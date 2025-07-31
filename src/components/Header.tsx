@@ -1,233 +1,234 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Sparkles } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const Header: React.FC = () => {
+const Hero = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  const toggleMenu = () => setIsMenuOpen(prev => !prev);
-
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 50);
-    const onMouseMove = (e: MouseEvent) => {
+    setIsVisible(true);
+
+    const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 100,
         y: (e.clientY / window.innerHeight) * 100,
       });
     };
 
-    window.addEventListener('scroll', onScroll);
-    window.addEventListener('mousemove', onMouseMove);
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('mousemove', onMouseMove);
-    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const handleNavigation = (path: string) => {
-    if (path.startsWith('#') && location.pathname === '/') {
-      const element = document.querySelector(path);
-      if (element) element.scrollIntoView({ behavior: 'smooth' });
-    } else if (path.startsWith('#')) {
-      navigate('/');
-      setTimeout(() => {
-        const element = document.querySelector(path);
-        if (element) element.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-    } else {
-      navigate(path);
-    }
-    setIsMenuOpen(false);
-  };
-
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
-      <nav
-        className={`
-          max-w-7xl mx-auto flex items-center justify-between
-          transition-all duration-200 ease-out
-          ${isScrolled
-            ? 'bg-white/80 backdrop-blur-2xl [-webkit-backdrop-filter:blur(20px)] border border-white/20 rounded-2xl shadow-2xl shadow-black/5 py-3 px-8 mx-6 mt-4'
-            : 'py-8 px-6'}
-        `}
-      >
-        {/* Glow */}
-        {isScrolled && (
-          <div
-            className="absolute inset-0 rounded-2xl opacity-30 pointer-events-none"
-            style={{
-              background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)`,
-            }}
-          />
-        )}
-
-        {/* Logo & Brand */}
+    <section className="relative min-h-screen flex flex-col overflow-hidden">
+      {/* Dynamic Background with Parallax */}
+      <div className="absolute inset-0 z-0">
+        {/* Main Background Image */}
         <div
-          className="relative flex items-center space-x-4 group cursor-pointer"
-          onClick={() => handleNavigation('/')}
+          className="absolute inset-0 transition-transform duration-1000 ease-out"
+          style={{
+            transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px) scale(1.05)`,
+          }}
         >
           <img
-            src={isScrolled 
-              ? "https://i.ibb.co/xKXkmwQJ/Workplan-ABlogo2.png" 
-              : "https://i.ibb.co/Rkq4d57H/Workplan-ABlogo1.png"
-            }
-            alt="Workplan Logo"
-            className={`
-              w-12 h-12 object-contain
-              transition-all duration-200 ease-out group-hover:scale-110
-            `}
+            src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg"
+            alt="Professional garden landscape"
+            className="w-full h-full object-cover"
           />
-
-          <div className="relative">
-            <h1
-              className={`
-                font-bold text-xl tracking-tight
-                transition-all duration-200 ease-out
-                ${isScrolled ? 'text-gray-900' : 'text-white'}
-              `}
-            >
-              Workplan
-            </h1>
-            <div
-              className={`
-                absolute -bottom-1 left-0 h-px bg-gradient-to-r from-blue-500 to-purple-500
-                transition-all duration-200 ease-out group-hover:w-full w-0
-              `}
-            />
-          </div>
         </div>
 
-        {/* Desktop Nav Links */}
-        <nav className="hidden lg:flex items-center space-x-1">
-          {[
-            { href: '/jobs', label: 'Jobb' },
-            { href: '/partner', label: 'Företag' },
-            { href: '/about', label: 'Om Oss' },
-            { href: '/contact', label: 'Kontakt' },
-          ].map(({ href, label }, i) => (
-            <button
-              key={label}
-              onClick={() => handleNavigation(href)}
-              className={`
-                relative px-4 py-2 rounded-lg font-medium text-sm tracking-wide
-                transition-all duration-200 ease-out group overflow-hidden
-                ${isScrolled
-                  ? 'text-gray-700 hover:text-gray-900'
-                  : 'text-white/90 hover:text-white'}
-              `}
-              style={{ transitionDelay: `${i * 50}ms` }}
-            >
-              <div
-                className={`
-                  absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100
-                  transition-all duration-200 ease-out scale-95 group-hover:scale-100
-                  ${isScrolled ? 'bg-gray-100' : 'bg-white/10 backdrop-blur-sm'}
-                `}
-              />
-              <span className="relative z-10">{label}</span>
-              <div
-                className={`
-                  absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 rounded-full
-                  group-hover:w-6 transition-all duration-200 ease-out
-                  ${isScrolled ? 'bg-blue-500' : 'bg-white'}
-                `}
-              />
-            </button>
-          ))}
-        </nav>
+        {/* Sophisticated Overlay System */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
-        {/* Mobile Menu Toggle */}
-        <button
-          onClick={toggleMenu}
-          className={`
-            lg:hidden relative p-3 rounded-xl
-            transition-all duration-200 ease-out group
-            ${isScrolled ? 'hover:bg-gray-100' : 'hover:bg-white/10 backdrop-blur-sm'}
-          `}
-        >
+        {/* Animated Geometric Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Floating Orbs */}
           <div
-            className={`
-              absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100
-              transition-all duration-200 ease-out
-              ${isScrolled ? 'bg-gray-100' : 'bg-white/10'}
-            `}
-            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '400' }}
+            className="absolute w-96 h-96 rounded-full bg-white/5 blur-3xl animate-pulse"
+            style={{
+              top: '10%',
+              right: '15%',
+              animationDuration: '4s',
+              transform: `translate(${mousePosition.x * 0.05}px, ${mousePosition.y * 0.05}px)`,
+            }}
           />
-          <div className="relative z-10">
-            {isMenuOpen ? (
-              <X
-                size={20}
-                className={`
-                  transition-all duration-200 ease-out
-                  ${isScrolled ? 'text-gray-800' : 'text-white'}
-                `}
-              />
-            ) : (
-              <Menu
-                size={20}
-                className={`
-                  transition-all duration-200 ease-out
-                  ${isScrolled ? 'text-gray-800' : 'text-white'}
-                `}
-              />
-            )}
-          </div>
-        </button>
-      </nav>
+          <div
+            className="absolute w-64 h-64 rounded-full bg-blue-500/10 blur-2xl animate-pulse"
+            style={{
+              bottom: '20%',
+              left: '10%',
+              animationDuration: '6s',
+              animationDelay: '2s',
+              transform: `translate(${mousePosition.x * -0.03}px, ${mousePosition.y * -0.03}px)`,
+            }}
+          />
 
-      {/* Mobile Menu Panel */}
-      <div
-        className={`
-          lg:hidden fixed inset-0 z-40
-          transition-all duration-200 ease-out
-          ${isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}
-          ${isScrolled ? 'top-[5.5rem]' : 'top-[7rem]'}
-        `}
-      >
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={toggleMenu} />
-        <div
-          className={`
-            relative bg-white/95 backdrop-blur-2xl border-t border-white/20
-            shadow-2xl shadow-black/10
-            transition-all duration-200 ease-out transform
-            ${isMenuOpen ? 'translate-y-0' : '-translate-y-full'}
-          `}
-        >
-          <nav className="flex flex-col p-6 space-y-2">
-            {[
-              { href: '/jobs', label: 'Jobb' },
-              { href: '/partner', label: 'Kunder' },
-              { href: '/about', label: 'Om Oss' },
-              { href: '/contact', label: 'Kontakt' },
-            ].map(({ href, label }, i) => (
-              <button
-                key={label}
-                onClick={() => handleNavigation(href)}
-                className={`
-                  relative px-4 py-3 rounded-xl text-lg font-medium text-left
-                  text-gray-800 hover:text-gray-900
-                  transition-all duration-200 ease-out group
-                  hover:bg-gray-50 hover:scale-[1.02]
-                `}
-                style={{ 
-                  fontFamily: 'Inter, sans-serif', 
-                  fontWeight: '500',
-                  transitionDelay: isMenuOpen ? `${i * 50}ms` : '0ms' 
-                }}
-              >
-                <span className="relative z-10">{label}</span>
-                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-0 h-6 bg-blue-500 rounded-r-full group-hover:w-1 transition-all duration-200" />
-              </button>
-            ))}
-          </nav>
+          {/* Subtle Grid Pattern */}
+          <div
+            className="absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+              `,
+              backgroundSize: '100px 100px',
+              transform: `translate(${mousePosition.x * 0.01}px, ${mousePosition.y * 0.01}px)`,
+            }}
+          />
         </div>
       </div>
-    </header>
+
+      {/* Content Container */}
+      <div className="relative z-10 flex-1 flex items-center py-16">
+        <div className="max-w-7xl mx-auto px-8 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Main Content - Left Side */}
+            <div className="lg:col-span-7 space-y-8">
+              {/* Main Headline */}
+              <div className="space-y-4">
+                <h1
+                  className={`
+                    text-5xl sm:text-6xl lg:text-7xl xl:text-8xl
+                    font-light text-white leading-[0.9] tracking-tight
+                    transition-all duration-1200 delay-200 transform
+                    ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
+                  `}
+                >
+                  <span
+                    className="block text-white font-light"
+                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '300' }}
+                  >
+                    Bemanna Ditt
+                  </span>
+                  <span className="block font-extralight text-white">
+                    <span
+                      className="text-white font-medium"
+                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '500' }}
+                    >
+                      Drömteam
+                    </span>
+                    <div className="relative inline-block">
+                      <img
+                        src="https://i.ibb.co/6c1JcWdr/image.png"
+                        alt=""
+                        className="absolute top-0 left-0 w-full h-4 object-contain"
+                        style={{ transform: 'translateY(10px)' }}
+                      />
+                    </div>
+                  </span>
+                </h1>
+                {/* Accent Line */}
+                <div
+                  className={`
+                    w-24 h-px bg-gradient-to-r from-white/60 to-transparent
+                    transition-all duration-1000 delay-600 transform
+                    ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
+                  `}
+                />
+              </div>
+
+              {/* Subtitle (light italic, smaller) */}
+              <p
+                className={`
+                  text-lg lg:text-xl italic text-white/80 leading-relaxed max-w-2xl
+                  transition-all duration-1000 delay-800 transform
+                  ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+                `}
+                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontStyle: 'italic' }}
+              >
+                Skräddarsydda bemanningslösningar –
+                <span className="block mt-2 text-white/60">
+                  snabbt, flexibelt och med rätt kompetens.
+                </span>
+              </p>
+
+              {/* Action Buttons */}
+              <div
+                className={`
+                  flex flex-col sm:flex-row gap-4 pt-4
+                  transition-all duration-1000 delay-1000 transform
+                  ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+                `}
+              >
+                <button
+                  onClick={() => navigate('/jobs')}
+                  className="
+                    group relative px-8 py-4 
+                    bg-white text-gray-900 rounded-full
+                    font-semibold text-lg tracking-wide
+                    hover:bg-white/95 
+                    transition-all duration-300
+                    shadow-2xl hover:shadow-white/20
+                    hover:scale-105 hover:-translate-y-1
+                    overflow-hidden
+                  "
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span className="relative z-10">Lediga Tjänster</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </button>
+                <button
+                  onClick={() => navigate('/partner')}
+                  className="
+                    group relative px-8 py-4
+                    bg-transparent text-white border-2 border-white/30 rounded-full
+                    font-semibold text-lg tracking-wide
+                    hover:border-white/60 hover:bg-white/10
+                    transition-all duration-300
+                    backdrop-blur-sm
+                    hover:scale-105 hover:-translate-y-1
+                    overflow-hidden
+                  "
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span className="relative z-10">Bli Partner</span>
+                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </button>
+              </div>
+            </div>
+
+            {/* Right Side - Empty for balance */}
+            <div className="lg:col-span-5" />
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Feature List */}
+      <div
+        className={`
+          absolute bottom-8 inset-x-0 z-10
+          transition-all duration-1000 delay-1200 transform
+          ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+        `}
+      >
+        <div
+          className="flex items-center justify-center space-x-6 text-center text-white/70"
+          style={{
+            fontFamily: 'Syne, sans-serif',
+            fontSize: '12px',
+            letterSpacing: '0.08em',
+          }}
+        >
+          <div className="flex items-center space-x-2">
+            <div className="w-1.5 h-1.5 bg-blue-400/60 rounded-full" />
+            <span className="uppercase">FLEXIBILITET</span>
+          </div>
+          <span className="text-white/40">|</span>
+          <div className="flex items-center space-x-2">
+            <div className="w-1.5 h-1.5 bg-emerald-400/60 rounded-full" />
+            <span className="uppercase">PERSONLIG SERVICE</span>
+          </div>
+          <span className="text-white/40">|</span>
+          <div className="flex items-center space-x-2">
+            <div className="w-1.5 h-1.5 bg-purple-400/60 rounded-full" />
+            <span className="uppercase">SNABB LEVERANS</span>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 
-export default Header;
+export default Hero;
