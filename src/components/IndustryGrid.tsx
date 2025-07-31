@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Truck, CheckCircle, Clock, Shield, Sparkles, ArrowRight } from 'lucide-react';
+import { Truck, CheckCircle, Clock, Shield } from 'lucide-react';
 
 const WarehouseLogisticsSpecialists = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -81,12 +81,10 @@ const WarehouseLogisticsSpecialists = () => {
       ref={sectionRef}
       className="relative py-24 bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50/30 overflow-hidden"
     >
-      {/* Modern Professional Background */}
+      {/* Bakgrund */}
       <div className="absolute inset-0">
-        {/* Primary gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-50/90 via-white/95 to-blue-50/80" />
-        
-        {/* Dynamic Gradient Orbs */}
+
         <div
           className="absolute w-[800px] h-[800px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000"
           style={{
@@ -115,7 +113,6 @@ const WarehouseLogisticsSpecialists = () => {
           }}
         />
 
-        {/* Sophisticated Grid Pattern */}
         <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
@@ -127,8 +124,7 @@ const WarehouseLogisticsSpecialists = () => {
             transform: `translate(${mousePosition.x * 0.01}px, ${mousePosition.y * 0.01}px)`,
           }}
         />
-        
-        {/* Diagonal Lines Pattern */}
+
         <div
           className="absolute inset-0 opacity-[0.015]"
           style={{
@@ -141,7 +137,6 @@ const WarehouseLogisticsSpecialists = () => {
           }}
         />
 
-        {/* Enhanced Floating Accent Elements */}
         <div className="absolute top-20 right-32 w-3 h-3 bg-blue-500/15 rounded-full animate-pulse shadow-lg" />
         <div
           className="absolute bottom-32 left-20 w-2 h-2 bg-emerald-500/20 rounded-full animate-pulse shadow-lg"
@@ -155,8 +150,7 @@ const WarehouseLogisticsSpecialists = () => {
           className="absolute top-1/2 right-1/4 w-2.5 h-2.5 bg-indigo-500/10 rounded-full animate-pulse shadow-lg"
           style={{ animationDelay: '3s' }}
         />
-        
-        {/* Geometric Shapes */}
+
         <div
           className="absolute top-16 left-16 w-24 h-24 border border-blue-200/30 rounded-full"
           style={{ transform: `rotate(${mousePosition.x * 0.1}deg)` }}
@@ -169,8 +163,7 @@ const WarehouseLogisticsSpecialists = () => {
           className="absolute top-1/2 left-8 w-16 h-16 border border-purple-200/25 rounded-lg"
           style={{ transform: `rotate(${mousePosition.x * 0.05}deg)` }}
         />
-        
-        {/* Subtle Noise Texture */}
+
         <div
           className="absolute inset-0 opacity-[0.008]"
           style={{
@@ -180,9 +173,8 @@ const WarehouseLogisticsSpecialists = () => {
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-8">
-        {/* Compact Header */}
+        {/* Header */}
         <div className="text-center mb-16">
-          {/* Main Title */}
           <h2
             className={`
               text-4xl md:text-5xl mb-4 tracking-tight
@@ -198,8 +190,6 @@ const WarehouseLogisticsSpecialists = () => {
             <span className="block">Vår Expertis inom</span>
             <span className="block">Logistikbemanning</span>
           </h2>
-
-          {/* Subtitle */}
           <p
             className={`
               text-lg max-w-2xl mx-auto leading-relaxed
@@ -210,19 +200,20 @@ const WarehouseLogisticsSpecialists = () => {
               fontFamily: 'Inter, sans-serif',
               fontWeight: 400,
               color: '#4B5563',
+              marginTop: '0.25rem',
             }}
           >
             Djup branschkunskap och noggrant urval för att matcha rätt kompetens med ert team.
           </p>
         </div>
 
-        {/* Compact Trust Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* 2x2 Kortlayout med lika höjd */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 auto-rows-fr">
           {trustPillars.map((pillar, index) => (
             <div
               key={index}
               className={`
-                group relative
+                group relative flex
                 transition-all duration-1000 transform
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
               `}
@@ -230,43 +221,44 @@ const WarehouseLogisticsSpecialists = () => {
               onMouseEnter={() => setActiveCard(index)}
               onMouseLeave={() => setActiveCard(null)}
             >
-              {/* Main Card */}
+              {/* Kort: gör så att alla stretchas till samma höjd */}
               <div
                 className={`
-                  relative min-h-48 p-6 rounded-2xl overflow-hidden
+                  relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
                   bg-white/90 backdrop-blur-sm border border-gray-200/50
                   shadow-lg shadow-gray-900/5
                   transition-all duration-500 ease-out
-                  hover:shadow-xl hover:shadow-gray-900/10
+                  ${activeCard === index ? 'shadow-xl' : ''}
                 `}
               >
-                {/* Dynamic Glow Effect */}
+                {/* Glow när aktiv */}
                 <div
                   className={`
-                    absolute inset-0 rounded-2xl opacity-0 transition-all duration-500
-                    ${activeCard === index ? 'opacity-100' : ''}
+                    absolute inset-0 rounded-2xl pointer-events-none
+                    transition-opacity duration-500
+                    ${activeCard === index ? 'opacity-100' : 'opacity-0'}
                   `}
                   style={{
                     background: `radial-gradient(circle at 50% 50%, ${pillar.glowColor} 0%, transparent 70%)`,
                   }}
                 />
 
-                {/* Icon Container */}
+                {/* Icon */}
                 <div
                   className={`
                     relative w-14 h-14 rounded-xl mb-4
                     bg-gradient-to-br ${pillar.gradient}
                     flex items-center justify-center
-                    shadow-lg
+                    shadow-lg flex-shrink-0
                   `}
                 >
                   <pillar.icon size={24} className="text-white" />
                 </div>
 
-                {/* Content */}
-                <div className="relative z-10 space-y-3">
+                {/* Innehåll */}
+                <div className="relative z-10 flex-1 flex flex-col">
                   <h3
-                    className="text-lg tracking-tight leading-tight"
+                    className="text-lg tracking-tight leading-tight mb-1"
                     style={{
                       fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                       fontWeight: 400,
@@ -277,7 +269,7 @@ const WarehouseLogisticsSpecialists = () => {
                   </h3>
 
                   <p
-                    className="text-sm leading-relaxed"
+                    className="text-sm leading-relaxed mb-4 flex-1"
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       fontWeight: 400,
@@ -287,9 +279,9 @@ const WarehouseLogisticsSpecialists = () => {
                     {pillar.description}
                   </p>
 
-                  {/* Highlight Text */}
+                  {/* Highlight */}
                   <div
-                    className="text-xs uppercase tracking-wider pt-2"
+                    className="text-xs uppercase tracking-wider mt-2"
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       fontWeight: 400,
@@ -304,7 +296,7 @@ const WarehouseLogisticsSpecialists = () => {
           ))}
         </div>
 
-        {/* Compact Bottom Element */}
+        {/* Bottom dots */}
         <div
           className={`
             text-center mt-12
