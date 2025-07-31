@@ -105,7 +105,7 @@ const Header: React.FC = () => {
         <nav className="hidden lg:flex items-center space-x-1">
           {[
             { href: '/jobs', label: 'Jobb' },
-            { href: '/partner', label: 'Kunder' },
+            { href: '/partner', label: 'Företag' },
             { href: '/about', label: 'Om Oss' },
             { href: '/contact', label: 'Kontakt' },
           ].map(({ href, label }, i) => (
