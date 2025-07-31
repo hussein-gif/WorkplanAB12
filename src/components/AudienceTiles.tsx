@@ -6,7 +6,6 @@ const AudienceTiles = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [activeCard, setActiveCard] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -166,7 +165,7 @@ const AudienceTiles = () => {
 
           <div
             className={`
-              flex items-center justify-center space-x-4 mb-8
+              flex items-center justify-center space-x-4 mb-4
               transition-all duration-1000 delay-200 transform
               ${isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
             `}
@@ -199,15 +198,16 @@ const AudienceTiles = () => {
             <div
               key={audience.id}
               className={`
-                group relative
+                relative
                 transition-all duration-1000 transform
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}
               `}
               style={{ transitionDelay: `${800 + index * 300}ms` }}
-              onMouseEnter={() => setActiveCard(index)}
-              onMouseLeave={() => setActiveCard(null)}
+              onClick={() =>
+                navigate(audience.id === 'candidates' ? '/for-candidates' : '/partner')
+              }
             >
-              {/* Huvudkort */}
+              {/* Huvudkort utan hover-effekter */}
               <div
                 className={`
                   relative h-[600px] rounded-3xl overflow-hidden
@@ -215,22 +215,8 @@ const AudienceTiles = () => {
                   border border-white/30
                   shadow-2xl shadow-black/20
                   transition-all duration-700 ease-out
-                  ${activeCard === index
-                    ? 'scale-105 shadow-3xl shadow-black/30 -translate-y-2'
-                    : 'hover:scale-[1.02] hover:-translate-y-1'}
                 `}
-                onClick={() =>
-                  navigate(audience.id === 'candidates' ? '/for-candidates' : '/partner')
-                }
               >
-                {/* Bakgrundsglow */}
-                <div
-                  className={`
-                    absolute inset-0 rounded-3xl opacity-0 transition-all duration-700
-                    ${activeCard === index ? `opacity-10 bg-gradient-to-br ${audience.gradient}` : ''}
-                  `}
-                />
-
                 {/* Gradient-header */}
                 <div
                   className={`
@@ -265,7 +251,6 @@ const AudienceTiles = () => {
                       relative z-10 w-24 h-24 rounded-2xl bg-white/20 backdrop-blur-sm
                       flex items-center justify-center
                       transition-all duration-500
-                      ${activeCard === index ? 'scale-110 rotate-3' : ''}
                     `}
                   >
                     <audience.icon size={40} className="text-white" />
@@ -276,7 +261,6 @@ const AudienceTiles = () => {
                       absolute top-6 right-6 w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm
                       flex items-center justify-center
                       transition-all duration-500 delay-100
-                      ${activeCard === index ? 'scale-125 rotate-12' : ''}
                     `}
                   >
                     <audience.accentIcon size={16} className="text-white/80" />
@@ -285,14 +269,14 @@ const AudienceTiles = () => {
 
                 {/* Innehåll */}
                 <div className="relative p-8 h-[calc(100%-12rem)] flex flex-col">
-                  <div className="mb-6">
+                  <div style={{ marginBottom: '0.15rem' }}>
                     <h3
                       style={{
                         fontFamily: 'Inter, sans-serif',
                         fontWeight: 400,
                         fontSize: '1.125rem',
                         color: '#6b7280',
-                        marginBottom: '0.25rem',
+                        margin: 0,
                       }}
                     >
                       {audience.title}
@@ -303,6 +287,7 @@ const AudienceTiles = () => {
                         fontWeight: 400,
                         fontSize: '1.875rem',
                         color: '#111827',
+                        margin: '2px 0 0 0',
                       }}
                     >
                       {audience.subtitle}
@@ -316,7 +301,7 @@ const AudienceTiles = () => {
                       fontSize: '1rem',
                       color: '#4b5563',
                       lineHeight: '1.75rem',
-                      marginBottom: '2rem',
+                      marginBottom: '1.5rem',
                     }}
                   >
                     {audience.description}
@@ -326,17 +311,13 @@ const AudienceTiles = () => {
                     {audience.features.map((feature, fIdx) => (
                       <div
                         key={fIdx}
-                        className={`flex items-center space-x-3 transition-all duration-500 ${
-                          activeCard === index ? 'translate-x-2' : ''
-                        }`}
+                        className="flex items-center space-x-3"
                         style={{ transitionDelay: `${fIdx * 100}ms` }}
                       >
                         <div
                           className={`
                             w-1.5 h-1.5 rounded-full bg-gradient-to-r ${audience.gradient}
-                            transition-all duration-500 ${
-                              activeCard === index ? 'scale-150' : ''
-                            }
+                            transition-all duration-500
                           `}
                         />
                         <span
@@ -352,65 +333,41 @@ const AudienceTiles = () => {
                       </div>
                     ))}
                   </div>
-
-                  <div className="flex items-center justify-end">
-                    <button
-                      className={`
-                        relative px-8 py-4 rounded-2xl
-                        bg-gradient-to-r ${audience.gradient} text-white
-                        shadow-lg hover:shadow-xl
-                        transition-all duration-300
-                        hover:scale-105 active:scale-95
-                        overflow-hidden font-medium
-                      `}
-                      style={{ fontFamily: 'Inter, sans-serif' }}
-                      onClick={() =>
-                        navigate(audience.id === 'candidates' ? '/for-candidates' : '/partner')
-                      }
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
-                      <div className="relative flex items-center space-x-2">
-                        <span
-                          style={{
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: 500,
-                          }}
-                        >
-                          {audience.id === 'candidates' ? 'Utforska Jobb' : 'Bli Partner'}
-                        </span>
-                        <ArrowRight size={16} className="transition-transform duration-300" />
-                      </div>
-                    </button>
-                  </div>
+                  <div style={{ height: '52px' }} aria-hidden="true" />
                 </div>
 
-                {/* Subtil kantglöd */}
-                <div
-                  className={`
-                    absolute inset-0 rounded-3xl border border-transparent
-                    bg-gradient-to-r ${audience.gradient} opacity-0
-                    transition-opacity duration-500
-                    ${activeCard === index ? 'opacity-20' : ''}
-                  `}
-                  style={{
-                    mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                    maskComposite: 'xor',
-                    WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                    WebkitMaskComposite: 'xor',
-                    padding: '1px',
-                  }}
-                />
+                {/* Knapp: absolut placerad i nedre högra hörnet med shimmer på hover */}
+                <div className="absolute bottom-6 right-6">
+                  <button
+                    className={`
+                      group relative px-8 py-4 rounded-2xl
+                      bg-gradient-to-r ${audience.gradient} text-white
+                      shadow-lg hover:shadow-xl
+                      transition-all duration-300
+                      hover:scale-105 active:scale-95
+                      overflow-hidden font-medium flex items-center space-x-2
+                    `}
+                    style={{ fontFamily: 'Inter, sans-serif' }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(audience.id === 'candidates' ? '/for-candidates' : '/partner');
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
+                    <div className="relative flex items-center space-x-2">
+                      <span
+                        style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {audience.id === 'candidates' ? 'Utforska Jobb' : 'Bli Partner'}
+                      </span>
+                      <ArrowRight size={16} className="transition-transform duration-300" />
+                    </div>
+                  </button>
+                </div>
               </div>
-
-              {/* Flytande skugga */}
-              <div
-                className={`
-                  absolute inset-0 rounded-3xl bg-gradient-to-br ${audience.gradient}
-                  opacity-0 blur-xl -z-10
-                  transition-all duration-700
-                  ${activeCard === index ? 'opacity-20 scale-110' : ''}
-                `}
-              />
             </div>
           ))}
         </div>
@@ -420,4 +377,3 @@ const AudienceTiles = () => {
 };
 
 export default AudienceTiles;
-
