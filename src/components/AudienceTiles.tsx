@@ -63,90 +63,82 @@ const AudienceTiles = () => {
     <section
       ref={sectionRef}
       className="relative py-32 overflow-hidden"
-      style={{ background: 'transparent' }}
     >
-      {/* Förnyad bakgrund med lager, glow, grid, noise och prickar */}
+      {/* Förnyad bakgrund: djup blå gradient + glow + grid + mild noise + prickar */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Basgradient (radial + linjär) */}
+        {/* Basgradient (mörk navy + djup blå) */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(circle at 30% 30%, #1f2a48 0%, #0f172a 60%), linear-gradient(135deg, #0f172a 0%, #1f2a48 80%)',
+              'radial-gradient(circle at 25% 35%, #0f1f44 0%, #0a142b 65%), linear-gradient(135deg, #0a142b 0%, #0f1f44 100%)',
           }}
         />
 
-        {/* Soft glows med parallax */}
+        {/* Soft glow 1 (parallax) */}
         <div
-          className="absolute -left-32 -top-32 w-[700px] h-[700px] rounded-full blur-3xl opacity-30"
+          className="absolute -left-32 -top-32 w-[600px] h-[600px] rounded-full blur-3xl opacity-25"
           style={{
-            background: 'radial-gradient(circle at 40% 40%, #6366f1 0%, transparent 60%)',
-            transform: `translate(${mousePosition.x * 0.04}px, ${mousePosition.y * 0.03}px)`,
-          }}
-        />
-        <div
-          className="absolute right-1/4 bottom-20 w-[500px] h-[500px] rounded-full blur-3xl opacity-20"
-          style={{
-            background: 'radial-gradient(circle at 60% 50%, #10b981 0%, transparent 60%)',
-            transform: `translate(${mousePosition.x * -0.02}px, ${mousePosition.y * -0.02}px)`,
+            background: 'radial-gradient(circle at 50% 50%, #6366f1 0%, transparent 70%)',
+            transform: `translate(${mousePosition.x * 0.03}px, ${mousePosition.y * 0.02}px)`,
           }}
         />
 
-        {/* Bevarade orbs för extra liv */}
+        {/* Soft glow 2 (parallax) */}
         <div
-          className="absolute w-[1000px] h-[1000px] rounded-full opacity-[0.08] blur-3xl transition-all duration-1000"
+          className="absolute right-1/4 bottom-20 w-[500px] h-[500px] rounded-full blur-3xl opacity-18"
+          style={{
+            background: 'radial-gradient(circle at 60% 50%, #10b981 0%, transparent 70%)',
+            transform: `translate(${mousePosition.x * -0.02}px, ${mousePosition.y * -0.01}px)`,
+          }}
+        />
+
+        {/* Subtila orbs för liv */}
+        <div
+          className="absolute w-[900px] h-[900px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000"
           style={{
             background: `radial-gradient(circle, #3B82F6 0%, transparent 70%)`,
-            left: `${mousePosition.x * 0.5}%`,
-            top: `${mousePosition.y * 0.3}%`,
+            left: `${mousePosition.x * 0.4}%`,
+            top: `${mousePosition.y * 0.25}%`,
             transform: 'translate(-50%, -50%)',
           }}
         />
         <div
-          className="absolute w-[800px] h-[800px] rounded-full opacity-[0.06] blur-3xl transition-all duration-1000 delay-300"
+          className="absolute w-[700px] h-[700px] rounded-full opacity-[0.03] blur-3xl transition-all duration-1000 delay-300"
           style={{
             background: `radial-gradient(circle, #10B981 0%, transparent 70%)`,
-            right: `${mousePosition.x * 0.3}%`,
-            bottom: `${mousePosition.y * 0.4}%`,
+            right: `${mousePosition.x * 0.25}%`,
+            bottom: `${mousePosition.y * 0.35}%`,
             transform: 'translate(50%, 50%)',
           }}
         />
-        <div
-          className="absolute w-[600px] h-[600px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000 delay-600"
-          style={{
-            background: `radial-gradient(circle, #8B5CF6 0%, transparent 70%)`,
-            left: `${50 + mousePosition.x * 0.2}%`,
-            top: `${50 + mousePosition.y * 0.2}%`,
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
 
-        {/* Subtil grid */}
+        {/* Subtil grid-overlay */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+              linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)
             `,
             backgroundSize: '100px 100px',
             mixBlendMode: 'overlay',
           }}
         />
 
-        {/* Atmosfäriskt brus / noise */}
+        {/* Mild noise */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' fill='rgba(255,255,255,0.02)'/%3E%3C/svg%3E")`,
+            backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23f)' fill='rgba(255,255,255,0.008)'/></svg>")`,
           }}
         />
 
-        {/* Vignette */}
+        {/* Vignette för att fokusera centrum */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 50%, rgba(0,0,0,0.35) 100%)',
+            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%)',
           }}
         />
 
@@ -154,15 +146,15 @@ const AudienceTiles = () => {
         <div className="absolute inset-0 pointer-events-none">
           <div
             className="absolute top-16 left-10 w-2 h-2 rounded-full animate-pulse"
-            style={{ backgroundColor: '#6366f1', opacity: 0.35, animationDuration: '5s' }}
+            style={{ backgroundColor: '#6366f1', opacity: 0.3, animationDuration: '6s' }}
           />
           <div
             className="absolute bottom-24 right-20 w-1.5 h-1.5 rounded-full animate-pulse"
-            style={{ backgroundColor: '#10b981', opacity: 0.3, animationDuration: '6s', animationDelay: '1s' }}
+            style={{ backgroundColor: '#10b981', opacity: 0.25, animationDuration: '7s', animationDelay: '1s' }}
           />
           <div
             className="absolute top-1/3 right-28 w-1 h-1 rounded-full animate-pulse"
-            style={{ backgroundColor: '#a78bfa', opacity: 0.25, animationDuration: '7s', animationDelay: '2s' }}
+            style={{ backgroundColor: '#a78bfa', opacity: 0.2, animationDuration: '8s', animationDelay: '2s' }}
           />
         </div>
       </div>
@@ -230,7 +222,6 @@ const AudienceTiles = () => {
                 navigate(audience.id === 'candidates' ? '/for-candidates' : '/partner')
               }
             >
-              {/* Huvudkort utan hover-effekter */}
               <div
                 className={`
                   relative h-[600px] rounded-3xl overflow-hidden
@@ -240,7 +231,6 @@ const AudienceTiles = () => {
                   transition-all duration-700 ease-out
                 `}
               >
-                {/* Gradient-header */}
                 <div
                   className={`
                     relative h-48 bg-gradient-to-br ${audience.gradient}
@@ -290,7 +280,6 @@ const AudienceTiles = () => {
                   </div>
                 </div>
 
-                {/* Innehåll */}
                 <div className="relative p-8 h-[calc(100%-12rem)] flex flex-col">
                   <div style={{ marginBottom: '0.15rem' }}>
                     <h3
@@ -359,7 +348,6 @@ const AudienceTiles = () => {
                   <div style={{ height: '52px' }} aria-hidden="true" />
                 </div>
 
-                {/* Knapp: absolut placerad i nedre högra hörnet med shimmer på hover */}
                 <div className="absolute bottom-6 right-6">
                   <button
                     className={`
