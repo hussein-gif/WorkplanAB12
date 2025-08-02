@@ -64,49 +64,51 @@ const AudienceTiles = () => {
       ref={sectionRef}
       className="relative py-32 overflow-hidden"
     >
-      {/* Förnyad bakgrund: djup blå gradient + glow + grid + mild noise + prickar */}
+      {/* Bakgrund: mörkblå bas + liv */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Basgradient (mörk navy + djup blå) */}
+        {/* Basgradient (mörk blå/navy) */}
         <div
           className="absolute inset-0"
           style={{
-            background:
-              'radial-gradient(circle at 25% 35%, #0f1f44 0%, #0a142b 65%), linear-gradient(135deg, #0a142b 0%, #0f1f44 100%)',
+            background: 'radial-gradient(circle at 25% 35%, #1f2a48 0%, #0f1f44 60%), linear-gradient(135deg, #0f1f44 0%, #1f2a63 100%)',
           }}
         />
 
-        {/* Soft glow 1 (parallax) */}
+        {/* Mjuk glow 1 (parallax) */}
         <div
-          className="absolute -left-32 -top-32 w-[600px] h-[600px] rounded-full blur-3xl opacity-25"
+          className="absolute -left-32 -top-32 w-[600px] h-[600px] rounded-full blur-3xl"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, #6366f1 0%, transparent 70%)',
+            background: 'radial-gradient(circle at 50% 50%, rgba(99,102,241,0.4) 0%, transparent 70%)',
+            opacity: 0.25,
             transform: `translate(${mousePosition.x * 0.03}px, ${mousePosition.y * 0.02}px)`,
           }}
         />
 
-        {/* Soft glow 2 (parallax) */}
+        {/* Mjuk glow 2 (parallax) */}
         <div
-          className="absolute right-1/4 bottom-20 w-[500px] h-[500px] rounded-full blur-3xl opacity-18"
+          className="absolute right-1/4 bottom-20 w-[500px] h-[500px] rounded-full blur-3xl"
           style={{
-            background: 'radial-gradient(circle at 60% 50%, #10b981 0%, transparent 70%)',
+            background: 'radial-gradient(circle at 60% 50%, rgba(16,185,129,0.35) 0%, transparent 70%)',
+            opacity: 0.18,
             transform: `translate(${mousePosition.x * -0.02}px, ${mousePosition.y * -0.01}px)`,
           }}
         />
 
-        {/* Subtila orbs för liv */}
+        {/* Subtila orbs */}
         <div
-          className="absolute w-[900px] h-[900px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000"
+          className="absolute w-[900px] h-[900px] rounded-full blur-3xl transition-all duration-1000"
           style={{
-            background: `radial-gradient(circle, #3B82F6 0%, transparent 70%)`,
+            background: `radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%)`,
             left: `${mousePosition.x * 0.4}%`,
             top: `${mousePosition.y * 0.25}%`,
             transform: 'translate(-50%, -50%)',
+            opacity: 0.08,
           }}
         />
         <div
-          className="absolute w-[700px] h-[700px] rounded-full opacity-[0.03] blur-3xl transition-all duration-1000 delay-300"
+          className="absolute w-[700px] h-[700px] rounded-full blur-3xl transition-all duration-1000 delay-300"
           style={{
-            background: `radial-gradient(circle, #10B981 0%, transparent 70%)`,
+            background: `radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%)`,
             right: `${mousePosition.x * 0.25}%`,
             bottom: `${mousePosition.y * 0.35}%`,
             transform: 'translate(50%, 50%)',
@@ -118,27 +120,27 @@ const AudienceTiles = () => {
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)
+              linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
             `,
-            backgroundSize: '100px 100px',
+            backgroundSize: '120px 120px',
             mixBlendMode: 'overlay',
           }}
         />
 
-        {/* Mild noise */}
+        {/* Lätt noise-overlay */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23f)' fill='rgba(255,255,255,0.008)'/></svg>")`,
+            backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.35' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' fill='rgba(255,255,255,0.008)'/></svg>")`,
           }}
         />
 
-        {/* Vignette för att fokusera centrum */}
+        {/* Vignette (mild) */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.35) 100%)',
+            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.25) 100%)',
           }}
         />
 
@@ -146,15 +148,15 @@ const AudienceTiles = () => {
         <div className="absolute inset-0 pointer-events-none">
           <div
             className="absolute top-16 left-10 w-2 h-2 rounded-full animate-pulse"
-            style={{ backgroundColor: '#6366f1', opacity: 0.3, animationDuration: '6s' }}
+            style={{ backgroundColor: '#6366f1', opacity: 0.25, animationDuration: '6s' }}
           />
           <div
             className="absolute bottom-24 right-20 w-1.5 h-1.5 rounded-full animate-pulse"
-            style={{ backgroundColor: '#10b981', opacity: 0.25, animationDuration: '7s', animationDelay: '1s' }}
+            style={{ backgroundColor: '#10b981', opacity: 0.2, animationDuration: '7s', animationDelay: '1s' }}
           />
           <div
             className="absolute top-1/3 right-28 w-1 h-1 rounded-full animate-pulse"
-            style={{ backgroundColor: '#a78bfa', opacity: 0.2, animationDuration: '8s', animationDelay: '2s' }}
+            style={{ backgroundColor: '#a78bfa', opacity: 0.15, animationDuration: '8s', animationDelay: '2s' }}
           />
         </div>
       </div>
