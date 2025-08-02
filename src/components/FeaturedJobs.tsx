@@ -59,7 +59,6 @@ const FeaturedJobs = () => {
 
   return (
     <>
-      {/* Lokal CSS för flytande vågor */}
       <style>{`
         @keyframes float-slow {
           0%,100% { transform: translate(0,0); }
@@ -68,6 +67,10 @@ const FeaturedJobs = () => {
         @keyframes float-slow-reverse {
           0%,100% { transform: translate(0,0); }
           50% { transform: translate(-8px,-5px); }
+        }
+        @keyframes pulse-light {
+          0%,100% { opacity: 0.08; }
+          50% { opacity: 0.16; }
         }
         .animate-float-slow {
           animation: float-slow 30s ease-in-out infinite;
@@ -82,49 +85,31 @@ const FeaturedJobs = () => {
         id="jobs"
         className="relative py-32 overflow-hidden"
       >
-        {/* Bakgrund med vågor + textur */}
+        {/* Bakgrund: samma mörka ton + organiska soft-former + textur + liv */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Mörkblå basgradient (samma ton) */}
+          {/* Basgradient: exakt samma djupa mörkblå/svarta känsla som original */}
           <div
             className="absolute inset-0"
             style={{
-              background: 'radial-gradient(circle at 30% 30%, #0f1f44 0%, #1b2a6a 60%, #0f1f44 100%)',
+              background: 'linear-gradient(135deg, #111827 0%, #0f172a 50%, #1f2937 100%)',
             }}
           />
 
-          {/* Organiska vågformer (blur + gradient) */}
-          <svg
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full mix-blend-overlay"
-            preserveAspectRatio="xMidYMid slice"
-            viewBox="0 0 800 600"
-          >
-            <defs>
-              <linearGradient id="waveGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#1b2a6a" stopOpacity="0.6" />
-                <stop offset="100%" stopColor="#0f1f44" stopOpacity="0.6" />
-              </linearGradient>
-              <filter id="blurFilter" x="-30%" y="-30%" width="160%" height="160%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="140" />
-              </filter>
-            </defs>
-            <path
-              d="M0 300 C200 200 600 400 800 300 L800 600 L0 600 Z"
-              fill="url(#waveGrad1)"
-              filter="url(#blurFilter)"
-              className="animate-float-slow"
-              style={{ opacity: 0.32 }}
-            />
-            <path
-              d="M0 350 C250 450 550 150 800 350 L800 600 L0 600 Z"
-              fill="url(#waveGrad1)"
-              filter="url(#blurFilter)"
-              className="animate-float-slow-reverse"
-              style={{ opacity: 0.24 }}
-            />
-          </svg>
+          {/* Mjuka svävande former för djup (toner inom samma palett) */}
+          <div
+            className="absolute w-[900px] h-[900px] rounded-full blur-3xl opacity-20 -left-64 -top-64 animate-float-slow"
+            style={{
+              background: 'radial-gradient(circle, rgba(31,41,55,0.35) 0%, transparent 75%)',
+            }}
+          />
+          <div
+            className="absolute w-[700px] h-[700px] rounded-full blur-3xl opacity-16 right-1/4 bottom-20 animate-float-slow-reverse"
+            style={{
+              background: 'radial-gradient(circle, rgba(17,23,39,0.3) 0%, transparent 75%)',
+            }}
+          />
 
-          {/* Subtil noise/textur-overlay */}
+          {/* Subtil noise/textur-overlay utan att ändra nyans */}
           <div
             className="absolute inset-0"
             aria-hidden="true"
@@ -135,10 +120,21 @@ const FeaturedJobs = () => {
             }}
           />
 
-          {/* Diskreta ljuspunkter (för lite liv) */}
-          <div className="absolute top-20 right-32 w-2 h-2 bg-blue-400/20 rounded-full animate-pulse" />
-          <div className="absolute bottom-32 left-20 w-1.5 h-1.5 bg-emerald-400/25 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute top-1/3 left-1/4 w-1 h-1 bg-purple-400/20 rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
+          {/* Små pulserande vita prickar */}
+          {Array.from({ length: 25 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full"
+              style={{
+                width: `${Math.random() * 2 + 1}px`,
+                height: `${Math.random() * 2 + 1}px`,
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                animation: `pulse-light ${5 + Math.random() * 5}s ease-in-out ${Math.random() * 2}s infinite`,
+              }}
+            />
+          ))}
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -317,9 +313,9 @@ const FeaturedJobs = () => {
             <div className="inline-flex items-center space-x-4">
               <div className="w-12 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
               <div className="flex space-x-2">
-                <div className="w-1.5 h-1.5 bg-blue-400 rounded-full animate-pulse" />
-                <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" style={{ animationDelay:'500ms' }} />
-                <div className="w-1.5 h-1.5 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay:'1000ms' }} />
+                <div className="w-1.5 h-1.5 bg-white/30 rounded-full animate-pulse" />
+                <div className="w-1.5 h-1.5 bg-white/30 rounded-full animate-pulse" style={{ animationDelay:'500ms' }} />
+                <div className="w-1.5 h-1.5 bg-white/30 rounded-full animate-pulse" style={{ animationDelay:'1000ms' }} />
               </div>
               <div className="w-12 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
             </div>
