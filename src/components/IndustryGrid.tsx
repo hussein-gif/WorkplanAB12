@@ -95,18 +95,10 @@ const IndustryGrid = () => {
         style={{
           boxShadow:
             activeCard === index
-              ? '0 40px 80px -10px rgba(0,0,0,0.35)'
-              : '0 25px 60px -15px rgba(0,0,0,0.2)',
+              ? '0 30px 70px -10px rgba(0,0,0,0.25)'
+              : '0 15px 40px -10px rgba(0,0,0,0.15)',
         }}
       >
-        {/* Subtil inre ljusstruktur för djup (frosted känsla) */}
-        <div
-          className="absolute inset-0 pointer-events-none rounded-2xl"
-          style={{
-            boxShadow: 'inset 0 0 30px rgba(255,255,255,0.1)',
-          }}
-        />
-
         {/* Glow när aktiv */}
         <div
           className={`
@@ -125,7 +117,7 @@ const IndustryGrid = () => {
             relative w-14 h-14 rounded-xl mb-4
             bg-gradient-to-br from-[#1f3f8b] to-[#3b6de8]
             flex items-center justify-center
-            shadow-lg flex-shrink-0
+            shadow flex-shrink-0
           `}
         >
           <pillar.icon size={24} className="text-white" />
@@ -400,7 +392,7 @@ const IndustryGrid = () => {
 
         {/* Layout med bubbla och kort */}
         <div className="flex flex-col gap-2 relative">
-          {/* Gradient bubble över korten (ljus blå ton, lite mindre) */}
+          {/* Gradient bubble över korten */}
           <div
             className="absolute left-1/2 top-1/2 w-[520px] h-[520px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={{
