@@ -47,7 +47,6 @@ const IndustryGrid = () => {
       title: 'Djup Branschkännedom',
       description: 'Vårt team förstår era unika behov inom lager och logistik.',
       highlight: 'Specialister på ert område',
-      gradient: 'from-blue-500 to-indigo-600',
       glowColor: 'rgba(59, 130, 246, 0.2)',
     },
     {
@@ -55,24 +54,21 @@ const IndustryGrid = () => {
       title: 'Noggrann Screening',
       description: 'Vi genomför strukturerade kompetens- och bakgrundskontroller.',
       highlight: 'Trygg matchning',
-      gradient: 'from-emerald-500 to-teal-600',
-      glowColor: 'rgba(16, 185, 129, 0.2)',
+      glowColor: 'rgba(59, 130, 246, 0.2)',
     },
     {
       icon: Clock,
       title: 'Snabb Respons',
       description: 'Omedelbar återkoppling för att hålla er bemanning i rörelse.',
       highlight: 'Snabbt igångsättande',
-      gradient: 'from-orange-500 to-red-600',
-      glowColor: 'rgba(249, 115, 22, 0.2)',
+      glowColor: 'rgba(59, 130, 246, 0.2)',
     },
     {
       icon: Shield,
       title: 'Säkerhet & Kvalitet',
       description: 'Certifierade medarbetare med fokus på trygghet och kvalitet i varje uppdrag.',
       highlight: 'Hög leveranskvalitet',
-      gradient: 'from-purple-500 to-violet-600',
-      glowColor: 'rgba(139, 92, 246, 0.2)',
+      glowColor: 'rgba(59, 130, 246, 0.2)',
     },
   ];
 
@@ -118,11 +114,11 @@ const IndustryGrid = () => {
           }}
         />
 
-        {/* Icon */}
+        {/* Icon med enhetlig blå ton */}
         <div
           className={`
             relative w-14 h-14 rounded-xl mb-4
-            bg-gradient-to-br ${pillar.gradient}
+            bg-gradient-to-br from-[#1f3f8b] to-[#3b6de8]
             flex items-center justify-center
             shadow-lg flex-shrink-0
           `}
@@ -158,7 +154,7 @@ const IndustryGrid = () => {
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 400,
-              color: '#9ca3af',
+              color: '#6B7280',
             }}
           >
             {pillar.highlight}
@@ -360,12 +356,12 @@ const IndustryGrid = () => {
 
         {/* Anpassad 2x2-layout (small/large / large/small) med finjusterade proportioner */}
         <div className="flex flex-col gap-2 relative">
-          {/* Gradient bubble över korten (ny färgkombination) */}
+          {/* Gradient bubble över korten (ny färg som ligger i det mörkblå temat, lite mindre) */}
           <div
-            className="absolute left-1/2 top-1/2 w-[560px] h-[560px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+            className="absolute left-1/2 top-1/2 w-[520px] h-[520px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={{
               filter: 'blur(80px)',
-              background: 'radial-gradient(circle at 40% 45%, rgba(124,58,237,0.2) 0%, rgba(99,102,241,0.12) 35%, rgba(16,185,129,0.08) 65%, transparent 85%)',
+              background: 'radial-gradient(circle at 50% 50%, rgba(125,211,252,0.2) 0%, rgba(59,130,246,0.15) 50%, transparent 85%)',
               mixBlendMode: 'screen',
             }}
           />
