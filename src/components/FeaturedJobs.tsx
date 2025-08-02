@@ -169,7 +169,7 @@ const FeaturedJobs = () => {
                   <div className="flex-1 min-w-0">
                     {/* Jobbtitel */}
                     <h3
-                      className="text-lg mb-1 leading-tight font-medium"
+                      className="text-lg mb-1 leading-tight font-bold"
                       style={{
                         fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                         color: '#111827',
