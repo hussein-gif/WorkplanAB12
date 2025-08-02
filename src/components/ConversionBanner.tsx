@@ -84,11 +84,11 @@ const ConversionBanner = () => {
 
       {/* Content Container */}
       <div className="relative z-10 max-w-4xl mx-auto px-8">
-        <div className="text-center">
+        <div className="text-center flex flex-col items-center space-y-4">
           {/* Main Heading */}
           <h2
             className={`
-              text-5xl md:text-6xl font-normal text-white mb-6 tracking-tight leading-[0.9]
+              text-5xl md:text-6xl font-normal text-white tracking-tight leading-[0.9]
               transition-all duration-1000 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
             `}
@@ -99,7 +99,7 @@ const ConversionBanner = () => {
 
           {/* Elegant Separator */}
           <div className={`
-            flex items-center justify-center space-x-4 mb-8
+            flex items-center justify-center space-x-4
             transition-all duration-1000 delay-200 transform
             ${isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
           `}>
@@ -110,7 +110,7 @@ const ConversionBanner = () => {
 
           {/* Subtitle */}
           <p className={`
-            text-xl text-white/80 mb-12 font-light leading-relaxed max-w-2xl mx-auto
+            text-xl text-white/80 font-light leading-relaxed max-w-2xl mx-auto
             transition-all duration-1000 delay-400 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}
