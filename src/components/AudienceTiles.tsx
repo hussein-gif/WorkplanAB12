@@ -151,7 +151,7 @@ const AudienceTiles = () => {
         <div className="text-center mb-20">
           <h2
             className={`
-              text-5xl md:text-7xl mb-6 tracking-tight leading-[0.9]
+              text-5xl md:text-6xl mb-6 tracking-tight leading-[0.9]
               transition-all duration-1000 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
             `}
@@ -166,7 +166,7 @@ const AudienceTiles = () => {
 
           <div
             className={`
-              flex items-center justify-center space-x-4 mb-4
+              flex items-center justify-center space-x-4 mb-8
               transition-all duration-1000 delay-200 transform
               ${isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
             `}
@@ -347,7 +347,7 @@ const AudienceTiles = () => {
                       shadow-lg hover:shadow-xl
                       transition-all duration-300
                       hover:scale-105 active:scale-95
-                      overflow-hidden font-bold flex items-center space-x-2
+                      overflow-hidden font-semibold flex items-center space-x-2
                     `}
                     style={{ fontFamily: 'Inter, sans-serif' }}
                     onClick={(e) => {
@@ -360,7 +360,7 @@ const AudienceTiles = () => {
                       <span
                         style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontWeight: 700,
+                          fontWeight: 600,
                         }}
                       >
                         {audience.id === 'candidates' ? 'Utforska Jobb' : 'Bli Partner'}
