@@ -187,7 +187,7 @@ const AudienceTiles = () => {
               color: 'rgba(255,255,255,0.7)',
             }}
           >
-            Flexibel bemanning för talanger och företag.
+            Flexibel bemanning för kandidater och företag.
           </p>
         </div>
 
