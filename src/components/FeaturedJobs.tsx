@@ -74,7 +74,7 @@ const FeaturedJobs = () => {
         }
         @keyframes hueShift {
           0% { filter: hue-rotate(0deg); }
-          50% { filter: hue-rotate(10deg); }
+          50% { filter: hue-rotate(12deg); }
           100% { filter: hue-rotate(0deg); }
         }
         .animate-float-slow {
@@ -84,7 +84,7 @@ const FeaturedJobs = () => {
           animation: float-slow-reverse 34s ease-in-out infinite;
         }
         .animate-hue {
-          animation: hueShift 60s ease-in-out infinite;
+          animation: hueShift 80s ease-in-out infinite;
         }
       `}</style>
 
@@ -95,66 +95,75 @@ const FeaturedJobs = () => {
       >
         {/* Förbättrad bakgrund: mörk, lager på lager, parallax, grid, liv */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Basgradient */}
+          {/* Djupare basgradient med lätt hue animation */}
           <div
             className="absolute inset-0 animate-hue"
             style={{
-              background: 'linear-gradient(135deg, #0f172a 0%, #111827 40%, #1f2937 100%)',
+              background: 'linear-gradient(135deg, #0e1b33 0%, #111827 45%, #1f2f54 100%)',
             }}
           />
 
-          {/* Parallax grid (ton-i-ton, rör sig svagt med mus) */}
+          {/* Vignette för djup i kanter */}
           <div
             className="absolute inset-0"
             style={{
-              backgroundImage: `
-                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
-              `,
-              backgroundSize: '160px 160px',
-              transform: `translate(${(mousePosition.x - 50) * 0.08}px, ${(mousePosition.y - 50) * 0.08}px)`,
               pointerEvents: 'none',
-              mixBlendMode: 'overlay',
+              background: 'radial-gradient(circle at 50% 50%, transparent 60%, rgba(0,0,0,0.45) 100%)',
+              mixBlendMode: 'multiply',
               opacity: 0.8,
             }}
           />
 
-          {/* Mjuka svävande former för djup (toner inom samma palett) med parallax */}
+          {/* Parallax grid (ton-i-ton) förstärkt */}
           <div
-            className="absolute w-[900px] h-[900px] rounded-full blur-3xl opacity-24 animate-float-slow"
+            className="absolute inset-0"
             style={{
-              background: 'radial-gradient(circle, rgba(31,41,55,0.45) 0%, transparent 75%)',
-              left: `calc(-64px + ${(mousePosition.x - 50) * 0.2}px)`,
-              top: `calc(-64px + ${(mousePosition.y - 50) * 0.15}px)`,
+              backgroundImage: `
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)
+              `,
+              backgroundSize: '140px 140px',
+              transform: `translate(${(mousePosition.x - 50) * 0.1}px, ${(mousePosition.y - 50) * 0.1}px)`,
+              mixBlendMode: 'overlay',
+              opacity: 0.9,
+            }}
+          />
+
+          {/* Flytande former med större synlighet och parallax */}
+          <div
+            className="absolute w-[1000px] h-[1000px] rounded-full blur-3xl opacity-28 animate-float-slow"
+            style={{
+              background: 'radial-gradient(circle, rgba(31,41,55,0.55) 0%, transparent 75%)',
+              left: `calc(-64px + ${(mousePosition.x - 50) * 0.25}px)`,
+              top: `calc(-64px + ${(mousePosition.y - 50) * 0.18}px)`,
             }}
           />
           <div
-            className="absolute w-[700px] h-[700px] rounded-full blur-3xl opacity-18 animate-float-slow-reverse"
+            className="absolute w-[800px] h-[800px] rounded-full blur-3xl opacity-22 animate-float-slow-reverse"
             style={{
-              background: 'radial-gradient(circle, rgba(17,23,39,0.35) 0%, transparent 75%)',
-              right: `calc(25% + ${(mousePosition.x - 50) * -0.15}px)`,
-              bottom: `calc(80px + ${(mousePosition.y - 50) * -0.1}px)`,
-            }}
-          />
-          {/* Extra mindre forms för variation */}
-          <div
-            className="absolute w-[500px] h-[500px] rounded-full blur-2xl opacity-12"
-            style={{
-              background: 'radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%)',
-              left: `10%`,
-              top: `25%`,
-              transform: `translate(${(mousePosition.x - 50) * 0.1}px, ${(mousePosition.y - 50) * 0.08}px)`,
-              animation: 'float-slow 40s ease-in-out infinite',
+              background: 'radial-gradient(circle, rgba(17,23,39,0.4) 0%, transparent 75%)',
+              right: `calc(25% + ${(mousePosition.x - 50) * -0.18}px)`,
+              bottom: `calc(80px + ${(mousePosition.y - 50) * -0.12}px)`,
             }}
           />
           <div
-            className="absolute w-[420px] h-[420px] rounded-full blur-2xl opacity-10"
+            className="absolute w-[500px] h-[500px] rounded-full blur-2xl opacity-16"
             style={{
-              background: 'radial-gradient(circle, rgba(125,211,252,0.08) 0%, transparent 75%)',
+              background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)',
+              left: `12%`,
+              top: `22%`,
+              transform: `translate(${(mousePosition.x - 50) * 0.12}px, ${(mousePosition.y - 50) * 0.09}px)`,
+              animation: 'float-slow 45s ease-in-out infinite',
+            }}
+          />
+          <div
+            className="absolute w-[420px] h-[420px] rounded-full blur-2xl opacity-14"
+            style={{
+              background: 'radial-gradient(circle, rgba(125,211,252,0.1) 0%, transparent 75%)',
               right: `15%`,
               bottom: `15%`,
-              transform: `translate(${(mousePosition.x - 50) * -0.1}px, ${(mousePosition.y - 50) * -0.06}px)`,
-              animation: 'float-slow-reverse 38s ease-in-out infinite',
+              transform: `translate(${(mousePosition.x - 50) * -0.1}px, ${(mousePosition.y - 50) * -0.07}px)`,
+              animation: 'float-slow-reverse 40s ease-in-out infinite',
             }}
           />
 
@@ -163,17 +172,17 @@ const FeaturedJobs = () => {
             className="absolute inset-0"
             aria-hidden="true"
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23f)' opacity='0.04'/%3E%3C/svg%3E")`,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23f)' opacity='0.05'/%3E%3C/svg%3E")`,
               backgroundRepeat: 'repeat',
               mixBlendMode: 'overlay',
             }}
           />
 
-          {/* Subtil ljuspunkt / glow för dimension */}
+          {/* Ljuspunkt / soft glow */}
           <div
             className="absolute inset-0"
             style={{
-              background: 'radial-gradient(circle at 45% 40%, rgba(255,255,255,0.08) 0%, transparent 65%)',
+              background: 'radial-gradient(circle at 45% 40%, rgba(255,255,255,0.1) 0%, transparent 70%)',
               mixBlendMode: 'soft-light',
               pointerEvents: 'none',
             }}
@@ -189,7 +198,7 @@ const FeaturedJobs = () => {
                 height: `${Math.random() * 2 + 1}px`,
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
-                backgroundColor: 'rgba(255,255,255,0.08)',
+                backgroundColor: 'rgba(255,255,255,0.1)',
                 animation: `pulse-light ${5 + Math.random() * 6}s ease-in-out ${Math.random() * 2}s infinite`,
               }}
             />
@@ -198,7 +207,15 @@ const FeaturedJobs = () => {
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="text-center mb-20">
+          <div className="text-center mb-20 relative">
+            {/* Glow bakom rubriken för separation */}
+            <div
+              className="absolute inset-x-0 top-0 mx-auto w-[400px] h-[180px] rounded-full blur-3xl opacity-25"
+              style={{
+                background: 'radial-gradient(circle at 50% 50%, rgba(125,211,252,0.35) 0%, transparent 60%)',
+                transform: 'translateY(-30px)',
+              }}
+            />
             <h2
               className={`
                 text-5xl md:text-6xl text-white mb-6 tracking-tight leading-[0.9]
