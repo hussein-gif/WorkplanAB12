@@ -187,8 +187,7 @@ const AudienceTiles = () => {
               color: 'rgba(255,255,255,0.7)',
             }}
           >
-            Oavsett om du är talang som söker nästa utmaning eller företag som behöver specialistkompetens,
-            erbjuder vi flexibla bemanningslösningar anpassade efter dina behov.
+            Flexibel bemanning för talanger och företag.
           </p>
         </div>
 
