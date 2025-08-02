@@ -66,6 +66,90 @@ const WarehouseLogisticsSpecialists = () => {
     },
   ];
 
+  const renderCard = (pillar: typeof trustPillars[0], index: number, flexClass: string) => (
+    <div
+      key={index}
+      className={`
+        ${flexClass} relative
+        transition-all duration-1000 transform
+        ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
+      `}
+      style={{ transitionDelay: `${600 + index * 150}ms` }}
+      onMouseEnter={() => setActiveCard(index)}
+      onMouseLeave={() => setActiveCard(null)}
+    >
+      <div
+        className={`
+          relative flex flex-col p-6 rounded-2xl overflow-hidden
+          bg-white shadow-md border border-gray-200
+          transition-all duration-500 ease-out
+          min-h-[260px]
+          ${activeCard === index ? 'shadow-xl' : ''}
+        `}
+      >
+        {/* Glow när aktiv */}
+        <div
+          className={`
+            absolute inset-0 rounded-2xl pointer-events-none
+            transition-opacity duration-500
+            ${activeCard === index ? 'opacity-100' : 'opacity-0'}
+          `}
+          style={{
+            background: `radial-gradient(circle at 50% 50%, ${pillar.glowColor} 0%, transparent 70%)`,
+          }}
+        />
+
+        {/* Icon */}
+        <div
+          className={`
+            relative w-14 h-14 rounded-xl mb-4
+            bg-gradient-to-br ${pillar.gradient}
+            flex items-center justify-center
+            shadow-lg flex-shrink-0
+          `}
+        >
+          <pillar.icon size={24} className="text-white" />
+        </div>
+
+        {/* Innehåll */}
+        <div className="relative z-10 flex-1 flex flex-col justify-between">
+          <div>
+            <h3
+              className="text-lg tracking-tight leading-tight mb-1"
+              style={{
+                fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                fontWeight: 400,
+                color: '#111827',
+              }}
+            >
+              {pillar.title}
+            </h3>
+            <p
+              className="text-sm leading-relaxed mb-4"
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                fontWeight: 400,
+                color: '#4B5563',
+              }}
+            >
+              {pillar.description}
+            </p>
+          </div>
+          <div
+            className="text-xs uppercase tracking-wider mt-2"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 400,
+              color: '#6B7280',
+            }}
+          >
+            {pillar.highlight}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <section
       ref={sectionRef}
@@ -197,91 +281,18 @@ const WarehouseLogisticsSpecialists = () => {
           </p>
         </div>
 
-        {/* 2x2 Kortlayout med exakt spacing och lika höjd */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 auto-rows-fr">
-          {trustPillars.map((pillar, index) => (
-            <div
-              key={index}
-              className={`
-                group relative flex
-                transition-all duration-1000 transform
-                ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
-              `}
-              style={{ transitionDelay: `${600 + index * 150}ms` }}
-              onMouseEnter={() => setActiveCard(index)}
-              onMouseLeave={() => setActiveCard(null)}
-            >
-              <div
-                className={`
-                  relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
-                  bg-white shadow-md border border-gray-200
-                  transition-all duration-500 ease-out
-                  min-h-[260px]
-                  ${activeCard === index ? 'shadow-xl' : ''}
-                `}
-              >
-                {/* Glow när aktiv */}
-                <div
-                  className={`
-                    absolute inset-0 rounded-2xl pointer-events-none
-                    transition-opacity duration-500
-                    ${activeCard === index ? 'opacity-100' : 'opacity-0'}
-                  `}
-                  style={{
-                    background: `radial-gradient(circle at 50% 50%, ${pillar.glowColor} 0%, transparent 70%)`,
-                  }}
-                />
-
-                {/* Icon */}
-                <div
-                  className={`
-                    relative w-14 h-14 rounded-xl mb-4
-                    bg-gradient-to-br ${pillar.gradient}
-                    flex items-center justify-center
-                    shadow-lg flex-shrink-0
-                  `}
-                >
-                  <pillar.icon size={24} className="text-white" />
-                </div>
-
-                {/* Innehåll: sprid så highlight alltid hamnar längst ner */}
-                <div className="relative z-10 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3
-                      className="text-lg tracking-tight leading-tight mb-1"
-                      style={{
-                        fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                        fontWeight: 400,
-                        color: '#111827',
-                      }}
-                    >
-                      {pillar.title}
-                    </h3>
-                    <p
-                      className="text-sm leading-relaxed mb-4"
-                      style={{
-                        fontFamily: 'Inter, sans-serif',
-                        fontWeight: 400,
-                        color: '#4B5563',
-                      }}
-                    >
-                      {pillar.description}
-                    </p>
-                  </div>
-                  <div
-                    className="text-xs uppercase tracking-wider mt-2"
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400,
-                      color: '#6B7280',
-                    }}
-                  >
-                    {pillar.highlight}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+        {/* Anpassad 2x2-layout (small/large / large/small) med tajt mellanrum */}
+        <div className="flex flex-col gap-2">
+          {/* Övre rad: small | large */}
+          <div className="flex gap-2">
+            {renderCard(trustPillars[0], 0, 'flex-[1]')}
+            {renderCard(trustPillars[1], 1, 'flex-[2]')}
+          </div>
+          {/* Nedre rad: large | small */}
+          <div className="flex gap-2">
+            {renderCard(trustPillars[2], 2, 'flex-[2]')}
+            {renderCard(trustPillars[3], 3, 'flex-[1]')}
+          </div>
         </div>
 
         {/* Bottom dots */}
