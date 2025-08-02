@@ -140,9 +140,9 @@ const ConversionBanner = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
               
               <div className="relative flex items-center justify-center space-x-3">
-                <Users size={18} className="text-[#22A055]" />
-                <span className="text-[#22A055]">Kontakta Oss</span>
-                <ArrowRight size={16} className="text-[#22A055] group-hover:translate-x-1 transition-transform duration-300" />
+                <Users size={18} className="text-[#1f2a63]" />
+                <span className="text-[#1f2a63]">Kontakta Oss</span>
+                <ArrowRight size={16} className="text-[#1f2a63] group-hover:translate-x-1 transition-transform duration-300" />
               </div>
             </button>
             
