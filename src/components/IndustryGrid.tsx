@@ -165,11 +165,7 @@ const IndustryGrid = () => {
   );
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative py-24 overflow-hidden"
-    >
-      {/* Livfullare ljus bakgrund: vit/ljus gradient + subtila accenter */}
+    <section ref={sectionRef} className="relative py-24 overflow-hidden">
       <style>{`
         @keyframes softPulse {
           0%,100% { opacity: 0.02; transform: scale(1) translate(0,0); }
@@ -180,24 +176,63 @@ const IndustryGrid = () => {
           50% { transform: translateY(-5px); }
           100% { transform: translateY(0px); }
         }
+        @keyframes slowFloatLarge {
+          0% { transform: translate(0,0) scale(1); }
+          50% { transform: translate(8px, -8px) scale(1.02); }
+          100% { transform: translate(0,0) scale(1); }
+        }
       `}</style>
 
       <div className="absolute inset-0">
-        {/* Basgradient i vitt/ljus ton */}
+        {/* Basgradient i ljusa toner */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(135deg, #ffffff 0%, #f5f7fa 55%, #ffffff 100%)',
+            background: 'linear-gradient(135deg, #ffffff 0%, #f0f5fa 55%, #ffffff 100%)',
           }}
         />
 
-        {/* Subtil central ljuspunkt för djup */}
+        {/* Subtil mönster-overlay (diagonal linjer) */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(circle at 50% 45%, rgba(125,211,252,0.1) 0%, transparent 60%)',
+            backgroundImage:
+              'repeating-linear-gradient(135deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 12px)',
+          }}
+        />
+
+        {/* Ljuspunkt för djup */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle at 45% 40%, rgba(255,255,255,0.5) 0%, transparent 65%)',
             mixBlendMode: 'overlay',
             animation: 'softPulse 25s ease-in-out infinite',
+          }}
+        />
+
+        {/* Mjuka flytande former för rörelse och liv */}
+        <div
+          className="absolute -left-32 top-10 w-[420px] h-[420px] rounded-full opacity-30 blur-3xl"
+          style={{
+            background: 'radial-gradient(circle at 30% 30%, rgba(99,102,241,0.12) 0%, transparent 60%)',
+            animation: 'slowFloatLarge 25s ease-in-out infinite',
+          }}
+        />
+        <div
+          className="absolute right-1/4 bottom-20 w-[360px] h-[360px] rounded-full opacity-25 blur-3xl"
+          style={{
+            background: 'radial-gradient(circle at 60% 40%, rgba(125,211,252,0.1) 0%, transparent 60%)',
+            animation: 'slowFloatLarge 30s ease-in-out infinite',
+            animationDelay: '5s',
+          }}
+        />
+        <div
+          className="absolute left-1/3 bottom-10 w-[300px] h-[300px] rounded-full opacity-20 blur-3xl"
+          style={{
+            background: 'radial-gradient(circle at 50% 50%, rgba(219,234,254,0.08) 0%, transparent 70%)',
+            animation: 'slowFloatLarge 22s ease-in-out infinite',
+            animationDelay: '2s',
           }}
         />
 
@@ -230,7 +265,7 @@ const IndustryGrid = () => {
           }}
         />
 
-        {/* Grid overlays (diskret ljusblå ton) */}
+        {/* Grid overlays (diskret ljus) */}
         <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
@@ -254,7 +289,7 @@ const IndustryGrid = () => {
           }}
         />
 
-        {/* Flytande små accenter */}
+        {/* Små accenter */}
         <div
           className="absolute top-24 left-16 w-3 h-3 bg-blue-400/20 rounded-full"
           style={{
@@ -358,9 +393,9 @@ const IndustryGrid = () => {
           </p>
         </div>
 
-        {/* Anpassad 2x2-layout (small/large / large/small) med finjusterade proportioner */}
+        {/* Layout med bubbla och kort */}
         <div className="flex flex-col gap-2 relative">
-          {/* Gradient bubble över korten i ljus blå ton (lite mindre) */}
+          {/* Gradient bubble över korten (ljus blå ton, mindre) */}
           <div
             className="absolute left-1/2 top-1/2 w-[520px] h-[520px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={{
