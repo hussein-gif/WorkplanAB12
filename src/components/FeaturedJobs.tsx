@@ -22,7 +22,7 @@ const SimpleHoverCard: React.FC<{
 const FeaturedJobs = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
   const [activeCard, setActiveCard] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -72,11 +72,19 @@ const FeaturedJobs = () => {
           0%,100% { opacity: 0.08; }
           50% { opacity: 0.16; }
         }
+        @keyframes hueShift {
+          0% { filter: hue-rotate(0deg); }
+          50% { filter: hue-rotate(10deg); }
+          100% { filter: hue-rotate(0deg); }
+        }
         .animate-float-slow {
           animation: float-slow 30s ease-in-out infinite;
         }
         .animate-float-slow-reverse {
           animation: float-slow-reverse 34s ease-in-out infinite;
+        }
+        .animate-hue {
+          animation: hueShift 60s ease-in-out infinite;
         }
       `}</style>
 
@@ -85,38 +93,89 @@ const FeaturedJobs = () => {
         id="jobs"
         className="relative py-32 overflow-hidden"
       >
-        {/* Bakgrund: samma mörka ton + organiska soft-former + textur + liv */}
+        {/* Förbättrad bakgrund: mörk, lager på lager, parallax, grid, liv */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Basgradient: exakt samma djupa mörkblå/svarta känsla som original */}
+          {/* Basgradient */}
+          <div
+            className="absolute inset-0 animate-hue"
+            style={{
+              background: 'linear-gradient(135deg, #0f172a 0%, #111827 40%, #1f2937 100%)',
+            }}
+          />
+
+          {/* Parallax grid (ton-i-ton, rör sig svagt med mus) */}
           <div
             className="absolute inset-0"
             style={{
-              background: 'linear-gradient(135deg, #111827 0%, #0f172a 50%, #1f2937 100%)',
+              backgroundImage: `
+                linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
+              `,
+              backgroundSize: '160px 160px',
+              transform: `translate(${(mousePosition.x - 50) * 0.08}px, ${(mousePosition.y - 50) * 0.08}px)`,
+              pointerEvents: 'none',
+              mixBlendMode: 'overlay',
+              opacity: 0.8,
             }}
           />
 
-          {/* Mjuka svävande former för djup (toner inom samma palett) */}
+          {/* Mjuka svävande former för djup (toner inom samma palett) med parallax */}
           <div
-            className="absolute w-[900px] h-[900px] rounded-full blur-3xl opacity-20 -left-64 -top-64 animate-float-slow"
+            className="absolute w-[900px] h-[900px] rounded-full blur-3xl opacity-24 animate-float-slow"
             style={{
-              background: 'radial-gradient(circle, rgba(31,41,55,0.35) 0%, transparent 75%)',
+              background: 'radial-gradient(circle, rgba(31,41,55,0.45) 0%, transparent 75%)',
+              left: `calc(-64px + ${(mousePosition.x - 50) * 0.2}px)`,
+              top: `calc(-64px + ${(mousePosition.y - 50) * 0.15}px)`,
             }}
           />
           <div
-            className="absolute w-[700px] h-[700px] rounded-full blur-3xl opacity-16 right-1/4 bottom-20 animate-float-slow-reverse"
+            className="absolute w-[700px] h-[700px] rounded-full blur-3xl opacity-18 animate-float-slow-reverse"
             style={{
-              background: 'radial-gradient(circle, rgba(17,23,39,0.3) 0%, transparent 75%)',
+              background: 'radial-gradient(circle, rgba(17,23,39,0.35) 0%, transparent 75%)',
+              right: `calc(25% + ${(mousePosition.x - 50) * -0.15}px)`,
+              bottom: `calc(80px + ${(mousePosition.y - 50) * -0.1}px)`,
+            }}
+          />
+          {/* Extra mindre forms för variation */}
+          <div
+            className="absolute w-[500px] h-[500px] rounded-full blur-2xl opacity-12"
+            style={{
+              background: 'radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%)',
+              left: `10%`,
+              top: `25%`,
+              transform: `translate(${(mousePosition.x - 50) * 0.1}px, ${(mousePosition.y - 50) * 0.08}px)`,
+              animation: 'float-slow 40s ease-in-out infinite',
+            }}
+          />
+          <div
+            className="absolute w-[420px] h-[420px] rounded-full blur-2xl opacity-10"
+            style={{
+              background: 'radial-gradient(circle, rgba(125,211,252,0.08) 0%, transparent 75%)',
+              right: `15%`,
+              bottom: `15%`,
+              transform: `translate(${(mousePosition.x - 50) * -0.1}px, ${(mousePosition.y - 50) * -0.06}px)`,
+              animation: 'float-slow-reverse 38s ease-in-out infinite',
             }}
           />
 
-          {/* Subtil noise/textur-overlay utan att ändra nyans */}
+          {/* Subtil textur / noise */}
           <div
             className="absolute inset-0"
             aria-hidden="true"
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23f)' opacity='0.03'/%3E%3C/svg%3E")`,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23f)' opacity='0.04'/%3E%3C/svg%3E")`,
               backgroundRepeat: 'repeat',
               mixBlendMode: 'overlay',
+            }}
+          />
+
+          {/* Subtil ljuspunkt / glow för dimension */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'radial-gradient(circle at 45% 40%, rgba(255,255,255,0.08) 0%, transparent 65%)',
+              mixBlendMode: 'soft-light',
+              pointerEvents: 'none',
             }}
           />
 
@@ -130,8 +189,8 @@ const FeaturedJobs = () => {
                 height: `${Math.random() * 2 + 1}px`,
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
-                backgroundColor: 'rgba(255,255,255,0.1)',
-                animation: `pulse-light ${5 + Math.random() * 5}s ease-in-out ${Math.random() * 2}s infinite`,
+                backgroundColor: 'rgba(255,255,255,0.08)',
+                animation: `pulse-light ${5 + Math.random() * 6}s ease-in-out ${Math.random() * 2}s infinite`,
               }}
             />
           ))}
