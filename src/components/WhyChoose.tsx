@@ -192,7 +192,7 @@ const WhyChoose = () => {
           />
           <p
             className={`
-              text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed font-light
+              text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed font-light -mt-2
               transition-all duration-1000 delay-400 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
             `}
