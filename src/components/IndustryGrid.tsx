@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Truck, CheckCircle, Clock, Shield } from 'lucide-react';
 
-const WarehouseLogisticsSpecialists = () => {
+const IndustryGrid = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [activeCard, setActiveCard] = useState<number | null>(null);
@@ -394,4 +394,4 @@ const WarehouseLogisticsSpecialists = () => {
   );
 };
 
-export default WarehouseLogisticsSpecialists;
+export default IndustryGrid;
