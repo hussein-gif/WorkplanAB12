@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Truck, CheckCircle, Clock, Shield } from 'lucide-react';
 
-const clamp = (val: number, min: number, max: number) => Math.min(Math.max(val, min), max);
-
 const WarehouseLogisticsSpecialists = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [activeCard, setActiveCard] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -64,97 +61,146 @@ const WarehouseLogisticsSpecialists = () => {
     },
   ];
 
-  const renderCard = (pillar: typeof trustPillars[0], index: number, flexGrow: number) => (
-    <div
-      key={index}
-      className={`
-        relative flex
-        transition-all duration-500 ease-out
-        ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
-        group
-      `}
-      style={{ transitionDelay: `${300 + index * 150}ms`, flex: flexGrow }}
-      onMouseEnter={() => setActiveCard(index)}
-      onMouseLeave={() => setActiveCard(null)}
-    >
-      <div
-        className={`
-          relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
-          bg-white shadow-md ring-1 ring-gray-100
-          transition-transform duration-300
-          ${activeCard === index ? 'scale-[1.02] shadow-xl' : ''}
-        `}
-        style={{ minHeight: '260px' }}
-      >
-        {/* Accent bar vänster */}
-        <div
-          className="absolute left-0 top-0 bottom-0 w-1 rounded-r"
-          style={{ background: pillar.accentGradient }}
-        />
+  // Unik kortkomponent med tilt och mikrointeraktion
+  const UniqueCard = ({
+    icon: Icon,
+    title,
+    description,
+    highlight,
+    accentGradient,
+  }: {
+    icon: React.ComponentType<{ size?: number; className?: string }>;
+    title: string;
+    description: string;
+    highlight: string;
+    accentGradient: string;
+  }) => {
+    const cardRef = useRef<HTMLDivElement | null>(null);
+    const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+    const [isHover, setIsHover] = useState(false);
 
-        {/* Titel & ikon */}
-        <div className="flex items-start gap-4 mb-2">
-          <div className="flex-shrink-0">
-            <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-white ring-1 ring-gray-200 shadow-sm">
-              <pillar.icon size={20} className="text-gray-700" />
+    const handleMouseMove = (e: React.MouseEvent) => {
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      const rotateY = (px - 0.5) * 12; // max 12deg
+      const rotateX = (0.5 - py) * 12;
+      setTilt({ rotateX, rotateY });
+    };
+
+    const handleMouseLeave = () => {
+      setTilt({ rotateX: 0, rotateY: 0 });
+      setIsHover(false);
+    };
+
+    return (
+      <div
+        ref={(el) => (cardRef.current = el)}
+        className="relative flex-1"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onMouseEnter={() => setIsHover(true)}
+        style={{ perspective: 1000 }}
+      >
+        <div
+          className={`
+            relative rounded-2xl overflow-hidden
+            bg-white/80 backdrop-blur-md
+            ring-1 ring-gray-200
+            shadow-lg transition-all duration-400
+          `}
+          style={{
+            minHeight: 260,
+            transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale(${isHover ? 1.03 : 1})`,
+            boxShadow: isHover
+              ? '0 25px 50px -10px rgba(0,0,0,0.25)'
+              : '0 15px 35px -5px rgba(0,0,0,0.1)',
+          }}
+        >
+          {/* Accent bar vänster */}
+          <div
+            className="absolute top-0 left-0 bottom-0 w-1"
+            style={{ background: accentGradient }}
+          />
+
+          {/* Dekorativ subtil bakgrundspattern (svg dots) */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            aria-hidden="true"
+          >
+            <svg
+              width="100%"
+              height="100%"
+              style={{ opacity: 0.04 }}
+              viewBox="0 0 200 200"
+              preserveAspectRatio="xMidYMid slice"
+              className="block"
+            >
+              <circle cx="160" cy="40" r="50" fill="none" stroke="rgba(0,0,0,0.03)" strokeWidth="1" />
+              <circle cx="40" cy="160" r="30" fill="none" stroke="rgba(0,0,0,0.02)" strokeWidth="1" />
+            </svg>
+          </div>
+
+          <div className="relative p-6 flex flex-col h-full">
+            <div className="flex items-start gap-4 mb-2">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-white ring-1 ring-gray-200 shadow-sm">
+                  <Icon size={20} className="text-gray-700" />
+                </div>
+              </div>
+              <div className="flex-1">
+                <h3
+                  className="text-lg font-semibold text-gray-900 relative"
+                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                >
+                  {title}
+                  <div
+                    className={`
+                      absolute left-0 bottom-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500
+                      transition-all duration-300
+                      ${isHover ? 'w-full' : 'w-8'}
+                    `}
+                  />
+                </h3>
+              </div>
+            </div>
+            <p
+              className="text-sm text-gray-600 flex-1 leading-relaxed mb-4"
+              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
+            >
+              {description}
+            </p>
+            <div
+              className="text-xs uppercase tracking-wider text-gray-400 mt-2"
+              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
+            >
+              {highlight}
             </div>
           </div>
-          <div className="flex-1">
-            <h3
-              className="text-lg font-semibold text-gray-900 relative"
-              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-            >
-              {pillar.title}
-              <div
-                className={`
-                  absolute left-0 bottom-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500
-                  transition-all duration-300
-                  ${activeCard === index ? 'w-full' : 'w-8'}
-                `}
-              />
-            </h3>
-          </div>
-        </div>
-
-        {/* Beskrivning */}
-        <p
-          className="text-sm text-gray-600 flex-1 leading-relaxed mb-4"
-          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
-        >
-          {pillar.description}
-        </p>
-
-        {/* Highlight */}
-        <div
-          className="text-xs uppercase tracking-wider text-gray-400 mt-2"
-          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
-        >
-          {pillar.highlight}
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <section ref={sectionRef} className="relative py-24 overflow-hidden">
-      {/* Bakgrund: ren, professionell, subtil djup */}
+      {/* Bakgrund: varm ljus gradient + vignette + subtil grid + små former */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Basgradient */}
         <div
           className="absolute inset-0"
           style={{
             background: 'linear-gradient(135deg, #f9fbfd 0%, #eef5fb 100%)',
           }}
         />
-        {/* Subtil vignette */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 40% 40%, rgba(0,0,0,0.04) 0%, transparent 70%)',
+            background:
+              'radial-gradient(circle at 40% 40%, rgba(0,0,0,0.04) 0%, transparent 70%)',
             mixBlendMode: 'multiply',
           }}
         />
-        {/* Diskret grid */}
         <div
           className="absolute inset-0"
           style={{
@@ -165,7 +211,6 @@ const WarehouseLogisticsSpecialists = () => {
             backgroundSize: '140px 140px',
           }}
         />
-        {/* Små geometriska former med lätt parallax */}
         <div
           className="absolute top-12 left-12 w-16 h-16 border border-indigo-200 rounded-full"
           style={{
@@ -223,15 +268,15 @@ const WarehouseLogisticsSpecialists = () => {
           </p>
         </div>
 
-        {/* Kortlayout: 2x2 med proportioner */}
+        {/* Layout: 2x2 med proportioner */}
         <div className="flex flex-col gap-4">
           <div className="flex gap-4">
-            {renderCard(trustPillars[0], 0, 1.2)}
-            {renderCard(trustPillars[1], 1, 1.8)}
+            <UniqueCard {...trustPillars[0]} />
+            <UniqueCard {...trustPillars[1]} />
           </div>
           <div className="flex gap-4">
-            {renderCard(trustPillars[2], 2, 1.8)}
-            {renderCard(trustPillars[3], 3, 1.2)}
+            <UniqueCard {...trustPillars[2]} />
+            <UniqueCard {...trustPillars[3]} />
           </div>
         </div>
 
