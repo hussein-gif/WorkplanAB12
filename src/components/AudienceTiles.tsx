@@ -62,14 +62,37 @@ const AudienceTiles = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative py-32 bg-gradient-to-br from-slate-900 via-gray-900 to-slate-800 overflow-hidden"
+      className="relative py-32 overflow-hidden"
+      style={{ background: 'transparent' }}
     >
-      {/* Bakgrundseffekter */}
-      <div className="absolute inset-0">
-        {/* Primär gradient-overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-gray-900/90 to-slate-800/95" />
+      {/* Förnyad bakgrund med lager, glow, grid, noise och prickar */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Basgradient (radial + linjär) */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(circle at 30% 30%, #1f2a48 0%, #0f172a 60%), linear-gradient(135deg, #0f172a 0%, #1f2a48 80%)',
+          }}
+        />
 
-        {/* Animerade orbs */}
+        {/* Soft glows med parallax */}
+        <div
+          className="absolute -left-32 -top-32 w-[700px] h-[700px] rounded-full blur-3xl opacity-30"
+          style={{
+            background: 'radial-gradient(circle at 40% 40%, #6366f1 0%, transparent 60%)',
+            transform: `translate(${mousePosition.x * 0.04}px, ${mousePosition.y * 0.03}px)`,
+          }}
+        />
+        <div
+          className="absolute right-1/4 bottom-20 w-[500px] h-[500px] rounded-full blur-3xl opacity-20"
+          style={{
+            background: 'radial-gradient(circle at 60% 50%, #10b981 0%, transparent 60%)',
+            transform: `translate(${mousePosition.x * -0.02}px, ${mousePosition.y * -0.02}px)`,
+          }}
+        />
+
+        {/* Bevarade orbs för extra liv */}
         <div
           className="absolute w-[1000px] h-[1000px] rounded-full opacity-[0.08] blur-3xl transition-all duration-1000"
           style={{
@@ -98,52 +121,50 @@ const AudienceTiles = () => {
           }}
         />
 
-        {/* Flytande geometriska element */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div
-            className="absolute inset-0 opacity-[0.02]"
-            style={{
-              backgroundImage: `
-                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-              `,
-              backgroundSize: '80px 80px',
-              transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`,
-            }}
-          />
-          <div
-            className="absolute top-20 right-32 w-3 h-3 bg-blue-400/30 rounded-full animate-pulse"
-            style={{ animationDuration: '3s' }}
-          />
-          <div
-            className="absolute top-40 left-20 w-2 h-2 bg-emerald-400/40 rounded-full animate-pulse"
-            style={{ animationDuration: '4s', animationDelay: '1s' }}
-          />
-          <div
-            className="absolute bottom-32 right-20 w-2.5 h-2.5 bg-purple-400/25 rounded-full animate-pulse"
-            style={{ animationDuration: '5s', animationDelay: '2s' }}
-          />
-          <div
-            className="absolute bottom-40 left-32 w-1.5 h-1.5 bg-indigo-400/35 rounded-full animate-pulse"
-            style={{ animationDuration: '6s', animationDelay: '3s' }}
-          />
-          <div
-            className="absolute top-1/4 left-1/4 w-32 h-32 border border-white/5 rounded-full"
-            style={{ transform: `rotate(${mousePosition.x * 0.1}deg)` }}
-          />
-          <div
-            className="absolute bottom-1/4 right-1/4 w-24 h-24 border border-white/5 rounded-full"
-            style={{ transform: `rotate(${-mousePosition.y * 0.1}deg)` }}
-          />
-        </div>
-
-        {/* Atmosfäriskt brus */}
+        {/* Subtil grid */}
         <div
-          className="absolute inset-0 opacity-[0.015]"
+          className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+            `,
+            backgroundSize: '100px 100px',
+            mixBlendMode: 'overlay',
           }}
         />
+
+        {/* Atmosfäriskt brus / noise */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' fill='rgba(255,255,255,0.02)'/%3E%3C/svg%3E")`,
+          }}
+        />
+
+        {/* Vignette */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 50%, rgba(0,0,0,0.35) 100%)',
+          }}
+        />
+
+        {/* Små pulserande prickar */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div
+            className="absolute top-16 left-10 w-2 h-2 rounded-full animate-pulse"
+            style={{ backgroundColor: '#6366f1', opacity: 0.35, animationDuration: '5s' }}
+          />
+          <div
+            className="absolute bottom-24 right-20 w-1.5 h-1.5 rounded-full animate-pulse"
+            style={{ backgroundColor: '#10b981', opacity: 0.3, animationDuration: '6s', animationDelay: '1s' }}
+          />
+          <div
+            className="absolute top-1/3 right-28 w-1 h-1 rounded-full animate-pulse"
+            style={{ backgroundColor: '#a78bfa', opacity: 0.25, animationDuration: '7s', animationDelay: '2s' }}
+          />
+        </div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-8">
