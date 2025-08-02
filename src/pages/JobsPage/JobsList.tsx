@@ -78,7 +78,10 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
                     {job.companyLogo}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-lg text-gray-900 mb-2 leading-tight" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '500' }}>
+                    <h3
+                      className="text-lg text-gray-900 mb-2 leading-tight font-medium"
+                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                    >
                       {job.title}
                     </h3>
                     <div className="text-base text-gray-700" style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}>
