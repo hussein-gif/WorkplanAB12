@@ -11,7 +11,7 @@ const WhyChoose = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const pillarRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-  // Determine which pillar is closest to viewport vertical center
+  // Vilken pelare är närmast vertikalt centrum
   const updateScrollIndex = () => {
     if (!pillarRefs.current.length) return;
     const centerY = window.innerHeight / 2;
@@ -102,20 +102,17 @@ const WhyChoose = () => {
     <section
       ref={sectionRef}
       className="relative py-32 overflow-hidden"
-      style={{
-        background: 'linear-gradient(135deg, #f7f9fc 0%, #e3e9f4 70%)',
-      }}
     >
-      {/* Globala animationer och reduced-motion */}
+      {/* Globala animationer & reduced motion */}
       <style>{`
         @keyframes blob {
           0% { transform: scale(1) translate(0,0); }
-          33% { transform: scale(1.05) translate(10px, -5px); }
-          66% { transform: scale(0.95) translate(-10px, 5px); }
+          33% { transform: scale(1.05) translate(8px, -5px); }
+          66% { transform: scale(0.95) translate(-8px, 5px); }
           100% { transform: scale(1) translate(0,0); }
         }
         .animate-blob {
-          animation: blob 18s infinite ease-in-out;
+          animation: blob 20s infinite ease-in-out;
         }
         @media (prefers-reduced-motion: reduce) {
           .animate-blob {
@@ -124,55 +121,65 @@ const WhyChoose = () => {
         }
       `}</style>
 
-      {/* Bakgrundseffekter: vignette, noise, blobs och dekor */}
+      {/* Bakgrund: gradient + vignette + noise + grid + blobs + dekor */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Vignette/fokus */}
+        {/* Bas: ljus varm gradient */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 50% 40%, rgba(0,0,0,0.08) 0%, transparent 80%)',
+            background: 'linear-gradient(135deg, #f5f7fa 0%, #fffdf7 80%)',
+          }}
+        />
+
+        {/* Vignette för fokus */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(circle at 50% 40%, rgba(0,0,0,0.06) 0%, transparent 80%)',
             mixBlendMode: 'multiply',
           }}
         />
-        {/* Noise overlay */}
+
+        {/* Subtil noise/textur */}
         <div
           className="absolute inset-0"
           style={{
-            background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)' opacity='0.04'/%3E%3C/svg%3E") repeat`,
+            background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E") repeat`,
           }}
         />
-        {/* Subtil grid/dekor */}
+
+        {/* Subtil gridstruktur */}
         <div
           className="absolute inset-0"
           style={{
-            opacity: 0.02,
             backgroundImage: `
-              linear-gradient(#000 1px, transparent 1px),
-              linear-gradient(90deg, #000 1px, transparent 1px)
+              linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)
             `,
-            backgroundSize: '80px 80px',
+            backgroundSize: '100px 100px',
           }}
         />
-        {/* Små dekorprickar */}
+
+        {/* Flytande accent-blobs */}
+        <div
+          className="absolute -top-10 left-1/3 w-[450px] h-[450px] rounded-full blur-3xl opacity-10 animate-blob"
+          style={{
+            background: 'radial-gradient(circle at 40% 40%, #7C3AED 0%, transparent 70%)',
+          }}
+        />
+        <div
+          className="absolute bottom-12 right-1/4 w-[500px] h-[500px] rounded-full blur-3xl opacity-10 animate-blob"
+          style={{
+            background: 'radial-gradient(circle at 60% 50%, #10B981 0%, transparent 70%)',
+            animationDelay: '3s',
+          }}
+        />
+
+        {/* Dekorprickar */}
         <div className="absolute top-20 right-20 w-2 h-2 bg-gray-200 rounded-full opacity-40" />
         <div className="absolute top-40 left-16 w-1 h-1 bg-gray-300 rounded-full opacity-60" />
         <div className="absolute bottom-32 right-32 w-1.5 h-1.5 bg-gray-200 rounded-full opacity-50" />
         <div className="absolute bottom-20 left-20 w-0.5 h-0.5 bg-gray-400 rounded-full opacity-30" />
-
-        {/* Flytande blobs */}
-        <div
-          className="absolute -top-10 left-1/4 w-[500px] h-[500px] rounded-full blur-3xl opacity-10 animate-blob"
-          style={{
-            background: 'radial-gradient(circle at 30% 30%, #6366F1 0%, transparent 70%)',
-          }}
-        />
-        <div
-          className="absolute bottom-0 right-1/3 w-[600px] h-[600px] rounded-full blur-3xl opacity-10 animate-blob"
-          style={{
-            background: 'radial-gradient(circle at 70% 40%, #22C55E 0%, transparent 70%)',
-            animationDelay: '2s',
-          }}
-        />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-8">
@@ -384,7 +391,7 @@ const WhyChoose = () => {
                         ${isActive ? 'scale-105' : ''}
                       `}
                     >
-                      {/* Subtil yttre “ring” / bakgrund */}
+                      {/* Subtil yttre bakgrund / ring */}
                       <div
                         className={`
                           absolute inset-0 rounded-full
@@ -399,7 +406,7 @@ const WhyChoose = () => {
                         }}
                       />
 
-                      {/* Inre diffus disk (alldeles väldigt lätt, inte opak) */}
+                      {/* Inre diffus disk */}
                       <div
                         className={`
                           absolute inset-10 rounded-full
@@ -412,7 +419,7 @@ const WhyChoose = () => {
                         }}
                       />
 
-                      {/* Centralt ikon med nedtonad vit bakgrund */}
+                      {/* Centralt ikon */}
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div
                           className={`
