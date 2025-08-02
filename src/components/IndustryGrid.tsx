@@ -4,39 +4,28 @@ import { Truck, CheckCircle, Clock, Shield } from 'lucide-react';
 const WarehouseLogisticsSpecialists = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [activeCard, setActiveCard] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
+        if (entry.isIntersecting) setIsVisible(true);
       },
       { threshold: 0.1 }
     );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    if (sectionRef.current) observer.observe(sectionRef.current);
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        setMousePosition({
-          x: ((e.clientX - rect.left) / rect.width) * 100,
-          y: ((e.clientY - rect.top) / rect.height) * 100,
-        });
-      }
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      setMousePosition({
+        x: ((e.clientX - rect.left) / rect.width) * 100,
+        y: ((e.clientY - rect.top) / rect.height) * 100,
+      });
     };
-
     window.addEventListener('mousemove', handleMouseMove);
-
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
+      if (sectionRef.current) observer.unobserve(sectionRef.current);
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
@@ -47,237 +36,202 @@ const WarehouseLogisticsSpecialists = () => {
       title: 'Djup Branschkännedom',
       description: 'Vårt team förstår era unika behov inom lager och logistik.',
       highlight: 'Specialister på ert område',
-      gradient: 'from-blue-500 to-indigo-600',
-      glowColor: 'rgba(59, 130, 246, 0.2)',
+      accent: 'teal' as const,
     },
     {
       icon: CheckCircle,
       title: 'Noggrann Screening',
       description: 'Vi genomför strukturerade kompetens- och bakgrundskontroller.',
       highlight: 'Trygg matchning',
-      gradient: 'from-emerald-500 to-teal-600',
-      glowColor: 'rgba(16, 185, 129, 0.2)',
+      accent: 'lavender' as const,
     },
     {
       icon: Clock,
       title: 'Snabb Respons',
       description: 'Omedelbar återkoppling för att hålla er bemanning i rörelse.',
       highlight: 'Snabbt igångsättande',
-      gradient: 'from-orange-500 to-red-600',
-      glowColor: 'rgba(249, 115, 22, 0.2)',
+      accent: 'teal' as const,
     },
     {
       icon: Shield,
       title: 'Säkerhet & Kvalitet',
       description: 'Certifierade medarbetare med fokus på trygghet och kvalitet i varje uppdrag.',
       highlight: 'Hög leveranskvalitet',
-      gradient: 'from-purple-500 to-violet-600',
-      glowColor: 'rgba(139, 92, 246, 0.2)',
+      accent: 'lavender' as const,
     },
-  ];
+  ] as const;
 
-  const renderCard = (pillar: typeof trustPillars[0], index: number, flexGrow: number) => (
-    <div
-      key={index}
-      className={`
-        relative flex
-        transition-all duration-1000 transform
-        ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
-      `}
-      style={{ transitionDelay: `${600 + index * 150}ms`, flex: flexGrow }}
-      onMouseEnter={() => setActiveCard(index)}
-      onMouseLeave={() => setActiveCard(null)}
-    >
+  type Pillar = typeof trustPillars[number];
+
+  const accentConfig = {
+    teal: {
+      bar: 'linear-gradient(180deg, rgba(94,234,212,1), rgba(94,234,212,0.6))',
+      underline: 'from-[#5eead4] to-[#5eead4]',
+      soft: 'rgba(94,234,212,0.15)',
+    },
+    lavender: {
+      bar: 'linear-gradient(180deg, rgba(196,181,253,1), rgba(196,181,253,0.6))',
+      underline: 'from-[#c4b5fd] to-[#c4b5fd]',
+      soft: 'rgba(196,181,253,0.15)',
+    },
+  } as const;
+
+  const DarkCard = ({
+    pillar,
+    index,
+  }: {
+    pillar: Pillar;
+    index: number;
+  }) => {
+    const [isHover, setIsHover] = useState(false);
+    return (
       <div
-        className={`
-          relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
-          bg-white/25 backdrop-blur-md border border-white/30
-          shadow-xl
-          transition-all duration-500 ease-out
-          min-h-[260px]
-          ${activeCard === index ? 'scale-[1.02]' : ''}
-        `}
+        className="relative flex-1"
+        style={{ perspective: 800, minHeight: 260 }}
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
       >
-        {/* Glow när aktiv */}
         <div
           className={`
-            absolute inset-0 rounded-2xl pointer-events-none
-            transition-opacity duration-500
-            ${activeCard === index ? 'opacity-100' : 'opacity-0'}
-          `}
-          style={{
-            background: `radial-gradient(circle at 50% 50%, ${pillar.glowColor} 0%, transparent 70%)`,
-          }}
-        />
-
-        {/* Accent bar up top (nästbildad från referens) */}
-        <div className="absolute top-0 left-0 w-full h-1 rounded-t-xl" style={{ background: `linear-gradient(90deg, #6366F1, #A855F7)` }} />
-
-        {/* Shared subtle decorative shapes inside card */}
-        <div className="absolute top-8 right-8 w-16 h-16 rounded-lg border border-white/20 opacity-30" />
-
-        {/* Icon */}
-        <div
-          className={`
-            relative w-14 h-14 rounded-xl mb-4
-            bg-gradient-to-br ${pillar.gradient}
-            flex items-center justify-center
-            shadow-md flex-shrink-0
+            relative rounded-2xl overflow-hidden
+            bg-[rgba(15,25,70,0.85)] border border-[rgba(255,255,255,0.07)]
+            shadow-md transition-all duration-300
+            ${isHover ? 'scale-[1.025] shadow-xl' : ''}
           `}
         >
-          <pillar.icon size={24} className="text-white" />
-        </div>
+          {/* Accent bar left */}
+          <div
+            className="absolute top-0 left-0 bottom-0 w-1 rounded-r"
+            style={{ background: accentConfig[pillar.accent].bar }}
+          />
 
-        {/* Innehåll */}
-        <div className="relative z-10 flex-1 flex flex-col justify-between">
-          <div>
-            <h3
-              className="text-lg tracking-tight leading-tight mb-1 font-medium"
-              style={{
-                fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                color: '#111827',
-              }}
-            >
-              {pillar.title}
-            </h3>
+          {/* Subtle decorative shapes */}
+          <div
+            className="absolute -top-5 -left-5 w-20 h-20 rounded-full opacity-20 blur-lg"
+            style={{ background: accentConfig[pillar.accent].soft }}
+            aria-hidden="true"
+          />
+          <div
+            className="absolute top-6 right-6 w-12 h-12 rounded border border-[rgba(255,255,255,0.08)] opacity-25"
+            aria-hidden="true"
+            style={{
+              transform: `translate(${mousePosition.x * 0.004}px, ${-mousePosition.y * 0.004}px)`,
+            }}
+          />
+
+          <div className="relative p-6 flex flex-col h-full">
+            <div className="flex items-start gap-3 mb-2">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[rgba(255,255,255,0.08)] ring-1 ring-[rgba(255,255,255,0.1)]">
+                  <pillar.icon size={20} className="text-white" />
+                </div>
+              </div>
+              <div className="flex-1">
+                <h3
+                  className="text-lg font-semibold text-white relative mb-1"
+                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                >
+                  {pillar.title}
+                  <div
+                    className={`
+                      absolute left-0 bottom-0 h-0.5 bg-gradient-to-r ${accentConfig[pillar.accent].underline}
+                      transition-all duration-300
+                      ${isHover ? 'w-full' : 'w-8'}
+                    `}
+                  />
+                </h3>
+              </div>
+            </div>
             <p
-              className="text-sm leading-relaxed mb-4"
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 300,
-                color: '#4B5563',
-              }}
+              className="text-sm text-gray-300 flex-1 leading-relaxed mb-4"
+              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
             >
               {pillar.description}
             </p>
-          </div>
-          <div
-            className="text-xs uppercase tracking-wider mt-2"
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 400,
-              color: '#6B7280',
-            }}
-          >
-            {pillar.highlight}
+            <div
+              className="text-xs uppercase tracking-wider"
+              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, color: '#9CA3AF' }}
+            >
+              {pillar.highlight}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <section
       ref={sectionRef}
-      className="relative py-24 bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50/30 overflow-hidden"
+      className="relative py-24 overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #f0f4f9 0%, #d9e2ec 70%)',
+      }}
     >
-      {/* Lätt subtil animation / patch för att göra bakgrunden mindre platt */}
+      {/* Bakgrundseffekter: mild vignette + subtilt grid + very light noise + central soft blob */}
       <style>{`
-        @keyframes softPulse {
+        @keyframes slowPulse {
           0%,100% { opacity: 0.04; }
           50% { opacity: 0.07; }
         }
-        .animate-soft-pulse {
-          animation: softPulse 18s ease-in-out infinite;
-        }
       `}</style>
-
-      {/* Bakgrund */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50/90 via-white/95 to-blue-50/80" />
-
-        {/* Subtil ljus patch över hela ytan för rörelse */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Ljus vignette för djup */}
         <div
-          className="absolute inset-0 pointer-events-none animate-soft-pulse"
+          className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6) 0%, transparent 60%)',
+            background: 'radial-gradient(circle at 40% 40%, rgba(255,255,255,0.65) 0%, transparent 65%)',
             mixBlendMode: 'overlay',
           }}
         />
-
+        {/* Subtilt grid */}
         <div
-          className="absolute w-[800px] h-[800px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000"
-          style={{
-            background: `radial-gradient(circle, #1e40af 0%, #3b82f6 30%, transparent 70%)`,
-            left: `${mousePosition.x * 0.3}%`,
-            top: `${mousePosition.y * 0.2}%`,
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
-        <div
-          className="absolute w-[600px] h-[600px] rounded-full opacity-[0.03] blur-3xl transition-all duration-1000 delay-500"
-          style={{
-            background: `radial-gradient(circle, #0f766e 0%, #14b8a6 30%, transparent 70%)`,
-            right: `${mousePosition.x * 0.2}%`,
-            bottom: `${mousePosition.y * 0.3}%`,
-            transform: 'translate(50%, 50%)',
-          }}
-        />
-        <div
-          className="absolute w-[400px] h-[400px] rounded-full opacity-[0.02] blur-3xl transition-all duration-1000 delay-1000"
-          style={{
-            background: `radial-gradient(circle, #7c3aed 0%, #a855f7 30%, transparent 70%)`,
-            left: `${50 + mousePosition.x * 0.1}%`,
-            top: `${30 + mousePosition.y * 0.1}%`,
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
-
-        <div
-          className="absolute inset-0 opacity-[0.02]"
+          className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(30,64,175,0.08) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(30,64,175,0.08) 1px, transparent 1px)
+              linear-gradient(135deg, rgba(0,0,0,0.02) 1px, transparent 1px),
+              linear-gradient(225deg, rgba(0,0,0,0.02) 1px, transparent 1px)
             `,
-            backgroundSize: '80px 80px',
-            transform: `translate(${mousePosition.x * 0.01}px, ${mousePosition.y * 0.01}px)`,
+            backgroundSize: '180px 180px',
+          }}
+        />
+        {/* Lätt noise via SVG */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'repeat',
+          }}
+        />
+        {/* Central, väldigt lätt accent-blob bakom korten */}
+        <div
+          className="absolute left-1/2 top-1/2 w-[600px] h-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-3xl"
+          style={{
+            background: 'radial-gradient(circle at 50% 50%, rgba(99,102,241,0.08) 0%, transparent 70%)',
+            animation: 'slowPulse 20s ease-in-out infinite',
           }}
         />
 
+        {/* Små geometriska accenter */}
         <div
-          className="absolute inset-0 opacity-[0.015]"
+          className="absolute top-16 left-16 w-16 h-16 border border-[#cbd5e1] rounded-full"
           style={{
-            backgroundImage: `
-              linear-gradient(45deg, rgba(59,130,246,0.1) 1px, transparent 1px),
-              linear-gradient(-45deg, rgba(16,185,129,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '120px 120px',
-            transform: `translate(${mousePosition.x * -0.005}px, ${mousePosition.y * -0.005}px)`,
+            transform: `translate(${mousePosition.x * 0.01}px, ${mousePosition.y * 0.008}px)`,
+            opacity: 0.35,
           }}
         />
-
-        <div className="absolute top-20 right-32 w-3 h-3 bg-blue-500/15 rounded-full animate-pulse shadow-lg" />
         <div
-          className="absolute bottom-32 left-20 w-2 h-2 bg-emerald-500/20 rounded-full animate-pulse shadow-lg"
-          style={{ animationDelay: '1s' }}
-        />
-        <div
-          className="absolute top-1/3 left-1/4 w-1.5 h-1.5 bg-purple-500/15 rounded-full animate-pulse shadow-lg"
-          style={{ animationDelay: '2s' }}
-        />
-        <div
-          className="absolute top-1/2 right-1/4 w-2.5 h-2.5 bg-indigo-500/10 rounded-full animate-pulse shadow-lg"
-          style={{ animationDelay: '3s' }}
-        />
-
-        <div
-          className="absolute top-16 left-16 w-24 h-24 border border-blue-200/30 rounded-full"
-          style={{ transform: `rotate(${mousePosition.x * 0.1}deg)` }}
-        />
-        <div
-          className="absolute bottom-16 right-16 w-32 h-32 border border-emerald-200/20 rounded-full"
-          style={{ transform: `rotate(${-mousePosition.y * 0.1}deg)` }}
-        />
-        <div
-          className="absolute top-1/2 left-8 w-16 h-16 border border-purple-200/25 rounded-lg"
-          style={{ transform: `rotate(${mousePosition.x * 0.05}deg)` }}
-        />
-
-        <div
-          className="absolute inset-0 opacity-[0.008]"
+          className="absolute bottom-20 right-16 w-20 h-20 border border-[#94a3b8] rounded-lg"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            transform: `translate(${mousePosition.x * -0.015}px, ${mousePosition.y * 0.01}px)`,
+            opacity: 0.3,
+          }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 w-12 h-12 border border-[#a5b8d1] rounded-sm"
+          style={{
+            transform: `translate(${mousePosition.x * 0.008}px, ${-mousePosition.y * 0.008}px)`,
+            opacity: 0.25,
           }}
         />
       </div>
@@ -288,78 +242,63 @@ const WarehouseLogisticsSpecialists = () => {
           <h2
             className={`
               text-4xl md:text-5xl mb-4 tracking-tight
-              transition-all duration-1000 delay-200 transform
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+              font-semibold text-gray-900
+              transition-all duration-700
+              ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
             `}
-            style={{
-              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-              fontWeight: 400,
-              color: '#111827',
-            }}
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
-            <span className="block">Vår Expertis Inom</span>
-            <span className="block font-medium">Logistikbemanning</span>
+            Vår Expertis Inom <span className="block font-normal">Logistikbemanning</span>
           </h2>
           <div
             className={`
-              w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-4
-              transition-all duration-1000 delay-200 transform
+              w-16 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto mb-3
+              transition-all duration-700
               ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
             `}
           />
           <p
             className={`
               text-lg max-w-2xl mx-auto leading-snug font-light
-              transition-all duration-1000 delay-400 transform
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+              text-gray-600
+              transition-all duration-700
+              ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
             `}
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              color: '#4B5563',
-              marginTop: '0.125rem',
-            }}
+            style={{ fontFamily: 'Inter, sans-serif' }}
           >
             Djup branschkunskap och noggrant urval för att matcha rätt kompetens med ert team.
           </p>
         </div>
 
-        {/* Anpassad 2x2-layout med shared gradient blob */}
-        <div className="flex flex-col gap-2 relative">
-          {/* Gemensam lätt gradient blob över korten */}
-          <div
-            className="absolute left-1/2 top-1/2 w-[600px] h-[600px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none blur-3xl"
-            style={{
-              background: 'radial-gradient(circle at 50% 50%, rgba(99,102,241,0.08) 0%, transparent 70%)',
-            }}
-          />
-
-          <div className="flex gap-2">
-            {renderCard(trustPillars[0], 0, 1.2)}
-            {renderCard(trustPillars[1], 1, 1.8)}
+        {/* Kortlayout 2x2 */}
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-4">
+            <DarkCard pillar={trustPillars[0]} index={0} />
+            <DarkCard pillar={trustPillars[1]} index={1} />
           </div>
-          <div className="flex gap-2">
-            {renderCard(trustPillars[2], 2, 1.8)}
-            {renderCard(trustPillars[3], 3, 1.2)}
+          <div className="flex gap-4">
+            <DarkCard pillar={trustPillars[2]} index={2} />
+            <DarkCard pillar={trustPillars[3]} index={3} />
           </div>
         </div>
 
-        {/* Bottom dots */}
+        {/* Indikatorer */}
         <div
           className={`
             text-center mt-12
-            transition-all duration-1000 delay-1200 transform
-            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+            transition-all duration-700
+            ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
           `}
         >
           <div className="inline-flex items-center space-x-3">
-            <div className="w-8 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
-            <div className="flex space-x-1.5">
-              <div className="w-1 h-1 bg-indigo-400 rounded-full animate-pulse" />
-              <div className="w-1 h-1 bg-teal-400 rounded-full animate-pulse" style={{ animationDelay: '300ms' }} />
-              <div className="w-1 h-1 bg-orange-400 rounded-full animate-pulse" style={{ animationDelay: '600ms' }} />
-              <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '900ms' }} />
+            <div className="w-8 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent" />
+            <div className="flex space-x-2">
+              <div className="w-2 h-2 bg-[#5eead4] rounded-full animate-pulse" />
+              <div className="w-2 h-2 bg-[#c4b5fd] rounded-full animate-pulse" style={{ animationDelay: '200ms' }} />
+              <div className="w-2 h-2 bg-[#5eead4] rounded-full animate-pulse" style={{ animationDelay: '400ms' }} />
+              <div className="w-2 h-2 bg-[#c4b5fd] rounded-full animate-pulse" style={{ animationDelay: '600ms' }} />
             </div>
-            <div className="w-8 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
+            <div className="w-8 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent" />
           </div>
         </div>
       </div>
