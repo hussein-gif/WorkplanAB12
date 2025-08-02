@@ -36,112 +36,92 @@ const WarehouseLogisticsSpecialists = () => {
       title: 'Djup Branschkännedom',
       description: 'Vårt team förstår era unika behov inom lager och logistik.',
       highlight: 'Specialister på ert område',
-      accentGradient: 'linear-gradient(180deg, rgba(94,234,212,0.6), rgba(94,234,212,0.25))', // tealish
+      accent: 'teal' as const,
     },
     {
       icon: CheckCircle,
       title: 'Noggrann Screening',
       description: 'Vi genomför strukturerade kompetens- och bakgrundskontroller.',
       highlight: 'Trygg matchning',
-      accentGradient: 'linear-gradient(180deg, rgba(196,181,253,0.6), rgba(196,181,253,0.25))', // lavender
+      accent: 'lavender' as const,
     },
     {
       icon: Clock,
       title: 'Snabb Respons',
       description: 'Omedelbar återkoppling för att hålla er bemanning i rörelse.',
       highlight: 'Snabbt igångsättande',
-      accentGradient: 'linear-gradient(180deg, rgba(94,234,212,0.6), rgba(94,234,212,0.25))', // växlar tillbaka till teal
+      accent: 'teal' as const,
     },
     {
       icon: Shield,
       title: 'Säkerhet & Kvalitet',
       description: 'Certifierade medarbetare med fokus på trygghet och kvalitet i varje uppdrag.',
       highlight: 'Hög leveranskvalitet',
-      accentGradient: 'linear-gradient(180deg, rgba(196,181,253,0.6), rgba(196,181,253,0.25))', // lavender
+      accent: 'lavender' as const,
     },
-  ];
+  ] as const;
 
-  const FancyCard = ({
-    icon: Icon,
-    title,
-    description,
-    highlight,
-    accentGradient,
+  type Pillar = typeof trustPillars[number];
+
+  const accentConfig = {
+    teal: {
+      bar: 'linear-gradient(180deg, rgba(94,234,212,1), rgba(94,234,212,0.6))',
+      underline: 'from-[#5eead4] to-[#5eead4]',
+    },
+    lavender: {
+      bar: 'linear-gradient(180deg, rgba(196,181,253,1), rgba(196,181,253,0.6))',
+      underline: 'from-[#c4b5fd] to-[#c4b5fd]',
+    },
+  } as const;
+
+  const DarkCard = ({
+    pillar,
+    index,
   }: {
-    icon: React.ComponentType<{ size?: number; className?: string }>;
-    title: string;
-    description: string;
-    highlight: string;
-    accentGradient: string;
+    pillar: Pillar;
+    index: number;
   }) => {
-    const cardRef = useRef<HTMLDivElement | null>(null);
-    const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
     const [isHover, setIsHover] = useState(false);
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-      if (!cardRef.current) return;
-      const rect = cardRef.current.getBoundingClientRect();
-      const px = (e.clientX - rect.left) / rect.width;
-      const py = (e.clientY - rect.top) / rect.height;
-      const rotateY = (px - 0.5) * 8; // mild tilt
-      const rotateX = (0.5 - py) * 8;
-      setTilt({ rotateX, rotateY });
-    };
-
-    const handleMouseLeave = () => {
-      setTilt({ rotateX: 0, rotateY: 0 });
-      setIsHover(false);
-    };
-
     return (
       <div
-        ref={(el) => (cardRef.current = el)}
         className="relative flex-1"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+        style={{ perspective: 800, minHeight: 260 }}
         onMouseEnter={() => setIsHover(true)}
-        style={{ perspective: 800 }}
+        onMouseLeave={() => setIsHover(false)}
       >
         <div
           className={`
             relative rounded-2xl overflow-hidden
             bg-[rgba(15,25,70,0.85)] border border-[rgba(255,255,255,0.07)]
-            shadow-lg transition-all duration-300
+            shadow-md transition-all duration-300
+            ${isHover ? 'scale-[1.025] shadow-xl' : ''}
           `}
-          style={{
-            minHeight: 260,
-            transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale(${isHover ? 1.025 : 1})`,
-            boxShadow: isHover
-              ? '0 30px 60px -5px rgba(0,0,0,0.4)'
-              : '0 15px 40px -5px rgba(0,0,0,0.25)',
-            backdropFilter: 'saturate(180%) blur(12px)',
-          }}
         >
-          {/* Accent bar vänster */}
+          {/* Accent bar left */}
           <div
             className="absolute top-0 left-0 bottom-0 w-1 rounded-r"
-            style={{ background: accentGradient }}
+            style={{ background: accentConfig[pillar.accent].bar }}
           />
 
-          {/* Subtil dekor (ljus cirkel) */}
+          {/* Subtle decorative shapes */}
           <div
-            className="absolute -top-6 -left-6 w-24 h-24 rounded-full opacity-25 blur-xl"
-            style={{ background: 'rgba(255,255,255,0.04)' }}
+            className="absolute -top-5 -left-5 w-20 h-20 rounded-full opacity-20 blur-lg"
+            style={{ background: pillar.accent === 'teal' ? 'rgba(94,234,212,0.15)' : 'rgba(196,181,253,0.15)' }}
             aria-hidden="true"
           />
           <div
-            className="absolute top-6 right-6 w-16 h-16 rounded-lg border border-[rgba(255,255,255,0.08)] opacity-30"
+            className="absolute top-6 right-6 w-12 h-12 rounded border border-[rgba(255,255,255,0.08)] opacity-25"
+            aria-hidden="true"
             style={{
               transform: `translate(${mousePosition.x * 0.004}px, ${-mousePosition.y * 0.004}px)`,
             }}
-            aria-hidden="true"
           />
 
           <div className="relative p-6 flex flex-col h-full">
-            <div className="flex items-start gap-4 mb-2">
+            <div className="flex items-start gap-3 mb-2">
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[rgba(255,255,255,0.08)] ring-1 ring-[rgba(255,255,255,0.1)]">
-                  <Icon size={20} className="text-white" />
+                  <pillar.icon size={20} className="text-white" />
                 </div>
               </div>
               <div className="flex-1">
@@ -149,10 +129,10 @@ const WarehouseLogisticsSpecialists = () => {
                   className="text-lg font-semibold text-white relative mb-1"
                   style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
                 >
-                  {title}
+                  {pillar.title}
                   <div
                     className={`
-                      absolute left-0 bottom-0 h-0.5 bg-gradient-to-r from-[#5eead4] to-[#c4b5fd]
+                      absolute left-0 bottom-0 h-0.5 bg-gradient-to-r ${accentConfig[pillar.accent].underline}
                       transition-all duration-300
                       ${isHover ? 'w-full' : 'w-8'}
                     `}
@@ -164,13 +144,13 @@ const WarehouseLogisticsSpecialists = () => {
               className="text-sm text-gray-300 flex-1 leading-relaxed mb-4"
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
             >
-              {description}
+              {pillar.description}
             </p>
             <div
               className="text-xs uppercase tracking-wider"
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, color: '#9CA3AF' }}
             >
-              {highlight}
+              {pillar.highlight}
             </div>
           </div>
         </div>
@@ -186,13 +166,13 @@ const WarehouseLogisticsSpecialists = () => {
         background: 'linear-gradient(135deg, #0f1f44 0%, #1e3f8f 85%)',
       }}
     >
-      {/* Bakgrundseffekter: vignette + subtil grid + former */}
+      {/* Bakgrund: vignette + grid + geometriska accenter */}
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(circle at 35% 35%, rgba(255,255,255,0.05) 0%, transparent 70%)',
+              'radial-gradient(circle at 35% 35%, rgba(255,255,255,0.03) 0%, transparent 70%)',
             mixBlendMode: 'overlay',
           }}
         />
@@ -270,19 +250,19 @@ const WarehouseLogisticsSpecialists = () => {
           </p>
         </div>
 
-        {/* Kortlayout: 2x2 */}
+        {/* Kortlayout 2x2 */}
         <div className="flex flex-col gap-4">
           <div className="flex gap-4">
-            <FancyCard {...trustPillars[0]} />
-            <FancyCard {...trustPillars[1]} />
+            <DarkCard pillar={trustPillars[0]} index={0} />
+            <DarkCard pillar={trustPillars[1]} index={1} />
           </div>
           <div className="flex gap-4">
-            <FancyCard {...trustPillars[2]} />
-            <FancyCard {...trustPillars[3]} />
+            <DarkCard pillar={trustPillars[2]} index={2} />
+            <DarkCard pillar={trustPillars[3]} index={3} />
           </div>
         </div>
 
-        {/* Indikatorer längst ner */}
+        {/* Indikatorer */}
         <div
           className={`
             text-center mt-12
