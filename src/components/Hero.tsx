@@ -80,32 +80,32 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Content Container - centrerat vertikalt */}
+      {/* Content Container - vertically more centered */}
       <div className="relative z-10 flex-1 flex items-center py-16">
         <div className="max-w-7xl mx-auto px-8 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Main Content - Left Side */}
-            <div className="lg:col-span-7 space-y-8">
-              {/* Main Headline */}
-              <div className="space-y-4">
+            <div className="lg:col-span-7 space-y-6">
+              {/* Headline */}
+              <div className="space-y-3">
                 <h1
                   className={`
-                    text-5xl sm:text-6xl lg:text-7xl xl:text-8xl
-                    font-light text-white leading-[0.9] tracking-tight
+                    text-4xl sm:text-5xl lg:text-6xl xl:text-7xl
+                    font-light text-white leading-tight tracking-tight
                     transition-all duration-1200 delay-200 transform
-                    ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
+                    ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
                   `}
                 >
                   <span
-                    className="block text-white font-light"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '300' }}
+                    className="block text-white"
+                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 300 }}
                   >
                     Bemanna Ditt
                   </span>
-                  <span className="block font-extralight text-white">
+                  <span className="block text-white">
                     <span
-                      className="text-white font-medium"
-                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '500' }}
+                      className="font-medium"
+                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
                     >
                       Drömteam
                     </span>
@@ -122,24 +122,24 @@ const Hero = () => {
                 {/* Accent Line */}
                 <div
                   className={`
-                    w-24 h-px bg-gradient-to-r from-white/60 to-transparent
+                    w-20 h-px bg-gradient-to-r from-white/60 to-transparent
                     transition-all duration-1000 delay-600 transform
                     ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
                   `}
                 />
               </div>
 
-              {/* Subtitle (light italic) */}
+              {/* Subtitle (light italic, smaller) */}
               <p
                 className={`
-                  text-xl lg:text-2xl text-white/80 italic leading-relaxed max-w-2xl
+                  text-base md:text-lg text-white/80 italic leading-relaxed max-w-2xl
                   transition-all duration-1000 delay-800 transform
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
                 `}
-                style={{ fontFamily: 'Inter, sans-serif', fontWeight: '300', fontStyle: 'italic' }}
+                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontStyle: 'italic' }}
               >
                 Skräddarsydda bemanningslösningar –
-                <span className="block mt-2 text-white/60">
+                <span className="block mt-1 text-white/60">
                   snabbt, flexibelt och med rätt kompetens.
                 </span>
               </p>
@@ -147,7 +147,7 @@ const Hero = () => {
               {/* Action Buttons */}
               <div
                 className={`
-                  flex flex-col sm:flex-row gap-4 pt-4
+                  flex flex-col sm:flex-row gap-3 pt-3
                   transition-all duration-1000 delay-1000 transform
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
                 `}
@@ -155,13 +155,13 @@ const Hero = () => {
                 <button
                   onClick={() => navigate('/jobs')}
                   className="
-                    group relative px-8 py-4 
+                    group relative px-6 py-3 
                     bg-white text-gray-900 rounded-full
-                    font-semibold text-lg tracking-wide
+                    font-medium text-base tracking-wide
                     hover:bg-white/95 
                     transition-all duration-300
-                    shadow-2xl hover:shadow-white/20
-                    hover:scale-105 hover:-translate-y-1
+                    shadow-lg hover:shadow-white/20
+                    hover:scale-105 hover:-translate-y-0.5
                     overflow-hidden
                   "
                   style={{ fontFamily: 'Inter, sans-serif' }}
@@ -172,13 +172,13 @@ const Hero = () => {
                 <button
                   onClick={() => navigate('/partner')}
                   className="
-                    group relative px-8 py-4
+                    group relative px-6 py-3
                     bg-transparent text-white border-2 border-white/30 rounded-full
-                    font-semibold text-lg tracking-wide
+                    font-medium text-base tracking-wide
                     hover:border-white/60 hover:bg-white/10
                     transition-all duration-300
                     backdrop-blur-sm
-                    hover:scale-105 hover:-translate-y-1
+                    hover:scale-105 hover:-translate-y-0.5
                     overflow-hidden
                   "
                   style={{ fontFamily: 'Inter, sans-serif' }}
@@ -189,7 +189,7 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Right Side - Empty for balance */}
+            {/* Spacer for balance */}
             <div className="lg:col-span-5" />
           </div>
         </div>
