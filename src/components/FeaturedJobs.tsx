@@ -117,6 +117,18 @@ const FeaturedJobs = () => {
             Utvalda Möjligheter
           </h2>
 
+          <div
+            className={`
+              flex items-center justify-center space-x-4 mb-2
+              transition-all duration-1000 delay-400 transform
+              ${isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
+            `}
+          >
+            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+            <div className="w-2 h-2 bg-white/20 rounded-full" />
+            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+          </div>
+
           <p
             className={`
               text-xl text-white/70 max-w-2xl mx-auto leading-relaxed
@@ -130,18 +142,6 @@ const FeaturedJobs = () => {
           >
             Hitta din nästa tjänst i vårt utbud av lediga jobb
           </p>
-
-          <div
-            className={`
-              flex items-center justify-center space-x-4 mt-4
-              transition-all duration-1000 delay-400 transform
-              ${isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
-            `}
-          >
-            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-            <div className="w-2 h-2 bg-white/20 rounded-full" />
-            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-          </div>
         </div>
 
         {/* Jobb-kort */}
