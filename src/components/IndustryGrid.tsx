@@ -98,7 +98,7 @@ const IndustryGrid = () => {
           ${activeCard === index ? 'shadow-xl scale-[1.01]' : ''}
         `}
       >
-        {/* Extra mörk overlay för djup (frosted känsla) */}
+        {/* Extra subtil overlay för frosted djup */}
         <div
           className="absolute inset-0 pointer-events-none rounded-2xl"
           style={{
@@ -158,7 +158,7 @@ const IndustryGrid = () => {
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 400,
-              color: '#000',
+              color: '#9ca3af',
             }}
           >
             {pillar.highlight}
