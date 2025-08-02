@@ -274,6 +274,13 @@ const WarehouseLogisticsSpecialists = () => {
             <span className="block">Vår Expertis Inom</span>
             <span className="block font-medium">Logistikbemanning</span>
           </h2>
+          <div
+            className={`
+              w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-4
+              transition-all duration-1000 delay-200 transform
+              ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
+            `}
+          />
           <p
             className={`
               text-lg max-w-2xl mx-auto leading-snug font-light
