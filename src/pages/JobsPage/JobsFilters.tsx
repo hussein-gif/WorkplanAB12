@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Search, MapPin, Building, Clock, X, ChevronDown } from 'lucide-react';
 
 interface JobsFiltersProps {
@@ -35,6 +35,8 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const [panelStyle, setPanelStyle] = useState<Partial<CSSStyleDeclaration>>({});
 
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
@@ -53,6 +55,34 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
     };
   }, []);
 
+  useLayoutEffect(() => {
+    if (!open || !buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom - 8;
+    const spaceAbove = rect.top - 8;
+    const maxPanelHeight = 280;
+    const openUpward = spaceBelow < 200 && spaceAbove > spaceBelow;
+    const computedMaxHeight = openUpward
+      ? Math.min(maxPanelHeight, spaceAbove)
+      : Math.min(maxPanelHeight, spaceBelow);
+    const style: any = {
+      left: rect.left + 'px',
+      width: rect.width + 'px',
+      maxHeight: `${computedMaxHeight}px`,
+      position: 'fixed',
+      zIndex: 9999,
+      overflow: 'auto',
+      transition: 'transform 0.2s ease, opacity 0.2s ease',
+      transformOrigin: openUpward ? 'bottom' : 'top',
+    };
+    if (openUpward) {
+      style.bottom = `${window.innerHeight - rect.top + 4}px`;
+    } else {
+      style.top = `${rect.bottom + 4}px`;
+    }
+    setPanelStyle(style);
+  }, [open]);
+
   return (
     <div className="relative" ref={(el) => (wrapperRef.current = el)}>
       <label
@@ -67,6 +97,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
           aria-haspopup="listbox"
           aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
+          ref={(el) => (buttonRef.current = el)}
           className={`
             w-full flex items-center justify-between
             pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl
@@ -78,7 +109,13 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
           <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
             <Icon size={16} className="text-white/40" />
           </div>
-          <span className="truncate text-left" style={{ fontFamily: 'Inter, sans-serif', fontWeight: value ? 500 : 400 }}>
+          <span
+            className="truncate text-left"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: value ? 500 : 400,
+            }}
+          >
             {value || placeholder || `Alla ${label.toLowerCase()}`}
           </span>
           <div className="ml-2 flex items-center">
@@ -89,48 +126,49 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
           </div>
         </button>
 
-        {/* Dropdown panel under the button */}
-        <div
-          className={`
-            absolute left-0 right-0 z-20 mt-1 max-h-60 overflow-auto
-            bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl
-            ring-1 ring-black ring-opacity-5
-            transform origin-top
-            ${open ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}
-            transition-all duration-200
-          `}
-          role="listbox"
-        >
-          {options.map((opt) => (
-            <div
-              key={opt}
-              role="option"
-              aria-selected={value === opt}
-              onClick={() => {
-                onChange(opt);
-                setOpen(false);
-              }}
-              className={`
-                px-4 py-2 flex items-center justify-between text-sm cursor-pointer
-                ${value === opt ? 'bg-white/10 font-medium' : 'hover:bg-white/10'}
-                text-white truncate
-              `}
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              <span>{opt}</span>
-              {value === opt && (
-                <span className="text-indigo-300" aria-hidden="true">
-                  ✓
-                </span>
-              )}
-            </div>
-          ))}
-          {options.length === 0 && (
-            <div className="px-4 py-2 text-sm text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Inga alternativ
-            </div>
-          )}
-        </div>
+        {/* Panel via portal */}
+        {open && (
+          <div
+            role="listbox"
+            aria-label={label}
+            className="bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl ring-1 ring-black ring-opacity-5"
+            style={{
+              ...panelStyle,
+              display: 'block',
+              backgroundClip: 'padding-box',
+            } as any}
+          >
+            {options.map((opt) => (
+              <div
+                key={opt}
+                role="option"
+                aria-selected={value === opt}
+                onClick={() => {
+                  onChange(opt);
+                  setOpen(false);
+                }}
+                className={`
+                  px-4 py-2 flex items-center justify-between text-sm cursor-pointer
+                  ${value === opt ? 'bg-white/10 font-medium' : 'hover:bg-white/10'}
+                  text-white truncate
+                `}
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                <span>{opt}</span>
+                {value === opt && (
+                  <span className="text-indigo-300" aria-hidden="true">
+                    ✓
+                  </span>
+                )}
+              </div>
+            ))}
+            {options.length === 0 && (
+              <div className="px-4 py-2 text-sm text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Inga alternativ
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
