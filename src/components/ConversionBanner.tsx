@@ -88,11 +88,11 @@ const ConversionBanner = () => {
           {/* Main Heading */}
           <h2
             className={`
-              text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight leading-[0.9]
+              text-5xl md:text-6xl font-semibold text-white mb-6 tracking-tight leading-[0.9]
               transition-all duration-1000 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
             `}
-            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 700 }}
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 600, textTransform: 'capitalize' }}
           >
             Vill Du Veta Mer?
           </h2>
