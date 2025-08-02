@@ -1,234 +1,182 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Menu, X, Sparkles } from 'lucide-react';
 
-const Hero = () => {
+const Header = () => {
   const navigate = useNavigate();
-  const [isVisible, setIsVisible] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const location = useLocation();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
-      });
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const navigationItems = [
+    { label: 'Hem', href: '/' },
+    { label: 'Jobb', href: '/jobs' },
+    { label: 'För Kandidater', href: '/for-candidates' },
+    { label: 'För Företag', href: '/partner' },
+    { label: 'Våra Tjänster', href: '/services' },
+    { label: 'Om Oss', href: '/about' },
+    { label: 'Kontakt', href: '/contact' }
+  ];
+
+  const handleNavigation = (href: string) => {
+    navigate(href);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <section className="relative min-h-screen flex flex-col overflow-hidden">
-      {/* Dynamic Background with Parallax */}
-      <div className="absolute inset-0 z-0">
-        {/* Main Background Image */}
-        <div
-          className="absolute inset-0 transition-transform duration-1000 ease-out"
-          style={{
-            transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px) scale(1.05)`,
-          }}
-        >
-          <img
-            src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg"
-            alt="Professional garden landscape"
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        {/* Sophisticated Overlay System */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-
-        {/* Animated Geometric Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Floating Orbs */}
-          <div
-            className="absolute w-96 h-96 rounded-full bg-white/5 blur-3xl animate-pulse"
-            style={{
-              top: '10%',
-              right: '15%',
-              animationDuration: '4s',
-              transform: `translate(${mousePosition.x * 0.05}px, ${mousePosition.y * 0.05}px)`,
-            }}
-          />
-          <div
-            className="absolute w-64 h-64 rounded-full bg-blue-500/10 blur-2xl animate-pulse"
-            style={{
-              bottom: '20%',
-              left: '10%',
-              animationDuration: '6s',
-              animationDelay: '2s',
-              transform: `translate(${mousePosition.x * -0.03}px, ${mousePosition.y * -0.03}px)`,
-            }}
-          />
-
-          {/* Subtle Grid Pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage: `
-                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-              `,
-              backgroundSize: '100px 100px',
-              transform: `translate(${mousePosition.x * 0.01}px, ${mousePosition.y * 0.01}px)`,
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Content Container */}
-      <div className="relative z-10 flex-1 flex items-center py-16">
-        <div className="max-w-7xl mx-auto px-8 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Main Content - Left Side */}
-            <div className="lg:col-span-7 space-y-8">
-              {/* Main Headline */}
-              <div className="space-y-4">
-                <h1
-                  className={`
-                    text-5xl sm:text-6xl lg:text-7xl xl:text-8xl
-                    font-light text-white leading-[0.9] tracking-tight
-                    transition-all duration-1200 delay-200 transform
-                    ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
-                  `}
-                >
-                  <span
-                    className="block text-white font-light"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '300' }}
-                  >
-                    Bemanna Ditt
-                  </span>
-                  <span className="block font-extralight text-white">
-                    <span
-                      className="text-white font-medium"
-                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '500' }}
-                    >
-                      Drömteam
-                    </span>
-                    <div className="relative inline-block">
-                      <img
-                        src="https://i.ibb.co/6c1JcWdr/image.png"
-                        alt=""
-                        className="absolute top-0 left-0 w-full h-4 object-contain"
-                        style={{ transform: 'translateY(10px)' }}
-                      />
-                    </div>
-                  </span>
-                </h1>
-                {/* Accent Line */}
-                <div
-                  className={`
-                    w-24 h-px bg-gradient-to-r from-white/60 to-transparent
-                    transition-all duration-1000 delay-600 transform
-                    ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
-                  `}
+    <>
+      <header
+        className={`
+          fixed top-0 left-0 right-0 z-50
+          transition-all duration-300
+          ${isScrolled 
+            ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/20' 
+            : 'bg-transparent'
+          }
+        `}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            {/* Logo */}
+            <div 
+              className="flex items-center space-x-3 cursor-pointer group"
+              onClick={() => handleNavigation('/')}
+            >
+              <div className="relative w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-300">
+                <div className="absolute inset-0 rounded-xl bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <Sparkles size={8} className="absolute top-1 right-1 text-white/60 animate-pulse" />
+                  <Sparkles size={6} className="absolute bottom-1 left-1 text-white/40 animate-pulse" style={{ animationDelay: '300ms' }} />
+                </div>
+                <img
+                  src="https://i.ibb.co/Rkq4d57H/Workplan-ABlogo1.png"
+                  alt="Workplan Logo"
+                  className="relative z-10 w-8 h-8 object-contain"
                 />
               </div>
-
-              {/* Subtitle (light italic, smaller) */}
-              <p
-                className={`
-                  text-lg lg:text-xl italic text-white/80 leading-relaxed max-w-2xl
-                  transition-all duration-1000 delay-800 transform
-                  ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-                `}
-                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontStyle: 'italic' }}
-              >
-                Skräddarsydda bemanningslösningar –
-                <span className="block mt-2 text-white/60">
-                  snabbt, flexibelt och med rätt kompetens.
-                </span>
-              </p>
-
-              {/* Action Buttons */}
-              <div
-                className={`
-                  flex flex-col sm:flex-row gap-4 pt-4
-                  transition-all duration-1000 delay-1000 transform
-                  ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-                `}
-              >
-                <button
-                  onClick={() => navigate('/jobs')}
-                  className="
-                    group relative px-8 py-4 
-                    bg-white text-gray-900 rounded-full
-                    font-semibold text-lg tracking-wide
-                    hover:bg-white/95 
-                    transition-all duration-300
-                    shadow-2xl hover:shadow-white/20
-                    hover:scale-105 hover:-translate-y-1
-                    overflow-hidden
-                  "
-                  style={{ fontFamily: 'Inter, sans-serif' }}
+              <div>
+                <h1 
+                  className={`text-2xl font-light tracking-tight transition-colors duration-300 ${
+                    isScrolled ? 'text-gray-900' : 'text-white'
+                  }`}
+                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
                 >
-                  <span className="relative z-10">Lediga Tjänster</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </button>
-                <button
-                  onClick={() => navigate('/partner')}
-                  className="
-                    group relative px-8 py-4
-                    bg-transparent text-white border-2 border-white/30 rounded-full
-                    font-semibold text-lg tracking-wide
-                    hover:border-white/60 hover:bg-white/10
-                    transition-all duration-300
-                    backdrop-blur-sm
-                    hover:scale-105 hover:-translate-y-1
-                    overflow-hidden
-                  "
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  <span className="relative z-10">Bli Partner</span>
-                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </button>
+                  Workplan
+                </h1>
               </div>
             </div>
 
-            {/* Right Side - Empty for balance */}
-            <div className="lg:col-span-5" />
-          </div>
-        </div>
-      </div>
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center space-x-8">
+              {navigationItems.map((item) => (
+                <button
+                  key={item.href}
+                  onClick={() => handleNavigation(item.href)}
+                  className={`
+                    relative px-3 py-2 text-sm font-medium transition-all duration-300
+                    hover:scale-105
+                    ${location.pathname === item.href
+                      ? isScrolled 
+                        ? 'text-blue-600' 
+                        : 'text-white'
+                      : isScrolled 
+                        ? 'text-gray-700 hover:text-blue-600' 
+                        : 'text-white/80 hover:text-white'
+                    }
+                  `}
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  {item.label}
+                  {location.pathname === item.href && (
+                    <div className={`
+                      absolute bottom-0 left-0 right-0 h-0.5 rounded-full
+                      ${isScrolled ? 'bg-blue-600' : 'bg-white'}
+                    `} />
+                  )}
+                </button>
+              ))}
+            </nav>
 
-      {/* Bottom Feature List */}
-      <div
-        className={`
-          absolute bottom-8 inset-x-0 z-10
-          transition-all duration-1000 delay-1200 transform
-          ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-        `}
-      >
-        <div
-          className="flex items-center justify-center space-x-6 text-center text-white/70"
-          style={{
-            fontFamily: 'Syne, sans-serif',
-            fontSize: '12px',
-            letterSpacing: '0.08em',
-          }}
-        >
-          <div className="flex items-center space-x-2">
-            <div className="w-1.5 h-1.5 bg-blue-400/60 rounded-full" />
-            <span className="uppercase">FLEXIBILITET</span>
-          </div>
-          <span className="text-white/40">|</span>
-          <div className="flex items-center space-x-2">
-            <div className="w-1.5 h-1.5 bg-emerald-400/60 rounded-full" />
-            <span className="uppercase">PERSONLIG SERVICE</span>
-          </div>
-          <span className="text-white/40">|</span>
-          <div className="flex items-center space-x-2">
-            <div className="w-1.5 h-1.5 bg-purple-400/60 rounded-full" />
-            <span className="uppercase">SNABB LEVERANS</span>
+            {/* CTA Button */}
+            <div className="hidden lg:flex items-center space-x-4">
+              <button
+                onClick={() => handleNavigation('/contact')}
+                className={`
+                  px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300
+                  hover:scale-105 hover:shadow-lg
+                  ${isScrolled
+                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                    : 'bg-white/10 text-white border border-white/20 hover:bg-white/20 backdrop-blur-sm'
+                  }
+                `}
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                Kom igång
+              </button>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className={`
+                lg:hidden p-2 rounded-lg transition-colors duration-300
+                ${isScrolled 
+                  ? 'text-gray-700 hover:bg-gray-100' 
+                  : 'text-white hover:bg-white/10'
+                }
+              `}
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
-      </div>
-    </section>
+      </header>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-40 lg:hidden">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
+          <div className="fixed top-20 left-0 right-0 bg-white/95 backdrop-blur-md border-b border-gray-200/20 shadow-lg">
+            <div className="max-w-7xl mx-auto px-4 py-6">
+              <nav className="space-y-4">
+                {navigationItems.map((item) => (
+                  <button
+                    key={item.href}
+                    onClick={() => handleNavigation(item.href)}
+                    className={`
+                      block w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-colors duration-300
+                      ${location.pathname === item.href
+                        ? 'text-blue-600 bg-blue-50'
+                        : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                      }
+                    `}
+                    style={{ fontFamily: 'Inter, sans-serif' }}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+                <button
+                  onClick={() => handleNavigation('/contact')}
+                  className="w-full mt-4 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold text-sm hover:bg-blue-700 transition-colors duration-300"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Kom igång
+                </button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
-export default Hero;
+export default Header;
