@@ -36,28 +36,28 @@ const WarehouseLogisticsSpecialists = () => {
       title: 'Djup Branschkännedom',
       description: 'Vårt team förstår era unika behov inom lager och logistik.',
       highlight: 'Specialister på ert område',
-      accentGradient: 'linear-gradient(180deg, #3B82F6, #6366F1)',
+      accentGradient: 'linear-gradient(180deg, rgba(94,234,212,0.6), rgba(94,234,212,0.25))', // tealish
     },
     {
       icon: CheckCircle,
       title: 'Noggrann Screening',
       description: 'Vi genomför strukturerade kompetens- och bakgrundskontroller.',
       highlight: 'Trygg matchning',
-      accentGradient: 'linear-gradient(180deg, #10B981, #14B8A6)',
+      accentGradient: 'linear-gradient(180deg, rgba(196,181,253,0.6), rgba(196,181,253,0.25))', // lavender
     },
     {
       icon: Clock,
       title: 'Snabb Respons',
       description: 'Omedelbar återkoppling för att hålla er bemanning i rörelse.',
       highlight: 'Snabbt igångsättande',
-      accentGradient: 'linear-gradient(180deg, #F59E0B, #EF4444)',
+      accentGradient: 'linear-gradient(180deg, rgba(94,234,212,0.6), rgba(94,234,212,0.25))', // växlar tillbaka till teal
     },
     {
       icon: Shield,
       title: 'Säkerhet & Kvalitet',
       description: 'Certifierade medarbetare med fokus på trygghet och kvalitet i varje uppdrag.',
       highlight: 'Hög leveranskvalitet',
-      accentGradient: 'linear-gradient(180deg, #A855F7, #7C3AED)',
+      accentGradient: 'linear-gradient(180deg, rgba(196,181,253,0.6), rgba(196,181,253,0.25))', // lavender
     },
   ];
 
@@ -74,61 +74,103 @@ const WarehouseLogisticsSpecialists = () => {
     highlight: string;
     accentGradient: string;
   }) => {
+    const cardRef = useRef<HTMLDivElement | null>(null);
+    const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+    const [isHover, setIsHover] = useState(false);
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      const rotateY = (px - 0.5) * 8; // mild tilt
+      const rotateX = (0.5 - py) * 8;
+      setTilt({ rotateX, rotateY });
+    };
+
+    const handleMouseLeave = () => {
+      setTilt({ rotateX: 0, rotateY: 0 });
+      setIsHover(false);
+    };
+
     return (
-      <div className="relative flex-1" style={{ perspective: 800 }}>
-        {/* Gradient border wrapper */}
+      <div
+        ref={(el) => (cardRef.current = el)}
+        className="relative flex-1"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        onMouseEnter={() => setIsHover(true)}
+        style={{ perspective: 800 }}
+      >
         <div
-          className="rounded-3xl p-[2px] mb-0"
+          className={`
+            relative rounded-2xl overflow-hidden
+            bg-[rgba(15,25,70,0.85)] border border-[rgba(255,255,255,0.07)]
+            shadow-lg transition-all duration-300
+          `}
           style={{
-            background: accentGradient,
+            minHeight: 260,
+            transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale(${isHover ? 1.025 : 1})`,
+            boxShadow: isHover
+              ? '0 30px 60px -5px rgba(0,0,0,0.4)'
+              : '0 15px 40px -5px rgba(0,0,0,0.25)',
+            backdropFilter: 'saturate(180%) blur(12px)',
           }}
         >
+          {/* Accent bar vänster */}
           <div
-            className="relative rounded-2xl bg-white overflow-hidden shadow-[0_25px_60px_-10px_rgba(16,24,40,0.08)] transition-transform duration-300 group hover:scale-[1.025]"
-            style={{ minHeight: 260 }}
-          >
-            {/* Subtil dekor bakom */}
-            <div className="absolute -top-6 -left-6 w-24 h-24 rounded-full opacity-30 blur-xl"
-              style={{ background: 'rgba(99,102,241,0.15)' }}
-              aria-hidden="true"
-            />
-            <div className="absolute top-6 right-6 w-16 h-16 rounded-lg border border-gray-200 opacity-40"
-              style={{
-                transform: `translate(${mousePosition.x * 0.005}px, ${-mousePosition.y * 0.005}px)`,
-              }}
-              aria-hidden="true"
-            />
+            className="absolute top-0 left-0 bottom-0 w-1 rounded-r"
+            style={{ background: accentGradient }}
+          />
 
-            <div className="relative p-6 flex flex-col h-full">
-              <div className="flex items-start gap-4 mb-3">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-gradient-to-br from-gray-100 to-white ring-1 ring-gray-200 shadow-sm">
-                    <Icon size={20} className="text-indigo-600" />
-                  </div>
-                </div>
-                <div className="flex-1">
-                  <h3
-                    className="text-lg font-semibold text-gray-900 relative mb-1"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    {title}
-                    <div className="absolute left-0 bottom-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300 group-hover:w-full w-8" />
-                  </h3>
-                  <div className="h-0.5 w-10 bg-gradient-to-r from-indigo-100 to-transparent rounded mt-1" />
+          {/* Subtil dekor (ljus cirkel) */}
+          <div
+            className="absolute -top-6 -left-6 w-24 h-24 rounded-full opacity-25 blur-xl"
+            style={{ background: 'rgba(255,255,255,0.04)' }}
+            aria-hidden="true"
+          />
+          <div
+            className="absolute top-6 right-6 w-16 h-16 rounded-lg border border-[rgba(255,255,255,0.08)] opacity-30"
+            style={{
+              transform: `translate(${mousePosition.x * 0.004}px, ${-mousePosition.y * 0.004}px)`,
+            }}
+            aria-hidden="true"
+          />
+
+          <div className="relative p-6 flex flex-col h-full">
+            <div className="flex items-start gap-4 mb-2">
+              <div className="flex-shrink-0">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[rgba(255,255,255,0.08)] ring-1 ring-[rgba(255,255,255,0.1)]">
+                  <Icon size={20} className="text-white" />
                 </div>
               </div>
-              <p
-                className="text-sm text-gray-600 flex-1 leading-relaxed mb-4"
-                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
-              >
-                {description}
-              </p>
-              <div
-                className="text-xs uppercase tracking-wider text-gray-400"
-                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
-              >
-                {highlight}
+              <div className="flex-1">
+                <h3
+                  className="text-lg font-semibold text-white relative mb-1"
+                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                >
+                  {title}
+                  <div
+                    className={`
+                      absolute left-0 bottom-0 h-0.5 bg-gradient-to-r from-[#5eead4] to-[#c4b5fd]
+                      transition-all duration-300
+                      ${isHover ? 'w-full' : 'w-8'}
+                    `}
+                  />
+                </h3>
               </div>
+            </div>
+            <p
+              className="text-sm text-gray-300 flex-1 leading-relaxed mb-4"
+              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
+            >
+              {description}
+            </p>
+            <div
+              className="text-xs uppercase tracking-wider"
+              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, color: '#9CA3AF' }}
+            >
+              {highlight}
             </div>
           </div>
         </div>
@@ -137,52 +179,59 @@ const WarehouseLogisticsSpecialists = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative py-24 overflow-hidden">
-      {/* Bakgrund: varm ljus gradient + vignette + subtil grid + små former */}
+    <section
+      ref={sectionRef}
+      className="relative py-24 overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #0f1f44 0%, #1e3f8f 85%)',
+      }}
+    >
+      {/* Bakgrundseffekter: vignette + subtil grid + former */}
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute inset-0"
           style={{
-            background: 'linear-gradient(135deg, #f9fbfd 0%, #eef5fb 100%)',
+            background:
+              'radial-gradient(circle at 35% 35%, rgba(255,255,255,0.05) 0%, transparent 70%)',
+            mixBlendMode: 'overlay',
           }}
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(circle at 40% 40%, rgba(0,0,0,0.04) 0%, transparent 70%)',
-            mixBlendMode: 'multiply',
+              'radial-gradient(circle at 60% 40%, rgba(0,0,0,0.2) 0%, transparent 80%)',
           }}
         />
         <div
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)
+              linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
             `,
-            backgroundSize: '140px 140px',
+            backgroundSize: '150px 150px',
           }}
         />
         <div
-          className="absolute top-12 left-12 w-16 h-16 border border-indigo-200 rounded-full"
+          className="absolute top-12 left-12 w-16 h-16 border border-[rgba(255,255,255,0.08)] rounded-full"
           style={{
-            transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.01}px)`,
-            opacity: 0.4,
-          }}
-        />
-        <div
-          className="absolute bottom-16 right-16 w-20 h-20 border border-teal-200 rounded-lg"
-          style={{
-            transform: `translate(${mousePosition.x * -0.015}px, ${mousePosition.y * 0.02}px)`,
+            transform: `translate(${mousePosition.x * 0.015}px, ${mousePosition.y * 0.01}px)`,
             opacity: 0.35,
           }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-12 h-12 border border-purple-200 rounded-sm"
+          className="absolute bottom-16 right-16 w-20 h-20 border border-[rgba(255,255,255,0.06)] rounded-lg"
           style={{
-            transform: `translate(${mousePosition.x * 0.01}px, ${mousePosition.y * -0.01}px)`,
+            transform: `translate(${mousePosition.x * -0.02}px, ${mousePosition.y * 0.015}px)`,
             opacity: 0.3,
+          }}
+        />
+        <div
+          className="absolute top-1/3 right-1/4 w-12 h-12 border border-[rgba(255,255,255,0.05)] rounded-sm"
+          style={{
+            transform: `translate(${mousePosition.x * 0.01}px, ${-mousePosition.y * 0.01}px)`,
+            opacity: 0.25,
           }}
         />
       </div>
@@ -193,7 +242,7 @@ const WarehouseLogisticsSpecialists = () => {
           <h2
             className={`
               text-4xl md:text-5xl mb-4 tracking-tight
-              font-semibold text-gray-900
+              font-semibold text-white
               transition-all duration-700
               ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
             `}
@@ -203,7 +252,7 @@ const WarehouseLogisticsSpecialists = () => {
           </h2>
           <div
             className={`
-              w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-3
+              w-16 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto mb-3
               transition-all duration-700
               ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
             `}
@@ -211,7 +260,7 @@ const WarehouseLogisticsSpecialists = () => {
           <p
             className={`
               text-lg max-w-2xl mx-auto leading-snug font-light
-              text-gray-600
+              text-gray-200
               transition-all duration-700
               ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
             `}
@@ -221,7 +270,7 @@ const WarehouseLogisticsSpecialists = () => {
           </p>
         </div>
 
-        {/* Layout: 2x2 med proportioner */}
+        {/* Kortlayout: 2x2 */}
         <div className="flex flex-col gap-4">
           <div className="flex gap-4">
             <FancyCard {...trustPillars[0]} />
@@ -233,7 +282,7 @@ const WarehouseLogisticsSpecialists = () => {
           </div>
         </div>
 
-        {/* Bottom indikatorer */}
+        {/* Indikatorer längst ner */}
         <div
           className={`
             text-center mt-12
@@ -242,14 +291,14 @@ const WarehouseLogisticsSpecialists = () => {
           `}
         >
           <div className="inline-flex items-center space-x-3">
-            <div className="w-8 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
+            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
             <div className="flex space-x-2">
-              <div className="w-2 h-2 bg-indigo-400 rounded-full animate-pulse" />
-              <div className="w-2 h-2 bg-teal-400 rounded-full animate-pulse" style={{ animationDelay: '200ms' }} />
-              <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" style={{ animationDelay: '400ms' }} />
-              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '600ms' }} />
+              <div className="w-2 h-2 bg-[#5eead4] rounded-full animate-pulse" />
+              <div className="w-2 h-2 bg-[#c4b5fd] rounded-full animate-pulse" style={{ animationDelay: '200ms' }} />
+              <div className="w-2 h-2 bg-[#5eead4] rounded-full animate-pulse" style={{ animationDelay: '400ms' }} />
+              <div className="w-2 h-2 bg-[#c4b5fd] rounded-full animate-pulse" style={{ animationDelay: '600ms' }} />
             </div>
-            <div className="w-8 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent" />
+            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
           </div>
         </div>
       </div>
