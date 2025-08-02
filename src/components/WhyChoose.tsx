@@ -101,13 +101,51 @@ const WhyChoose = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative py-32 bg-white overflow-hidden"
+      className="relative py-32 overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #f7f9fc 0%, #e3e9f4 70%)',
+      }}
     >
-      {/* Bakgrundsgrid och dekor */}
-      <div className="absolute inset-0">
+      {/* Globala styles för blob-animation och reduced motion */}
+      <style>{`
+        @keyframes blob {
+          0% { transform: scale(1) translate(0,0); }
+          33% { transform: scale(1.05) translate(10px, -5px); }
+          66% { transform: scale(0.95) translate(-10px, 5px); }
+          100% { transform: scale(1) translate(0,0); }
+        }
+        .animate-blob {
+          animation: blob 18s infinite ease-in-out;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-blob {
+            animation: none;
+          }
+        }
+      `}</style>
+
+      {/* Bakgrundseffekter: vignette, noise, blobs och dekor */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Vignette/fokus */}
         <div
-          className="absolute inset-0 opacity-[0.02]"
+          className="absolute inset-0"
           style={{
+            background: 'radial-gradient(circle at 50% 40%, rgba(0,0,0,0.08) 0%, transparent 80%)',
+            mixBlendMode: 'multiply',
+          }}
+        />
+        {/* Noise overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)' opacity='0.04'/%3E%3C/svg%3E") repeat`,
+          }}
+        />
+        {/* Existerande grid/dekor */}
+        <div
+          className="absolute inset-0"
+          style={{
+            opacity: 0.02,
             backgroundImage: `
               linear-gradient(#000 1px, transparent 1px),
               linear-gradient(90deg, #000 1px, transparent 1px)
@@ -115,10 +153,26 @@ const WhyChoose = () => {
             backgroundSize: '80px 80px',
           }}
         />
+        {/* Små dekorprickar */}
         <div className="absolute top-20 right-20 w-2 h-2 bg-gray-200 rounded-full opacity-40" />
         <div className="absolute top-40 left-16 w-1 h-1 bg-gray-300 rounded-full opacity-60" />
         <div className="absolute bottom-32 right-32 w-1.5 h-1.5 bg-gray-200 rounded-full opacity-50" />
         <div className="absolute bottom-20 left-20 w-0.5 h-0.5 bg-gray-400 rounded-full opacity-30" />
+
+        {/* Flytande blobs */}
+        <div
+          className="absolute -top-10 left-1/4 w-[500px] h-[500px] rounded-full blur-3xl opacity-10 animate-blob"
+          style={{
+            background: 'radial-gradient(circle at 30% 30%, #6366F1 0%, transparent 70%)',
+          }}
+        />
+        <div
+          className="absolute bottom-0 right-1/3 w-[600px] h-[600px] rounded-full blur-3xl opacity-10 animate-blob"
+          style={{
+            background: 'radial-gradient(circle at 70% 40%, #22C55E 0%, transparent 70%)',
+            animationDelay: '2s',
+          }}
+        />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-8">
@@ -173,16 +227,27 @@ const WhyChoose = () => {
 
         {/* Rubrik */}
         <div className="text-center mb-24">
-          <h2
-            className={`
-              text-5xl md:text-6xl font-normal text-gray-900 mb-4 tracking-tight leading-[1.1]
-              transition-all duration-1000 transform
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-            `}
-            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-          >
-            Vår Metod För <span className="font-medium">Framgång</span>
-          </h2>
+          <div className="inline-block relative">
+            {/* Glow bakom rubriken */}
+            <div
+              className="absolute inset-0 rounded-md"
+              style={{
+                background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 60%)',
+                filter: 'blur(16px)',
+                zIndex: -1,
+              }}
+            />
+            <h2
+              className={`
+                text-5xl md:text-6xl font-normal text-gray-900 mb-4 tracking-tight leading-[1.1]
+                transition-all duration-1000 transform
+                ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+              `}
+              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+            >
+              Vår Metod För <span className="font-medium">Framgång</span>
+            </h2>
+          </div>
           <div
             className={`
               w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-4
