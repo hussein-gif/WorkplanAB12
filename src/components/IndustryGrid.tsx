@@ -91,13 +91,21 @@ const IndustryGrid = () => {
       <div
         className={`
           relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
-          bg-white/30 backdrop-blur-md border border-white/10
-          shadow-lg shadow-gray-900/5
+          bg-white/5 backdrop-blur-xl ring-1 ring-white/20
+          shadow-lg shadow-gray-900/10
           transition-all duration-500 ease-out
           min-h-[260px]
-          ${activeCard === index ? 'shadow-xl' : ''}
+          ${activeCard === index ? 'shadow-xl scale-[1.01]' : ''}
         `}
       >
+        {/* Extra mörk overlay för djup (frosted känsla) */}
+        <div
+          className="absolute inset-0 pointer-events-none rounded-2xl"
+          style={{
+            background: 'rgba(15,23,42,0.15)',
+          }}
+        />
+
         {/* Glow när aktiv */}
         <div
           className={`
@@ -129,7 +137,7 @@ const IndustryGrid = () => {
               className="text-lg tracking-tight leading-tight mb-1 font-medium"
               style={{
                 fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                color: '#111827',
+                color: '#f9f9fb',
               }}
             >
               {pillar.title}
@@ -139,7 +147,7 @@ const IndustryGrid = () => {
               style={{
                 fontFamily: 'Inter, sans-serif',
                 fontWeight: 300,
-                color: '#4B5563',
+                color: '#c3c9d6',
               }}
             >
               {pillar.description}
@@ -150,7 +158,7 @@ const IndustryGrid = () => {
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 400,
-              color: '#6B7280',
+              color: '#9ca3af',
             }}
           >
             {pillar.highlight}
@@ -352,11 +360,13 @@ const IndustryGrid = () => {
 
         {/* Anpassad 2x2-layout (small/large / large/small) med finjusterade proportioner */}
         <div className="flex flex-col gap-2 relative">
-          {/* Gemensam gradient bubble över korten (modifierad för tydligare effekt) */}
+          {/* Gradient bubble över korten (tangerar alla kort men inte bakgrunden) */}
           <div
-            className="absolute left-1/2 top-1/2 w-[600px] h-[600px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none blur-3xl"
+            className="absolute left-1/2 top-1/2 w-[660px] h-[660px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={{
-              background: 'radial-gradient(circle at 50% 50%, rgba(124,58,237,0.15) 0%, rgba(99,102,241,0.12) 35%, transparent 75%)',
+              filter: 'blur(80px)',
+              background: 'radial-gradient(circle at 40% 45%, rgba(124,58,237,0.2) 0%, rgba(99,102,241,0.15) 30%, rgba(16,185,129,0.08) 65%, transparent 85%)',
+              mixBlendMode: 'screen',
             }}
           />
 
