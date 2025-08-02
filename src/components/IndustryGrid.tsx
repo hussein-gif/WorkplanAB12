@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Truck, CheckCircle, Clock, Shield } from 'lucide-react';
 
+const clamp = (val: number, min: number, max: number) => Math.min(Math.max(val, min), max);
+
 const WarehouseLogisticsSpecialists = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -47,7 +49,8 @@ const WarehouseLogisticsSpecialists = () => {
       title: 'Djup Branschkännedom',
       description: 'Vårt team förstår era unika behov inom lager och logistik.',
       highlight: 'Specialister på ert område',
-      gradient: 'from-blue-500 to-indigo-600',
+      gradientClass: 'from-blue-500 to-indigo-600',
+      accentGradient: 'linear-gradient(90deg, #3B82F6, #4F46E5)', // blue-500 to indigo-600
       glowColor: 'rgba(59, 130, 246, 0.2)',
     },
     {
@@ -55,7 +58,8 @@ const WarehouseLogisticsSpecialists = () => {
       title: 'Noggrann Screening',
       description: 'Vi genomför strukturerade kompetens- och bakgrundskontroller.',
       highlight: 'Trygg matchning',
-      gradient: 'from-emerald-500 to-teal-600',
+      gradientClass: 'from-emerald-500 to-teal-600',
+      accentGradient: 'linear-gradient(90deg, #10B981, #0D9488)', // emerald-500 to teal-600
       glowColor: 'rgba(16, 185, 129, 0.2)',
     },
     {
@@ -63,7 +67,8 @@ const WarehouseLogisticsSpecialists = () => {
       title: 'Snabb Respons',
       description: 'Omedelbar återkoppling för att hålla er bemanning i rörelse.',
       highlight: 'Snabbt igångsättande',
-      gradient: 'from-orange-500 to-red-600',
+      gradientClass: 'from-orange-500 to-red-600',
+      accentGradient: 'linear-gradient(90deg, #F59E0B, #DC2626)', // orange-500 to red-600
       glowColor: 'rgba(249, 115, 22, 0.2)',
     },
     {
@@ -71,7 +76,8 @@ const WarehouseLogisticsSpecialists = () => {
       title: 'Säkerhet & Kvalitet',
       description: 'Certifierade medarbetare med fokus på trygghet och kvalitet i varje uppdrag.',
       highlight: 'Hög leveranskvalitet',
-      gradient: 'from-purple-500 to-violet-600',
+      gradientClass: 'from-purple-500 to-violet-600',
+      accentGradient: 'linear-gradient(90deg, #A855F7, #7C3AED)', // purple-500 to violet-600
       glowColor: 'rgba(139, 92, 246, 0.2)',
     },
   ];
@@ -91,13 +97,19 @@ const WarehouseLogisticsSpecialists = () => {
       <div
         className={`
           relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
-          bg-white/90 backdrop-blur-sm border border-gray-200/50
-          shadow-lg shadow-gray-900/5
+          bg-white/80 backdrop-blur-sm border border-gray-100/60
+          shadow-md hover:shadow-xl
           transition-all duration-500 ease-out
           min-h-[260px]
-          ${activeCard === index ? 'shadow-xl' : ''}
+          ${activeCard === index ? 'shadow-xl scale-[1.01]' : ''}
         `}
       >
+        {/* Accent bar */}
+        <div
+          className="absolute top-0 left-0 w-full h-1"
+          style={{ background: pillar.accentGradient }}
+        />
+
         {/* Glow när aktiv */}
         <div
           className={`
@@ -111,22 +123,22 @@ const WarehouseLogisticsSpecialists = () => {
         />
 
         {/* Icon */}
-        <div
-          className={`
-            relative w-14 h-14 rounded-xl mb-4
-            bg-gradient-to-br ${pillar.gradient}
-            flex items-center justify-center
-            shadow-lg flex-shrink-0
-          `}
-        >
-          <pillar.icon size={24} className="text-white" />
-        </div>
-
-        {/* Innehåll */}
-        <div className="relative z-10 flex-1 flex flex-col justify-between">
-          <div>
+        <div className="flex items-start gap-4 mb-2">
+          <div
+            className={`
+              relative w-14 h-14 rounded-xl flex-shrink-0
+              bg-gradient-to-br ${pillar.gradientClass}
+              flex items-center justify-center
+              shadow-lg
+              transition-transform duration-300
+              ${activeCard === index ? 'scale-105' : ''}
+            `}
+          >
+            <pillar.icon size={24} className="text-white" />
+          </div>
+          <div className="flex-1">
             <h3
-              className="text-lg tracking-tight leading-tight mb-1 font-medium"
+              className="text-lg tracking-tight leading-tight mb-1 font-semibold"
               style={{
                 fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                 color: '#111827',
@@ -134,6 +146,12 @@ const WarehouseLogisticsSpecialists = () => {
             >
               {pillar.title}
             </h3>
+          </div>
+        </div>
+
+        {/* Innehåll */}
+        <div className="relative z-10 flex-1 flex flex-col justify-between">
+          <div>
             <p
               className="text-sm leading-relaxed mb-4"
               style={{
@@ -161,14 +179,80 @@ const WarehouseLogisticsSpecialists = () => {
   );
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative py-24 bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50/30 overflow-hidden"
-    >
-      {/* Bakgrund */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50/90 via-white/95 to-blue-50/80" />
+    <section ref={sectionRef} className="relative py-24 overflow-hidden">
+      {/* Globala animationer (blobs) */}
+      <style>{`
+        @keyframes blob {
+          0% { transform: scale(1) translate(0,0); }
+          33% { transform: scale(1.05) translate(8px, -5px); }
+          66% { transform: scale(0.95) translate(-8px, 5px); }
+          100% { transform: scale(1) translate(0,0); }
+        }
+        .animate-blob {
+          animation: blob 22s infinite ease-in-out;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-blob {
+            animation: none;
+          }
+        }
+      `}</style>
 
+      {/* Bakgrund: varm gradient + vignette + noise + grid + accent-blobs + interaktiva orbs */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Bas: ljus varm gradient */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(135deg, #f5f7fa 0%, #fffdf7 80%)',
+          }}
+        />
+
+        {/* Vignette */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(circle at 50% 40%, rgba(0,0,0,0.06) 0%, transparent 80%)',
+            mixBlendMode: 'multiply',
+          }}
+        />
+
+        {/* Subtil noise/textur */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E") repeat`,
+          }}
+        />
+
+        {/* Subtil gridstruktur */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)
+            `,
+            backgroundSize: '100px 100px',
+          }}
+        />
+
+        {/* Flytande accent-blobs (varmare) */}
+        <div
+          className="absolute -top-16 left-1/4 w-[500px] h-[500px] rounded-full blur-3xl opacity-8 animate-blob"
+          style={{
+            background: 'radial-gradient(circle at 40% 40%, #C4B5FD 0%, transparent 70%)',
+          }}
+        />
+        <div
+          className="absolute bottom-10 right-1/4 w-[550px] h-[550px] rounded-full blur-3xl opacity-8 animate-blob"
+          style={{
+            background: 'radial-gradient(circle at 60% 50%, #6EE7B7 0%, transparent 70%)',
+            animationDelay: '4s',
+          }}
+        />
+
+        {/* Interaktiva “cool” orbs från tidigare */}
         <div
           className="absolute w-[800px] h-[800px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000"
           style={{
@@ -197,30 +281,7 @@ const WarehouseLogisticsSpecialists = () => {
           }}
         />
 
-        <div
-          className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(30,64,175,0.08) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(30,64,175,0.08) 1px, transparent 1px)
-            `,
-            backgroundSize: '80px 80px',
-            transform: `translate(${mousePosition.x * 0.01}px, ${mousePosition.y * 0.01}px)`,
-          }}
-        />
-
-        <div
-          className="absolute inset-0 opacity-[0.015]"
-          style={{
-            backgroundImage: `
-              linear-gradient(45deg, rgba(59,130,246,0.1) 1px, transparent 1px),
-              linear-gradient(-45deg, rgba(16,185,129,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '120px 120px',
-            transform: `translate(${mousePosition.x * -0.005}px, ${mousePosition.y * -0.005}px)`,
-          }}
-        />
-
+        {/* Extra dekorstruktur (färgade prickar/ramar) */}
         <div className="absolute top-20 right-32 w-3 h-3 bg-blue-500/15 rounded-full animate-pulse shadow-lg" />
         <div
           className="absolute bottom-32 left-20 w-2 h-2 bg-emerald-500/20 rounded-full animate-pulse shadow-lg"
@@ -248,6 +309,7 @@ const WarehouseLogisticsSpecialists = () => {
           style={{ transform: `rotate(${mousePosition.x * 0.05}deg)` }}
         />
 
+        {/* Lätt noise-svg längst ner för struktur */}
         <div
           className="absolute inset-0 opacity-[0.008]"
           style={{
@@ -297,7 +359,7 @@ const WarehouseLogisticsSpecialists = () => {
           </p>
         </div>
 
-        {/* Anpassad 2x2-layout (small/large / large/small) med finjusterade proportioner */}
+        {/* Anpassad 2x2-layout (small/large / large/small) */}
         <div className="flex flex-col gap-2">
           <div className="flex gap-2">
             {renderCard(trustPillars[0], 0, 1.2)}
