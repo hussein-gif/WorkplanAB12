@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import WhyChoose from './components/WhyChoose';
 import AudienceTiles from './components/AudienceTiles';
-import WarehouseLogisticsSpecialists from './components/IndustryGrid';
+import IndustryGrid from './components/IndustryGrid';
 import FeaturedJobs from './components/FeaturedJobs';
 import ConversionBanner from './components/ConversionBanner';
 import Footer from './components/Footer';
@@ -22,7 +22,7 @@ function HomePage() {
       <Hero />
       <WhyChoose />
       <AudienceTiles />
-      <WarehouseLogisticsSpecialists />
+      <IndustryGrid />
       <FeaturedJobs />
       <ConversionBanner />
     </>
