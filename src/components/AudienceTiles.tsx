@@ -69,14 +69,23 @@ const AudienceTiles = () => {
 
   return (
     <section ref={sectionRef} className="relative py-32 overflow-hidden">
-      {/* Bakgrund: mörkblå bas + mjuka glows + små prickar */}
+      {/* Bakgrund: mörkblå bas + gradient-overlay + mjuka glows + små prickar */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Mörkblå basgradient (närmare original) */}
+        {/* Mörkblå basgradient */}
         <div
           className="absolute inset-0"
           style={{
             background:
               'radial-gradient(circle at 30% 30%, #1f2a48 0%, #0f1f44 65%), linear-gradient(135deg, #0f1f44 0%, #1f2a63 100%)',
+          }}
+        />
+
+        {/* Färgad accent-gradient ovanpå */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(120deg, rgba(99,102,241,0.15) 0%, rgba(16,185,129,0.1) 60%, rgba(79,70,229,0.08) 100%)',
+            mixBlendMode: 'soft-light',
           }}
         />
 
@@ -100,6 +109,35 @@ const AudienceTiles = () => {
           }}
         />
 
+        {/* Subtilt grid för struktur */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px)
+            `,
+            backgroundSize: '160px 160px',
+            mixBlendMode: 'overlay',
+          }}
+        />
+
+        {/* Lätt noise */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.2' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23f)' fill='rgba(255,255,255,0.005)'/></svg>")`,
+          }}
+        />
+
+        {/* Mild vignette */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.25) 100%)',
+          }}
+        />
+
         {/* Små pulserande stjärnor */}
         {subtleStars.map((s, i) => (
           <div
@@ -117,14 +155,6 @@ const AudienceTiles = () => {
             }}
           />
         ))}
-
-        {/* Mild vignette för fokus */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.25) 100%)',
-          }}
-        />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-8">
