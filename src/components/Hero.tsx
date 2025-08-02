@@ -80,7 +80,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Content Container - vertically more centered */}
+      {/* Content Container - centrerat vertikalt mer */}
       <div className="relative z-10 flex-1 flex items-center py-16">
         <div className="max-w-7xl mx-auto px-8 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -90,7 +90,7 @@ const Hero = () => {
               <div className="space-y-3">
                 <h1
                   className={`
-                    text-4xl sm:text-5xl lg:text-6xl xl:text-7xl
+                    text-5xl sm:text-6xl lg:text-7xl xl:text-8xl
                     font-light text-white leading-tight tracking-tight
                     transition-all duration-1200 delay-200 transform
                     ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
@@ -122,14 +122,14 @@ const Hero = () => {
                 {/* Accent Line */}
                 <div
                   className={`
-                    w-20 h-px bg-gradient-to-r from-white/60 to-transparent
+                    w-24 h-px bg-gradient-to-r from-white/60 to-transparent
                     transition-all duration-1000 delay-600 transform
                     ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
                   `}
                 />
               </div>
 
-              {/* Subtitle (light italic, smaller) */}
+              {/* Subtitle (light italic) */}
               <p
                 className={`
                   text-base md:text-lg text-white/80 italic leading-relaxed max-w-2xl
@@ -147,7 +147,7 @@ const Hero = () => {
               {/* Action Buttons */}
               <div
                 className={`
-                  flex flex-col sm:flex-row gap-3 pt-3
+                  flex flex-col sm:flex-row gap-4 pt-4
                   transition-all duration-1000 delay-1000 transform
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
                 `}
@@ -155,9 +155,9 @@ const Hero = () => {
                 <button
                   onClick={() => navigate('/jobs')}
                   className="
-                    group relative px-6 py-3 
+                    group relative px-8 py-4 
                     bg-white text-gray-900 rounded-full
-                    font-medium text-base tracking-wide
+                    font-semibold text-lg tracking-wide
                     hover:bg-white/95 
                     transition-all duration-300
                     shadow-lg hover:shadow-white/20
@@ -172,9 +172,9 @@ const Hero = () => {
                 <button
                   onClick={() => navigate('/partner')}
                   className="
-                    group relative px-6 py-3
+                    group relative px-8 py-4
                     bg-transparent text-white border-2 border-white/30 rounded-full
-                    font-medium text-base tracking-wide
+                    font-semibold text-lg tracking-wide
                     hover:border-white/60 hover:bg-white/10
                     transition-all duration-300
                     backdrop-blur-sm
