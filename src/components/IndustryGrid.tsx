@@ -10,23 +10,33 @@ const WarehouseLogisticsSpecialists = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        }
       },
       { threshold: 0.1 }
     );
-    if (sectionRef.current) observer.observe(sectionRef.current);
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      setMousePosition({
-        x: ((e.clientX - rect.left) / rect.width) * 100,
-        y: ((e.clientY - rect.top) / rect.height) * 100,
-      });
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        setMousePosition({
+          x: ((e.clientX - rect.left) / rect.width) * 100,
+          y: ((e.clientY - rect.top) / rect.height) * 100,
+        });
+      }
     };
+
     window.addEventListener('mousemove', handleMouseMove);
+
     return () => {
-      if (sectionRef.current) observer.unobserve(sectionRef.current);
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
@@ -251,7 +261,7 @@ const WarehouseLogisticsSpecialists = () => {
         <div className="text-center mb-16">
           <h2
             className={`
-              text-5xl md:text-6xl mb-4 tracking-tight
+              text-4xl md:text-5xl mb-4 tracking-tight
               transition-all duration-1000 delay-200 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
             `}
