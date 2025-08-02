@@ -91,11 +91,11 @@ const WarehouseLogisticsSpecialists = () => {
       <div
         className={`
           relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
-          bg-white/90 backdrop-blur-sm border border-gray-200/50
-          shadow-lg shadow-gray-900/5
+          bg-white/25 backdrop-blur-md border border-white/30
+          shadow-xl
           transition-all duration-500 ease-out
           min-h-[260px]
-          ${activeCard === index ? 'shadow-xl' : ''}
+          ${activeCard === index ? 'scale-[1.02]' : ''}
         `}
       >
         {/* Glow när aktiv */}
@@ -110,13 +110,19 @@ const WarehouseLogisticsSpecialists = () => {
           }}
         />
 
+        {/* Accent bar up top (nästbildad från referens) */}
+        <div className="absolute top-0 left-0 w-full h-1 rounded-t-xl" style={{ background: `linear-gradient(90deg, #6366F1, #A855F7)` }} />
+
+        {/* Shared subtle decorative shapes inside card */}
+        <div className="absolute top-8 right-8 w-16 h-16 rounded-lg border border-white/20 opacity-30" />
+
         {/* Icon */}
         <div
           className={`
             relative w-14 h-14 rounded-xl mb-4
             bg-gradient-to-br ${pillar.gradient}
             flex items-center justify-center
-            shadow-lg flex-shrink-0
+            shadow-md flex-shrink-0
           `}
         >
           <pillar.icon size={24} className="text-white" />
@@ -165,9 +171,29 @@ const WarehouseLogisticsSpecialists = () => {
       ref={sectionRef}
       className="relative py-24 bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50/30 overflow-hidden"
     >
+      {/* Lätt subtil animation / patch för att göra bakgrunden mindre platt */}
+      <style>{`
+        @keyframes softPulse {
+          0%,100% { opacity: 0.04; }
+          50% { opacity: 0.07; }
+        }
+        .animate-soft-pulse {
+          animation: softPulse 18s ease-in-out infinite;
+        }
+      `}</style>
+
       {/* Bakgrund */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-50/90 via-white/95 to-blue-50/80" />
+
+        {/* Subtil ljus patch över hela ytan för rörelse */}
+        <div
+          className="absolute inset-0 pointer-events-none animate-soft-pulse"
+          style={{
+            background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6) 0%, transparent 60%)',
+            mixBlendMode: 'overlay',
+          }}
+        />
 
         <div
           className="absolute w-[800px] h-[800px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000"
@@ -297,8 +323,16 @@ const WarehouseLogisticsSpecialists = () => {
           </p>
         </div>
 
-        {/* Anpassad 2x2-layout (small/large / large/small) med finjusterade proportioner */}
-        <div className="flex flex-col gap-2">
+        {/* Anpassad 2x2-layout med shared gradient blob */}
+        <div className="flex flex-col gap-2 relative">
+          {/* Gemensam lätt gradient blob över korten */}
+          <div
+            className="absolute left-1/2 top-1/2 w-[600px] h-[600px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none blur-3xl"
+            style={{
+              background: 'radial-gradient(circle at 50% 50%, rgba(99,102,241,0.08) 0%, transparent 70%)',
+            }}
+          />
+
           <div className="flex gap-2">
             {renderCard(trustPillars[0], 0, 1.2)}
             {renderCard(trustPillars[1], 1, 1.8)}
