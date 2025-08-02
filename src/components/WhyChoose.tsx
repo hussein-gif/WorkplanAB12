@@ -181,7 +181,7 @@ const WhyChoose = () => {
             `}
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
-            Vår Metod för Framgång
+            Vår Metod För <span className="font-medium">Framgång</span>
           </h2>
           <div
             className={`
@@ -270,7 +270,7 @@ const WhyChoose = () => {
 
                     {/* Titel */}
                     <h3
-                      className="text-3xl font-normal text-gray-900 tracking-tight"
+                      className="text-3xl font-medium text-gray-900 tracking-tight"
                       style={{
                         fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                       }}
