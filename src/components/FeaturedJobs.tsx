@@ -131,13 +131,13 @@ const FeaturedJobs = () => {
 
           <p
             className={`
-              text-xl text-white/70 max-w-2xl mx-auto leading-relaxed
+              text-xl text-white/70 max-w-2xl mx-auto leading-relaxed font-light
               transition-all duration-1000 delay-600 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
             `}
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 400,
+              fontWeight: 300,
             }}
           >
             Hitta din nästa tjänst i vårt utbud av lediga jobb
@@ -169,10 +169,9 @@ const FeaturedJobs = () => {
                   <div className="flex-1 min-w-0">
                     {/* Jobbtitel */}
                     <h3
-                      className="text-lg mb-1 leading-tight"
+                      className="text-lg mb-1 leading-tight font-medium"
                       style={{
                         fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                        fontWeight: 400,
                         color: '#111827',
                       }}
                     >
@@ -246,7 +245,7 @@ const FeaturedJobs = () => {
             className="
               group relative px-8 py-4
               bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white rounded-2xl
-              font-medium tracking-wide
+              font-semibold tracking-wide
               hover:border-white/40 hover:bg-white/20
               transition-all duration-300
               shadow-lg hover:shadow-xl
@@ -260,7 +259,7 @@ const FeaturedJobs = () => {
             {/* Shimmer */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
             <div className="relative flex items-center space-x-2">
-              <span>Se Alla Jobb</span>
+              <span className="font-semibold">Se Alla Jobb</span>
               <ArrowRight size={16} className="transition-transform duration-300" />
             </div>
           </button>
