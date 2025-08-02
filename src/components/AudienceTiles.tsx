@@ -73,27 +73,27 @@ const AudienceTiles = () => {
         <div
           className="absolute w-[1000px] h-[1000px] rounded-full opacity-[0.08] blur-3xl transition-all duration-1000"
           style={{
-            background: `radial-gradient(circle, #3B82F6 0%, transparent 70%)`,
-            left: `${mousePosition.x * 0.5}%`,
-            top: `${mousePosition.y * 0.3}%`,
+            background: radial-gradient(circle, #3B82F6 0%, transparent 70%),
+            left: ${mousePosition.x * 0.5}%,
+            top: ${mousePosition.y * 0.3}%,
             transform: 'translate(-50%, -50%)',
           }}
         />
         <div
           className="absolute w-[800px] h-[800px] rounded-full opacity-[0.06] blur-3xl transition-all duration-1000 delay-300"
           style={{
-            background: `radial-gradient(circle, #10B981 0%, transparent 70%)`,
-            right: `${mousePosition.x * 0.3}%`,
-            bottom: `${mousePosition.y * 0.4}%`,
+            background: radial-gradient(circle, #10B981 0%, transparent 70%),
+            right: ${mousePosition.x * 0.3}%,
+            bottom: ${mousePosition.y * 0.4}%,
             transform: 'translate(50%, 50%)',
           }}
         />
         <div
           className="absolute w-[600px] h-[600px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000 delay-600"
           style={{
-            background: `radial-gradient(circle, #8B5CF6 0%, transparent 70%)`,
-            left: `${50 + mousePosition.x * 0.2}%`,
-            top: `${50 + mousePosition.y * 0.2}%`,
+            background: radial-gradient(circle, #8B5CF6 0%, transparent 70%),
+            left: ${50 + mousePosition.x * 0.2}%,
+            top: ${50 + mousePosition.y * 0.2}%,
             transform: 'translate(-50%, -50%)',
           }}
         />
@@ -103,12 +103,12 @@ const AudienceTiles = () => {
           <div
             className="absolute inset-0 opacity-[0.02]"
             style={{
-              backgroundImage: `
+              backgroundImage: 
                 linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-              `,
+              ,
               backgroundSize: '80px 80px',
-              transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px)`,
+              transform: translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px),
             }}
           />
           <div
@@ -129,11 +129,11 @@ const AudienceTiles = () => {
           />
           <div
             className="absolute top-1/4 left-1/4 w-32 h-32 border border-white/5 rounded-full"
-            style={{ transform: `rotate(${mousePosition.x * 0.1}deg)` }}
+            style={{ transform: rotate(${mousePosition.x * 0.1}deg) }}
           />
           <div
             className="absolute bottom-1/4 right-1/4 w-24 h-24 border border-white/5 rounded-full"
-            style={{ transform: `rotate(${-mousePosition.y * 0.1}deg)` }}
+            style={{ transform: rotate(${-mousePosition.y * 0.1}deg) }}
           />
         </div>
 
@@ -141,7 +141,7 @@ const AudienceTiles = () => {
         <div
           className="absolute inset-0 opacity-[0.015]"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            backgroundImage: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"),
           }}
         />
       </div>
@@ -150,11 +150,11 @@ const AudienceTiles = () => {
         {/* Sektionens rubrik */}
         <div className="text-center mb-20">
           <h2
-            className={`
+            className={
               text-5xl md:text-6xl mb-6 tracking-tight leading-[0.9]
               transition-all duration-1000 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
-            `}
+            }
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
               fontWeight: 400,
@@ -165,11 +165,11 @@ const AudienceTiles = () => {
           </h2>
 
           <div
-            className={`
-              flex items-center justify-center space-x-4 mb-8
+            className={
+              flex items-center justify-center space-x-4 mb-6
               transition-all duration-1000 delay-200 transform
               ${isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
-            `}
+            }
           >
             <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
             <div className="w-2 h-2 bg-white/20 rounded-full" />
@@ -177,11 +177,11 @@ const AudienceTiles = () => {
           </div>
 
           <p
-            className={`
+            className={
               text-xl max-w-2xl mx-auto leading-relaxed
               transition-all duration-1000 delay-400 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-            `}
+            }
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
@@ -197,12 +197,12 @@ const AudienceTiles = () => {
           {audiences.map((audience, index) => (
             <div
               key={audience.id}
-              className={`
+              className={
                 relative
                 transition-all duration-1000 transform
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}
-              `}
-              style={{ transitionDelay: `${800 + index * 300}ms` }}
+              }
+              style={{ transitionDelay: ${800 + index * 300}ms }}
               onMouseEnter={() => setActiveCard(index)}
               onMouseLeave={() => setActiveCard(null)}
               onClick={() =>
@@ -211,59 +211,59 @@ const AudienceTiles = () => {
             >
               {/* Huvudkort utan hover-effekter */}
               <div
-                className={`
+                className={
                   relative h-[600px] rounded-3xl overflow-hidden
                   bg-white/95 backdrop-blur-xl
                   border border-white/30
                   shadow-2xl shadow-black/20
                   transition-all duration-700 ease-out
-                `}
+                }
               >
                 {/* Gradient-header */}
                 <div
-                  className={`
+                  className={
                     relative h-48 bg-gradient-to-br ${audience.gradient}
                     flex items-center justify-center overflow-hidden
-                  `}
+                  }
                 >
                   <div className="absolute inset-0">
                     <div
                       className="absolute top-8 right-8 w-20 h-20 border border-white/20 rounded-full"
-                      style={{ transform: `rotate(${mousePosition.x * 0.1}deg)` }}
+                      style={{ transform: rotate(${mousePosition.x * 0.1}deg) }}
                     />
                     <div
                       className="absolute bottom-8 left-8 w-12 h-12 border border-white/30 rounded-full"
-                      style={{ transform: `rotate(${-mousePosition.y * 0.1}deg)` }}
+                      style={{ transform: rotate(${-mousePosition.y * 0.1}deg) }}
                     />
 
                     <Sparkles
                       size={12}
                       className="absolute top-12 left-12 text-white/40 animate-pulse"
-                      style={{ animationDelay: `${index * 500}ms` }}
+                      style={{ animationDelay: ${index * 500}ms }}
                     />
                     <Sparkles
                       size={8}
                       className="absolute bottom-12 right-12 text-white/30 animate-pulse"
-                      style={{ animationDelay: `${index * 500 + 1000}ms` }}
+                      style={{ animationDelay: ${index * 500 + 1000}ms }}
                     />
                   </div>
 
                   <div
-                    className={`
+                    className={
                       relative z-10 w-24 h-24 rounded-2xl bg-white/20 backdrop-blur-sm
                       flex items-center justify-center
                       transition-all duration-500
-                    `}
+                    }
                   >
                     <audience.icon size={40} className="text-white" />
                   </div>
 
                   <div
-                    className={`
+                    className={
                       absolute top-6 right-6 w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm
                       flex items-center justify-center
                       transition-all duration-500 delay-100
-                    `}
+                    }
                   >
                     <audience.accentIcon size={16} className="text-white/80" />
                   </div>
@@ -314,13 +314,13 @@ const AudienceTiles = () => {
                       <div
                         key={fIdx}
                         className="flex items-center space-x-3"
-                        style={{ transitionDelay: `${fIdx * 100}ms` }}
+                        style={{ transitionDelay: ${fIdx * 100}ms }}
                       >
                         <div
-                          className={`
+                          className={
                             w-1.5 h-1.5 rounded-full bg-gradient-to-r ${audience.gradient}
                             transition-all duration-500
-                          `}
+                          }
                         />
                         <span
                           style={{
@@ -341,14 +341,14 @@ const AudienceTiles = () => {
                 {/* Knapp: absolut placerad i nedre högra hörnet med shimmer på hover */}
                 <div className="absolute bottom-6 right-6">
                   <button
-                    className={`
+                    className={
                       group relative px-8 py-4 rounded-2xl
                       bg-gradient-to-r ${audience.gradient} text-white
                       shadow-lg hover:shadow-xl
                       transition-all duration-300
                       hover:scale-105 active:scale-95
                       overflow-hidden font-semibold flex items-center space-x-2
-                    `}
+                    }
                     style={{ fontFamily: 'Inter, sans-serif' }}
                     onClick={(e) => {
                       e.stopPropagation();
