@@ -129,14 +129,14 @@ const Hero = () => {
                 />
               </div>
 
-              {/* Subtitle */}
+              {/* Subtitle (light italic) */}
               <p
                 className={`
-                  text-xl lg:text-2xl text-white/80 font-light leading-relaxed max-w-2xl
+                  text-xl lg:text-2xl text-white/80 italic leading-relaxed max-w-2xl
                   transition-all duration-1000 delay-800 transform
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
                 `}
-                style={{ fontFamily: 'Inter, sans-serif', fontWeight: '300' }}
+                style={{ fontFamily: 'Inter, sans-serif', fontWeight: '300', fontStyle: 'italic' }}
               >
                 Skräddarsydda bemanningslösningar –
                 <span className="block mt-2 text-white/60">
