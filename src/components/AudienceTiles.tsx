@@ -76,7 +76,7 @@ const AudienceTiles = () => {
     const rect = card.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width;
     const py = (e.clientY - rect.top) / rect.height;
-    const rotateY = (px - 0.5) * 12; // max ~6deg each side
+    const rotateY = (px - 0.5) * 12;
     const rotateX = -(py - 0.5) * 12;
     setTilt((prev) => {
       const copy = [...prev];
@@ -124,13 +124,13 @@ const AudienceTiles = () => {
         }
       `}</style>
 
-      {/* Bakgrund med fler lager */}
+      {/* Samma bakgrund som FeaturedJobs för visuell konsistens */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Basgradient + hue shift */}
+        {/* Basgradient med hue-shift */}
         <div
           className="absolute inset-0 animate-hue"
           style={{
-            background: 'linear-gradient(135deg, #0f1f44 0%, #1f2a63 50%, #0f1f44 100%)',
+            background: 'linear-gradient(135deg, #0e1b33 0%, #111827 45%, #1f2f54 100%)',
           }}
         />
 
@@ -149,7 +149,7 @@ const AudienceTiles = () => {
           }}
         />
 
-        {/* Driftande ljus-overlay för att bryta monotoni */}
+        {/* Driftande ljus-overlay */}
         <div
           className="absolute inset-0"
           style={{
@@ -177,7 +177,7 @@ const AudienceTiles = () => {
           }}
         />
 
-        {/* Subtil vignette */}
+        {/* Vignette */}
         <div
           className="absolute inset-0"
           style={{
@@ -204,7 +204,7 @@ const AudienceTiles = () => {
           />
         ))}
 
-        {/* Lätt textur / noise */}
+        {/* Textur / noise */}
         <div
           className="absolute inset-0"
           aria-hidden="true"
@@ -219,7 +219,6 @@ const AudienceTiles = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-8">
         {/* Rubrik */}
         <div className="text-center mb-20 relative">
-          {/* Glow bakom rubrik */}
           <div
             className="absolute inset-x-0 mx-auto top-0 w-[360px] h-[160px] rounded-full blur-3xl opacity-25"
             style={{
@@ -317,7 +316,6 @@ const AudienceTiles = () => {
                     bg-gradient-to-br ${audience.gradient}
                   `}
                 >
-                  {/* Dekorativa former i gradienten */}
                   <div className="absolute inset-0 pointer-events-none">
                     <div
                       className="absolute top-8 right-8 w-20 h-20 border border-white/25 rounded-full"
@@ -339,7 +337,6 @@ const AudienceTiles = () => {
                     />
                   </div>
 
-                  {/* Ikon-box */}
                   <div
                     className={`
                       relative z-10 w-24 h-24 rounded-2xl bg-white/15 backdrop-blur-sm
@@ -351,7 +348,6 @@ const AudienceTiles = () => {
                     <audience.icon size={40} className="text-white" />
                   </div>
 
-                  {/* Accent-ikon */}
                   <div
                     className={`
                       absolute top-6 right-6 w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm
