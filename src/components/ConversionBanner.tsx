@@ -85,19 +85,16 @@ const ConversionBanner = () => {
       {/* Content Container */}
       <div className="relative z-10 max-w-4xl mx-auto px-8">
         <div className="text-center">
-          {/* Floating Badge */}
           {/* Main Heading */}
-          <h2 className={`
-            text-5xl md:text-6xl font-extralight text-white mb-6 tracking-tight leading-[0.9]
-            transition-all duration-1000 transform
-            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
-          `}
-          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '400' }}
+          <h2
+            className={`
+              text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight leading-[0.9]
+              transition-all duration-1000 transform
+              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
+            `}
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 700 }}
           >
-            <span className="block font-light">Vill du</span>
-            <span className="block font-extralight italic text-white/80">
-              veta mer?
-            </span>
+            Vill Du Veta Mer?
           </h2>
 
           {/* Elegant Separator */}
@@ -132,17 +129,17 @@ const ConversionBanner = () => {
             <button
               onClick={() => navigate('/contact')}
               className="
-              group relative px-8 py-4 
-              bg-white/95 text-gray-900 rounded-2xl
-              font-semibold text-lg tracking-wide
-              hover:bg-white hover:scale-105
-              transition-all duration-300
-              shadow-2xl hover:shadow-white/20
-              hover:-translate-y-1
-              overflow-hidden
-              min-w-[200px]
-            "
-            style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}
+                group relative px-8 py-4 
+                bg-white/95 text-gray-900 rounded-2xl
+                font-semibold text-lg tracking-wide
+                hover:bg-white hover:scale-105
+                transition-all duration-300
+                shadow-2xl hover:shadow-white/20
+                hover:-translate-y-1
+                overflow-hidden
+                min-w-[200px]
+              "
+              style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}
             >
               {/* Shimmer Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
@@ -158,17 +155,17 @@ const ConversionBanner = () => {
             <button
               onClick={() => navigate('/services')}
               className="
-              group relative px-8 py-4
-              bg-transparent text-white border-2 border-white/30 rounded-2xl
-              font-semibold text-lg tracking-wide
-              hover:border-white/60 hover:bg-white/10 hover:scale-105
-              transition-all duration-300
-              backdrop-blur-sm
-              hover:-translate-y-1
-              overflow-hidden
-              min-w-[200px]
-            "
-            style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}
+                group relative px-8 py-4
+                bg-transparent text-white border-2 border-white/30 rounded-2xl
+                font-semibold text-lg tracking-wide
+                hover:border-white/60 hover:bg-white/10 hover:scale-105
+                transition-all duration-300
+                backdrop-blur-sm
+                hover:-translate-y-1
+                overflow-hidden
+                min-w-[200px]
+              "
+              style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}
             >
               {/* Shimmer Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
