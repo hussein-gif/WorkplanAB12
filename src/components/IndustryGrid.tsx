@@ -251,7 +251,7 @@ const WarehouseLogisticsSpecialists = () => {
         <div className="text-center mb-16">
           <h2
             className={`
-              text-4xl md:text-5xl mb-4 tracking-tight
+              text-5xl md:text-6xl mb-4 tracking-tight
               transition-all duration-1000 delay-200 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
             `}
