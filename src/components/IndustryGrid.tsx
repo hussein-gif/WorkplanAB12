@@ -67,10 +67,12 @@ const WarehouseLogisticsSpecialists = () => {
     teal: {
       bar: 'linear-gradient(180deg, rgba(94,234,212,1), rgba(94,234,212,0.6))',
       underline: 'from-[#5eead4] to-[#5eead4]',
+      soft: 'rgba(94,234,212,0.15)',
     },
     lavender: {
       bar: 'linear-gradient(180deg, rgba(196,181,253,1), rgba(196,181,253,0.6))',
       underline: 'from-[#c4b5fd] to-[#c4b5fd]',
+      soft: 'rgba(196,181,253,0.15)',
     },
   } as const;
 
@@ -106,7 +108,7 @@ const WarehouseLogisticsSpecialists = () => {
           {/* Subtle decorative shapes */}
           <div
             className="absolute -top-5 -left-5 w-20 h-20 rounded-full opacity-20 blur-lg"
-            style={{ background: pillar.accent === 'teal' ? 'rgba(94,234,212,0.15)' : 'rgba(196,181,253,0.15)' }}
+            style={{ background: accentConfig[pillar.accent].soft }}
             aria-hidden="true"
           />
           <div
@@ -141,14 +143,14 @@ const WarehouseLogisticsSpecialists = () => {
               </div>
             </div>
             <p
-              className="text-sm text-gray-300 flex-1 leading-relaxed mb-4"
+              className="text-sm text-gray-700 flex-1 leading-relaxed mb-4"
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
             >
               {pillar.description}
             </p>
             <div
               className="text-xs uppercase tracking-wider"
-              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, color: '#9CA3AF' }}
+              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, color: '#6B7280' }}
             >
               {pillar.highlight}
             </div>
@@ -163,52 +165,45 @@ const WarehouseLogisticsSpecialists = () => {
       ref={sectionRef}
       className="relative py-24 overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #0f1f44 0%, #1e3f8f 85%)',
+        background: 'linear-gradient(135deg, #f9fbfd 0%, #eef5fb 100%)',
       }}
     >
-      {/* Bakgrund: vignette + grid + geometriska accenter */}
+      {/* Bakgrund: vignette + diskret grid + former */}
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(circle at 35% 35%, rgba(255,255,255,0.03) 0%, transparent 70%)',
-            mixBlendMode: 'overlay',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(circle at 60% 40%, rgba(0,0,0,0.2) 0%, transparent 80%)',
+              'radial-gradient(circle at 35% 35%, rgba(0,0,0,0.08) 0%, transparent 70%)',
+            mixBlendMode: 'multiply',
           }}
         />
         <div
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+              linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)
             `,
             backgroundSize: '150px 150px',
           }}
         />
         <div
-          className="absolute top-12 left-12 w-16 h-16 border border-[rgba(255,255,255,0.08)] rounded-full"
+          className="absolute top-12 left-12 w-16 h-16 border border-indigo-200 rounded-full"
           style={{
             transform: `translate(${mousePosition.x * 0.015}px, ${mousePosition.y * 0.01}px)`,
             opacity: 0.35,
           }}
         />
         <div
-          className="absolute bottom-16 right-16 w-20 h-20 border border-[rgba(255,255,255,0.06)] rounded-lg"
+          className="absolute bottom-16 right-16 w-20 h-20 border border-emerald-200 rounded-lg"
           style={{
             transform: `translate(${mousePosition.x * -0.02}px, ${mousePosition.y * 0.015}px)`,
             opacity: 0.3,
           }}
         />
         <div
-          className="absolute top-1/3 right-1/4 w-12 h-12 border border-[rgba(255,255,255,0.05)] rounded-sm"
+          className="absolute top-1/3 right-1/4 w-12 h-12 border border-purple-200 rounded-sm"
           style={{
             transform: `translate(${mousePosition.x * 0.01}px, ${-mousePosition.y * 0.01}px)`,
             opacity: 0.25,
@@ -222,7 +217,7 @@ const WarehouseLogisticsSpecialists = () => {
           <h2
             className={`
               text-4xl md:text-5xl mb-4 tracking-tight
-              font-semibold text-white
+              font-semibold text-gray-900
               transition-all duration-700
               ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
             `}
@@ -232,7 +227,7 @@ const WarehouseLogisticsSpecialists = () => {
           </h2>
           <div
             className={`
-              w-16 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent mx-auto mb-3
+              w-16 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent mx-auto mb-3
               transition-all duration-700
               ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
             `}
@@ -240,7 +235,7 @@ const WarehouseLogisticsSpecialists = () => {
           <p
             className={`
               text-lg max-w-2xl mx-auto leading-snug font-light
-              text-gray-200
+              text-gray-600
               transition-all duration-700
               ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
             `}
@@ -271,14 +266,14 @@ const WarehouseLogisticsSpecialists = () => {
           `}
         >
           <div className="inline-flex items-center space-x-3">
-            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+            <div className="w-8 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent" />
             <div className="flex space-x-2">
               <div className="w-2 h-2 bg-[#5eead4] rounded-full animate-pulse" />
               <div className="w-2 h-2 bg-[#c4b5fd] rounded-full animate-pulse" style={{ animationDelay: '200ms' }} />
               <div className="w-2 h-2 bg-[#5eead4] rounded-full animate-pulse" style={{ animationDelay: '400ms' }} />
               <div className="w-2 h-2 bg-[#c4b5fd] rounded-full animate-pulse" style={{ animationDelay: '600ms' }} />
             </div>
-            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+            <div className="w-8 h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent" />
           </div>
         </div>
       </div>
