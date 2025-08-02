@@ -114,7 +114,7 @@ const FeaturedJobs = () => {
               fontWeight: 400,
             }}
           >
-            Utvalda Möjligheter
+            Utvalda <span className="font-medium">Möjligheter</span>
           </h2>
 
           <div
