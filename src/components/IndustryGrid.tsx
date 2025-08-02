@@ -66,22 +66,23 @@ const WarehouseLogisticsSpecialists = () => {
     },
   ];
 
-  const renderCard = (pillar: typeof trustPillars[0], index: number, flexClass: string) => (
+  const renderCard = (pillar: typeof trustPillars[0], index: number, flexGrow: number) => (
     <div
       key={index}
       className={`
-        ${flexClass} relative
+        relative flex
         transition-all duration-1000 transform
         ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
       `}
-      style={{ transitionDelay: `${600 + index * 150}ms` }}
+      style={{ transitionDelay: `${600 + index * 150}ms`, flex: flexGrow }}
       onMouseEnter={() => setActiveCard(index)}
       onMouseLeave={() => setActiveCard(null)}
     >
       <div
         className={`
-          relative flex flex-col p-6 rounded-2xl overflow-hidden
-          bg-white shadow-md border border-gray-200
+          relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
+          bg-white/90 backdrop-blur-sm border border-gray-200/50
+          shadow-lg shadow-gray-900/5
           transition-all duration-500 ease-out
           min-h-[260px]
           ${activeCard === index ? 'shadow-xl' : ''}
@@ -281,17 +282,15 @@ const WarehouseLogisticsSpecialists = () => {
           </p>
         </div>
 
-        {/* Anpassad 2x2-layout (small/large / large/small) med tajt mellanrum */}
+        {/* Anpassad 2x2-layout (small/large / large/small) med finjusterade proportioner */}
         <div className="flex flex-col gap-2">
-          {/* Övre rad: small | large */}
           <div className="flex gap-2">
-            {renderCard(trustPillars[0], 0, 'flex-[1]')}
-            {renderCard(trustPillars[1], 1, 'flex-[2]')}
+            {renderCard(trustPillars[0], 0, 1.2)}
+            {renderCard(trustPillars[1], 1, 1.8)}
           </div>
-          {/* Nedre rad: large | small */}
           <div className="flex gap-2">
-            {renderCard(trustPillars[2], 2, 'flex-[2]')}
-            {renderCard(trustPillars[3], 3, 'flex-[1]')}
+            {renderCard(trustPillars[2], 2, 1.8)}
+            {renderCard(trustPillars[3], 3, 1.2)}
           </div>
         </div>
 
