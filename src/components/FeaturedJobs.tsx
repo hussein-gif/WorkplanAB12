@@ -245,7 +245,7 @@ const FeaturedJobs = () => {
             className="
               group relative px-8 py-4
               bg-white/10 backdrop-blur-sm border-2 border-white/20 text-white rounded-2xl
-              font-semibold tracking-wide
+              font-bold tracking-wide
               hover:border-white/40 hover:bg-white/20
               transition-all duration-300
               shadow-lg hover:shadow-xl
@@ -259,7 +259,7 @@ const FeaturedJobs = () => {
             {/* Shimmer */}
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
             <div className="relative flex items-center space-x-2">
-              <span className="font-semibold">Se Alla Jobb</span>
+              <span className="font-bold">Se Alla Jobb</span>
               <ArrowRight size={16} className="transition-transform duration-300" />
             </div>
           </button>
