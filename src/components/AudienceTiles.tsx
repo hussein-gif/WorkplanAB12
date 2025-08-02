@@ -166,7 +166,7 @@ const AudienceTiles = () => {
 
           <div
             className={`
-              flex items-center justify-center space-x-4 mb-8
+              flex items-center justify-center space-x-4 mb-6
               transition-all duration-1000 delay-200 transform
               ${isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
             `}
@@ -184,7 +184,7 @@ const AudienceTiles = () => {
             `}
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 400,
+              fontWeight: 300,
               color: 'rgba(255,255,255,0.7)',
             }}
           >
