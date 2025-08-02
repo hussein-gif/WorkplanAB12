@@ -84,44 +84,39 @@ const ConversionBanner = () => {
 
       {/* Content Container */}
       <div className="relative z-10 max-w-4xl mx-auto px-8">
-        <div className="text-center flex flex-col items-center space-y-4">
-          {/* Main Heading */}
-          <h2
+        <div className="text-center flex flex-col items-center">
+          {/* Heading + Separator + Subtitle */}
+          <div
             className={`
-              text-5xl md:text-6xl font-normal text-white tracking-tight leading-[0.9]
+              flex flex-col items-center space-y-6 -mt-8
               transition-all duration-1000 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
             `}
-            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400, textTransform: 'capitalize' }}
           >
-            Vill Du Veta Mer?
-          </h2>
+            <h2
+              className="text-5xl md:text-6xl font-normal text-white tracking-tight leading-[0.9]"
+              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400, textTransform: 'capitalize' }}
+            >
+              Vill Du Veta Mer?
+            </h2>
 
-          {/* Elegant Separator */}
-          <div className={`
-            flex items-center justify-center space-x-4
-            transition-all duration-1000 delay-200 transform
-            ${isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
-          `}>
-            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-            <div className="w-2 h-2 bg-white/20 rounded-full" />
-            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+            <div className="flex items-center justify-center space-x-4">
+              <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+              <div className="w-2 h-2 bg-white/20 rounded-full" />
+              <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+            </div>
+
+            <p
+              className="text-xl text-white/80 font-light leading-relaxed max-w-2xl mx-auto"
+              style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}
+            >
+              Oavsett om du är kandidat eller arbetsgivare har vi rätt lösning för dig.
+            </p>
           </div>
 
-          {/* Subtitle */}
-          <p className={`
-            text-xl text-white/80 font-light leading-relaxed max-w-2xl mx-auto
-            transition-all duration-1000 delay-400 transform
-            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-          `}
-          style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}
-          >
-            Oavsett om du är kandidat eller arbetsgivare har vi rätt lösning för dig.
-          </p>
-          
-          {/* Enhanced Button Container */}
+          {/* Enhanced Button Container (mer mellanrum från underrubrik) */}
           <div className={`
-            flex flex-col sm:flex-row gap-6 justify-center items-center
+            flex flex-col sm:flex-row gap-6 justify-center items-center mt-10
             transition-all duration-1000 delay-600 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}>
