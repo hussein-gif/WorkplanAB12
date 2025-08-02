@@ -59,88 +59,86 @@ const AudienceTiles = () => {
     },
   ];
 
-  // några små stjärnor/prickor för liv
-  const stars = [
-    { x: 12, y: 18, size: 2, delay: '0s', color: '#ffffff', opacity: 0.15 },
-    { x: 80, y: 25, size: 1.5, delay: '1s', color: '#d1ddff', opacity: 0.1 },
-    { x: 45, y: 60, size: 1.8, delay: '2s', color: '#8fcfff', opacity: 0.12 },
-    { x: 30, y: 40, size: 1.2, delay: '0.5s', color: '#a0bfff', opacity: 0.08 },
-    { x: 65, y: 10, size: 2.5, delay: '1.5s', color: '#c5e8ff', opacity: 0.1 },
+  const subtleStars = [
+    { left: '12%', top: '18%', size: 2, delay: '0s', color: '#ffffff', opacity: 0.12 },
+    { left: '80%', top: '25%', size: 1.5, delay: '1s', color: '#d1ddff', opacity: 0.08 },
+    { left: '45%', top: '60%', size: 1.8, delay: '2s', color: '#8fcfff', opacity: 0.1 },
+    { left: '30%', top: '40%', size: 1.2, delay: '0.5s', color: '#a0bfff', opacity: 0.07 },
+    { left: '65%', top: '10%', size: 2.5, delay: '1.5s', color: '#c5e8ff', opacity: 0.09 },
   ];
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative py-32 overflow-hidden"
-    >
-      {/* Bakgrund: mörkblå + liv utan att bli “gritty” */}
+    <section ref={sectionRef} className="relative py-32 overflow-hidden">
+      {/* Bakgrund: mörkblå + liv */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Basgradient */}
+        {/* Mörkblå basgradient */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              'radial-gradient(circle at 30% 30%, #1f2a48 0%, #0f1f44 70%), linear-gradient(135deg, #0f1f44 0%, #1f2a63 100%)',
+              'radial-gradient(circle at 30% 30%, #1f2a48 0%, #0f1f44 65%), linear-gradient(135deg, #0f1f44 0%, #1f2a63 100%)',
           }}
         />
 
-        {/* Soft glow bakom innehåll */}
+        {/* Mjuk glow 1 */}
         <div
-          className="absolute -left-28 -top-28 w-[650px] h-[650px] rounded-full blur-3xl"
+          className="absolute -left-28 -top-28 w-[600px] h-[600px] rounded-full blur-3xl"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(99,102,241,0.35) 0%, transparent 70%)',
+            background: 'radial-gradient(circle at 50% 50%, rgba(99,102,241,0.3) 0%, transparent 70%)',
             opacity: 0.25,
-            transform: `translate(${mousePosition.x * 0.025}px, ${mousePosition.y * 0.02}px)`,
+            transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.015}px)`,
           }}
         />
+
+        {/* Mjuk glow 2 */}
         <div
           className="absolute right-1/4 bottom-24 w-[500px] h-[500px] rounded-full blur-3xl"
           style={{
-            background: 'radial-gradient(circle at 60% 50%, rgba(16,185,129,0.25) 0%, transparent 70%)',
+            background: 'radial-gradient(circle at 60% 50%, rgba(16,185,129,0.2) 0%, transparent 70%)',
             opacity: 0.18,
             transform: `translate(${mousePosition.x * -0.015}px, ${mousePosition.y * -0.01}px)`,
           }}
         />
 
-        {/* Subtilt grid för struktur */}
+        {/* Subtil grid-overlay */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
+              linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px)
             `,
-            backgroundSize: '140px 140px',
+            backgroundSize: '160px 160px',
             mixBlendMode: 'overlay',
           }}
         />
 
-        {/* Mild noise overlay */}
+        {/* Lätt noise */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.25' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' fill='rgba(255,255,255,0.007)'/></svg>")`,
+            backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.2' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23f)' fill='rgba(255,255,255,0.005)'/></svg>")`,
           }}
         />
 
-        {/* Vignette (mild) */}
+        {/* Mild vignette */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.3) 100%)',
+            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.25) 100%)',
           }}
         />
 
         {/* Små pulserande stjärnor */}
-        {stars.map((s, i) => (
+        {subtleStars.map((s, i) => (
           <div
             key={i}
             className="absolute rounded-full animate-pulse"
             style={{
               width: `${s.size}px`,
               height: `${s.size}px`,
-              left: `${s.x}%`,
-              top: `${s.y}%`,
+              left: s.left,
+              top: s.top,
               backgroundColor: s.color,
               opacity: s.opacity,
               animationDuration: '6s',
