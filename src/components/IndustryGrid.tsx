@@ -116,10 +116,9 @@ const WarehouseLogisticsSpecialists = () => {
         <div className="relative z-10 flex-1 flex flex-col justify-between">
           <div>
             <h3
-              className="text-lg tracking-tight leading-tight mb-1"
+              className="text-lg tracking-tight leading-tight mb-1 font-medium"
               style={{
                 fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                fontWeight: 400,
                 color: '#111827',
               }}
             >
@@ -129,7 +128,7 @@ const WarehouseLogisticsSpecialists = () => {
               className="text-sm leading-relaxed mb-4"
               style={{
                 fontFamily: 'Inter, sans-serif',
-                fontWeight: 400,
+                fontWeight: 300,
                 color: '#4B5563',
               }}
             >
@@ -262,18 +261,17 @@ const WarehouseLogisticsSpecialists = () => {
               color: '#111827',
             }}
           >
-            <span className="block">Vår Expertis inom</span>
-            <span className="block">Logistikbemanning</span>
+            <span className="block">Vår Expertis Inom</span>
+            <span className="block font-medium">Logistikbemanning</span>
           </h2>
           <p
             className={`
-              text-lg max-w-2xl mx-auto leading-snug
+              text-lg max-w-2xl mx-auto leading-snug font-light
               transition-all duration-1000 delay-400 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
             `}
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 400,
               color: '#4B5563',
               marginTop: '0.125rem',
             }}
