@@ -102,7 +102,7 @@ const IndustryGrid = () => {
         <div
           className="absolute inset-0 pointer-events-none rounded-2xl"
           style={{
-            background: 'rgba(15,23,42,0.15)',
+            background: 'rgba(255,255,255,0.05)',
           }}
         />
 
@@ -137,7 +137,7 @@ const IndustryGrid = () => {
               className="text-lg tracking-tight leading-tight mb-1 font-medium"
               style={{
                 fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                color: '#f9f9fb',
+                color: '#000',
               }}
             >
               {pillar.title}
@@ -147,7 +147,7 @@ const IndustryGrid = () => {
               style={{
                 fontFamily: 'Inter, sans-serif',
                 fontWeight: 300,
-                color: '#c3c9d6',
+                color: '#000',
               }}
             >
               {pillar.description}
@@ -158,7 +158,7 @@ const IndustryGrid = () => {
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 400,
-              color: '#9ca3af',
+              color: '#000',
             }}
           >
             {pillar.highlight}
@@ -329,7 +329,7 @@ const IndustryGrid = () => {
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
               fontWeight: 400,
-              color: '#111827',
+              color: '#000',
             }}
           >
             <span className="block">Vår Expertis Inom</span>
@@ -350,7 +350,7 @@ const IndustryGrid = () => {
             `}
             style={{
               fontFamily: 'Inter, sans-serif',
-              color: '#4B5563',
+              color: '#000',
               marginTop: '0.125rem',
             }}
           >
