@@ -10,33 +10,23 @@ const WarehouseLogisticsSpecialists = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        }
+        if (entry.isIntersecting) setIsVisible(true);
       },
       { threshold: 0.1 }
     );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    if (sectionRef.current) observer.observe(sectionRef.current);
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        setMousePosition({
-          x: ((e.clientX - rect.left) / rect.width) * 100,
-          y: ((e.clientY - rect.top) / rect.height) * 100,
-        });
-      }
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      setMousePosition({
+        x: ((e.clientX - rect.left) / rect.width) * 100,
+        y: ((e.clientY - rect.top) / rect.height) * 100,
+      });
     };
-
     window.addEventListener('mousemove', handleMouseMove);
-
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
+      if (sectionRef.current) observer.unobserve(sectionRef.current);
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
@@ -48,7 +38,7 @@ const WarehouseLogisticsSpecialists = () => {
       description: 'Vårt team förstår era unika behov inom lager och logistik.',
       highlight: 'Specialister på ert område',
       gradient: 'from-blue-500 to-indigo-600',
-      glowColor: 'rgba(59, 130, 246, 0.3)',
+      glowColor: 'rgba(59, 130, 246, 0.2)',
     },
     {
       icon: CheckCircle,
@@ -56,7 +46,7 @@ const WarehouseLogisticsSpecialists = () => {
       description: 'Vi genomför strukturerade kompetens- och bakgrundskontroller.',
       highlight: 'Trygg matchning',
       gradient: 'from-emerald-500 to-teal-600',
-      glowColor: 'rgba(16, 185, 129, 0.3)',
+      glowColor: 'rgba(16, 185, 129, 0.2)',
     },
     {
       icon: Clock,
@@ -64,7 +54,7 @@ const WarehouseLogisticsSpecialists = () => {
       description: 'Omedelbar återkoppling för att hålla er bemanning i rörelse.',
       highlight: 'Snabbt igångsättande',
       gradient: 'from-orange-500 to-red-600',
-      glowColor: 'rgba(249, 115, 22, 0.3)',
+      glowColor: 'rgba(249, 115, 22, 0.2)',
     },
     {
       icon: Shield,
@@ -72,7 +62,7 @@ const WarehouseLogisticsSpecialists = () => {
       description: 'Certifierade medarbetare med fokus på trygghet och kvalitet i varje uppdrag.',
       highlight: 'Hög leveranskvalitet',
       gradient: 'from-purple-500 to-violet-600',
-      glowColor: 'rgba(139, 92, 246, 0.3)',
+      glowColor: 'rgba(139, 92, 246, 0.2)',
     },
   ];
 
@@ -172,7 +162,7 @@ const WarehouseLogisticsSpecialists = () => {
         />
       </div>
 
-      <div className="relative z-10 max-w-5xl mx-auto px-8">
+      <div className="relative z-10 max-w-[1040px] mx-auto px-8">
         {/* Header */}
         <div className="text-center mb-16">
           <h2
@@ -192,7 +182,7 @@ const WarehouseLogisticsSpecialists = () => {
           </h2>
           <p
             className={`
-              text-lg max-w-2xl mx-auto leading-relaxed
+              text-lg max-w-2xl mx-auto leading-snug
               transition-all duration-1000 delay-400 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
             `}
@@ -200,7 +190,7 @@ const WarehouseLogisticsSpecialists = () => {
               fontFamily: 'Inter, sans-serif',
               fontWeight: 400,
               color: '#4B5563',
-              marginTop: '0.25rem',
+              marginTop: '0.125rem',
             }}
           >
             Djup branschkunskap och noggrant urval för att matcha rätt kompetens med ert team.
@@ -208,7 +198,7 @@ const WarehouseLogisticsSpecialists = () => {
         </div>
 
         {/* 2x2 Kortlayout med exakt spacing och lika höjd */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12 auto-rows-fr">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-16 auto-rows-fr">
           {trustPillars.map((pillar, index) => (
             <div
               key={index}
@@ -221,18 +211,16 @@ const WarehouseLogisticsSpecialists = () => {
               onMouseEnter={() => setActiveCard(index)}
               onMouseLeave={() => setActiveCard(null)}
             >
-              {/* Kort med lika höjd via flex och auto-rows-fr */}
               <div
                 className={`
                   relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
-                  bg-white/90 backdrop-blur-sm border border-gray-200/50
-                  shadow-lg shadow-gray-900/5
+                  bg-white shadow-md border border-gray-200
                   transition-all duration-500 ease-out
                   min-h-[260px]
                   ${activeCard === index ? 'shadow-xl' : ''}
                 `}
               >
-                {/* Aktiv glow */}
+                {/* Glow när aktiv */}
                 <div
                   className={`
                     absolute inset-0 rounded-2xl pointer-events-none
@@ -244,7 +232,7 @@ const WarehouseLogisticsSpecialists = () => {
                   }}
                 />
 
-                {/* Ikon */}
+                {/* Icon */}
                 <div
                   className={`
                     relative w-14 h-14 rounded-xl mb-4
@@ -256,30 +244,30 @@ const WarehouseLogisticsSpecialists = () => {
                   <pillar.icon size={24} className="text-white" />
                 </div>
 
-                {/* Innehåll */}
-                <div className="relative z-10 flex-1 flex flex-col">
-                  <h3
-                    className="text-lg tracking-tight leading-tight mb-1"
-                    style={{
-                      fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                      fontWeight: 400,
-                      color: '#111827',
-                    }}
-                  >
-                    {pillar.title}
-                  </h3>
-
-                  <p
-                    className="text-sm leading-relaxed mb-4 flex-1"
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400,
-                      color: '#4B5563',
-                    }}
-                  >
-                    {pillar.description}
-                  </p>
-
+                {/* Innehåll: sprid så highlight alltid hamnar längst ner */}
+                <div className="relative z-10 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3
+                      className="text-lg tracking-tight leading-tight mb-1"
+                      style={{
+                        fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                        fontWeight: 400,
+                        color: '#111827',
+                      }}
+                    >
+                      {pillar.title}
+                    </h3>
+                    <p
+                      className="text-sm leading-relaxed mb-4"
+                      style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: 400,
+                        color: '#4B5563',
+                      }}
+                    >
+                      {pillar.description}
+                    </p>
+                  </div>
                   <div
                     className="text-xs uppercase tracking-wider mt-2"
                     style={{
