@@ -150,7 +150,7 @@ const AudienceTiles = () => {
         <div className="text-center mb-20">
           <h2
             className={`
-              text-5xl md:text-7xl mb-6 tracking-tight leading-[0.9]
+              text-4xl md:text-5xl mb-6 tracking-tight leading-[0.9]
               transition-all duration-1000 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
             `}
@@ -335,7 +335,7 @@ const AudienceTiles = () => {
                   <div style={{ height: '52px' }} aria-hidden="true" />
                 </div>
 
-                {/* Knapp: absolut placerad i nedre högra hörnet med shimmer på hover */}
+                {/* Knapp */}
                 <div className="absolute bottom-6 right-6">
                   <button
                     className={`
