@@ -6,6 +6,7 @@ const AudienceTiles = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [activeCard, setActiveCard] = useState<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -65,8 +66,10 @@ const AudienceTiles = () => {
     >
       {/* Bakgrundseffekter */}
       <div className="absolute inset-0">
+        {/* Primär gradient-overlay */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-gray-900/90 to-slate-800/95" />
 
+        {/* Animerade orbs */}
         <div
           className="absolute w-[1000px] h-[1000px] rounded-full opacity-[0.08] blur-3xl transition-all duration-1000"
           style={{
@@ -95,6 +98,7 @@ const AudienceTiles = () => {
           }}
         />
 
+        {/* Flytande geometriska element */}
         <div className="absolute inset-0 overflow-hidden">
           <div
             className="absolute inset-0 opacity-[0.02]"
@@ -133,6 +137,7 @@ const AudienceTiles = () => {
           />
         </div>
 
+        {/* Atmosfäriskt brus */}
         <div
           className="absolute inset-0 opacity-[0.015]"
           style={{
@@ -146,7 +151,7 @@ const AudienceTiles = () => {
         <div className="text-center mb-20">
           <h2
             className={`
-              text-5xl md:text-6xl mb-6 tracking-tight leading-[0.9]
+              text-5xl md:text-7xl mb-6 tracking-tight leading-[0.9]
               transition-all duration-1000 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
             `}
@@ -179,7 +184,7 @@ const AudienceTiles = () => {
             `}
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 300, // light boldness
+              fontWeight: 400,
               color: 'rgba(255,255,255,0.7)',
             }}
           >
@@ -198,10 +203,13 @@ const AudienceTiles = () => {
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'}
               `}
               style={{ transitionDelay: `${800 + index * 300}ms` }}
+              onMouseEnter={() => setActiveCard(index)}
+              onMouseLeave={() => setActiveCard(null)}
               onClick={() =>
                 navigate(audience.id === 'candidates' ? '/for-candidates' : '/partner')
               }
             >
+              {/* Huvudkort utan hover-effekter */}
               <div
                 className={`
                   relative h-[600px] rounded-3xl overflow-hidden
@@ -211,6 +219,7 @@ const AudienceTiles = () => {
                   transition-all duration-700 ease-out
                 `}
               >
+                {/* Gradient-header */}
                 <div
                   className={`
                     relative h-48 bg-gradient-to-br ${audience.gradient}
@@ -260,6 +269,7 @@ const AudienceTiles = () => {
                   </div>
                 </div>
 
+                {/* Innehåll */}
                 <div className="relative p-8 h-[calc(100%-12rem)] flex flex-col">
                   <div style={{ marginBottom: '0.15rem' }}>
                     <h3
@@ -276,7 +286,7 @@ const AudienceTiles = () => {
                     <h4
                       style={{
                         fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                        fontWeight: 400,
+                        fontWeight: 500,
                         fontSize: '1.875rem',
                         color: '#111827',
                         margin: '2px 0 0 0',
@@ -328,6 +338,7 @@ const AudienceTiles = () => {
                   <div style={{ height: '52px' }} aria-hidden="true" />
                 </div>
 
+                {/* Knapp: absolut placerad i nedre högra hörnet med shimmer på hover */}
                 <div className="absolute bottom-6 right-6">
                   <button
                     className={`
@@ -336,7 +347,7 @@ const AudienceTiles = () => {
                       shadow-lg hover:shadow-xl
                       transition-all duration-300
                       hover:scale-105 active:scale-95
-                      overflow-hidden font-medium flex items-center space-x-2
+                      overflow-hidden font-bold flex items-center space-x-2
                     `}
                     style={{ fontFamily: 'Inter, sans-serif' }}
                     onClick={(e) => {
@@ -349,7 +360,7 @@ const AudienceTiles = () => {
                       <span
                         style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontWeight: 500,
+                          fontWeight: 700,
                         }}
                       >
                         {audience.id === 'candidates' ? 'Utforska Jobb' : 'Bli Partner'}
