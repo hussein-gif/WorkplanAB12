@@ -105,7 +105,7 @@ const FeaturedJobs = () => {
         <div className="text-center mb-20">
           <h2
             className={`
-              text-5xl md:text-6xl text-white mb-6 tracking-tight leading-[0.9]
+              text-5xl md:text-6xl text-white mb-2 tracking-tight leading-[0.9]
               transition-all duration-700 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
             `}
@@ -116,18 +116,6 @@ const FeaturedJobs = () => {
           >
             Utvalda Möjligheter
           </h2>
-
-          <div
-            className={`
-              flex items-center justify-center space-x-4 mb-8
-              transition-all duration-1000 delay-400 transform
-              ${isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
-            `}
-          >
-            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-            <div className="w-2 h-2 bg-white/20 rounded-full" />
-            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-          </div>
 
           <p
             className={`
@@ -142,6 +130,18 @@ const FeaturedJobs = () => {
           >
             Hitta din nästa tjänst i vårt utbud av lediga jobb
           </p>
+
+          <div
+            className={`
+              flex items-center justify-center space-x-4 mt-4
+              transition-all duration-1000 delay-400 transform
+              ${isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}
+            `}
+          >
+            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+            <div className="w-2 h-2 bg-white/20 rounded-full" />
+            <div className="w-8 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+          </div>
         </div>
 
         {/* Jobb-kort */}
