@@ -175,7 +175,7 @@ const WhyChoose = () => {
         <div className="text-center mb-24">
           <h2
             className={`
-              text-4xl md:text-6xl font-normal text-gray-900 mb-4 tracking-tight leading-[1.1]
+              text-5xl md:text-6xl font-normal text-gray-900 mb-4 tracking-tight leading-[1.1]
               transition-all duration-1000 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
             `}
