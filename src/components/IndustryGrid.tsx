@@ -91,7 +91,7 @@ const WarehouseLogisticsSpecialists = () => {
       <div
         className={`
           relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
-          bg-white/90 backdrop-blur-sm border border-gray-200/50
+          bg-white/30 backdrop-blur-md border border-white/10
           shadow-lg shadow-gray-900/5
           transition-all duration-500 ease-out
           min-h-[260px]
@@ -352,11 +352,11 @@ const WarehouseLogisticsSpecialists = () => {
 
         {/* Anpassad 2x2-layout (small/large / large/small) med finjusterade proportioner */}
         <div className="flex flex-col gap-2 relative">
-          {/* Gemensam lätt gradient blob över korten */}
+          {/* Gemensam gradient bubble över korten (modifierad för tydligare effekt) */}
           <div
             className="absolute left-1/2 top-1/2 w-[600px] h-[600px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none blur-3xl"
             style={{
-              background: 'radial-gradient(circle at 50% 50%, rgba(99,102,241,0.08) 0%, transparent 70%)',
+              background: 'radial-gradient(circle at 50% 50%, rgba(124,58,237,0.15) 0%, rgba(99,102,241,0.12) 35%, transparent 75%)',
             }}
           />
 
@@ -394,4 +394,4 @@ const WarehouseLogisticsSpecialists = () => {
   );
 };
 
-export default IndustryGrid;
+export default WarehouseLogisticsSpecialists;
