@@ -61,8 +61,7 @@ const WarehouseLogisticsSpecialists = () => {
     },
   ];
 
-  // Unik kortkomponent med tilt och mikrointeraktion
-  const UniqueCard = ({
+  const FancyCard = ({
     icon: Icon,
     title,
     description,
@@ -75,107 +74,61 @@ const WarehouseLogisticsSpecialists = () => {
     highlight: string;
     accentGradient: string;
   }) => {
-    const cardRef = useRef<HTMLDivElement | null>(null);
-    const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
-    const [isHover, setIsHover] = useState(false);
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-      if (!cardRef.current) return;
-      const rect = cardRef.current.getBoundingClientRect();
-      const px = (e.clientX - rect.left) / rect.width;
-      const py = (e.clientY - rect.top) / rect.height;
-      const rotateY = (px - 0.5) * 12; // max 12deg
-      const rotateX = (0.5 - py) * 12;
-      setTilt({ rotateX, rotateY });
-    };
-
-    const handleMouseLeave = () => {
-      setTilt({ rotateX: 0, rotateY: 0 });
-      setIsHover(false);
-    };
-
     return (
-      <div
-        ref={(el) => (cardRef.current = el)}
-        className="relative flex-1"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        onMouseEnter={() => setIsHover(true)}
-        style={{ perspective: 1000 }}
-      >
+      <div className="relative flex-1" style={{ perspective: 800 }}>
+        {/* Gradient border wrapper */}
         <div
-          className={`
-            relative rounded-2xl overflow-hidden
-            bg-white/80 backdrop-blur-md
-            ring-1 ring-gray-200
-            shadow-lg transition-all duration-400
-          `}
+          className="rounded-3xl p-[2px] mb-0"
           style={{
-            minHeight: 260,
-            transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale(${isHover ? 1.03 : 1})`,
-            boxShadow: isHover
-              ? '0 25px 50px -10px rgba(0,0,0,0.25)'
-              : '0 15px 35px -5px rgba(0,0,0,0.1)',
+            background: accentGradient,
           }}
         >
-          {/* Accent bar vänster */}
           <div
-            className="absolute top-0 left-0 bottom-0 w-1"
-            style={{ background: accentGradient }}
-          />
-
-          {/* Dekorativ subtil bakgrundspattern (svg dots) */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            aria-hidden="true"
+            className="relative rounded-2xl bg-white overflow-hidden shadow-[0_25px_60px_-10px_rgba(16,24,40,0.08)] transition-transform duration-300 group hover:scale-[1.025]"
+            style={{ minHeight: 260 }}
           >
-            <svg
-              width="100%"
-              height="100%"
-              style={{ opacity: 0.04 }}
-              viewBox="0 0 200 200"
-              preserveAspectRatio="xMidYMid slice"
-              className="block"
-            >
-              <circle cx="160" cy="40" r="50" fill="none" stroke="rgba(0,0,0,0.03)" strokeWidth="1" />
-              <circle cx="40" cy="160" r="30" fill="none" stroke="rgba(0,0,0,0.02)" strokeWidth="1" />
-            </svg>
-          </div>
+            {/* Subtil dekor bakom */}
+            <div className="absolute -top-6 -left-6 w-24 h-24 rounded-full opacity-30 blur-xl"
+              style={{ background: 'rgba(99,102,241,0.15)' }}
+              aria-hidden="true"
+            />
+            <div className="absolute top-6 right-6 w-16 h-16 rounded-lg border border-gray-200 opacity-40"
+              style={{
+                transform: `translate(${mousePosition.x * 0.005}px, ${-mousePosition.y * 0.005}px)`,
+              }}
+              aria-hidden="true"
+            />
 
-          <div className="relative p-6 flex flex-col h-full">
-            <div className="flex items-start gap-4 mb-2">
-              <div className="flex-shrink-0">
-                <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-white ring-1 ring-gray-200 shadow-sm">
-                  <Icon size={20} className="text-gray-700" />
+            <div className="relative p-6 flex flex-col h-full">
+              <div className="flex items-start gap-4 mb-3">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-gradient-to-br from-gray-100 to-white ring-1 ring-gray-200 shadow-sm">
+                    <Icon size={20} className="text-indigo-600" />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3
+                    className="text-lg font-semibold text-gray-900 relative mb-1"
+                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                  >
+                    {title}
+                    <div className="absolute left-0 bottom-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300 group-hover:w-full w-8" />
+                  </h3>
+                  <div className="h-0.5 w-10 bg-gradient-to-r from-indigo-100 to-transparent rounded mt-1" />
                 </div>
               </div>
-              <div className="flex-1">
-                <h3
-                  className="text-lg font-semibold text-gray-900 relative"
-                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                >
-                  {title}
-                  <div
-                    className={`
-                      absolute left-0 bottom-0 h-0.5 bg-gradient-to-r from-indigo-500 to-purple-500
-                      transition-all duration-300
-                      ${isHover ? 'w-full' : 'w-8'}
-                    `}
-                  />
-                </h3>
+              <p
+                className="text-sm text-gray-600 flex-1 leading-relaxed mb-4"
+                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
+              >
+                {description}
+              </p>
+              <div
+                className="text-xs uppercase tracking-wider text-gray-400"
+                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
+              >
+                {highlight}
               </div>
-            </div>
-            <p
-              className="text-sm text-gray-600 flex-1 leading-relaxed mb-4"
-              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
-            >
-              {description}
-            </p>
-            <div
-              className="text-xs uppercase tracking-wider text-gray-400 mt-2"
-              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
-            >
-              {highlight}
             </div>
           </div>
         </div>
@@ -271,16 +224,16 @@ const WarehouseLogisticsSpecialists = () => {
         {/* Layout: 2x2 med proportioner */}
         <div className="flex flex-col gap-4">
           <div className="flex gap-4">
-            <UniqueCard {...trustPillars[0]} />
-            <UniqueCard {...trustPillars[1]} />
+            <FancyCard {...trustPillars[0]} />
+            <FancyCard {...trustPillars[1]} />
           </div>
           <div className="flex gap-4">
-            <UniqueCard {...trustPillars[2]} />
-            <UniqueCard {...trustPillars[3]} />
+            <FancyCard {...trustPillars[2]} />
+            <FancyCard {...trustPillars[3]} />
           </div>
         </div>
 
-        {/* Bottom indicators */}
+        {/* Bottom indikatorer */}
         <div
           className={`
             text-center mt-12
