@@ -87,18 +87,17 @@ const IndustryGrid = () => {
       <div
         className={`
           relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
-          bg-white/5 backdrop-blur-xl ring-1 ring-white/20
-          shadow-lg shadow-gray-900/10
-          transition-all duration-500 ease-out
+          bg-white/30 backdrop-blur-3xl border border-blue-50/40
+          shadow-xl transition-all duration-500 ease-out
           min-h-[260px]
-          ${activeCard === index ? 'shadow-xl scale-[1.01]' : ''}
+          ${activeCard === index ? 'shadow-2xl scale-[1.01]' : ''}
         `}
       >
-        {/* Extra subtil overlay för frosted djup */}
+        {/* Subtil inre ljusstruktur för djup (frosted känsla) */}
         <div
           className="absolute inset-0 pointer-events-none rounded-2xl"
           style={{
-            background: 'rgba(255,255,255,0.05)',
+            boxShadow: 'inset 0 0 30px rgba(255,255,255,0.1)',
           }}
         />
 
@@ -395,7 +394,7 @@ const IndustryGrid = () => {
 
         {/* Layout med bubbla och kort */}
         <div className="flex flex-col gap-2 relative">
-          {/* Gradient bubble över korten (ljus blå ton, mindre) */}
+          {/* Gradient bubble över korten (ljus blå ton, lite mindre) */}
           <div
             className="absolute left-1/2 top-1/2 w-[520px] h-[520px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={{
