@@ -106,7 +106,7 @@ const WhyChoose = () => {
         background: 'linear-gradient(135deg, #f7f9fc 0%, #e3e9f4 70%)',
       }}
     >
-      {/* Globala styles för blob-animation och reduced motion */}
+      {/* Globala animationer och reduced-motion */}
       <style>{`
         @keyframes blob {
           0% { transform: scale(1) translate(0,0); }
@@ -141,7 +141,7 @@ const WhyChoose = () => {
             background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)' opacity='0.04'/%3E%3C/svg%3E") repeat`,
           }}
         />
-        {/* Existerande grid/dekor */}
+        {/* Subtil grid/dekor */}
         <div
           className="absolute inset-0"
           style={{
@@ -370,7 +370,7 @@ const WhyChoose = () => {
                     </div>
                   </div>
 
-                  {/* Höger: Illustration */}
+                  {/* Höger: Illustration med subtila cirklar */}
                   <div
                     className={`
                       lg:col-span-5 relative
@@ -384,31 +384,45 @@ const WhyChoose = () => {
                         ${isActive ? 'scale-105' : ''}
                       `}
                     >
-                      {/* Yttre cirkel */}
+                      {/* Subtil yttre “ring” / bakgrund */}
                       <div
                         className={`
-                          absolute inset-0 rounded-full border border-gray-100
+                          absolute inset-0 rounded-full
                           transition-all duration-700
-                          ${isActive ? 'border-gray-300 scale-110' : ''}
                         `}
-                      />
-                      {/* Inre cirkel */}
-                      <div
-                        className={`
-                          absolute inset-8 rounded-full bg-gray-50
-                          transition-all duration-700
-                          ${isActive ? 'bg-gray-100 scale-95' : ''}
-                        `}
+                        style={{
+                          border: '1px solid rgba(107,114,128,0.08)',
+                          background: 'rgba(255,255,255,0.03)',
+                          boxShadow: isActive
+                            ? '0 0 30px rgba(30,58,138,0.1)'
+                            : '0 0 15px rgba(0,0,0,0.03)',
+                        }}
                       />
 
-                      {/* Centralt ikon */}
+                      {/* Inre diffus disk (alldeles väldigt lätt, inte opak) */}
+                      <div
+                        className={`
+                          absolute inset-10 rounded-full
+                          transition-all duration-700
+                        `}
+                        style={{
+                          background: 'rgba(255,255,255,0.015)',
+                          backdropFilter: 'blur(3px)',
+                          ...(isActive ? { transform: 'scale(1.02)' } : {}),
+                        }}
+                      />
+
+                      {/* Centralt ikon med nedtonad vit bakgrund */}
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div
                           className={`
-                            w-20 h-20 rounded-full bg-white shadow-sm border border-gray-100 flex items-center justify-center
+                            w-20 h-20 rounded-full shadow-sm border border-gray-100 flex items-center justify-center
                             transition-all duration-700
                             ${isActive ? 'scale-125 shadow-lg' : ''}
                           `}
+                          style={{
+                            background: 'rgba(255,255,255,0.85)',
+                          }}
                         >
                           <pillar.icon
                             size={32}
