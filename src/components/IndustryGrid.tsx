@@ -167,9 +167,9 @@ const IndustryGrid = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative py-24 bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50/30 overflow-hidden"
+      className="relative py-24 overflow-hidden"
     >
-      {/* Livfullare bakgrund: subtil pulserande patch + små flytande former */}
+      {/* Livfullare bakgrund: djup mörkblå gradient, subtil ljuspunkt och former */}
       <style>{`
         @keyframes softPulse {
           0%,100% { opacity: 0.03; transform: scale(1) translate(0,0); }
@@ -182,16 +182,20 @@ const IndustryGrid = () => {
         }
       `}</style>
 
-      {/* Bakgrund */}
       <div className="absolute inset-0">
-        {/* Basgradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50/90 via-white/95 to-blue-50/80" />
+        {/* Basgradient i mörkblått */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(135deg, #0f172a 0%, #1f3b8a 55%, #0f172a 100%)',
+          }}
+        />
 
-        {/* Pulserande ljus patch för liv */}
+        {/* Subtil central ljuspunkt för djup/läsbarhet */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6) 0%, transparent 65%)',
+            background: 'radial-gradient(circle at 50% 45%, rgba(125,211,252,0.08) 0%, transparent 60%)',
             mixBlendMode: 'overlay',
             animation: 'softPulse 25s ease-in-out infinite',
           }}
@@ -226,25 +230,24 @@ const IndustryGrid = () => {
           }}
         />
 
-        {/* Grid overlays */}
+        {/* Grid overlays (ton-i-ton blå) */}
         <div
-          className="absolute inset-0 opacity-[0.02]"
+          className="absolute inset-0 opacity-[0.03]"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(30,64,175,0.08) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(30,64,175,0.08) 1px, transparent 1px)
+              linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px)
             `,
             backgroundSize: '80px 80px',
             transform: `translate(${mousePosition.x * 0.01}px, ${mousePosition.y * 0.01}px)`,
           }}
         />
-
         <div
-          className="absolute inset-0 opacity-[0.015]"
+          className="absolute inset-0 opacity-[0.02]"
           style={{
             backgroundImage: `
-              linear-gradient(45deg, rgba(59,130,246,0.1) 1px, transparent 1px),
-              linear-gradient(-45deg, rgba(16,185,129,0.1) 1px, transparent 1px)
+              linear-gradient(45deg, rgba(99,102,241,0.04) 1px, transparent 1px),
+              linear-gradient(-45deg, rgba(59,130,246,0.03) 1px, transparent 1px)
             `,
             backgroundSize: '120px 120px',
             transform: `translate(${mousePosition.x * -0.005}px, ${mousePosition.y * -0.005}px)`,
@@ -304,10 +307,11 @@ const IndustryGrid = () => {
           style={{ transform: `rotate(${mousePosition.x * 0.05}deg)` }}
         />
 
-        {/* Subtil noise */}
+        {/* Subtil noise för att undvika platt yta */}
         <div
-          className="absolute inset-0 opacity-[0.008]"
+          className="absolute inset-0"
           style={{
+            opacity: 0.015,
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
           }}
         />
@@ -356,7 +360,7 @@ const IndustryGrid = () => {
 
         {/* Anpassad 2x2-layout (small/large / large/small) med finjusterade proportioner */}
         <div className="flex flex-col gap-2 relative">
-          {/* Gradient bubble över korten (ny färg som ligger i det mörkblå temat, lite mindre) */}
+          {/* Gradient bubble över korten i ljus blå ton (lite mindre) */}
           <div
             className="absolute left-1/2 top-1/2 w-[520px] h-[520px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={{
