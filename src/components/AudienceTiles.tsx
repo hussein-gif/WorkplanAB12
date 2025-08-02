@@ -69,9 +69,9 @@ const AudienceTiles = () => {
 
   return (
     <section ref={sectionRef} className="relative py-32 overflow-hidden">
-      {/* Bakgrund: mörkblå + liv */}
+      {/* Bakgrund: mörkblå bas + mjuka glows + små prickar */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Mörkblå basgradient */}
+        {/* Mörkblå basgradient (närmare original) */}
         <div
           className="absolute inset-0"
           style={{
@@ -80,7 +80,7 @@ const AudienceTiles = () => {
           }}
         />
 
-        {/* Mjuk glow 1 */}
+        {/* Mjuk glow 1 (parallax) */}
         <div
           className="absolute -left-28 -top-28 w-[600px] h-[600px] rounded-full blur-3xl"
           style={{
@@ -90,42 +90,13 @@ const AudienceTiles = () => {
           }}
         />
 
-        {/* Mjuk glow 2 */}
+        {/* Mjuk glow 2 (parallax) */}
         <div
           className="absolute right-1/4 bottom-24 w-[500px] h-[500px] rounded-full blur-3xl"
           style={{
             background: 'radial-gradient(circle at 60% 50%, rgba(16,185,129,0.2) 0%, transparent 70%)',
             opacity: 0.18,
             transform: `translate(${mousePosition.x * -0.015}px, ${mousePosition.y * -0.01}px)`,
-          }}
-        />
-
-        {/* Subtil grid-overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.012) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.012) 1px, transparent 1px)
-            `,
-            backgroundSize: '160px 160px',
-            mixBlendMode: 'overlay',
-          }}
-        />
-
-        {/* Lätt noise */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.2' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23f)' fill='rgba(255,255,255,0.005)'/></svg>")`,
-          }}
-        />
-
-        {/* Mild vignette */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.25) 100%)',
           }}
         />
 
@@ -146,6 +117,14 @@ const AudienceTiles = () => {
             }}
           />
         ))}
+
+        {/* Mild vignette för fokus */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.25) 100%)',
+          }}
+        />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-8">
@@ -300,7 +279,7 @@ const AudienceTiles = () => {
                       fontFamily: 'Inter, sans-serif',
                       fontWeight: 400,
                       fontSize: '1rem',
-                      color: '#4b5563',
+                      color: '#4B5563',
                       lineHeight: '1.75rem',
                       marginBottom: '1.5rem',
                     }}
