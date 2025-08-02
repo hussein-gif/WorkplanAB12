@@ -360,12 +360,12 @@ const IndustryGrid = () => {
 
         {/* Anpassad 2x2-layout (small/large / large/small) med finjusterade proportioner */}
         <div className="flex flex-col gap-2 relative">
-          {/* Gradient bubble över korten (tangerar alla kort men inte bakgrunden) */}
+          {/* Mörkblå gradient bubble över korten (mindre) */}
           <div
-            className="absolute left-1/2 top-1/2 w-[660px] h-[660px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+            className="absolute left-1/2 top-1/2 w-[560px] h-[560px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={{
               filter: 'blur(80px)',
-              background: 'radial-gradient(circle at 40% 45%, rgba(124,58,237,0.2) 0%, rgba(99,102,241,0.15) 30%, rgba(16,185,129,0.08) 65%, transparent 85%)',
+              background: 'radial-gradient(circle at 40% 45%, rgba(10,25,70,0.25) 0%, rgba(30,58,138,0.18) 35%, rgba(59,130,246,0.1) 60%, transparent 85%)',
               mixBlendMode: 'screen',
             }}
           />
