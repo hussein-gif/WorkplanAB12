@@ -394,4 +394,4 @@ const WarehouseLogisticsSpecialists = () => {
   );
 };
 
-export default WarehouseLogisticsSpecialists;
+export default IndustryGrid;
