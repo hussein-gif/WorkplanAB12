@@ -172,7 +172,7 @@ const WarehouseLogisticsSpecialists = () => {
         />
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-8">
+      <div className="relative z-10 max-w-5xl mx-auto px-8">
         {/* Header */}
         <div className="text-center mb-16">
           <h2
@@ -207,8 +207,8 @@ const WarehouseLogisticsSpecialists = () => {
           </p>
         </div>
 
-        {/* 2x2 Kortlayout med lika höjd */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 auto-rows-fr">
+        {/* 2x2 Kortlayout med exakt spacing och lika höjd */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12 auto-rows-fr">
           {trustPillars.map((pillar, index) => (
             <div
               key={index}
@@ -221,17 +221,18 @@ const WarehouseLogisticsSpecialists = () => {
               onMouseEnter={() => setActiveCard(index)}
               onMouseLeave={() => setActiveCard(null)}
             >
-              {/* Kort: gör så att alla stretchas till samma höjd */}
+              {/* Kort med lika höjd via flex och auto-rows-fr */}
               <div
                 className={`
                   relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
                   bg-white/90 backdrop-blur-sm border border-gray-200/50
                   shadow-lg shadow-gray-900/5
                   transition-all duration-500 ease-out
+                  min-h-[260px]
                   ${activeCard === index ? 'shadow-xl' : ''}
                 `}
               >
-                {/* Glow när aktiv */}
+                {/* Aktiv glow */}
                 <div
                   className={`
                     absolute inset-0 rounded-2xl pointer-events-none
@@ -243,7 +244,7 @@ const WarehouseLogisticsSpecialists = () => {
                   }}
                 />
 
-                {/* Icon */}
+                {/* Ikon */}
                 <div
                   className={`
                     relative w-14 h-14 rounded-xl mb-4
@@ -279,7 +280,6 @@ const WarehouseLogisticsSpecialists = () => {
                     {pillar.description}
                   </p>
 
-                  {/* Highlight */}
                   <div
                     className="text-xs uppercase tracking-wider mt-2"
                     style={{
