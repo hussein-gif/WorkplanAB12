@@ -61,43 +61,44 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
       >
         {label}
       </label>
-      <button
-        type="button"
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        onClick={() => setOpen((o) => !o)}
-        className={`
-          w-full flex items-center justify-between
-          pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl
-          text-white text-sm appearance-none cursor-pointer
-          focus:bg-white/15 focus:border-white/40 transition-all duration-300
-          relative
-        `}
-      >
-        <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-          <Icon size={16} className="text-white/40" />
-        </div>
-        <span className="truncate text-left" style={{ fontFamily: 'Inter, sans-serif', fontWeight: value ? 500 : 400 }}>
-          {value || placeholder || `Alla ${label.toLowerCase()}`}
-        </span>
-        <div className="ml-2 flex items-center">
-          <ChevronDown
-            size={16}
-            className={`transition-transform duration-200 ${open ? 'rotate-180' : 'rotate-0'} text-white/60`}
-          />
-        </div>
+      <div className="relative">
+        <button
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          onClick={() => setOpen((o) => !o)}
+          className={`
+            w-full flex items-center justify-between
+            pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl
+            text-white text-sm appearance-none cursor-pointer
+            focus:bg-white/15 focus:border-white/40 transition-all duration-300
+            relative
+          `}
+        >
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+            <Icon size={16} className="text-white/40" />
+          </div>
+          <span className="truncate text-left" style={{ fontFamily: 'Inter, sans-serif', fontWeight: value ? 500 : 400 }}>
+            {value || placeholder || `Alla ${label.toLowerCase()}`}
+          </span>
+          <div className="ml-2 flex items-center">
+            <ChevronDown
+              size={16}
+              className={`transition-transform duration-200 ${open ? 'rotate-180' : 'rotate-0'} text-white/60`}
+            />
+          </div>
+        </button>
 
-        {/* Dropdown panel */}
+        {/* Dropdown panel under the button */}
         <div
           className={`
-            absolute left-0 right-0 mt-1 max-h-60 overflow-auto
-            bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl z-20
+            absolute left-0 right-0 z-20 mt-1 max-h-60 overflow-auto
+            bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl
             ring-1 ring-black ring-opacity-5
             transform origin-top
             ${open ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}
             transition-all duration-200
           `}
-          style={{ paddingTop: 4, paddingBottom: 4 }}
           role="listbox"
         >
           {options.map((opt) => (
@@ -130,7 +131,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             </div>
           )}
         </div>
-      </button>
+      </div>
     </div>
   );
 };
@@ -149,8 +150,6 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
   omfattningar,
   clearFilters
 }) => {
-  const hasActiveFilters = selectedLocation || selectedIndustry || selectedOmfattning || searchTerm;
-
   return (
     <div className="px-8 mb-12">
       <div className="max-w-7xl mx-auto">
@@ -218,7 +217,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
           </div>
 
           {/* Active Filters Indicator */}
-          {(selectedLocation || selectedIndustry || selectedOmfattning) && (
+          {(selectedLocation || selectedIndustry || selectedOmfattning || searchTerm) && (
             <div className="mt-4">
               <div className="flex items-center space-x-2 flex-wrap">
                 <span className="text-white/60 text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>Aktiva filter:</span>
