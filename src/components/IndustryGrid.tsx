@@ -88,10 +88,16 @@ const IndustryGrid = () => {
         className={`
           relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
           bg-white/30 backdrop-blur-3xl border border-blue-50/40
-          shadow-xl transition-all duration-500 ease-out
+          transition-all duration-500 ease-out
           min-h-[260px]
-          ${activeCard === index ? 'shadow-2xl scale-[1.01]' : ''}
+          ${activeCard === index ? 'scale-[1.01]' : ''}
         `}
+        style={{
+          boxShadow:
+            activeCard === index
+              ? '0 40px 80px -10px rgba(0,0,0,0.35)'
+              : '0 25px 60px -15px rgba(0,0,0,0.2)',
+        }}
       >
         {/* Subtil inre ljusstruktur för djup (frosted känsla) */}
         <div
