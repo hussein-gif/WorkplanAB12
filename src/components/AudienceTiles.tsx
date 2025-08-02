@@ -59,63 +59,50 @@ const AudienceTiles = () => {
     },
   ];
 
+  // några små stjärnor/prickor för liv
+  const stars = [
+    { x: 12, y: 18, size: 2, delay: '0s', color: '#ffffff', opacity: 0.15 },
+    { x: 80, y: 25, size: 1.5, delay: '1s', color: '#d1ddff', opacity: 0.1 },
+    { x: 45, y: 60, size: 1.8, delay: '2s', color: '#8fcfff', opacity: 0.12 },
+    { x: 30, y: 40, size: 1.2, delay: '0.5s', color: '#a0bfff', opacity: 0.08 },
+    { x: 65, y: 10, size: 2.5, delay: '1.5s', color: '#c5e8ff', opacity: 0.1 },
+  ];
+
   return (
     <section
       ref={sectionRef}
       className="relative py-32 overflow-hidden"
     >
-      {/* Bakgrund: mörkblå bas + liv */}
+      {/* Bakgrund: mörkblå + liv utan att bli “gritty” */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Basgradient (mörk blå/navy) */}
+        {/* Basgradient */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 25% 35%, #1f2a48 0%, #0f1f44 60%), linear-gradient(135deg, #0f1f44 0%, #1f2a63 100%)',
+            background:
+              'radial-gradient(circle at 30% 30%, #1f2a48 0%, #0f1f44 70%), linear-gradient(135deg, #0f1f44 0%, #1f2a63 100%)',
           }}
         />
 
-        {/* Mjuk glow 1 (parallax) */}
+        {/* Soft glow bakom innehåll */}
         <div
-          className="absolute -left-32 -top-32 w-[600px] h-[600px] rounded-full blur-3xl"
+          className="absolute -left-28 -top-28 w-[650px] h-[650px] rounded-full blur-3xl"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(99,102,241,0.4) 0%, transparent 70%)',
+            background: 'radial-gradient(circle at 50% 50%, rgba(99,102,241,0.35) 0%, transparent 70%)',
             opacity: 0.25,
-            transform: `translate(${mousePosition.x * 0.03}px, ${mousePosition.y * 0.02}px)`,
+            transform: `translate(${mousePosition.x * 0.025}px, ${mousePosition.y * 0.02}px)`,
           }}
         />
-
-        {/* Mjuk glow 2 (parallax) */}
         <div
-          className="absolute right-1/4 bottom-20 w-[500px] h-[500px] rounded-full blur-3xl"
+          className="absolute right-1/4 bottom-24 w-[500px] h-[500px] rounded-full blur-3xl"
           style={{
-            background: 'radial-gradient(circle at 60% 50%, rgba(16,185,129,0.35) 0%, transparent 70%)',
+            background: 'radial-gradient(circle at 60% 50%, rgba(16,185,129,0.25) 0%, transparent 70%)',
             opacity: 0.18,
-            transform: `translate(${mousePosition.x * -0.02}px, ${mousePosition.y * -0.01}px)`,
+            transform: `translate(${mousePosition.x * -0.015}px, ${mousePosition.y * -0.01}px)`,
           }}
         />
 
-        {/* Subtila orbs */}
-        <div
-          className="absolute w-[900px] h-[900px] rounded-full blur-3xl transition-all duration-1000"
-          style={{
-            background: `radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%)`,
-            left: `${mousePosition.x * 0.4}%`,
-            top: `${mousePosition.y * 0.25}%`,
-            transform: 'translate(-50%, -50%)',
-            opacity: 0.08,
-          }}
-        />
-        <div
-          className="absolute w-[700px] h-[700px] rounded-full blur-3xl transition-all duration-1000 delay-300"
-          style={{
-            background: `radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%)`,
-            right: `${mousePosition.x * 0.25}%`,
-            bottom: `${mousePosition.y * 0.35}%`,
-            transform: 'translate(50%, 50%)',
-          }}
-        />
-
-        {/* Subtil grid-overlay */}
+        {/* Subtilt grid för struktur */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -123,16 +110,16 @@ const AudienceTiles = () => {
               linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
               linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
             `,
-            backgroundSize: '120px 120px',
+            backgroundSize: '140px 140px',
             mixBlendMode: 'overlay',
           }}
         />
 
-        {/* Lätt noise-overlay */}
+        {/* Mild noise overlay */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.35' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' fill='rgba(255,255,255,0.008)'/></svg>")`,
+            backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.25' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' fill='rgba(255,255,255,0.007)'/></svg>")`,
           }}
         />
 
@@ -140,25 +127,27 @@ const AudienceTiles = () => {
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.25) 100%)',
+            background: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.3) 100%)',
           }}
         />
 
-        {/* Små pulserande prickar */}
-        <div className="absolute inset-0 pointer-events-none">
+        {/* Små pulserande stjärnor */}
+        {stars.map((s, i) => (
           <div
-            className="absolute top-16 left-10 w-2 h-2 rounded-full animate-pulse"
-            style={{ backgroundColor: '#6366f1', opacity: 0.25, animationDuration: '6s' }}
+            key={i}
+            className="absolute rounded-full animate-pulse"
+            style={{
+              width: `${s.size}px`,
+              height: `${s.size}px`,
+              left: `${s.x}%`,
+              top: `${s.y}%`,
+              backgroundColor: s.color,
+              opacity: s.opacity,
+              animationDuration: '6s',
+              animationDelay: s.delay,
+            }}
           />
-          <div
-            className="absolute bottom-24 right-20 w-1.5 h-1.5 rounded-full animate-pulse"
-            style={{ backgroundColor: '#10b981', opacity: 0.2, animationDuration: '7s', animationDelay: '1s' }}
-          />
-          <div
-            className="absolute top-1/3 right-28 w-1 h-1 rounded-full animate-pulse"
-            style={{ backgroundColor: '#a78bfa', opacity: 0.15, animationDuration: '8s', animationDelay: '2s' }}
-          />
-        </div>
+        ))}
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-8">
@@ -200,7 +189,7 @@ const AudienceTiles = () => {
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
-              color: 'rgba(255,255,255,0.7)',
+              color: 'rgba(255,255,255,0.75)',
             }}
           >
             Flexibel bemanning för kandidater och företag.
