@@ -80,10 +80,10 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Content Container */}
-      <div className="relative z-10 flex-1 flex items-end pb-16 pt-24">
+      {/* Content Container - centrerat vertikalt */}
+      <div className="relative z-10 flex-1 flex items-center py-16">
         <div className="max-w-7xl mx-auto px-8 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Main Content - Left Side */}
             <div className="lg:col-span-7 space-y-8">
               {/* Main Headline */}
