@@ -19,24 +19,88 @@ export interface Job {
   companyLogo: string;
 }
 
-// Enkel, professionell bakgrund med samma färgpalett som tidigare
-const SimpleBackground: React.FC = () => (
-  <div className="absolute inset-0">
-    {/* Grundläggande gradient */}
+// Laddningsplaceholder
+const LoadingPlaceholder = () => (
+  <div className="min-h-screen flex items-center justify-center relative">
+    <SimpleBackground /> {/* Visar bakgrund även under laddning */}
+    <div className="relative z-10 text-center">
+      <div className="inline-flex items-center space-x-3 mb-2">
+        <div
+          role="status"
+          aria-label="Laddar jobb"
+          className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin"
+        />
+        <h3 className="text-xl text-white/90" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}>
+          Laddar alla jobb...
+        </h3>
+      </div>
+    </div>
+  </div>
+);
+
+// Enkel, levande men diskret bakgrund
+const SimpleBackground: React.FC<{ mousePosition?: { x: number; y: number } }> = ({ mousePosition }) => (
+  <div className="absolute inset-0 overflow-hidden">
+    <style>{`
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      @keyframes glowPulse {
+        0% { transform: scale(1); opacity: 0.08; }
+        50% { transform: scale(1.02); opacity: 0.1; }
+        100% { transform: scale(1); opacity: 0.08; }
+      }
+    `}</style>
+
+    {/* Basgradient med långsam rörelse */}
     <div
-      aria-hidden="true"
       className="absolute inset-0"
       style={{
-        background: 'linear-gradient(135deg, #111827 0%, #0f172a 50%, #1f2937 100%)',
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%)',
+        backgroundSize: '200% 200%',
+        animation: 'gradientShift 40s ease infinite',
+        zIndex: 0,
       }}
     />
-    {/* Mycket subtil textur för djup (kan tas bort om du vill helt platt) */}
+
+    {/* Subtil textur */}
     <div
-      aria-hidden="true"
       className="absolute inset-0 pointer-events-none"
       style={{
-        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><defs><pattern id='p' width='20' height='20' patternUnits='userSpaceOnUse'><path d='M20 0 L0 0 0 20' stroke='%23ffffff' stroke-width='0.5' fill='none'/></pattern></defs><rect width='120' height='120' fill='url(%23p)' opacity='0.02'/></svg>")`,
+        backgroundImage: `url("data:image/svg+xml;utf8,<svg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='p' width='20' height='20' patternUnits='userSpaceOnUse'><path d='M20 0 L0 0 0 20' stroke='%23ffffff' stroke-width='0.5' fill='none'/></pattern></defs><rect width='120' height='120' fill='url(%23p)' opacity='0.02'/></svg>")`,
         backgroundSize: '120px 120px',
+        zIndex: 1,
+      }}
+    />
+
+    {/* Mjuk glow bakom header (placerad topp-centre) */}
+    <div
+      aria-hidden="true"
+      className="absolute left-1/2 top-[190px] -translate-x-1/2 rounded-full"
+      style={{
+        width: 700,
+        height: 220,
+        background: 'radial-gradient(circle at 50% 50%, rgba(59,130,246,0.18) 0%, transparent 70%)',
+        filter: 'blur(100px)',
+        animation: 'glowPulse 12s ease-in-out infinite',
+        zIndex: 2,
+        pointerEvents: 'none',
+      }}
+    />
+
+    {/* Liten subtil accent längst ner (valfritt, kan tas bort) */}
+    <div
+      aria-hidden="true"
+      className="absolute bottom-0 right-0 rounded-full"
+      style={{
+        width: 300,
+        height: 300,
+        background: 'radial-gradient(circle at 70% 70%, rgba(16,185,129,0.1) 0%, transparent 80%)',
+        filter: 'blur(120px)',
+        zIndex: 2,
+        pointerEvents: 'none',
       }}
     />
   </div>
@@ -49,6 +113,8 @@ const JobsPage = () => {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedIndustry, setSelectedIndustry] = useState('');
   const [selectedOmfattning, setSelectedOmfattning] = useState('');
+  const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
+  const [showUrgentOnly, setShowUrgentOnly] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -223,14 +289,24 @@ const JobsPage = () => {
       filtered = filtered.filter(job => job.omfattning === selectedOmfattning);
     }
 
+    // Featured / Urgent (om du vill lägga till togglar senare)
+    if (showFeaturedOnly) {
+      filtered = filtered.filter(job => job.featured);
+    }
+    if (showUrgentOnly) {
+      filtered = filtered.filter(job => job.urgent);
+    }
+
     setFilteredJobs(filtered);
-  }, [searchTerm, selectedLocation, selectedIndustry, selectedOmfattning, jobs]);
+  }, [searchTerm, selectedLocation, selectedIndustry, selectedOmfattning, showFeaturedOnly, showUrgentOnly, jobs]);
 
   const clearFilters = () => {
     setSearchTerm('');
     setSelectedLocation('');
     setSelectedIndustry('');
     setSelectedOmfattning('');
+    setShowFeaturedOnly(false);
+    setShowUrgentOnly(false);
   };
 
   const locations = [...new Set(jobs.map(job => job.location))];
@@ -238,20 +314,13 @@ const JobsPage = () => {
   const omfattningar = [...new Set(jobs.map(job => job.omfattning))];
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 flex items-center justify-center">
-        <div className="text-center">
-          <h3 className="text-xl text-white/80 mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '400' }}>Inga tjänster hittades</h3>
-          <p className="text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>Prova att ändra dina sökkriterier</p>
-        </div>
-      </div>
-    );
+    return <LoadingPlaceholder />;
   }
 
   return (
     <div className="min-h-screen relative">
-      {/* Enkel professionell bakgrund */}
-      <SimpleBackground />
+      {/* Diskret, levande bakgrund */}
+      <SimpleBackground mousePosition={mousePosition} />
 
       <div className="relative z-10">
         {/* Header */}
