@@ -112,6 +112,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
                 role="option"
                 aria-selected={value === opt}
                 onClick={() => {
+                  console.log(`Dropdown "${label}" val:`, opt);
                   onChange(opt);
                   setOpen(false);
                 }}
@@ -245,7 +246,10 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                   type="text"
                   placeholder="Sök efter tjänster, företag, färdigheter..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => {
+                    console.log('Sökterm:', e.target.value);
+                    setSearchTerm(e.target.value);
+                  }}
                   className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 />
