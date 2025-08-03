@@ -34,9 +34,10 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
   placeholder,
 }) => {
   const [open, setOpen] = useState(false);
+  const [openUpward, setOpenUpward] = useState(false);
+  const [maxHeight, setMaxHeight] = useState(280);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const [panelStyle, setPanelStyle] = useState<Partial<CSSStyleDeclaration>>({});
 
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
@@ -58,29 +59,14 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
   useLayoutEffect(() => {
     if (!open || !buttonRef.current) return;
     const rect = buttonRef.current.getBoundingClientRect();
-    const spaceBelow = window.innerHeight - rect.bottom - 8;
-    const spaceAbove = rect.top - 8;
-    const maxPanelHeight = 280;
-    const openUpward = spaceBelow < 200 && spaceAbove > spaceBelow;
-    const computedMaxHeight = openUpward
-      ? Math.min(maxPanelHeight, spaceAbove)
-      : Math.min(maxPanelHeight, spaceBelow);
-    const style: any = {
-      left: rect.left + 'px',
-      width: rect.width + 'px',
-      maxHeight: `${computedMaxHeight}px`,
-      position: 'fixed',
-      zIndex: 9999,
-      overflow: 'auto',
-      transition: 'transform 0.2s ease, opacity 0.2s ease',
-      transformOrigin: openUpward ? 'bottom' : 'top',
-    };
-    if (openUpward) {
-      style.bottom = `${window.innerHeight - rect.top + 4}px`;
-    } else {
-      style.top = `${rect.bottom + 4}px`;
-    }
-    setPanelStyle(style);
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const shouldOpenUp = spaceBelow < 200 && spaceAbove > spaceBelow;
+    setOpenUpward(shouldOpenUp);
+    const computedMax = shouldOpenUp
+      ? Math.min(280, spaceAbove - 10)
+      : Math.min(280, spaceBelow - 10);
+    setMaxHeight(computedMax);
   }, [open]);
 
   return (
@@ -102,7 +88,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             w-full flex items-center justify-between
             pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl
             text-white text-sm appearance-none cursor-pointer
-            focus:bg-white/15 focus:border-white/40 transition-all duration-300
+            focus:bg-white/15 focus:border-white/40 transition-all duration-200
             relative
           `}
         >
@@ -126,17 +112,19 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
           </div>
         </button>
 
-        {/* Panel via portal */}
+        {/* Dropdown panel */}
         {open && (
           <div
             role="listbox"
             aria-label={label}
-            className="bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl ring-1 ring-black ring-opacity-5"
-            style={{
-              ...panelStyle,
-              display: 'block',
-              backgroundClip: 'padding-box',
-            } as any}
+            className={`
+              absolute left-0 right-0 z-50
+              bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl ring-1 ring-black ring-opacity-5
+              overflow-auto
+              transition-all duration-200 ease-out
+              ${openUpward ? 'origin-bottom mb-1 bottom-full' : 'origin-top mt-1 top-full'}
+            `}
+            style={{ maxHeight: `${maxHeight}px` }}
           >
             {options.map((opt) => (
               <div
