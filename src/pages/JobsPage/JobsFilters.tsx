@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import { Search, MapPin, Building, Clock, X, ChevronDown } from 'lucide-react';
 
 interface JobsFiltersProps {
@@ -83,7 +83,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
   }, [open]);
 
   const panel = open && panelPos
-    ? ReactDOM.createPortal(
+    ? createPortal(
         <div
           role="listbox"
           aria-label={label}
@@ -200,11 +200,14 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
   omfattningar,
   clearFilters
 }) => {
+  const anyFilterActive =
+    !!selectedLocation || !!selectedIndustry || !!selectedOmfattning || !!searchTerm;
+
   return (
     <div className="px-8 mb-12">
       <div className="max-w-7xl mx-auto">
         {/* Inline Search and Filters */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 mb-8">
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 mb-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
             {/* Location Filter */}
             <div className="lg:col-span-2">
@@ -244,7 +247,13 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
 
             {/* Search Bar */}
             <div className="lg:col-span-5">
-              <label className="block text-white/80 text-sm mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '400' }}>
+              <label
+                className="block text-white/80 text-sm mb-2"
+                style={{
+                  fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                  fontWeight: '400',
+                }}
+              >
                 Sök
               </label>
               <div className="relative">
@@ -260,47 +269,91 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
               </div>
             </div>
 
-            {/* Clear Filters Button */}
-            <div className="lg:col-span-1 flex items-center">
-              {/* Placeholder space if needed; moved clear into active filters area */}
+            {/* Spacer for alignment */}
+            <div className="lg:col-span-1 flex items-center" />
+          </div>
+        </div>
+
+        {/* Valda filter / active filters */}
+        {anyFilterActive && (
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/20 px-6 py-3 flex flex-wrap gap-2 items-center mb-6">
+            <div className="flex items-center space-x-2 flex-wrap flex-1">
+              <span className="text-white/70 text-sm font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Valda filter:
+              </span>
+              {selectedLocation && (
+                <div
+                  className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/20 text-blue-200 rounded-full text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span>{selectedLocation}</span>
+                  <button
+                    aria-label="Rensa plats"
+                    onClick={() => setSelectedLocation('')}
+                    className="p-1 rounded-full hover:bg-white/10"
+                  >
+                    <X size={12} className="text-white/70" />
+                  </button>
+                </div>
+              )}
+              {selectedIndustry && (
+                <div
+                  className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 text-emerald-200 rounded-full text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span>{selectedIndustry}</span>
+                  <button
+                    aria-label="Rensa bransch"
+                    onClick={() => setSelectedIndustry('')}
+                    className="p-1 rounded-full hover:bg-white/10"
+                  >
+                    <X size={12} className="text-white/70" />
+                  </button>
+                </div>
+              )}
+              {selectedOmfattning && (
+                <div
+                  className="inline-flex items-center gap-2 px-3 py-1 bg-purple-500/20 text-purple-200 rounded-full text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span>{selectedOmfattning}</span>
+                  <button
+                    aria-label="Rensa omfattning"
+                    onClick={() => setSelectedOmfattning('')}
+                    className="p-1 rounded-full hover:bg-white/10"
+                  >
+                    <X size={12} className="text-white/70" />
+                  </button>
+                </div>
+              )}
+              {searchTerm && (
+                <div
+                  className="inline-flex items-center gap-2 px-3 py-1 bg-gray-700/40 text-white/80 rounded-full text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span>Sök: {searchTerm}</span>
+                  <button
+                    aria-label="Rensa sök"
+                    onClick={() => setSearchTerm('')}
+                    className="p-1 rounded-full hover:bg-white/10"
+                  >
+                    <X size={12} className="text-white/70" />
+                  </button>
+                </div>
+              )}
+            </div>
+            <div className="flex-shrink-0">
+              <button
+                onClick={clearFilters}
+                className="inline-flex items-center gap-1 text-sm bg-white/10 hover:bg-white/20 text-white rounded-full px-3 py-1 transition"
+                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
+              >
+                <X size={14} />
+                <span>Rensa alla</span>
+              </button>
             </div>
           </div>
-
-          {/* Active Filters Indicator */}
-          {(selectedLocation || selectedIndustry || selectedOmfattning || searchTerm) && (
-            <div className="mt-4">
-              <div className="flex items-center space-x-2 flex-wrap">
-                <span className="text-white/60 text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>Aktiva filter:</span>
-                {selectedLocation && (
-                  <span className="px-3 py-1 bg-blue-500/20 text-blue-300 rounded-full text-sm" style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}>
-                    {selectedLocation}
-                  </span>
-                )}
-                {selectedIndustry && (
-                  <span className="px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-sm" style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}>
-                    {selectedIndustry}
-                  </span>
-                )}
-                {selectedOmfattning && (
-                  <span className="px-3 py-1 bg-purple-500/20 text-purple-300 rounded-full text-sm" style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}>
-                    {selectedOmfattning}
-                  </span>
-                )}
-                
-                {/* Clear All Button positioned right after filter tags */}
-                <button
-                  onClick={clearFilters}
-                  className="flex items-center space-x-1 px-3 py-1 text-white/60 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-300 group text-sm ml-2"
-                  style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}
-                  title="Rensa alla filter"
-                >
-                  <X size={14} className="group-hover:rotate-90 transition-transform duration-300" />
-                  <span>Rensa alla</span>
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
+        )}
       </div>
     </div>
   );
