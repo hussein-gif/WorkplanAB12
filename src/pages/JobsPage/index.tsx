@@ -19,10 +19,33 @@ export interface Job {
   companyLogo: string;
 }
 
-// Laddningsplaceholder
+// Enkel, professionell bakgrund med subtil textur
+const SimpleBackground: React.FC = () => (
+  <div className="absolute inset-0">
+    {/* Mjuk gradientbakgrund */}
+    <div
+      aria-hidden="true"
+      className="absolute inset-0"
+      style={{
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%)',
+      }}
+    />
+    {/* Mycket subtilt rutmönster för djup */}
+    <div
+      aria-hidden="true"
+      className="absolute inset-0 pointer-events-none"
+      style={{
+        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><defs><pattern id='p' width='20' height='20' patternUnits='userSpaceOnUse'><path d='M20 0 L0 0 0 20' stroke='%23ffffff' stroke-width='0.5' fill='none'/></pattern></defs><rect width='120' height='120' fill='url(%23p)' opacity='0.015'/></svg>")`,
+        backgroundSize: '120px 120px',
+      }}
+    />
+  </div>
+);
+
+// Loading placeholder med samma bakgrund
 const LoadingPlaceholder = () => (
   <div className="min-h-screen flex items-center justify-center relative">
-    <SimpleBackground /> {/* Visar bakgrund även under laddning */}
+    <SimpleBackground />
     <div className="relative z-10 text-center">
       <div className="inline-flex items-center space-x-3 mb-2">
         <div
@@ -30,7 +53,10 @@ const LoadingPlaceholder = () => (
           aria-label="Laddar jobb"
           className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin"
         />
-        <h3 className="text-xl text-white/90" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}>
+        <h3
+          className="text-xl text-white/90"
+          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
+        >
           Laddar alla jobb...
         </h3>
       </div>
@@ -38,71 +64,24 @@ const LoadingPlaceholder = () => (
   </div>
 );
 
-// Enkel, levande men diskret bakgrund
-const SimpleBackground: React.FC<{ mousePosition?: { x: number; y: number } }> = ({ mousePosition }) => (
-  <div className="absolute inset-0 overflow-hidden">
-    <style>{`
-      @keyframes gradientShift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
-      @keyframes glowPulse {
-        0% { transform: scale(1); opacity: 0.08; }
-        50% { transform: scale(1.02); opacity: 0.1; }
-        100% { transform: scale(1); opacity: 0.08; }
-      }
-    `}</style>
-
-    {/* Basgradient med långsam rörelse */}
-    <div
-      className="absolute inset-0"
-      style={{
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%)',
-        backgroundSize: '200% 200%',
-        animation: 'gradientShift 40s ease infinite',
-        zIndex: 0,
-      }}
-    />
-
-    {/* Subtil textur */}
-    <div
-      className="absolute inset-0 pointer-events-none"
-      style={{
-        backgroundImage: `url("data:image/svg+xml;utf8,<svg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='p' width='20' height='20' patternUnits='userSpaceOnUse'><path d='M20 0 L0 0 0 20' stroke='%23ffffff' stroke-width='0.5' fill='none'/></pattern></defs><rect width='120' height='120' fill='url(%23p)' opacity='0.02'/></svg>")`,
-        backgroundSize: '120px 120px',
-        zIndex: 1,
-      }}
-    />
-
-    {/* Mjuk glow bakom header (placerad topp-centre) */}
-    <div
-      aria-hidden="true"
-      className="absolute left-1/2 top-[190px] -translate-x-1/2 rounded-full"
-      style={{
-        width: 700,
-        height: 220,
-        background: 'radial-gradient(circle at 50% 50%, rgba(59,130,246,0.18) 0%, transparent 70%)',
-        filter: 'blur(100px)',
-        animation: 'glowPulse 12s ease-in-out infinite',
-        zIndex: 2,
-        pointerEvents: 'none',
-      }}
-    />
-
-    {/* Liten subtil accent längst ner (valfritt, kan tas bort) */}
-    <div
-      aria-hidden="true"
-      className="absolute bottom-0 right-0 rounded-full"
-      style={{
-        width: 300,
-        height: 300,
-        background: 'radial-gradient(circle at 70% 70%, rgba(16,185,129,0.1) 0%, transparent 80%)',
-        filter: 'blur(120px)',
-        zIndex: 2,
-        pointerEvents: 'none',
-      }}
-    />
+// Tomtillstånd (oförändrat)
+const EmptyState = ({ clearFilters }: { clearFilters: () => void }) => (
+  <div className="py-20 text-center">
+    <h3
+      className="text-2xl text-white/80 mb-2"
+      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
+    >
+      Inga tjänster hittades
+    </h3>
+    <p className="text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
+      Prova att ändra dina sökkriterier eller återställ filtren.
+    </p>
+    <button
+      onClick={clearFilters}
+      className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-500 transition rounded-md text-white"
+    >
+      Rensa filter
+    </button>
   </div>
 );
 
@@ -116,7 +95,6 @@ const JobsPage = () => {
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [showUrgentOnly, setShowUrgentOnly] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   // Mock job data
   const mockJobs: Job[] = [
@@ -133,7 +111,7 @@ const JobsPage = () => {
       requirements: ['React', 'TypeScript', 'Node.js', '5+ års erfarenhet'],
       featured: true,
       urgent: false,
-      companyLogo: 'T'
+      companyLogo: 'T',
     },
     {
       id: '2',
@@ -148,7 +126,7 @@ const JobsPage = () => {
       requirements: ['Digital marknadsföring', 'Google Analytics', 'SEO/SEM'],
       featured: false,
       urgent: true,
-      companyLogo: 'G'
+      companyLogo: 'G',
     },
     {
       id: '3',
@@ -163,7 +141,7 @@ const JobsPage = () => {
       requirements: ['Figma', 'Prototyping', 'User Research', 'Portfolio'],
       featured: true,
       urgent: false,
-      companyLogo: 'D'
+      companyLogo: 'D',
     },
     {
       id: '4',
@@ -178,7 +156,7 @@ const JobsPage = () => {
       requirements: ['SQL', 'Python', 'Tableau', 'Statistik'],
       featured: false,
       urgent: false,
-      companyLogo: 'D'
+      companyLogo: 'D',
     },
     {
       id: '5',
@@ -193,7 +171,7 @@ const JobsPage = () => {
       requirements: ['PMP', 'Agile', 'Byggbransch', 'Ledarskap'],
       featured: false,
       urgent: false,
-      companyLogo: 'B'
+      companyLogo: 'B',
     },
     {
       id: '6',
@@ -208,7 +186,7 @@ const JobsPage = () => {
       requirements: ['AWS', 'Docker', 'Kubernetes', 'CI/CD'],
       featured: true,
       urgent: true,
-      companyLogo: 'C'
+      companyLogo: 'C',
     },
     {
       id: '7',
@@ -223,7 +201,7 @@ const JobsPage = () => {
       requirements: ['B2B försäljning', 'CRM', 'Kommunikation', 'Måldriven'],
       featured: false,
       urgent: false,
-      companyLogo: 'S'
+      companyLogo: 'S',
     },
     {
       id: '8',
@@ -238,70 +216,63 @@ const JobsPage = () => {
       requirements: ['React', 'CSS', 'JavaScript', 'Responsive design'],
       featured: false,
       urgent: false,
-      companyLogo: 'W'
-    }
+      companyLogo: 'W',
+    },
   ];
 
   useEffect(() => {
-    // Simulate loading
+    // Simulera laddning
     setTimeout(() => {
       setJobs(mockJobs);
       setFilteredJobs(mockJobs);
       setIsLoading(false);
     }, 1000);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
-      });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   useEffect(() => {
     let filtered = jobs;
 
-    console.log('Filtering with:', { searchTerm, selectedLocation, selectedIndustry, selectedOmfattning });
-
-    // Search filter
     if (searchTerm) {
-      filtered = filtered.filter(job =>
-        job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.requirements.some(req => req.toLowerCase().includes(searchTerm.toLowerCase()))
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        job =>
+          job.title.toLowerCase().includes(term) ||
+          job.company.toLowerCase().includes(term) ||
+          job.description.toLowerCase().includes(term) ||
+          job.requirements.some(req => req.toLowerCase().includes(term))
       );
     }
 
-    // Location filter
     if (selectedLocation) {
       filtered = filtered.filter(job => job.location === selectedLocation);
     }
 
-    // Industry filter
     if (selectedIndustry) {
       filtered = filtered.filter(job => job.industry === selectedIndustry);
     }
 
-    // Omfattning filter
     if (selectedOmfattning) {
       filtered = filtered.filter(job => job.omfattning === selectedOmfattning);
     }
 
-    // Featured / Urgent (om du vill lägga till togglar senare)
     if (showFeaturedOnly) {
       filtered = filtered.filter(job => job.featured);
     }
+
     if (showUrgentOnly) {
       filtered = filtered.filter(job => job.urgent);
     }
 
     setFilteredJobs(filtered);
-    console.log('Filtered jobs count:', filtered.length);
-  }, [searchTerm, selectedLocation, selectedIndustry, selectedOmfattning, showFeaturedOnly, showUrgentOnly, jobs]);
+  }, [
+    searchTerm,
+    selectedLocation,
+    selectedIndustry,
+    selectedOmfattning,
+    showFeaturedOnly,
+    showUrgentOnly,
+    jobs,
+  ]);
 
   const clearFilters = () => {
     setSearchTerm('');
@@ -322,10 +293,13 @@ const JobsPage = () => {
 
   return (
     <div className="min-h-screen relative">
-      {/* Diskret, levande bakgrund */}
-      <SimpleBackground mousePosition={mousePosition} />
+      {/* Enkel bakgrund */}
+      <SimpleBackground />
 
       <div className="relative z-10">
+        {/* Diskret halo bakom header för lite liv, utan att bli mycket */}
+        <div className="absolute top-24 left-1/2 -translate-x-1/2 w-[600px] h-[160px] rounded-full blur-3xl opacity-10 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(59,130,246,0.2) 0%, transparent 70%)' }} />
+
         {/* Header */}
         <JobsHeader filteredJobsCount={filteredJobs.length} />
 
@@ -345,8 +319,12 @@ const JobsPage = () => {
           clearFilters={clearFilters}
         />
 
-        {/* Jobs List */}
-        <JobsList jobs={filteredJobs} />
+        {/* Jobs List / Empty */}
+        {filteredJobs.length === 0 ? (
+          <EmptyState clearFilters={clearFilters} />
+        ) : (
+          <JobsList jobs={filteredJobs} />
+        )}
       </div>
     </div>
   );
