@@ -35,10 +35,10 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
   placeholder,
 }) => {
   const [open, setOpen] = useState(false);
-  const [openUpward, setOpenUpward] = useState(false);
-  const [maxHeight, setMaxHeight] = useState(280);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const [openUpward, setOpenUpward] = useState(false);
+  const [maxHeight, setMaxHeight] = useState(280);
   const [panelPos, setPanelPos] = useState<{ top?: number; bottom?: number; left: number; width: number } | null>(null);
 
   useEffect(() => {
@@ -77,8 +77,8 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
     setPanelPos({
       left: rect.left,
       width: rect.width,
-      top: shouldOpenUp ? undefined : rect.bottom + 4,
-      bottom: shouldOpenUp ? window.innerHeight - rect.top + 4 : undefined,
+      top: shouldOpenUp ? undefined : rect.bottom + 6,
+      bottom: shouldOpenUp ? window.innerHeight - rect.top + 6 : undefined,
     });
   }, [open]);
 
@@ -87,12 +87,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
         <div
           role="listbox"
           aria-label={label}
-          className={`
-            bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl ring-1 ring-black ring-opacity-5
-            overflow-auto
-            text-sm
-            transition-all duration-150
-          `}
+          className="bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 overflow-auto text-sm"
           style={{
             position: 'fixed',
             left: panelPos.left,
@@ -102,6 +97,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             maxHeight: `${maxHeight}px`,
             zIndex: 10000,
             transformOrigin: openUpward ? 'bottom' : 'top',
+            transition: 'opacity .15s ease, transform .15s ease',
           } as React.CSSProperties}
         >
           {options.map((opt) => (
@@ -153,13 +149,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
           aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
           ref={(el) => (buttonRef.current = el)}
-          className={`
-            w-full flex items-center justify-between
-            pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl
-            text-white text-sm appearance-none cursor-pointer
-            focus:bg-white/15 focus:border-white/40 transition-all duration-200
-            relative
-          `}
+          className="w-full flex items-center justify-between pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm cursor-pointer appearance-none focus:bg-white/15 focus:border-white/40 transition-all duration-200 relative"
         >
           <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
             <Icon size={16} className="text-white/40" />
@@ -206,10 +196,8 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
   return (
     <div className="px-8 mb-12">
       <div className="max-w-7xl mx-auto">
-        {/* Inline Search and Filters */}
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 mb-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
-            {/* Location Filter */}
             <div className="lg:col-span-2">
               <DropdownSelect
                 label="Plats"
@@ -220,8 +208,6 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                 placeholder="Alla platser"
               />
             </div>
-
-            {/* Industry Filter */}
             <div className="lg:col-span-2">
               <DropdownSelect
                 label="Bransch"
@@ -232,8 +218,6 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                 placeholder="Alla branscher"
               />
             </div>
-
-            {/* Omfattning Filter */}
             <div className="lg:col-span-2">
               <DropdownSelect
                 label="Omfattning"
@@ -244,15 +228,10 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                 placeholder="Alla omfattningar"
               />
             </div>
-
-            {/* Search Bar */}
             <div className="lg:col-span-5">
               <label
                 className="block text-white/80 text-sm mb-2"
-                style={{
-                  fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                  fontWeight: '400',
-                }}
+                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '400' }}
               >
                 Sök
               </label>
@@ -268,13 +247,10 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                 />
               </div>
             </div>
-
-            {/* Spacer for alignment */}
             <div className="lg:col-span-1 flex items-center" />
           </div>
         </div>
 
-        {/* Valda filter / active filters */}
         {anyFilterActive && (
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/20 px-6 py-3 flex flex-wrap gap-2 items-center mb-6">
             <div className="flex items-center space-x-2 flex-wrap flex-1">
@@ -282,10 +258,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                 Valda filter:
               </span>
               {selectedLocation && (
-                <div
-                  className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/20 text-blue-200 rounded-full text-sm"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/20 text-blue-200 rounded-full text-sm">
                   <span>{selectedLocation}</span>
                   <button
                     aria-label="Rensa plats"
@@ -297,10 +270,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                 </div>
               )}
               {selectedIndustry && (
-                <div
-                  className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 text-emerald-200 rounded-full text-sm"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 text-emerald-200 rounded-full text-sm">
                   <span>{selectedIndustry}</span>
                   <button
                     aria-label="Rensa bransch"
@@ -312,10 +282,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                 </div>
               )}
               {selectedOmfattning && (
-                <div
-                  className="inline-flex items-center gap-2 px-3 py-1 bg-purple-500/20 text-purple-200 rounded-full text-sm"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-500/20 text-purple-200 rounded-full text-sm">
                   <span>{selectedOmfattning}</span>
                   <button
                     aria-label="Rensa omfattning"
@@ -327,10 +294,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                 </div>
               )}
               {searchTerm && (
-                <div
-                  className="inline-flex items-center gap-2 px-3 py-1 bg-gray-700/40 text-white/80 rounded-full text-sm"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-700/40 text-white/80 rounded-full text-sm">
                   <span>Sök: {searchTerm}</span>
                   <button
                     aria-label="Rensa sök"
