@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import JobsHeader from './JobsHeader';
 import JobsFilters from './JobsFilters';
 import JobsList from './JobsList';
@@ -19,33 +19,161 @@ export interface Job {
   companyLogo: string;
 }
 
-// Enkel, nedtonad men levande bakgrund — mycket mindre blått
-const SimpleBackground: React.FC = () => (
-  <div className="absolute inset-0">
-    {/* Mjuk, mörk gradient med väldigt svag ton av färg */}
-    <div
-      aria-hidden="true"
-      className="absolute inset-0"
-      style={{
-        background: 'linear-gradient(135deg, #0f1117 0%, #1c1e26 60%, #0f1117 100%)',
-      }}
-    />
-    {/* Subtil textur för djup (nästan osynlig) */}
-    <div
-      aria-hidden="true"
-      className="absolute inset-0 pointer-events-none"
-      style={{
-        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><defs><pattern id='p' width='20' height='20' patternUnits='userSpaceOnUse'><path d='M20 0 L0 0 0 20' stroke='rgba(255,255,255,0.15)' stroke-width='0.5' fill='none'/></pattern></defs><rect width='120' height='120' fill='url(%23p)' opacity='0.01'/></svg>")`,
-        backgroundSize: '120px 120px',
-      }}
-    />
-  </div>
-);
+// Rich, levande men mörk bakgrund med parallax, glows, grid, hue-shift, vignette och noise
+const RichBackground: React.FC = () => {
+  const [mouse, setMouse] = useState({ x: 50, y: 50 });
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-// Loading placeholder med samma bakgrund
+  useEffect(() => {
+    const handleMouse = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      setMouse({ x, y });
+    };
+    window.addEventListener('mousemove', handleMouse);
+    return () => window.removeEventListener('mousemove', handleMouse);
+  }, []);
+
+  return (
+    <div ref={(el) => (containerRef.current = el)} className="absolute inset-0 pointer-events-none overflow-hidden">
+      <style>{`
+        @keyframes hueShift {
+          0% { filter: hue-rotate(0deg); }
+          50% { filter: hue-rotate(6deg); }
+          100% { filter: hue-rotate(0deg); }
+        }
+        @keyframes floatSlow {
+          0%,100% { transform: translate(0,0); }
+          50% { transform: translate(8px,-6px); }
+        }
+        @keyframes floatSlowRev {
+          0%,100% { transform: translate(0,0); }
+          50% { transform: translate(-7px,5px); }
+        }
+        @keyframes pulseSmall {
+          0%,100% { opacity: 0.08; }
+          50% { opacity: 0.16; }
+        }
+      `}</style>
+
+      {/* Basgradient med hue-shift */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(135deg, #0f1119 0%, #1f233f 45%, #0f1119 100%)',
+          animation: 'hueShift 80s ease-in-out infinite',
+        }}
+      />
+
+      {/* Parallax grid */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
+          `,
+          backgroundSize: '160px 160px',
+          transform: `translate(${(mouse.x - 50) * 0.08}px, ${(mouse.y - 50) * 0.08}px)`,
+          mixBlendMode: 'overlay',
+          opacity: 0.85,
+        }}
+      />
+
+      {/* Flytande glows */}
+      <div
+        className="absolute w-[900px] h-[900px] rounded-full blur-3xl animate-floatSlow"
+        style={{
+          background: 'radial-gradient(circle at 30% 30%, rgba(99,102,241,0.35) 0%, transparent 70%)',
+          opacity: 0.25,
+          top: '-150px',
+          left: '-120px',
+          transform: `translate(${(mouse.x - 50) * 0.18}px, ${(mouse.y - 50) * 0.12}px)`,
+        }}
+      />
+      <div
+        className="absolute w-[700px] h-[700px] rounded-full blur-3xl animate-floatSlowRev"
+        style={{
+          background: 'radial-gradient(circle at 60% 50%, rgba(16,185,129,0.25) 0%, transparent 70%)',
+          opacity: 0.2,
+          right: '10%',
+          bottom: '120px',
+          transform: `translate(${(mouse.x - 50) * -0.15}px, ${(mouse.y - 50) * -0.08}px)`,
+        }}
+      />
+      <div
+        className="absolute w-[500px] h-[500px] rounded-full blur-2xl"
+        style={{
+          background: 'radial-gradient(circle at 50% 50%, rgba(125,211,252,0.1) 0%, transparent 75%)',
+          opacity: 0.15,
+          left: '15%',
+          top: '40%',
+          transform: `translate(${(mouse.x - 50) * 0.1}px, ${(mouse.y - 50) * 0.07}px)`,
+        }}
+      />
+
+      {/* Driftande soft overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'radial-gradient(circle at 25% 35%, rgba(255,255,255,0.015) 0%, transparent 60%)',
+          mixBlendMode: 'soft-light',
+          animation: 'floatSlow 70s ease-in-out infinite',
+        }}
+      />
+
+      {/* Vignette */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Subtil noise */}
+      <div
+        className="absolute inset-0"
+        aria-hidden="true"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")`,
+          mixBlendMode: 'overlay',
+          backgroundRepeat: 'repeat',
+        }}
+      />
+
+      {/* Pulserande små prickar */}
+      {Array.from({ length: 30 }).map((_, i) => {
+        const size = Math.random() * 2 + 1;
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const delay = Math.random() * 5;
+        return (
+          <div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: `${size}px`,
+              height: `${size}px`,
+              top: `${top}%`,
+              left: `${left}%`,
+              backgroundColor: 'rgba(255,255,255,0.08)',
+              animation: `pulseSmall ${6 + Math.random() * 4}s ease-in-out ${delay}s infinite`,
+              mixBlendMode: 'screen',
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+// Loading placeholder med nya bakgrunden
 const LoadingPlaceholder = () => (
   <div className="min-h-screen flex items-center justify-center relative">
-    <SimpleBackground />
+    <RichBackground />
     <div className="relative z-10 text-center">
       <div className="inline-flex items-center space-x-3 mb-2">
         <div
@@ -290,11 +418,10 @@ const JobsPage = () => {
 
   return (
     <div className="min-h-screen relative">
-      {/* Enkel, nedtonad bakgrund */}
-      <SimpleBackground />
+      <RichBackground />
 
       <div className="relative z-10">
-        {/* Diskret halo bakom header för subtilt liv (utan blå dominance) */}
+        {/* Diskret halo bakom header för subtilt liv */}
         <div
           className="absolute top-24 left-1/2 -translate-x-1/2 w-[600px] h-[160px] rounded-full blur-3xl opacity-10 pointer-events-none"
           style={{
