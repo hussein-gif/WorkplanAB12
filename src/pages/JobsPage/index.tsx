@@ -7,50 +7,114 @@ import JobsList from './JobsList';
 const mockJobs = [
   {
     id: "1",
-    title: "Senior Frontend Developer",
-    company: "TechCorp AB",
+    title: "Senior Software Engineer",
+    company: "TechFlow AB",
     location: "Stockholm",
-    type: "heltid",
+    industry: "Teknologi",
     omfattning: "Heltid",
-    industry: "Tech",
-    salary: "45,000 - 60,000 SEK",
+    salary: "650,000 - 850,000 SEK",
     posted: "2 dagar sedan",
-    deadline: "Sista ansökningsdag: 2024-02-15",
-    description: "Vi söker en erfaren frontend-utvecklare...",
-    requirements: ["React", "TypeScript", "3+ års erfarenhet"],
-    companyLogo: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
+    companyLogo: "T",
+    featured: true
   },
   {
     id: "2",
     title: "Marketing Manager",
-    company: "Growth Solutions",
+    company: "GrowthCo",
     location: "Göteborg",
-    type: "heltid",
+    industry: "Marknadsföring",
     omfattning: "Heltid",
-    industry: "Marketing",
-    salary: "40,000 - 50,000 SEK",
-    posted: "1 vecka sedan",
-    deadline: "Sista ansökningsdag: 2024-02-20",
-    description: "Erfaren marknadsförare för att leda vårt team...",
-    requirements: ["Digital marknadsföring", "5+ års erfarenhet", "Teamledning"],
-    companyLogo: "https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
+    salary: "450,000 - 550,000 SEK",
+    posted: "1 dag sedan",
+    companyLogo: "G",
+    featured: true
   },
   {
     id: "3",
     title: "UX Designer",
-    company: "Design Studio",
-    location: "Malmö",
-    type: "deltid",
-    omfattning: "Deltid",
+    company: "DesignStudio",
+    location: "Remote",
     industry: "Design",
-    salary: "35,000 - 45,000 SEK",
-    posted: "3 dagar sedan",
-    deadline: "Sista ansökningsdag: 2024-02-18",
-    description: "Kreativ UX-designer för spännande projekt...",
-    requirements: ["Figma", "Användarforskning", "Prototyping"],
-    companyLogo: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
+    omfattning: "Konsult",
+    salary: "4,000 - 5,000 SEK/dag",
+    posted: "3 timmar sedan",
+    companyLogo: "D",
+    featured: false
+  },
+  {
+    id: "4",
+    title: "Data Analyst",
+    company: "DataInsights",
+    location: "Malmö",
+    industry: "Analys",
+    omfattning: "Heltid",
+    salary: "420,000 - 520,000 SEK",
+    posted: "1 dag sedan",
+    companyLogo: "D",
+    featured: false
+  },
+  {
+    id: "5",
+    title: "Project Manager",
+    company: "BuildCorp",
+    location: "Uppsala",
+    industry: "Byggnad",
+    omfattning: "Heltid",
+    salary: "500,000 - 650,000 SEK",
+    posted: "4 dagar sedan",
+    companyLogo: "B",
+    featured: true
+  },
+  {
+    id: "6",
+    title: "DevOps Engineer",
+    company: "CloudTech",
+    location: "Stockholm",
+    industry: "Teknologi",
+    omfattning: "Heltid",
+    salary: "580,000 - 750,000 SEK",
+    posted: "6 timmar sedan",
+    companyLogo: "C",
+    featured: false
+  },
+  {
+    id: "7",
+    title: "Sales Representative",
+    company: "SalesForce Nordic",
+    location: "Göteborg",
+    industry: "Försäljning",
+    omfattning: "Heltid",
+    salary: "380,000 - 480,000 SEK + provision",
+    posted: "2 dagar sedan",
+    companyLogo: "S",
+    featured: true
+  },
+  {
+    id: "8",
+    title: "Frontend Developer",
+    company: "WebStudio",
+    location: "Remote",
+    industry: "Teknologi",
+    omfattning: "Deltid",
+    salary: "2,500 - 3,500 SEK/dag",
+    posted: "1 vecka sedan",
+    companyLogo: "W",
+    featured: false
   }
 ];
+
+export interface Job {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  industry: string;
+  omfattning: string;
+  salary: string;
+  posted: string;
+  companyLogo: string;
+  featured: boolean;
+}
 
 // Professional background component
 const ProfessionalBackground: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -116,7 +180,7 @@ const JobsPage: React.FC = () => {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedIndustry, setSelectedIndustry] = useState('');
   const [selectedOmfattning, setSelectedOmfattning] = useState('');
-  const [filteredJobs, setFilteredJobs] = useState(mockJobs);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>(mockJobs);
 
   // Extract unique values for filter options
   const locations = Array.from(new Set(mockJobs.map(job => job.location)));
