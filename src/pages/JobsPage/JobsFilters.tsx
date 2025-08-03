@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Search, MapPin, Building, Clock, X, ChevronDown } from 'lucide-react';
 
 interface JobsFiltersProps {
@@ -147,7 +147,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
   return (
     <div className="px-8 mb-12">
       <div className="max-w-7xl mx-auto">
-        {/* Filters row */}
+        {/* Filterpanel med dropdowns + valda filter inuti samma ruta */}
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 mb-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
             <div className="lg:col-span-2">
@@ -201,79 +201,82 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
             </div>
             <div className="lg:col-span-1 flex items-center" />
           </div>
-        </div>
 
-        {/* Active filters */}
-        {anyFilterActive && (
-          <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/20 px-6 py-3 flex flex-wrap gap-2 items-center mb-6">
-            <div className="flex items-center space-x-2 flex-wrap flex-1">
-              <span
-                className="text-white/70 text-sm font-medium"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                Valda filter:
-              </span>
-              {selectedLocation && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/20 text-blue-200 rounded-full text-sm">
-                  <span>{selectedLocation}</span>
-                  <button
-                    aria-label="Rensa plats"
-                    onClick={() => setSelectedLocation('')}
-                    className="p-1 rounded-full hover:bg-white/10"
-                  >
-                    <X size={12} className="text-white/70" />
-                  </button>
-                </div>
-              )}
-              {selectedIndustry && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 text-emerald-200 rounded-full text-sm">
-                  <span>{selectedIndustry}</span>
-                  <button
-                    aria-label="Rensa bransch"
-                    onClick={() => setSelectedIndustry('')}
-                    className="p-1 rounded-full hover:bg-white/10"
-                  >
-                    <X size={12} className="text-white/70" />
-                  </button>
-                </div>
-              )}
-              {selectedOmfattning && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-500/20 text-purple-200 rounded-full text-sm">
-                  <span>{selectedOmfattning}</span>
-                  <button
-                    aria-label="Rensa omfattning"
-                    onClick={() => setSelectedOmfattning('')}
-                    className="p-1 rounded-full hover:bg-white/10"
-                  >
-                    <X size={12} className="text-white/70" />
-                  </button>
-                </div>
-              )}
-              {searchTerm && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-700/40 text-white/80 rounded-full text-sm">
-                  <span>Sök: {searchTerm}</span>
-                  <button
-                    aria-label="Rensa sök"
-                    onClick={() => setSearchTerm('')}
-                    className="p-1 rounded-full hover:bg-white/10"
-                  >
-                    <X size={12} className="text-white/70" />
-                  </button>
-                </div>
-              )}
+          {/* Valda filter i samma ruta */}
+          {anyFilterActive && (
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <div className="flex items-center flex-wrap gap-2 flex-1">
+                <span
+                  className="text-white/70 text-sm font-medium"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Valda filter:
+                </span>
+
+                {selectedLocation && (
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/20 text-blue-200 rounded-full text-sm">
+                    <span>{selectedLocation}</span>
+                    <button
+                      aria-label="Rensa plats"
+                      onClick={() => setSelectedLocation('')}
+                      className="p-1 rounded-full hover:bg-white/10"
+                    >
+                      <X size={12} className="text-white/70" />
+                    </button>
+                  </div>
+                )}
+                {selectedIndustry && (
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 text-emerald-200 rounded-full text-sm">
+                    <span>{selectedIndustry}</span>
+                    <button
+                      aria-label="Rensa bransch"
+                      onClick={() => setSelectedIndustry('')}
+                      className="p-1 rounded-full hover:bg-white/10"
+                    >
+                      <X size={12} className="text-white/70" />
+                    </button>
+                  </div>
+                )}
+                {selectedOmfattning && (
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-500/20 text-purple-200 rounded-full text-sm">
+                    <span>{selectedOmfattning}</span>
+                    <button
+                      aria-label="Rensa omfattning"
+                      onClick={() => setSelectedOmfattning('')}
+                      className="p-1 rounded-full hover:bg-white/10"
+                    >
+                      <X size={12} className="text-white/70" />
+                    </button>
+                  </div>
+                )}
+                {searchTerm && (
+                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-700/40 text-white/80 rounded-full text-sm">
+                    <span>Sök: {searchTerm}</span>
+                    <button
+                      aria-label="Rensa sök"
+                      onClick={() => setSearchTerm('')}
+                      className="p-1 rounded-full hover:bg-white/10"
+                    >
+                      <X size={12} className="text-white/70" />
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Rensa alla nära taggarna */}
+              <div className="flex-shrink-0">
+                <button
+                  onClick={clearFilters}
+                  className="inline-flex items-center gap-1 text-sm bg-white/10 hover:bg-white/20 text-white rounded-full px-3 py-1 transition"
+                  style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
+                >
+                  <X size={14} />
+                  <span>Rensa alla</span>
+                </button>
+              </div>
             </div>
-            <div className="flex-shrink-0">
-              <button
-                onClick={clearFilters}
-                className="inline-flex items-center gap-1 text-sm bg-white/10 hover:bg-white/20 text-white rounded-full px-3 py-1 transition"
-                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
-              >
-                <X size={14} />
-                <span>Rensa alla</span>
-              </button>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
