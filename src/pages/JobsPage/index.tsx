@@ -1,12 +1,52 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import JobsPage from './JobsPage';
-import './globals.css'; // Se till att din Tailwind / globala CSS laddas
+import React, { useState } from 'react';
+import JobsHeader from './JobsHeader';
+import JobsFilters from './JobsFilters';
+import JobsList from './JobsList';
 
-// Professionell, enkel bakgrund med gradient + subtilt mönster + mjuka floating shapes
+// Mock job data
+const mockJobs = [
+  {
+    id: 1,
+    title: "Senior Frontend Developer",
+    company: "TechCorp AB",
+    location: "Stockholm",
+    type: "Heltid",
+    salary: "45,000 - 60,000 SEK",
+    posted: "2 dagar sedan",
+    deadline: "Sista ansökningsdag: 2024-02-15",
+    description: "Vi söker en erfaren frontend-utvecklare...",
+    requirements: ["React", "TypeScript", "3+ års erfarenhet"]
+  },
+  {
+    id: 2,
+    title: "Marketing Manager",
+    company: "Growth Solutions",
+    location: "Göteborg",
+    type: "Heltid",
+    salary: "40,000 - 50,000 SEK",
+    posted: "1 vecka sedan",
+    deadline: "Sista ansökningsdag: 2024-02-20",
+    description: "Erfaren marknadsförare för att leda vårt team...",
+    requirements: ["Digital marknadsföring", "5+ års erfarenhet", "Teamledning"]
+  },
+  {
+    id: 3,
+    title: "UX Designer",
+    company: "Design Studio",
+    location: "Malmö",
+    type: "Deltid",
+    salary: "35,000 - 45,000 SEK",
+    posted: "3 dagar sedan",
+    deadline: "Sista ansökningsdag: 2024-02-18",
+    description: "Kreativ UX-designer för spännande projekt...",
+    requirements: ["Figma", "Användarforskning", "Prototyping"]
+  }
+];
+
+// Professional background component
 const ProfessionalBackground: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <div className="min-h-screen relative overflow-hidden">
-    {/* Basgradient */}
+    {/* Base gradient */}
     <div
       aria-hidden="true"
       className="absolute inset-0"
@@ -16,7 +56,7 @@ const ProfessionalBackground: React.FC<{ children: React.ReactNode }> = ({ child
       }}
     />
 
-    {/* Subtilt geometriskt mönster (diagonal grid) */}
+    {/* Subtle geometric pattern (diagonal grid) */}
     <div
       aria-hidden="true"
       className="absolute inset-0 pointer-events-none"
@@ -26,7 +66,7 @@ const ProfessionalBackground: React.FC<{ children: React.ReactNode }> = ({ child
       }}
     />
 
-    {/* Mjuka floating shapes för djup */}
+    {/* Soft floating shapes for depth */}
     <div
       aria-hidden="true"
       className="absolute top-1/4 left-[15%] w-[480px] h-[480px] rounded-[100px] blur-[140px] opacity-20"
@@ -48,10 +88,10 @@ const ProfessionalBackground: React.FC<{ children: React.ReactNode }> = ({ child
       }}
     />
 
-    {/* Innehåll ovanpå */}
+    {/* Content on top */}
     <div className="relative z-10">{children}</div>
 
-    {/* Keyframes ilined för att undvika att kräva global CSS-ändring */}
+    {/* Keyframes inline to avoid requiring global CSS changes */}
     <style>{`
       @keyframes float {
         0% { transform: translate(0,0) scale(1); }
@@ -62,13 +102,44 @@ const ProfessionalBackground: React.FC<{ children: React.ReactNode }> = ({ child
   </div>
 );
 
-const rootEl = document.getElementById('root');
-if (!rootEl) throw new Error('Root element not found');
+const JobsPage: React.FC = () => {
+  const [filteredJobs, setFilteredJobs] = useState(mockJobs);
 
-createRoot(rootEl).render(
-  <React.StrictMode>
+  const handleFilterChange = (filters: any) => {
+    // Apply filters to jobs
+    let filtered = mockJobs;
+    
+    if (filters.location && filters.location !== 'all') {
+      filtered = filtered.filter(job => 
+        job.location.toLowerCase().includes(filters.location.toLowerCase())
+      );
+    }
+    
+    if (filters.type && filters.type !== 'all') {
+      filtered = filtered.filter(job => 
+        job.type.toLowerCase() === filters.type.toLowerCase()
+      );
+    }
+    
+    if (filters.search) {
+      filtered = filtered.filter(job =>
+        job.title.toLowerCase().includes(filters.search.toLowerCase()) ||
+        job.company.toLowerCase().includes(filters.search.toLowerCase())
+      );
+    }
+    
+    setFilteredJobs(filtered);
+  };
+
+  return (
     <ProfessionalBackground>
-      <JobsPage />
+      <div className="container mx-auto px-4 py-8">
+        <JobsHeader />
+        <JobsFilters onFilterChange={handleFilterChange} />
+        <JobsList jobs={filteredJobs} />
+      </div>
     </ProfessionalBackground>
-  </React.StrictMode>
-);
+  );
+};
+
+export default JobsPage;
