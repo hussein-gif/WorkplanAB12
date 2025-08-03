@@ -19,23 +19,23 @@ export interface Job {
   companyLogo: string;
 }
 
-// Enkel, professionell bakgrund med subtil textur
+// Enkel, nedtonad men levande bakgrund — mycket mindre blått
 const SimpleBackground: React.FC = () => (
   <div className="absolute inset-0">
-    {/* Mjuk gradientbakgrund */}
+    {/* Mjuk, mörk gradient med väldigt svag ton av färg */}
     <div
       aria-hidden="true"
       className="absolute inset-0"
       style={{
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%)',
+        background: 'linear-gradient(135deg, #0f1117 0%, #1c1e26 60%, #0f1117 100%)',
       }}
     />
-    {/* Mycket subtilt rutmönster för djup */}
+    {/* Subtil textur för djup (nästan osynlig) */}
     <div
       aria-hidden="true"
       className="absolute inset-0 pointer-events-none"
       style={{
-        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><defs><pattern id='p' width='20' height='20' patternUnits='userSpaceOnUse'><path d='M20 0 L0 0 0 20' stroke='%23ffffff' stroke-width='0.5' fill='none'/></pattern></defs><rect width='120' height='120' fill='url(%23p)' opacity='0.015'/></svg>")`,
+        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><defs><pattern id='p' width='20' height='20' patternUnits='userSpaceOnUse'><path d='M20 0 L0 0 0 20' stroke='rgba(255,255,255,0.15)' stroke-width='0.5' fill='none'/></pattern></defs><rect width='120' height='120' fill='url(%23p)' opacity='0.01'/></svg>")`,
         backgroundSize: '120px 120px',
       }}
     />
@@ -64,13 +64,10 @@ const LoadingPlaceholder = () => (
   </div>
 );
 
-// Tomtillstånd (oförändrat)
+// Tomtillstånd
 const EmptyState = ({ clearFilters }: { clearFilters: () => void }) => (
   <div className="py-20 text-center">
-    <h3
-      className="text-2xl text-white/80 mb-2"
-      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
-    >
+    <h3 className="text-2xl text-white/80 mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}>
       Inga tjänster hittades
     </h3>
     <p className="text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -293,12 +290,17 @@ const JobsPage = () => {
 
   return (
     <div className="min-h-screen relative">
-      {/* Enkel bakgrund */}
+      {/* Enkel, nedtonad bakgrund */}
       <SimpleBackground />
 
       <div className="relative z-10">
-        {/* Diskret halo bakom header för lite liv, utan att bli mycket */}
-        <div className="absolute top-24 left-1/2 -translate-x-1/2 w-[600px] h-[160px] rounded-full blur-3xl opacity-10 pointer-events-none" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(59,130,246,0.2) 0%, transparent 70%)' }} />
+        {/* Diskret halo bakom header för subtilt liv (utan blå dominance) */}
+        <div
+          className="absolute top-24 left-1/2 -translate-x-1/2 w-[600px] h-[160px] rounded-full blur-3xl opacity-10 pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 70%)',
+          }}
+        />
 
         {/* Header */}
         <JobsHeader filteredJobsCount={filteredJobs.length} />
