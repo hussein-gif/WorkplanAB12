@@ -19,7 +19,7 @@ export interface Job {
   companyLogo: string;
 }
 
-// Rich, levande men mörk bakgrund med parallax, glows, grid, hue-shift, vignette och noise
+// Rich, mörkblå bakgrund med parallax, glows, grid, vignette och noise
 const RichBackground: React.FC = () => {
   const [mouse, setMouse] = useState({ x: 50, y: 50 });
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -39,11 +39,6 @@ const RichBackground: React.FC = () => {
   return (
     <div ref={(el) => (containerRef.current = el)} className="absolute inset-0 pointer-events-none overflow-hidden">
       <style>{`
-        @keyframes hueShift {
-          0% { filter: hue-rotate(0deg); }
-          50% { filter: hue-rotate(6deg); }
-          100% { filter: hue-rotate(0deg); }
-        }
         @keyframes floatSlow {
           0%,100% { transform: translate(0,0); }
           50% { transform: translate(8px,-6px); }
@@ -58,12 +53,11 @@ const RichBackground: React.FC = () => {
         }
       `}</style>
 
-      {/* Basgradient med hue-shift */}
+      {/* Basgradient: mörkblå utan lila */}
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(135deg, #0f1119 0%, #1f233f 45%, #0f1119 100%)',
-          animation: 'hueShift 80s ease-in-out infinite',
+          background: 'linear-gradient(135deg, #0d1b35 0%, #112a5f 45%, #0d1b35 100%)',
         }}
       />
 
@@ -82,11 +76,11 @@ const RichBackground: React.FC = () => {
         }}
       />
 
-      {/* Flytande glows */}
+      {/* Flytande blå glows */}
       <div
         className="absolute w-[900px] h-[900px] rounded-full blur-3xl animate-floatSlow"
         style={{
-          background: 'radial-gradient(circle at 30% 30%, rgba(99,102,241,0.35) 0%, transparent 70%)',
+          background: 'radial-gradient(circle at 30% 30%, rgba(59,130,246,0.35) 0%, transparent 70%)',
           opacity: 0.25,
           top: '-150px',
           left: '-120px',
@@ -96,7 +90,7 @@ const RichBackground: React.FC = () => {
       <div
         className="absolute w-[700px] h-[700px] rounded-full blur-3xl animate-floatSlowRev"
         style={{
-          background: 'radial-gradient(circle at 60% 50%, rgba(16,185,129,0.25) 0%, transparent 70%)',
+          background: 'radial-gradient(circle at 60% 50%, rgba(16,185,252,0.25) 0%, transparent 70%)',
           opacity: 0.2,
           right: '10%',
           bottom: '120px',
@@ -106,7 +100,7 @@ const RichBackground: React.FC = () => {
       <div
         className="absolute w-[500px] h-[500px] rounded-full blur-2xl"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, rgba(125,211,252,0.1) 0%, transparent 75%)',
+          background: 'radial-gradient(circle at 50% 50%, rgba(125,211,252,0.12) 0%, transparent 75%)',
           opacity: 0.15,
           left: '15%',
           top: '40%',
@@ -120,7 +114,6 @@ const RichBackground: React.FC = () => {
         style={{
           background: 'radial-gradient(circle at 25% 35%, rgba(255,255,255,0.015) 0%, transparent 60%)',
           mixBlendMode: 'soft-light',
-          animation: 'floatSlow 70s ease-in-out infinite',
         }}
       />
 
