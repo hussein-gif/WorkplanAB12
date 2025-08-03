@@ -22,7 +22,7 @@ export interface Job {
 const LoadingPlaceholder = () => (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 flex items-center justify-center">
     <div className="text-center">
-      <div className="inline-flex items-center space-x-3 mb-2">
+      <div className="inline-flex items-center space-x-3">
         <div
           role="status"
           aria-label="Laddar jobb"
@@ -35,9 +35,6 @@ const LoadingPlaceholder = () => (
           Laddar alla jobb...
         </h3>
       </div>
-      <p className="text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
-        Det tar bara några sekunder.
-      </p>
     </div>
   </div>
 );
@@ -261,7 +258,7 @@ const JobsPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800">
-      {/* Background */}
+      {/* Sophisticated Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-slate-900/90 to-gray-800/95" />
 
