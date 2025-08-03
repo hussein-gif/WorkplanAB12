@@ -19,80 +19,24 @@ export interface Job {
   companyLogo: string;
 }
 
-// Ny bakgrundskomponent: professionell, levande men diskret
-const LiveBackground: React.FC<{ mousePosition: { x: number; y: number } }> = ({ mousePosition }) => (
-  <div className="absolute inset-0 overflow-hidden">
-    {/* Keyframes inbäddade så ingen global CSS krävs */}
-    <style>{`
-      @keyframes gradientShift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-      }
-      @keyframes floatSlow {
-        0% { transform: translate(-50%, -50%) scale(1); }
-        50% { transform: translate(-48%, -52%) scale(1.015); }
-        100% { transform: translate(-50%, -50%) scale(1); }
-      }
-    `}</style>
-
-    {/* Animera gradientbas */}
+// Enkel, professionell bakgrund med samma färgpalett som tidigare
+const SimpleBackground: React.FC = () => (
+  <div className="absolute inset-0">
+    {/* Grundläggande gradient */}
     <div
+      aria-hidden="true"
       className="absolute inset-0"
       style={{
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 45%, #10B981 75%, #0f172a 100%)',
-        backgroundSize: '200% 200%',
-        animation: 'gradientShift 35s ease infinite',
-        zIndex: 0,
+        background: 'linear-gradient(135deg, #111827 0%, #0f172a 50%, #1f2937 100%)',
       }}
     />
-
-    {/* Subtilt grid-mönster */}
+    {/* Mycket subtil textur för djup (kan tas bort om du vill helt platt) */}
     <div
+      aria-hidden="true"
       className="absolute inset-0 pointer-events-none"
       style={{
-        backgroundImage: `url("data:image/svg+xml;utf8,<svg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='grid' width='20' height='20' patternUnits='userSpaceOnUse'><path d='M20 0 L0 0 0 20' stroke='rgba(255,255,255,0.4)' stroke-width='0.5' fill='none'/></pattern></defs><rect width='160' height='160' fill='url(%23grid)' opacity='0.03'/></svg>")`,
-        zIndex: 1,
-      }}
-    />
-
-    {/* Flytande orb 1 */}
-    <div
-      className="absolute w-[500px] h-[500px] rounded-full filter blur-3xl opacity-25"
-      style={{
-        background: 'radial-gradient(circle at 30% 30%, rgba(59,130,246,0.35) 0%, transparent 70%)',
-        left: `calc(${mousePosition.x * 0.2}% + 10%)`,
-        top: `calc(${mousePosition.y * 0.15}% + 5%)`,
-        transform: 'translate(-50%, -50%)',
-        animation: 'floatSlow 28s ease-in-out infinite',
-        mixBlendMode: 'overlay',
-        zIndex: 2,
-      }}
-    />
-
-    {/* Flytande orb 2 */}
-    <div
-      className="absolute w-[600px] h-[600px] rounded-full filter blur-3xl opacity-20"
-      style={{
-        background: 'radial-gradient(circle at 70% 60%, rgba(16,185,129,0.25) 0%, transparent 70%)',
-        right: `calc(${mousePosition.x * 0.15}% + 8%)`,
-        bottom: `calc(${mousePosition.y * 0.1}% + 10%)`,
-        transform: 'translate(50%, 50%)',
-        animation: 'floatSlow 32s ease-in-out 5s infinite',
-        mixBlendMode: 'overlay',
-        zIndex: 2,
-      }}
-    />
-
-    {/* Subtil shimmer-overlay för extra liv */}
-    <div
-      className="absolute inset-0 pointer-events-none"
-      style={{
-        background: 'linear-gradient(90deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.003) 50%, rgba(255,255,255,0.01) 100%)',
-        mixBlendMode: 'overlay',
-        backgroundSize: '200% 100%',
-        animation: 'gradientShift 60s ease-in-out infinite',
-        zIndex: 3,
+        backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><defs><pattern id='p' width='20' height='20' patternUnits='userSpaceOnUse'><path d='M20 0 L0 0 0 20' stroke='%23ffffff' stroke-width='0.5' fill='none'/></pattern></defs><rect width='120' height='120' fill='url(%23p)' opacity='0.02'/></svg>")`,
+        backgroundSize: '120px 120px',
       }}
     />
   </div>
@@ -306,8 +250,8 @@ const JobsPage = () => {
 
   return (
     <div className="min-h-screen relative">
-      {/* Uppgraderad, levande men professionell bakgrund */}
-      <LiveBackground mousePosition={mousePosition} />
+      {/* Enkel professionell bakgrund */}
+      <SimpleBackground />
 
       <div className="relative z-10">
         {/* Header */}
