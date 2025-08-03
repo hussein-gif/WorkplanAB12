@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { Search, MapPin, Building, Clock, X, ChevronDown } from 'lucide-react';
 
 interface JobsFiltersProps {
@@ -38,6 +39,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
   const [maxHeight, setMaxHeight] = useState(280);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const [panelRect, setPanelRect] = useState<{ top?: number; bottom?: number; left: number; width: number } | null>(null);
 
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
@@ -50,14 +52,19 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
     };
     window.addEventListener('mousedown', handleOutside);
     window.addEventListener('keydown', handleEsc);
+    window.addEventListener('resize', () => setOpen(false));
     return () => {
       window.removeEventListener('mousedown', handleOutside);
       window.removeEventListener('keydown', handleEsc);
+      window.removeEventListener('resize', () => setOpen(false));
     };
   }, []);
 
   useLayoutEffect(() => {
-    if (!open || !buttonRef.current) return;
+    if (!open || !buttonRef.current) {
+      setPanelRect(null);
+      return;
+    }
     const rect = buttonRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
@@ -67,7 +74,70 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
       ? Math.min(280, spaceAbove - 10)
       : Math.min(280, spaceBelow - 10);
     setMaxHeight(computedMax);
+
+    setPanelRect({
+      left: rect.left,
+      width: rect.width,
+      top: shouldOpenUp ? undefined : rect.bottom + 4,
+      bottom: shouldOpenUp ? window.innerHeight - rect.top + 4 : undefined,
+    });
   }, [open]);
+
+  const panel = open && panelRect
+    ? ReactDOM.createPortal(
+        <div
+          role="listbox"
+          aria-label={label}
+          className={`
+            bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl ring-1 ring-black ring-opacity-5
+            overflow-auto
+            text-sm
+            transition-all duration-150
+          `}
+          style={{
+            position: 'fixed',
+            left: panelRect.left,
+            width: panelRect.width,
+            top: panelRect.top,
+            bottom: panelRect.bottom,
+            maxHeight: `${maxHeight}px`,
+            zIndex: 10000,
+            transformOrigin: openUpward ? 'bottom' : 'top',
+          } as React.CSSProperties}
+        >
+          {options.map((opt) => (
+            <div
+              key={opt}
+              role="option"
+              aria-selected={value === opt}
+              onClick={() => {
+                onChange(opt);
+                setOpen(false);
+              }}
+              className={`
+                px-4 py-2 flex items-center justify-between cursor-pointer truncate
+                ${value === opt ? 'bg-white/10 font-medium' : 'hover:bg-white/10'}
+                text-white
+              `}
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              <span>{opt}</span>
+              {value === opt && (
+                <span className="text-indigo-300" aria-hidden="true">
+                  ✓
+                </span>
+              )}
+            </div>
+          ))}
+          {options.length === 0 && (
+            <div className="px-4 py-2 text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
+              Inga alternativ
+            </div>
+          )}
+        </div>,
+        document.body
+      )
+    : null;
 
   return (
     <div className="relative" ref={(el) => (wrapperRef.current = el)}>
@@ -111,52 +181,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             />
           </div>
         </button>
-
-        {/* Dropdown panel */}
-        {open && (
-          <div
-            role="listbox"
-            aria-label={label}
-            className={`
-              absolute left-0 right-0 z-50
-              bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl ring-1 ring-black ring-opacity-5
-              overflow-auto
-              transition-all duration-200 ease-out
-              ${openUpward ? 'origin-bottom mb-1 bottom-full' : 'origin-top mt-1 top-full'}
-            `}
-            style={{ maxHeight: `${maxHeight}px` }}
-          >
-            {options.map((opt) => (
-              <div
-                key={opt}
-                role="option"
-                aria-selected={value === opt}
-                onClick={() => {
-                  onChange(opt);
-                  setOpen(false);
-                }}
-                className={`
-                  px-4 py-2 flex items-center justify-between text-sm cursor-pointer
-                  ${value === opt ? 'bg-white/10 font-medium' : 'hover:bg-white/10'}
-                  text-white truncate
-                `}
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                <span>{opt}</span>
-                {value === opt && (
-                  <span className="text-indigo-300" aria-hidden="true">
-                    ✓
-                  </span>
-                )}
-              </div>
-            ))}
-            {options.length === 0 && (
-              <div className="px-4 py-2 text-sm text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
-                Inga alternativ
-              </div>
-            )}
-          </div>
-        )}
+        {panel}
       </div>
     </div>
   );
