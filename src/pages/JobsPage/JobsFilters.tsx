@@ -37,8 +37,8 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
   const [open, setOpen] = useState(false);
   const [openUpward, setOpenUpward] = useState(false);
   const [maxHeight, setMaxHeight] = useState(280);
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [panelPos, setPanelPos] = useState<{
     top?: number;
     bottom?: number;
@@ -100,7 +100,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             top: panelPos.top,
             bottom: panelPos.bottom,
             maxHeight: `${maxHeight}px`,
-            zIndex: 10000,
+            zIndex: 20000,
             transformOrigin: openUpward ? 'bottom' : 'top',
             transition: 'opacity .15s ease, transform .15s ease',
           } as React.CSSProperties}
@@ -112,7 +112,6 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
                 role="option"
                 aria-selected={value === opt}
                 onClick={() => {
-                  console.log(`Dropdown "${label}" val:`, opt);
                   onChange(opt);
                   setOpen(false);
                 }}
@@ -246,10 +245,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                   type="text"
                   placeholder="Sök efter tjänster, företag, färdigheter..."
                   value={searchTerm}
-                  onChange={(e) => {
-                    console.log('Sökterm:', e.target.value);
-                    setSearchTerm(e.target.value);
-                  }}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 />
