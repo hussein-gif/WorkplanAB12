@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, MapPin, Building, Clock, X, ChevronDown } from 'lucide-react';
 
 interface JobsFiltersProps {
@@ -36,10 +35,6 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const [openUpward, setOpenUpward] = useState(false);
-  const [maxHeight, setMaxHeight] = useState(280);
-  const [panelPos, setPanelPos] = useState<{ top?: number; bottom?: number; left: number; width: number } | null>(null);
 
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
@@ -52,103 +47,24 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
     };
     window.addEventListener('mousedown', handleOutside);
     window.addEventListener('keydown', handleEsc);
-    window.addEventListener('resize', () => setOpen(false));
     return () => {
       window.removeEventListener('mousedown', handleOutside);
       window.removeEventListener('keydown', handleEsc);
-      window.removeEventListener('resize', () => setOpen(false));
     };
   }, []);
-
-  useLayoutEffect(() => {
-    if (!open || !buttonRef.current) {
-      setPanelPos(null);
-      return;
-    }
-    const rect = buttonRef.current.getBoundingClientRect();
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
-    const shouldOpenUp = spaceBelow < 200 && spaceAbove > spaceBelow;
-    setOpenUpward(shouldOpenUp);
-    const computedMax = shouldOpenUp
-      ? Math.min(280, spaceAbove - 10)
-      : Math.min(280, spaceBelow - 10);
-    setMaxHeight(computedMax);
-    setPanelPos({
-      left: rect.left,
-      width: rect.width,
-      top: shouldOpenUp ? undefined : rect.bottom + 6,
-      bottom: shouldOpenUp ? window.innerHeight - rect.top + 6 : undefined,
-    });
-  }, [open]);
-
-  const panel = open && panelPos
-    ? createPortal(
-        <div
-          role="listbox"
-          aria-label={label}
-          className="bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 overflow-auto text-sm"
-          style={{
-            position: 'fixed',
-            left: panelPos.left,
-            width: panelPos.width,
-            top: panelPos.top,
-            bottom: panelPos.bottom,
-            maxHeight: `${maxHeight}px`,
-            zIndex: 10000,
-            transformOrigin: openUpward ? 'bottom' : 'top',
-            transition: 'opacity .15s ease, transform .15s ease',
-          } as React.CSSProperties}
-        >
-          {options.map((opt) => (
-            <div
-              key={opt}
-              role="option"
-              aria-selected={value === opt}
-              onClick={() => {
-                onChange(opt);
-                setOpen(false);
-              }}
-              className={`
-                px-4 py-2 flex items-center justify-between cursor-pointer truncate
-                ${value === opt ? 'bg-white/10 font-medium' : 'hover:bg-white/10'}
-                text-white
-              `}
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              <span>{opt}</span>
-              {value === opt && (
-                <span className="text-indigo-300" aria-hidden="true">
-                  ✓
-                </span>
-              )}
-            </div>
-          ))}
-          {options.length === 0 && (
-            <div className="px-4 py-2 text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Inga alternativ
-            </div>
-          )}
-        </div>,
-        document.body
-      )
-    : null;
 
   return (
     <div className="relative" ref={(el) => (wrapperRef.current = el)}>
       <label
         className="block text-white/80 text-sm mb-2"
-        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '400' }}
+        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
       >
         {label}
       </label>
       <div className="relative">
         <button
           type="button"
-          aria-haspopup="listbox"
-          aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
-          ref={(el) => (buttonRef.current = el)}
           className="w-full flex items-center justify-between pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm cursor-pointer appearance-none focus:bg-white/15 focus:border-white/40 transition-all duration-200 relative"
         >
           <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
@@ -156,10 +72,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
           </div>
           <span
             className="truncate text-left"
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: value ? 500 : 400,
-            }}
+            style={{ fontFamily: 'Inter, sans-serif', fontWeight: value ? 500 : 400 }}
           >
             {value || placeholder || `Alla ${label.toLowerCase()}`}
           </span>
@@ -170,7 +83,45 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             />
           </div>
         </button>
-        {panel}
+
+        {open && (
+          <div
+            role="listbox"
+            aria-label={label}
+            className="absolute left-0 right-0 mt-1 z-50 bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl overflow-auto max-h-60"
+          >
+            {options.length > 0 ? (
+              options.map((opt) => (
+                <div
+                  key={opt}
+                  role="option"
+                  aria-selected={value === opt}
+                  onClick={() => {
+                    onChange(opt);
+                    setOpen(false);
+                  }}
+                  className={`
+                    px-4 py-2 flex items-center justify-between cursor-pointer truncate
+                    ${value === opt ? 'bg-white/10 font-medium' : 'hover:bg-white/10'}
+                    text-white text-sm
+                  `}
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span>{opt}</span>
+                  {value === opt && (
+                    <span className="text-indigo-300" aria-hidden="true">
+                      ✓
+                    </span>
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="px-4 py-2 text-sm text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Inga alternativ
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -188,7 +139,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
   locations,
   industries,
   omfattningar,
-  clearFilters
+  clearFilters,
 }) => {
   const anyFilterActive =
     !!selectedLocation || !!selectedIndustry || !!selectedOmfattning || !!searchTerm;
@@ -196,6 +147,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
   return (
     <div className="px-8 mb-12">
       <div className="max-w-7xl mx-auto">
+        {/* Filters row */}
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 mb-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
             <div className="lg:col-span-2">
@@ -231,7 +183,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
             <div className="lg:col-span-5">
               <label
                 className="block text-white/80 text-sm mb-2"
-                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '400' }}
+                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
               >
                 Sök
               </label>
@@ -251,10 +203,14 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
           </div>
         </div>
 
+        {/* Active filters */}
         {anyFilterActive && (
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/20 px-6 py-3 flex flex-wrap gap-2 items-center mb-6">
             <div className="flex items-center space-x-2 flex-wrap flex-1">
-              <span className="text-white/70 text-sm font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <span
+                className="text-white/70 text-sm font-medium"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
                 Valda filter:
               </span>
               {selectedLocation && (
