@@ -19,6 +19,85 @@ export interface Job {
   companyLogo: string;
 }
 
+// Ny bakgrundskomponent: professionell, levande men diskret
+const LiveBackground: React.FC<{ mousePosition: { x: number; y: number } }> = ({ mousePosition }) => (
+  <div className="absolute inset-0 overflow-hidden">
+    {/* Keyframes inbäddade så ingen global CSS krävs */}
+    <style>{`
+      @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      @keyframes floatSlow {
+        0% { transform: translate(-50%, -50%) scale(1); }
+        50% { transform: translate(-48%, -52%) scale(1.015); }
+        100% { transform: translate(-50%, -50%) scale(1); }
+      }
+    `}</style>
+
+    {/* Animera gradientbas */}
+    <div
+      className="absolute inset-0"
+      style={{
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 45%, #10B981 75%, #0f172a 100%)',
+        backgroundSize: '200% 200%',
+        animation: 'gradientShift 35s ease infinite',
+        zIndex: 0,
+      }}
+    />
+
+    {/* Subtilt grid-mönster */}
+    <div
+      className="absolute inset-0 pointer-events-none"
+      style={{
+        backgroundImage: `url("data:image/svg+xml;utf8,<svg width='160' height='160' viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='grid' width='20' height='20' patternUnits='userSpaceOnUse'><path d='M20 0 L0 0 0 20' stroke='rgba(255,255,255,0.4)' stroke-width='0.5' fill='none'/></pattern></defs><rect width='160' height='160' fill='url(%23grid)' opacity='0.03'/></svg>")`,
+        zIndex: 1,
+      }}
+    />
+
+    {/* Flytande orb 1 */}
+    <div
+      className="absolute w-[500px] h-[500px] rounded-full filter blur-3xl opacity-25"
+      style={{
+        background: 'radial-gradient(circle at 30% 30%, rgba(59,130,246,0.35) 0%, transparent 70%)',
+        left: `calc(${mousePosition.x * 0.2}% + 10%)`,
+        top: `calc(${mousePosition.y * 0.15}% + 5%)`,
+        transform: 'translate(-50%, -50%)',
+        animation: 'floatSlow 28s ease-in-out infinite',
+        mixBlendMode: 'overlay',
+        zIndex: 2,
+      }}
+    />
+
+    {/* Flytande orb 2 */}
+    <div
+      className="absolute w-[600px] h-[600px] rounded-full filter blur-3xl opacity-20"
+      style={{
+        background: 'radial-gradient(circle at 70% 60%, rgba(16,185,129,0.25) 0%, transparent 70%)',
+        right: `calc(${mousePosition.x * 0.15}% + 8%)`,
+        bottom: `calc(${mousePosition.y * 0.1}% + 10%)`,
+        transform: 'translate(50%, 50%)',
+        animation: 'floatSlow 32s ease-in-out 5s infinite',
+        mixBlendMode: 'overlay',
+        zIndex: 2,
+      }}
+    />
+
+    {/* Subtil shimmer-overlay för extra liv */}
+    <div
+      className="absolute inset-0 pointer-events-none"
+      style={{
+        background: 'linear-gradient(90deg, rgba(255,255,255,0.01) 0%, rgba(255,255,255,0.003) 50%, rgba(255,255,255,0.01) 100%)',
+        mixBlendMode: 'overlay',
+        backgroundSize: '200% 100%',
+        animation: 'gradientShift 60s ease-in-out infinite',
+        zIndex: 3,
+      }}
+    />
+  </div>
+);
+
 const JobsPage = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
@@ -226,43 +305,9 @@ const JobsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800">
-      {/* Sophisticated Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-slate-900/90 to-gray-800/95" />
-        
-        {/* Dynamic Gradient Orbs */}
-        <div 
-          className="absolute w-[800px] h-[800px] rounded-full opacity-[0.06] blur-3xl transition-all duration-1000"
-          style={{
-            background: `radial-gradient(circle, #3B82F6 0%, transparent 70%)`,
-            left: `${mousePosition.x * 0.3}%`,
-            top: `${mousePosition.y * 0.2}%`,
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
-        <div 
-          className="absolute w-[600px] h-[600px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000 delay-500"
-          style={{
-            background: `radial-gradient(circle, #10B981 0%, transparent 70%)`,
-            right: `${mousePosition.x * 0.2}%`,
-            bottom: `${mousePosition.y * 0.3}%`,
-            transform: 'translate(50%, 50%)',
-          }}
-        />
-
-        {/* Grid Pattern */}
-        <div 
-          className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px',
-          }}
-        />
-      </div>
+    <div className="min-h-screen relative">
+      {/* Uppgraderad, levande men professionell bakgrund */}
+      <LiveBackground mousePosition={mousePosition} />
 
       <div className="relative z-10">
         {/* Header */}
