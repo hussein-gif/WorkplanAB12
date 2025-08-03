@@ -264,6 +264,8 @@ const JobsPage = () => {
   useEffect(() => {
     let filtered = jobs;
 
+    console.log('Filtering with:', { searchTerm, selectedLocation, selectedIndustry, selectedOmfattning });
+
     // Search filter
     if (searchTerm) {
       filtered = filtered.filter(job =>
@@ -298,6 +300,7 @@ const JobsPage = () => {
     }
 
     setFilteredJobs(filtered);
+    console.log('Filtered jobs count:', filtered.length);
   }, [searchTerm, selectedLocation, selectedIndustry, selectedOmfattning, showFeaturedOnly, showUrgentOnly, jobs]);
 
   const clearFilters = () => {
