@@ -1,21 +1,22 @@
-import React, { useState, useEffect, useRef, useLayoutEffect, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Search, MapPin, Building, Clock, X, ChevronDown } from 'lucide-react';
-import { useNavigate } from 'react-router-dom'; // om du använder navigation
 
-// Typdefinition för ett jobb
-export interface Job {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  omfattning: string;
-  industry: string;
-  posted: string;
-  companyLogo: string;
+interface JobsFiltersProps {
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+  selectedLocation: string;
+  setSelectedLocation: (location: string) => void;
+  selectedIndustry: string;
+  setSelectedIndustry: (industry: string) => void;
+  selectedOmfattning: string;
+  setSelectedOmfattning: (omfattning: string) => void;
+  locations: string[];
+  industries: string[];
+  omfattningar: string[];
+  clearFilters: () => void;
 }
 
-// Dropdown-komponent
 interface DropdownSelectProps {
   label: string;
   value: string;
@@ -45,7 +46,6 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
     width: number;
   } | null>(null);
 
-  // stäng om man klickar utanför eller trycker escape
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
@@ -65,7 +65,6 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
     };
   }, []);
 
-  // beräkna position för panelen (flip om det saknas plats)
   useLayoutEffect(() => {
     if (!open || !buttonRef.current) {
       setPanelPos(null);
@@ -101,7 +100,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             top: panelPos.top,
             bottom: panelPos.bottom,
             maxHeight: `${maxHeight}px`,
-            zIndex: 5000, // högre än jobbkort
+            zIndex: 20000,
             transformOrigin: openUpward ? 'bottom' : 'top',
             transition: 'opacity .15s ease, transform .15s ease',
           } as React.CSSProperties}
@@ -154,7 +153,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
           type="button"
           aria-haspopup="listbox"
           aria-expanded={open}
-          onClick={() => setOpen(o => !o)}
+          onClick={() => setOpen((o) => !o)}
           ref={(el) => (buttonRef.current = el)}
           className="w-full flex items-center justify-between pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm cursor-pointer appearance-none focus:bg-white/15 focus:border-white/40 transition-all duration-200 relative"
         >
@@ -180,22 +179,6 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
   );
 };
 
-// Filters-komponenten
-interface JobsFiltersProps {
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
-  selectedLocation: string;
-  setSelectedLocation: (location: string) => void;
-  selectedIndustry: string;
-  setSelectedIndustry: (industry: string) => void;
-  selectedOmfattning: string;
-  setSelectedOmfattning: (omfattning: string) => void;
-  locations: string[];
-  industries: string[];
-  omfattningar: string[];
-  clearFilters: () => void;
-}
-
 const JobsFilters: React.FC<JobsFiltersProps> = ({
   searchTerm,
   setSearchTerm,
@@ -216,6 +199,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
   return (
     <div className="px-8 mb-12">
       <div className="max-w-7xl mx-auto">
+        {/* Filterpanel med dropdowns + valda filter inline */}
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 mb-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
             <div className="lg:col-span-2">
@@ -270,7 +254,6 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
             <div className="lg:col-span-1 flex items-center" />
           </div>
 
-          {/* valda filter inline */}
           {anyFilterActive && (
             <div className="mt-4 flex flex-wrap items-center gap-2">
               <span
@@ -345,148 +328,4 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
   );
 };
 
-// Enkel lista som visar filtrerade jobb
-const JobsList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
-  if (jobs.length === 0) {
-    return <div className="px-8 py-12 text-center text-white/80">Inga jobb matchar filtren.</div>;
-  }
-  return (
-    <div className="px-8 pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {jobs.map((job) => (
-        <div
-          key={job.id}
-          className="bg-white/95 rounded-2xl p-5 flex flex-col shadow-lg border border-white/20"
-        >
-          <div className="flex items-start space-x-4 mb-4">
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg">
-              {job.companyLogo}
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3
-                className="text-lg mb-1 font-medium"
-                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-              >
-                {job.title}
-              </h3>
-              <div style={{ fontFamily: 'Inter, sans-serif' }}>{job.company}</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-sm mb-4" style={{ fontFamily: 'Inter, sans-serif' }}>
-            <div className="flex items-center gap-1">
-              <MapPin size={14} className="text-gray-500" />
-              <span>{job.location}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Clock size={14} className="text-gray-500" />
-              <span>{job.omfattning}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Building size={14} className="text-gray-500" />
-              <span>{job.industry}</span>
-            </div>
-          </div>
-          <div className="mt-auto flex justify-between text-sm text-gray-600">
-            <div>{job.posted}</div>
-            <div>Apply by {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE')}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-// Huvudsida som binder ihop allt
-const JobsPage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState('');
-  const [selectedIndustry, setSelectedIndustry] = useState('');
-  const [selectedOmfattning, setSelectedOmfattning] = useState('');
-
-  const allJobs: Job[] = useMemo(
-    () => [
-      {
-        id: '1',
-        title: 'Senior Software Engineer',
-        company: 'TechFlow',
-        location: 'Stockholm',
-        omfattning: 'Heltid',
-        industry: 'Tech',
-        posted: '2 dagar sedan',
-        companyLogo: 'T',
-      },
-      {
-        id: '2',
-        title: 'Marketing Manager',
-        company: 'GrowthCo',
-        location: 'Göteborg',
-        omfattning: 'Heltid',
-        industry: 'Marketing',
-        posted: '1 dag sedan',
-        companyLogo: 'G',
-      },
-      {
-        id: '3',
-        title: 'UX Designer',
-        company: 'DesignStudio',
-        location: 'Remote',
-        omfattning: 'Konsult',
-        industry: 'Design',
-        posted: '3 timmar sedan',
-        companyLogo: 'D',
-      },
-    ],
-    []
-  );
-
-  const clearFilters = () => {
-    setSearchTerm('');
-    setSelectedLocation('');
-    setSelectedIndustry('');
-    setSelectedOmfattning('');
-  };
-
-  const filteredJobs = useMemo(() => {
-    return allJobs.filter((job) => {
-      if (selectedLocation && job.location !== selectedLocation) return false;
-      if (selectedIndustry && job.industry !== selectedIndustry) return false;
-      if (selectedOmfattning && job.omfattning !== selectedOmfattning) return false;
-      if (searchTerm) {
-        const lc = searchTerm.toLowerCase();
-        if (!job.title.toLowerCase().includes(lc) && !job.company.toLowerCase().includes(lc)) {
-          return false;
-        }
-      }
-      return true;
-    });
-  }, [selectedLocation, selectedIndustry, selectedOmfattning, searchTerm, allJobs]);
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 text-white">
-      <div className="pt-16">
-        <JobsFilters
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          selectedLocation={selectedLocation}
-          setSelectedLocation={setSelectedLocation}
-          selectedIndustry={selectedIndustry}
-          setSelectedIndustry={setSelectedIndustry}
-          selectedOmfattning={selectedOmfattning}
-          setSelectedOmfattning={setSelectedOmfattning}
-          locations={['Stockholm', 'Göteborg', 'Remote']}
-          industries={['Tech', 'Design', 'Marketing']}
-          omfattningar={['Heltid', 'Deltid', 'Konsult']}
-          clearFilters={clearFilters}
-        />
-        <div className="px-8 mb-6">
-          <div className="max-w-7xl mx-auto text-center">
-            <h2 className="text-3xl font-medium mb-2">Hitta Din Nästa Roll</h2>
-            <p className="text-white/70">{filteredJobs.length} aktiva tjänster</p>
-          </div>
-        </div>
-        <JobsList jobs={filteredJobs} />
-      </div>
-    </div>
-  );
-};
-
-export default JobsPage;
+export default JobsFilters;
