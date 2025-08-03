@@ -21,7 +21,7 @@ const JobsHeader: React.FC<JobsHeaderProps> = ({ filteredJobsCount }) => {
             Hitta Din{' '}
           </span>
           <span
-            className="font-medium text-white/80"
+            className="font-medium text-white"
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
               fontWeight: 500,
