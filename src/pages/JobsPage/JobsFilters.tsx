@@ -39,7 +39,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
   const [maxHeight, setMaxHeight] = useState(280);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const [panelRect, setPanelRect] = useState<{ top?: number; bottom?: number; left: number; width: number } | null>(null);
+  const [panelPos, setPanelPos] = useState<{ top?: number; bottom?: number; left: number; width: number } | null>(null);
 
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
@@ -62,7 +62,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
 
   useLayoutEffect(() => {
     if (!open || !buttonRef.current) {
-      setPanelRect(null);
+      setPanelPos(null);
       return;
     }
     const rect = buttonRef.current.getBoundingClientRect();
@@ -74,8 +74,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
       ? Math.min(280, spaceAbove - 10)
       : Math.min(280, spaceBelow - 10);
     setMaxHeight(computedMax);
-
-    setPanelRect({
+    setPanelPos({
       left: rect.left,
       width: rect.width,
       top: shouldOpenUp ? undefined : rect.bottom + 4,
@@ -83,7 +82,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
     });
   }, [open]);
 
-  const panel = open && panelRect
+  const panel = open && panelPos
     ? ReactDOM.createPortal(
         <div
           role="listbox"
@@ -96,10 +95,10 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
           `}
           style={{
             position: 'fixed',
-            left: panelRect.left,
-            width: panelRect.width,
-            top: panelRect.top,
-            bottom: panelRect.bottom,
+            left: panelPos.left,
+            width: panelPos.width,
+            top: panelPos.top,
+            bottom: panelPos.bottom,
             maxHeight: `${maxHeight}px`,
             zIndex: 10000,
             transformOrigin: openUpward ? 'bottom' : 'top',
