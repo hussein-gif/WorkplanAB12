@@ -310,4 +310,4 @@ const JobsPage = () => {
   );
 };
 
-export default JobsPage;
+export default Index;
