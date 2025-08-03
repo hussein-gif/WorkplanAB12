@@ -6,40 +6,49 @@ import JobsList from './JobsList';
 // Mock job data
 const mockJobs = [
   {
-    id: 1,
+    id: "1",
     title: "Senior Frontend Developer",
     company: "TechCorp AB",
     location: "Stockholm",
-    type: "Heltid",
+    type: "heltid",
+    omfattning: "Heltid",
+    industry: "Tech",
     salary: "45,000 - 60,000 SEK",
     posted: "2 dagar sedan",
     deadline: "Sista ansökningsdag: 2024-02-15",
     description: "Vi söker en erfaren frontend-utvecklare...",
-    requirements: ["React", "TypeScript", "3+ års erfarenhet"]
+    requirements: ["React", "TypeScript", "3+ års erfarenhet"],
+    companyLogo: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
   },
   {
-    id: 2,
+    id: "2",
     title: "Marketing Manager",
     company: "Growth Solutions",
     location: "Göteborg",
-    type: "Heltid",
+    type: "heltid",
+    omfattning: "Heltid",
+    industry: "Marketing",
     salary: "40,000 - 50,000 SEK",
     posted: "1 vecka sedan",
     deadline: "Sista ansökningsdag: 2024-02-20",
     description: "Erfaren marknadsförare för att leda vårt team...",
-    requirements: ["Digital marknadsföring", "5+ års erfarenhet", "Teamledning"]
+    requirements: ["Digital marknadsföring", "5+ års erfarenhet", "Teamledning"],
+    companyLogo: "https://images.pexels.com/photos/3184338/pexels-photo-3184338.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
   },
   {
-    id: 3,
+    id: "3",
     title: "UX Designer",
     company: "Design Studio",
     location: "Malmö",
-    type: "Deltid",
+    type: "deltid",
+    omfattning: "Deltid",
+    industry: "Design",
     salary: "35,000 - 45,000 SEK",
     posted: "3 dagar sedan",
     deadline: "Sista ansökningsdag: 2024-02-18",
     description: "Kreativ UX-designer för spännande projekt...",
-    requirements: ["Figma", "Användarforskning", "Prototyping"]
+    requirements: ["Figma", "Användarforskning", "Prototyping"],
+    companyLogo: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&fit=crop"
   }
 ];
 
@@ -103,39 +112,74 @@ const ProfessionalBackground: React.FC<{ children: React.ReactNode }> = ({ child
 );
 
 const JobsPage: React.FC = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedIndustry, setSelectedIndustry] = useState('');
+  const [selectedOmfattning, setSelectedOmfattning] = useState('');
   const [filteredJobs, setFilteredJobs] = useState(mockJobs);
 
-  const handleFilterChange = (filters: any) => {
-    // Apply filters to jobs
+  // Extract unique values for filter options
+  const locations = Array.from(new Set(mockJobs.map(job => job.location)));
+  const industries = Array.from(new Set(mockJobs.map(job => job.industry)));
+  const omfattningar = Array.from(new Set(mockJobs.map(job => job.omfattning)));
+
+  // Apply filters whenever filter state changes
+  React.useEffect(() => {
     let filtered = mockJobs;
     
-    if (filters.location && filters.location !== 'all') {
+    if (selectedLocation) {
       filtered = filtered.filter(job => 
-        job.location.toLowerCase().includes(filters.location.toLowerCase())
+        job.location.toLowerCase().includes(selectedLocation.toLowerCase())
       );
     }
     
-    if (filters.type && filters.type !== 'all') {
+    if (selectedIndustry) {
       filtered = filtered.filter(job => 
-        job.type.toLowerCase() === filters.type.toLowerCase()
+        job.industry.toLowerCase().includes(selectedIndustry.toLowerCase())
       );
     }
     
-    if (filters.search) {
+    if (selectedOmfattning) {
+      filtered = filtered.filter(job => 
+        job.omfattning.toLowerCase().includes(selectedOmfattning.toLowerCase())
+      );
+    }
+    
+    if (searchTerm) {
       filtered = filtered.filter(job =>
-        job.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-        job.company.toLowerCase().includes(filters.search.toLowerCase())
+        job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        job.company.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
     
     setFilteredJobs(filtered);
+  }, [searchTerm, selectedLocation, selectedIndustry, selectedOmfattning]);
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedLocation('');
+    setSelectedIndustry('');
+    setSelectedOmfattning('');
   };
 
   return (
     <ProfessionalBackground>
       <div className="container mx-auto px-4 py-8">
-        <JobsHeader />
-        <JobsFilters onFilterChange={handleFilterChange} />
+        <JobsHeader filteredJobsCount={filteredJobs.length} />
+        <JobsFilters
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+          selectedIndustry={selectedIndustry}
+          setSelectedIndustry={setSelectedIndustry}
+          selectedOmfattning={selectedOmfattning}
+          setSelectedOmfattning={setSelectedOmfattning}
+          locations={locations}
+          industries={industries}
+          omfattningar={omfattningar}
+          clearFilters={clearFilters}
+        />
         <JobsList jobs={filteredJobs} />
       </div>
     </ProfessionalBackground>
