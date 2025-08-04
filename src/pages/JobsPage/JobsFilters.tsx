@@ -57,7 +57,6 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
       const style: Partial<CSSStyleDeclaration> = {
         width: `${rect.width}px`,
         left: `${window.scrollX + rect.left}px`,
-        // up or down
       };
       if (shouldOpenUp) {
         style.top = `${window.scrollY + rect.top - maxHeight - 6}px`;
@@ -121,10 +120,9 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             boxShadow: '0 30px 80px -10px rgba(0,0,0,0.5)',
             paddingTop: 4,
             paddingBottom: 4,
-            zIndex: 99999,
+            zIndex: 500, // ligger över jobbkorten (som har z-10) men under en navbar med t.ex. z-1000
             fontFamily: 'Inter, sans-serif',
             transition: 'opacity .15s ease, transform .15s ease',
-            // width / top / left set in updatePosition
           }}
         >
           {options.length > 0 ? (
