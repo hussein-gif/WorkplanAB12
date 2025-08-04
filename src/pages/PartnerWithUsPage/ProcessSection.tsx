@@ -10,10 +10,25 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
     <section id="how-it-works" className="py-24 px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
-            Så går vår process till
+          <h2
+            className="text-4xl md:text-5xl text-white mb-6"
+            style={{
+              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+              fontWeight: 400,
+              lineHeight: 1.1,
+            }}
+          >
+            <span style={{ fontWeight: 400 }}>Vår </span>
+            <span style={{ fontWeight: 500 }}>Process</span>
           </h2>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
+          <p
+            className="text-xl text-white/70 max-w-2xl mx-auto"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 300,
+              lineHeight: 1.4,
+            }}
+          >
             En tydlig 5-stegsprocess som ger er rätt kompetens – snabbt, tryggt och utan överraskningar.
           </p>
         </div>
@@ -23,28 +38,28 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             {
               icon: Phone,
               title: 'Behovsanalys',
-              description: 'Vi kartlägger mål, tidsram och kompetenskrav i ett kort uppstartssamtal.'
+              description: 'Vi kartlägger mål, tidsram och kompetenskrav i ett kort uppstartssamtal.',
             },
             {
               icon: Search,
               title: 'Lösningsförslag',
-              description: 'Ni får ett transparent förslag på bemanningsupplägg, tidsplan och pris.'
+              description: 'Ni får ett transparent förslag på bemanningsupplägg, tidsplan och pris.',
             },
             {
               icon: UserCheck,
               title: 'Sökning & urval',
-              description: 'Aktiv search, annonsering vid behov och strukturerade intervjuer/screening.'
+              description: 'Aktiv search, annonsering vid behov och strukturerade intervjuer/screening.',
             },
             {
               icon: Briefcase,
               title: 'Kandidatpresentation',
-              description: 'En shortlist med matchade kandidater, referenser och våra rekommendationer.'
+              description: 'En shortlist med matchade kandidater, referenser och våra rekommendationer.',
             },
             {
               icon: Handshake,
               title: 'Start & uppföljning',
-              description: 'Smidig onboarding och regelbunden uppföljning för att säkerställa kvalitet.'
-            }
+              description: 'Smidig onboarding och regelbunden uppföljning för att säkerställa kvalitet.',
+            },
           ].map((step, index) => (
             <div key={index} className="text-center">
               <div className="relative mb-6">
@@ -55,10 +70,24 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                   {index + 1}
                 </div>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-3 break-words max-w-full">
+              <h3
+                className="text-lg text-white mb-3 break-words max-w-full"
+                style={{
+                  fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                  fontWeight: 500,
+                  margin: 0,
+                }}
+              >
                 {step.title}
               </h3>
-              <p className="text-white/70 text-sm leading-relaxed break-words max-w-full">
+              <p
+                className="text-white/70 text-sm leading-relaxed break-words max-w-full"
+                style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 400,
+                  margin: 0,
+                }}
+              >
                 {step.description}
               </p>
             </div>
