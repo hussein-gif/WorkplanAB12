@@ -54,17 +54,18 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
-              fontSize: '1.25rem',
+              fontSize: '1rem', // mindre och mer professionellt
               color: 'rgba(255,255,255,0.7)',
               maxWidth: '40rem',
-              margin: '0.5rem auto 0'
+              margin: '0.5rem auto 0',
+              lineHeight: 1.4,
             }}
           >
             Flexibla bemanningslösningar skräddarsydda för dina affärsbehov.
           </p>
         </div>
 
-        {/* Frosted‑Glass Cards with Neon‑Blue Glow */}
+        {/* Frosted-Glass Cards with Neon-Blue Glow */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {services.map((service, idx) => (
             <div
@@ -146,7 +147,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                 {service.highlight}
               </div>
 
-              {/* Right‑pointing arrow in a circle */}
+              {/* Right-pointing arrow in a circle */}
               <div
                 style={{
                   position: 'absolute',
