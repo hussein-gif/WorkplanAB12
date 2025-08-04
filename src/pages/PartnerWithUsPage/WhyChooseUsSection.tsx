@@ -114,20 +114,16 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 
                 {/* Bottom Label */}
                 <div className="flex justify-start">
-                  <button 
-                    className="px-2 py-1 rounded-xl text-xs transition-all duration-200 hover:bg-gray-100"
+                  <div
+                    className="text-xs font-medium uppercase tracking-wider"
                     style={{
                       fontFamily: 'Inter, sans-serif',
-                      fontSize: '12px',
-                      fontWeight: 500, // medium
-                      padding: '4px 8px',
-                      borderRadius: '12px',
-                      backgroundColor: 'white',
-                      color: '#1f2937',
+                      fontWeight: 500,
+                      color: 'rgba(255,255,255,0.5)',
                     }}
                   >
                     {feature.label}
-                  </button>
+                  </div>
                 </div>
               </div>
             </div>
