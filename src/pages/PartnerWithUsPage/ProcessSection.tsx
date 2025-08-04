@@ -10,26 +10,11 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
     <section id="how-it-works" className="py-24 px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2
-            className="text-4xl md:text-5xl text-white mb-6"
-            style={{
-              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-              lineHeight: 1.1,
-              margin: 0,
-            }}
-          >
+          <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
             <span style={{ fontWeight: 400 }}>Vår </span>
             <span style={{ fontWeight: 500 }}>Process</span>
           </h2>
-          <p
-            className="text-base text-white/70 max-w-2xl mx-auto mt-2"
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 300,
-              lineHeight: 1.4,
-              margin: 0,
-            }}
-          >
+          <p className="text-xl text-white/70 max-w-2xl mx-auto">
             En tydlig 5-stegsprocess som ger er rätt kompetens – snabbt, tryggt och utan överraskningar.
           </p>
         </div>
@@ -71,23 +56,10 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                   {index + 1}
                 </div>
               </div>
-              <h3
-                className="text-lg font-semibold text-white mb-3 break-words max-w-full"
-                style={{
-                  fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                  margin: 0,
-                }}
-              >
+              <h3 className="text-lg font-semibold text-white mb-3 break-words max-w-full">
                 {step.title}
               </h3>
-              <p
-                className="text-white/70 text-sm leading-relaxed break-words max-w-full"
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontWeight: 400,
-                  margin: 0,
-                }}
-              >
+              <p className="text-white/70 text-sm leading-relaxed break-words max-w-full">
                 {step.description}
               </p>
             </div>
