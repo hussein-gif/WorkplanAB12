@@ -17,7 +17,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
-            Berätta om ert bemanningsbehov
+            Berätta Om Ert Bemanningsbehov
           </h2>
           <p className="text-white/70">
             Fyll i formuläret – vi återkommer inom 24 timmar.
