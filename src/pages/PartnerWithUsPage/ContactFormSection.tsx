@@ -16,7 +16,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
     <section id="kontakt-form" className="py-24 px-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-6xl font-light text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-light text-white mb-4">
             Berätta om ert bemanningsbehov
           </h2>
           <p className="text-white/70">
