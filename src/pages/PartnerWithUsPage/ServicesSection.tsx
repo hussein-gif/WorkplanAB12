@@ -42,19 +42,22 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
             style={{
               color: '#FFFFFF',
               fontFamily: 'Zen Kaku Gothic Antique, serif',
-              lineHeight: 1.1,
-              fontSize: '2.25rem'
+              lineHeight: 1.2,
+              fontSize: '3rem'
             }}
-            className="sm:text-4xl font-bold mb-4"
           >
             <span style={{ fontWeight: 400 }}>Våra </span>
-            <span style={{ fontWeight: 400 }}>Bemanningstjänster</span>
+            <span style={{ fontWeight: 500 }}>Bemanningstjänster</span>
           </h2>
           <p
-            className="text-xl text-white/60 max-w-3xl mx-auto"
+            className="mt-4"
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 300
+              fontWeight: 300,
+              fontSize: '1.25rem',
+              color: 'rgba(255,255,255,0.7)',
+              maxWidth: '40rem',
+              margin: '0.5rem auto 0'
             }}
           >
             Flexibla bemanningslösningar skräddarsydda för dina affärsbehov.

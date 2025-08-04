@@ -39,21 +39,21 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
         <div className="text-center mb-16">
           <h2
             className={`
-              text-3xl sm:text-4xl font-bold text-white mb-4
+              text-4xl md:text-5xl text-white mb-6
               transition-all duration-300
             `}
             style={{
-              fontFamily: 'Zen Kaku Gothic Antique, sans-serif', 
-              fontWeight: '400'
+              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+              fontWeight: 400
             }}
           >
             Därför väljer företag Workplan
           </h2>
           <p
-            className="text-xl text-white/60 max-w-3xl mx-auto"
+            className="text-xl text-white/70 max-w-2xl mx-auto"
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 300
+              fontWeight: 400
             }}
           >
             Fyra löften som gör bemanning enkel, träffsäker och trygg – från första kontakt till avslutat uppdrag.
