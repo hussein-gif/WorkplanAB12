@@ -1,468 +1,501 @@
-import React, { useState, useEffect, useRef, useLayoutEffect, useMemo } from 'react';
-import ReactDOM from 'react-dom';
-import { Search, MapPin, Building, Clock, X, ChevronDown } from 'lucide-react';
-import { useNavigate } from 'react-router-dom'; // om du använder navigation
+import React, { useState, useEffect, useRef } from 'react';
+import JobsHeader from './JobsHeader';
+import JobsFilters from './JobsFilters';
+// import JobsList from './JobsList'; // inte längre används
+import { MapPin, Clock } from 'lucide-react';
 
-// Typdefinition för ett jobb
 export interface Job {
   id: string;
   title: string;
   company: string;
   location: string;
-  omfattning: string;
   industry: string;
+  omfattning: 'Heltid' | 'Deltid';
+  salary: string;
   posted: string;
+  description: string;
+  requirements: string[];
+  featured: boolean;
+  urgent: boolean;
   companyLogo: string;
 }
 
-// Dropdown-komponent
-interface DropdownSelectProps {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  options: string[];
-  icon: React.ComponentType<{ size?: number; className?: string }>;
-  placeholder?: string;
-}
+// Rich, mörkblå bakgrund med parallax, glows, grid, vignette och noise
+const RichBackground: React.FC = () => {
+  const [mouse, setMouse] = useState({ x: 50, y: 50 });
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-const DropdownSelect: React.FC<DropdownSelectProps> = ({
-  label,
-  value,
-  onChange,
-  options,
-  icon: Icon,
-  placeholder,
-}) => {
-  const [open, setOpen] = useState(false);
-  const [openUpward, setOpenUpward] = useState(false);
-  const [maxHeight, setMaxHeight] = useState(280);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const [panelPos, setPanelPos] = useState<{
-    top?: number;
-    bottom?: number;
-    left: number;
-    width: number;
-  } | null>(null);
-
-  // stäng om man klickar utanför eller trycker escape
   useEffect(() => {
-    const handleOutside = (e: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
+    const handleMouse = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      setMouse({ x, y });
     };
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
-    };
-    window.addEventListener('mousedown', handleOutside);
-    window.addEventListener('keydown', handleEsc);
-    window.addEventListener('resize', () => setOpen(false));
-    return () => {
-      window.removeEventListener('mousedown', handleOutside);
-      window.removeEventListener('keydown', handleEsc);
-      window.removeEventListener('resize', () => setOpen(false));
-    };
+    window.addEventListener('mousemove', handleMouse);
+    return () => window.removeEventListener('mousemove', handleMouse);
   }, []);
 
-  // beräkna position för panelen (flip om det saknas plats)
-  useLayoutEffect(() => {
-    if (!open || !buttonRef.current) {
-      setPanelPos(null);
-      return;
-    }
-    const rect = buttonRef.current.getBoundingClientRect();
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
-    const shouldOpenUp = spaceBelow < 200 && spaceAbove > spaceBelow;
-    setOpenUpward(shouldOpenUp);
-    const computedMax = shouldOpenUp
-      ? Math.min(280, spaceAbove - 10)
-      : Math.min(280, spaceBelow - 10);
-    setMaxHeight(computedMax);
-    setPanelPos({
-      left: rect.left,
-      width: rect.width,
-      top: shouldOpenUp ? undefined : rect.bottom + 6,
-      bottom: shouldOpenUp ? window.innerHeight - rect.top + 6 : undefined,
-    });
-  }, [open]);
+  return (
+    <div ref={(el) => (containerRef.current = el)} className="absolute inset-0 pointer-events-none overflow-hidden">
+      <style>{`
+        @keyframes floatSlow {
+          0%,100% { transform: translate(0,0); }
+          50% { transform: translate(8px,-6px); }
+        }
+        @keyframes floatSlowRev {
+          0%,100% { transform: translate(0,0); }
+          50% { transform: translate(-7px,5px); }
+        }
+        @keyframes pulseSmall {
+          0%,100% { opacity: 0.08; }
+          50% { opacity: 0.16; }
+        }
+      `}</style>
 
-  const panel = open && panelPos
-    ? ReactDOM.createPortal(
+      {/* Basgradient: mörkblå utan lila */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(135deg, #0d1b35 0%, #112a5f 45%, #0d1b35 100%)',
+        }}
+      />
+
+      {/* Parallax grid */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
+          `,
+          backgroundSize: '160px 160px',
+          transform: `translate(${(mouse.x - 50) * 0.08}px, ${(mouse.y - 50) * 0.08}px)`,
+          mixBlendMode: 'overlay',
+          opacity: 0.85,
+        }}
+      />
+
+      {/* Flytande blå glows */}
+      <div
+        className="absolute w-[900px] h-[900px] rounded-full blur-3xl animate-floatSlow"
+        style={{
+          background: 'radial-gradient(circle at 30% 30%, rgba(59,130,246,0.35) 0%, transparent 70%)',
+          opacity: 0.25,
+          top: '-150px',
+          left: '-120px',
+          transform: `translate(${(mouse.x - 50) * 0.18}px, ${(mouse.y - 50) * 0.12}px)`,
+        }}
+      />
+      <div
+        className="absolute w-[700px] h-[700px] rounded-full blur-3xl animate-floatSlowRev"
+        style={{
+          background: 'radial-gradient(circle at 60% 50%, rgba(16,185,252,0.25) 0%, transparent 70%)',
+          opacity: 0.2,
+          right: '10%',
+          bottom: '120px',
+          transform: `translate(${(mouse.x - 50) * -0.15}px, ${(mouse.y - 50) * -0.08}px)`,
+        }}
+      />
+      <div
+        className="absolute w-[500px] h-[500px] rounded-full blur-2xl"
+        style={{
+          background: 'radial-gradient(circle at 50% 50%, rgba(125,211,252,0.12) 0%, transparent 75%)',
+          opacity: 0.15,
+          left: '15%',
+          top: '40%',
+          transform: `translate(${(mouse.x - 50) * 0.1}px, ${(mouse.y - 50) * 0.07}px)`,
+        }}
+      />
+
+      {/* Driftande soft overlay */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'radial-gradient(circle at 25% 35%, rgba(255,255,255,0.015) 0%, transparent 60%)',
+          mixBlendMode: 'soft-light',
+        }}
+      />
+
+      {/* Vignette */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Subtil noise */}
+      <div
+        className="absolute inset-0"
+        aria-hidden="true"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")`,
+          mixBlendMode: 'overlay',
+          backgroundRepeat: 'repeat',
+        }}
+      />
+
+      {/* Pulserande små prickar */}
+      {Array.from({ length: 30 }).map((_, i) => {
+        const size = Math.random() * 2 + 1;
+        const top = Math.random() * 100;
+        const left = Math.random() * 100;
+        const delay = Math.random() * 5;
+        return (
+          <div
+            key={i}
+            className="absolute rounded-full"
+            style={{
+              width: `${size}px`,
+              height: `${size}px`,
+              top: `${top}%`,
+              left: `${left}%`,
+              backgroundColor: 'rgba(255,255,255,0.08)',
+              animation: `pulseSmall ${6 + Math.random() * 4}s ease-in-out ${delay}s infinite`,
+              mixBlendMode: 'screen',
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+// Loading placeholder med nya bakgrunden
+const LoadingPlaceholder = () => (
+  <div className="min-h-screen flex items-center justify-center relative">
+    <RichBackground />
+    <div className="relative z-10 text-center">
+      <div className="inline-flex items-center space-x-3 mb-2">
         <div
-          role="listbox"
-          aria-label={label}
-          className="bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 overflow-auto text-sm"
-          style={{
-            position: 'fixed',
-            left: panelPos.left,
-            width: panelPos.width,
-            top: panelPos.top,
-            bottom: panelPos.bottom,
-            maxHeight: `${maxHeight}px`,
-            zIndex: 5000, // högre än jobbkort
-            transformOrigin: openUpward ? 'bottom' : 'top',
-            transition: 'opacity .15s ease, transform .15s ease',
-          } as React.CSSProperties}
+          role="status"
+          aria-label="Laddar jobb"
+          className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin"
+        />
+        <h3
+          className="text-xl text-white/90"
+          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
         >
-          {options.length > 0 ? (
-            options.map((opt) => (
-              <div
-                key={opt}
-                role="option"
-                aria-selected={value === opt}
-                onClick={() => {
-                  onChange(opt);
-                  setOpen(false);
-                }}
-                className={`
-                  px-4 py-2 flex items-center justify-between cursor-pointer truncate
-                  ${value === opt ? 'bg-white/10 font-medium' : 'hover:bg-white/10'}
-                  text-white
-                `}
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                <span>{opt}</span>
-                {value === opt && (
-                  <span className="text-indigo-300" aria-hidden="true">
-                    ✓
-                  </span>
-                )}
-              </div>
-            ))
-          ) : (
-            <div className="px-4 py-2 text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Inga alternativ
-            </div>
-          )}
-        </div>,
-        document.body
-      )
-    : null;
+          Laddar alla jobb...
+        </h3>
+      </div>
+    </div>
+  </div>
+);
+
+// Tomtillstånd
+const EmptyState = ({ clearFilters }: { clearFilters: () => void }) => (
+  <div className="py-20 text-center">
+    <h3 className="text-2xl text-white/80 mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}>
+      Inga tjänster hittades
+    </h3>
+    <p className="text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
+      Prova att ändra dina sökkriterier eller återställ filtren.
+    </p>
+    <button
+      onClick={clearFilters}
+      className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-500 transition rounded-md text-white"
+    >
+      Rensa filter
+    </button>
+  </div>
+);
+
+// Eget jobbkort som ersätter potentiellt problematiskt JobsList
+const JobCard: React.FC<{ job: Job }> = ({ job }) => {
+  const applyBy = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE');
 
   return (
-    <div className="relative" ref={(el) => (wrapperRef.current = el)}>
-      <label
-        className="block text-white/80 text-sm mb-2"
-        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
-      >
-        {label}
-      </label>
-      <div className="relative">
-        <button
-          type="button"
-          aria-haspopup="listbox"
-          aria-expanded={open}
-          onClick={() => setOpen(o => !o)}
-          ref={(el) => (buttonRef.current = el)}
-          className="w-full flex items-center justify-between pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm cursor-pointer appearance-none focus:bg-white/15 focus:border-white/40 transition-all duration-200 relative"
-        >
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-            <Icon size={16} className="text-white/40" />
-          </div>
-          <span
-            className="truncate text-left"
-            style={{ fontFamily: 'Inter, sans-serif', fontWeight: value ? 500 : 400 }}
+    <div
+      className="relative rounded-2xl cursor-pointer p-5 flex flex-col justify-between min-h-[170px]"
+      style={{
+        background: 'rgba(255,255,255,0.03)',
+        backdropFilter: 'blur(18px)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        boxShadow: '0 25px 60px -10px rgba(0,0,0,0.35)',
+      }}
+    >
+      <div>
+        <div className="flex items-start gap-4 mb-3">
+          <div
+            className="
+              w-14 h-14 rounded-xl
+              bg-gradient-to-br from-[#1f3f8b] to-[#3b6de8]
+              flex items-center justify-center
+              text-white font-bold text-lg shadow
+              flex-shrink-0
+            "
           >
-            {value || placeholder || `Alla ${label.toLowerCase()}`}
-          </span>
-          <div className="ml-2 flex items-center">
-            <ChevronDown
-              size={16}
-              className={`transition-transform duration-200 ${open ? 'rotate-180' : 'rotate-0'} text-white/60`}
-            />
+            {job.companyLogo}
           </div>
-        </button>
-        {panel}
+          <div className="flex-1 min-w-0">
+            <h3
+              className="text-lg font-bold mb-0"
+              style={{
+                fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                color: '#fff',
+              }}
+            >
+              {job.title}
+            </h3>
+            <div
+              className="text-sm"
+              style={{
+                fontFamily: 'Inter, sans-serif',
+                color: 'rgba(255,255,255,0.75)',
+              }}
+            >
+              {job.company}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex text-xs gap-4 mb-2" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'Inter, sans-serif' }}>
+          <div className="flex items-center gap-1">
+            <MapPin size={12} />
+            <span>{job.location}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <Clock size={12} />
+            <span>{job.omfattning}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex justify-between text-xs mt-4" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'Inter, sans-serif' }}>
+        <div>{job.posted}</div>
+        <div>Ansök senast {applyBy}</div>
       </div>
     </div>
   );
 };
 
-// Filters-komponenten
-interface JobsFiltersProps {
-  searchTerm: string;
-  setSearchTerm: (term: string) => void;
-  selectedLocation: string;
-  setSelectedLocation: (location: string) => void;
-  selectedIndustry: string;
-  setSelectedIndustry: (industry: string) => void;
-  selectedOmfattning: string;
-  setSelectedOmfattning: (omfattning: string) => void;
-  locations: string[];
-  industries: string[];
-  omfattningar: string[];
-  clearFilters: () => void;
-}
-
-const JobsFilters: React.FC<JobsFiltersProps> = ({
-  searchTerm,
-  setSearchTerm,
-  selectedLocation,
-  setSelectedLocation,
-  selectedIndustry,
-  setSelectedIndustry,
-  selectedOmfattning,
-  setSelectedOmfattning,
-  locations,
-  industries,
-  omfattningar,
-  clearFilters,
-}) => {
-  const anyFilterActive =
-    !!selectedLocation || !!selectedIndustry || !!selectedOmfattning || !!searchTerm;
-
-  return (
-    <div className="px-8 mb-12">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 mb-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
-            <div className="lg:col-span-2">
-              <DropdownSelect
-                label="Plats"
-                value={selectedLocation}
-                onChange={setSelectedLocation}
-                options={locations}
-                icon={MapPin}
-                placeholder="Alla platser"
-              />
-            </div>
-            <div className="lg:col-span-2">
-              <DropdownSelect
-                label="Bransch"
-                value={selectedIndustry}
-                onChange={setSelectedIndustry}
-                options={industries}
-                icon={Building}
-                placeholder="Alla branscher"
-              />
-            </div>
-            <div className="lg:col-span-2">
-              <DropdownSelect
-                label="Omfattning"
-                value={selectedOmfattning}
-                onChange={setSelectedOmfattning}
-                options={omfattningar}
-                icon={Clock}
-                placeholder="Alla omfattningar"
-              />
-            </div>
-            <div className="lg:col-span-5">
-              <label
-                className="block text-white/80 text-sm mb-2"
-                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
-              >
-                Sök
-              </label>
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
-                <input
-                  type="text"
-                  placeholder="Sök efter tjänster, företag, färdigheter..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                />
-              </div>
-            </div>
-            <div className="lg:col-span-1 flex items-center" />
-          </div>
-
-          {/* valda filter inline */}
-          {anyFilterActive && (
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              <span
-                className="text-white/70 text-sm font-medium"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                Valda filter:
-              </span>
-
-              {selectedLocation && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/20 text-blue-200 rounded-full text-sm">
-                  <span>{selectedLocation}</span>
-                  <button
-                    aria-label="Rensa plats"
-                    onClick={() => setSelectedLocation('')}
-                    className="p-1 rounded-full hover:bg-white/10"
-                  >
-                    <X size={12} className="text-white/70" />
-                  </button>
-                </div>
-              )}
-              {selectedIndustry && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 text-emerald-200 rounded-full text-sm">
-                  <span>{selectedIndustry}</span>
-                  <button
-                    aria-label="Rensa bransch"
-                    onClick={() => setSelectedIndustry('')}
-                    className="p-1 rounded-full hover:bg-white/10"
-                  >
-                    <X size={12} className="text-white/70" />
-                  </button>
-                </div>
-              )}
-              {selectedOmfattning && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-500/20 text-purple-200 rounded-full text-sm">
-                  <span>{selectedOmfattning}</span>
-                  <button
-                    aria-label="Rensa omfattning"
-                    onClick={() => setSelectedOmfattning('')}
-                    className="p-1 rounded-full hover:bg-white/10"
-                  >
-                    <X size={12} className="text-white/70" />
-                  </button>
-                </div>
-              )}
-              {searchTerm && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-gray-700/40 text-white/80 rounded-full text-sm">
-                  <span>Sök: {searchTerm}</span>
-                  <button
-                    aria-label="Rensa sök"
-                    onClick={() => setSearchTerm('')}
-                    className="p-1 rounded-full hover:bg-white/10"
-                  >
-                    <X size={12} className="text-white/70" />
-                  </button>
-                </div>
-              )}
-
-              <button
-                onClick={clearFilters}
-                className="inline-flex items-center gap-1 text-sm bg-white/10 hover:bg-white/20 text-white rounded-full px-3 py-1 transition"
-                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
-              >
-                <X size={14} />
-                <span>Rensa alla</span>
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Enkel lista som visar filtrerade jobb
-const JobsList: React.FC<{ jobs: Job[] }> = ({ jobs }) => {
-  if (jobs.length === 0) {
-    return <div className="px-8 py-12 text-center text-white/80">Inga jobb matchar filtren.</div>;
-  }
-  return (
-    <div className="px-8 pb-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {jobs.map((job) => (
-        <div
-          key={job.id}
-          className="bg-white/95 rounded-2xl p-5 flex flex-col shadow-lg border border-white/20"
-        >
-          <div className="flex items-start space-x-4 mb-4">
-            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg">
-              {job.companyLogo}
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3
-                className="text-lg mb-1 font-medium"
-                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-              >
-                {job.title}
-              </h3>
-              <div style={{ fontFamily: 'Inter, sans-serif' }}>{job.company}</div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 text-sm mb-4" style={{ fontFamily: 'Inter, sans-serif' }}>
-            <div className="flex items-center gap-1">
-              <MapPin size={14} className="text-gray-500" />
-              <span>{job.location}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Clock size={14} className="text-gray-500" />
-              <span>{job.omfattning}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Building size={14} className="text-gray-500" />
-              <span>{job.industry}</span>
-            </div>
-          </div>
-          <div className="mt-auto flex justify-between text-sm text-gray-600">
-            <div>{job.posted}</div>
-            <div>Apply by {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE')}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-// Huvudsida som binder ihop allt
-const JobsPage: React.FC = () => {
+const JobsPage = () => {
+  const [jobs, setJobs] = useState<Job[]>([]);
+  const [filteredJobs, setFilteredJobs] = useState<Job[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedIndustry, setSelectedIndustry] = useState('');
   const [selectedOmfattning, setSelectedOmfattning] = useState('');
+  const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
+  const [showUrgentOnly, setShowUrgentOnly] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const allJobs: Job[] = useMemo(
-    () => [
-      {
-        id: '1',
-        title: 'Senior Software Engineer',
-        company: 'TechFlow',
-        location: 'Stockholm',
-        omfattning: 'Heltid',
-        industry: 'Tech',
-        posted: '2 dagar sedan',
-        companyLogo: 'T',
-      },
-      {
-        id: '2',
-        title: 'Marketing Manager',
-        company: 'GrowthCo',
-        location: 'Göteborg',
-        omfattning: 'Heltid',
-        industry: 'Marketing',
-        posted: '1 dag sedan',
-        companyLogo: 'G',
-      },
-      {
-        id: '3',
-        title: 'UX Designer',
-        company: 'DesignStudio',
-        location: 'Remote',
-        omfattning: 'Konsult',
-        industry: 'Design',
-        posted: '3 timmar sedan',
-        companyLogo: 'D',
-      },
-    ],
-    []
-  );
+  // Mock job data
+  const mockJobs: Job[] = [
+    {
+      id: '1',
+      title: 'Senior Software Engineer',
+      company: 'TechFlow AB',
+      location: 'Örebro',
+      industry: 'Lager & Logistik',
+      omfattning: 'Heltid',
+      salary: '650,000 - 850,000 SEK',
+      posted: '2 dagar sedan',
+      description: 'Vi söker en erfaren mjukvaruingenjör för att bygga nästa generations plattform.',
+      requirements: ['React', 'TypeScript', 'Node.js', '5+ års erfarenhet'],
+      featured: true,
+      urgent: false,
+      companyLogo: 'T',
+    },
+    {
+      id: '2',
+      title: 'Marketing Manager',
+      company: 'GrowthCo',
+      location: 'Örebro',
+      industry: 'Lager & Logistik',
+      omfattning: 'Heltid',
+      salary: '450,000 - 550,000 SEK',
+      posted: '1 dag sedan',
+      description: 'Leda vårt marknadsföringsteam och utveckla strategier för tillväxt.',
+      requirements: ['Digital marknadsföring', 'Google Analytics', 'SEO/SEM'],
+      featured: false,
+      urgent: true,
+      companyLogo: 'G',
+    },
+    {
+      id: '3',
+      title: 'UX Designer',
+      company: 'DesignStudio',
+      location: 'Örebro',
+      industry: 'Lager & Logistik',
+      omfattning: 'Deltid',
+      salary: '4,000 - 5,000 SEK/dag',
+      posted: '3 timmar sedan',
+      description: 'Skapa användarcentrerade designlösningar för våra kunder.',
+      requirements: ['Figma', 'Prototyping', 'User Research', 'Portfolio'],
+      featured: true,
+      urgent: false,
+      companyLogo: 'D',
+    },
+    {
+      id: '4',
+      title: 'Data Analyst',
+      company: 'DataInsights',
+      location: 'Örebro',
+      industry: 'Lager & Logistik',
+      omfattning: 'Heltid',
+      salary: '420,000 - 520,000 SEK',
+      posted: '1 dag sedan',
+      description: 'Analysera data för att ge insikter som driver affärsbeslut.',
+      requirements: ['SQL', 'Python', 'Tableau', 'Statistik'],
+      featured: false,
+      urgent: false,
+      companyLogo: 'D',
+    },
+    {
+      id: '5',
+      title: 'Project Manager',
+      company: 'BuildCorp',
+      location: 'Örebro',
+      industry: 'Lager & Logistik',
+      omfattning: 'Heltid',
+      salary: '500,000 - 650,000 SEK',
+      posted: '4 dagar sedan',
+      description: 'Leda byggprojekt från planering till färdigställande.',
+      requirements: ['PMP', 'Agile', 'Byggbransch', 'Ledarskap'],
+      featured: false,
+      urgent: false,
+      companyLogo: 'B',
+    },
+    {
+      id: '6',
+      title: 'DevOps Engineer',
+      company: 'CloudTech',
+      location: 'Örebro',
+      industry: 'Lager & Logistik',
+      omfattning: 'Heltid',
+      salary: '580,000 - 750,000 SEK',
+      posted: '6 timmar sedan',
+      description: 'Automatisera och optimera vår molninfrastruktur.',
+      requirements: ['AWS', 'Docker', 'Kubernetes', 'CI/CD'],
+      featured: true,
+      urgent: true,
+      companyLogo: 'C',
+    },
+    {
+      id: '7',
+      title: 'Sales Representative',
+      company: 'SalesForce Nordic',
+      location: 'Örebro',
+      industry: 'Lager & Logistik',
+      omfattning: 'Heltid',
+      salary: '380,000 - 480,000 SEK + provision',
+      posted: '2 dagar sedan',
+      description: 'Utveckla nya kundrelationer och öka försäljningen.',
+      requirements: ['B2B försäljning', 'CRM', 'Kommunikation', 'Måldriven'],
+      featured: false,
+      urgent: false,
+      companyLogo: 'S',
+    },
+    {
+      id: '8',
+      title: 'Frontend Developer',
+      company: 'WebStudio',
+      location: 'Örebro',
+      industry: 'Lager & Logistik',
+      omfattning: 'Deltid',
+      salary: '2,500 - 3,500 SEK/dag',
+      posted: '5 timmar sedan',
+      description: 'Utveckla responsiva webbapplikationer med modern teknik.',
+      requirements: ['React', 'CSS', 'JavaScript', 'Responsive design'],
+      featured: false,
+      urgent: false,
+      companyLogo: 'W',
+    },
+  ];
+
+  useEffect(() => {
+    // Simulera laddning
+    setTimeout(() => {
+      setJobs(mockJobs);
+      setFilteredJobs(mockJobs);
+      setIsLoading(false);
+    }, 1000);
+  }, []);
+
+  useEffect(() => {
+    let filtered = jobs;
+
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        job =>
+          job.title.toLowerCase().includes(term) ||
+          job.company.toLowerCase().includes(term) ||
+          job.description.toLowerCase().includes(term) ||
+          job.requirements.some(req => req.toLowerCase().includes(term))
+      );
+    }
+
+    if (selectedLocation) {
+      filtered = filtered.filter(job => job.location === selectedLocation);
+    }
+
+    if (selectedIndustry) {
+      filtered = filtered.filter(job => job.industry === selectedIndustry);
+    }
+
+    if (selectedOmfattning) {
+      filtered = filtered.filter(job => job.omfattning === selectedOmfattning);
+    }
+
+    if (showFeaturedOnly) {
+      filtered = filtered.filter(job => job.featured);
+    }
+
+    if (showUrgentOnly) {
+      filtered = filtered.filter(job => job.urgent);
+    }
+
+    setFilteredJobs(filtered);
+  }, [
+    searchTerm,
+    selectedLocation,
+    selectedIndustry,
+    selectedOmfattning,
+    showFeaturedOnly,
+    showUrgentOnly,
+    jobs,
+  ]);
 
   const clearFilters = () => {
     setSearchTerm('');
     setSelectedLocation('');
     setSelectedIndustry('');
     setSelectedOmfattning('');
+    setShowFeaturedOnly(false);
+    setShowUrgentOnly(false);
   };
 
-  const filteredJobs = useMemo(() => {
-    return allJobs.filter((job) => {
-      if (selectedLocation && job.location !== selectedLocation) return false;
-      if (selectedIndustry && job.industry !== selectedIndustry) return false;
-      if (selectedOmfattning && job.omfattning !== selectedOmfattning) return false;
-      if (searchTerm) {
-        const lc = searchTerm.toLowerCase();
-        if (!job.title.toLowerCase().includes(lc) && !job.company.toLowerCase().includes(lc)) {
-          return false;
-        }
-      }
-      return true;
-    });
-  }, [selectedLocation, selectedIndustry, selectedOmfattning, searchTerm, allJobs]);
+  const locations = [...new Set(jobs.map(job => job.location))];
+  const industries = [...new Set(jobs.map(job => job.industry))];
+  const omfattningar = [...new Set(jobs.map(job => job.omfattning))];
+
+  if (isLoading) {
+    return <LoadingPlaceholder />;
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 text-white">
-      <div className="pt-16">
+    <div className="relative">
+      <RichBackground />
+
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8">
+        {/* Diskret halo bakom header för subtilt liv */}
+        <div
+          className="absolute top-24 left-1/2 -translate-x-1/2 w-[600px] h-[160px] rounded-full blur-3xl opacity-10 pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 70%)',
+          }}
+        />
+
+        {/* Header */}
+        <JobsHeader filteredJobsCount={filteredJobs.length} />
+
+        {/* Search and Filters */}
         <JobsFilters
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
@@ -472,18 +505,22 @@ const JobsPage: React.FC = () => {
           setSelectedIndustry={setSelectedIndustry}
           selectedOmfattning={selectedOmfattning}
           setSelectedOmfattning={setSelectedOmfattning}
-          locations={['Stockholm', 'Göteborg', 'Remote']}
-          industries={['Tech', 'Design', 'Marketing']}
-          omfattningar={['Heltid', 'Deltid', 'Konsult']}
+          locations={locations}
+          industries={industries}
+          omfattningar={omfattningar}
           clearFilters={clearFilters}
         />
-        <div className="px-8 mb-6">
-          <div className="max-w-7xl mx-auto text-center">
-            <h2 className="text-3xl font-medium mb-2">Hitta Din Nästa Roll</h2>
-            <p className="text-white/70">{filteredJobs.length} aktiva tjänster</p>
+
+        {/* Jobs List / Empty */}
+        {filteredJobs.length === 0 ? (
+          <EmptyState clearFilters={clearFilters} />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-8 mb-16">
+            {filteredJobs.map(job => (
+              <JobCard key={job.id} job={job} />
+            ))}
           </div>
-        </div>
-        <JobsList jobs={filteredJobs} />
+        )}
       </div>
     </div>
   );
