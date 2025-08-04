@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { User, Briefcase, ArrowRight, Sparkles, Target, Zap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const AudienceTiles = () => {
+const JobsPage = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
@@ -470,4 +470,4 @@ const AudienceTiles = () => {
   );
 };
 
-export default AudienceTiles;
+export default JobsPage;
