@@ -10,7 +10,10 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
     <section id="how-it-works" className="py-24 px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
+          <h2
+            className="text-4xl md:text-5xl font-light text-white mb-6"
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+          >
             <span style={{ fontWeight: 400 }}>Vår </span>
             <span style={{ fontWeight: 500 }}>Process</span>
           </h2>
