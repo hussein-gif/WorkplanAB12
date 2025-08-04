@@ -69,6 +69,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
 
     const btn = buttonRef.current;
     const rect = btn.getBoundingClientRect();
+
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     const shouldOpenUp = spaceBelow < 160 && spaceAbove > spaceBelow;
@@ -79,7 +80,6 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
       : Math.min(220, spaceBelow - 10);
     setMaxHeight(computedMax);
 
-    // position relativt wrapper (wrapper är position: relative)
     const buttonOffsetTop = btn.offsetTop;
     const buttonOffsetLeft = btn.offsetLeft;
     const buttonHeight = btn.offsetHeight;
@@ -90,7 +90,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
       width: btn.offsetWidth,
       maxHeight: computedMax,
       overflowY: 'auto',
-      zIndex: 1000, // säkra att den ligger över allt
+      zIndex: 99999, // mycket högt så den alltid ligger över jobbkorten
       borderRadius: 12,
       background: 'rgba(31,42,72,0.95)',
       border: '1px solid rgba(255,255,255,0.15)',
@@ -98,6 +98,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
       fontSize: 14,
       paddingTop: 4,
       paddingBottom: 4,
+      transition: 'opacity .15s ease, transform .15s ease',
     };
 
     if (shouldOpenUp) {
