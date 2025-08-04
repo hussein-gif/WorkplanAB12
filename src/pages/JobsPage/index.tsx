@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import JobsHeader from './JobsHeader';
 import JobsFilters from './JobsFilters';
-// import JobsList from './JobsList'; // inte längre används
-import { MapPin, Clock } from 'lucide-react';
+import JobsList from './JobsList';
 
 export interface Job {
   id: string;
@@ -203,75 +202,6 @@ const EmptyState = ({ clearFilters }: { clearFilters: () => void }) => (
     </button>
   </div>
 );
-
-// Eget jobbkort som ersätter potentiellt problematiskt JobsList
-const JobCard: React.FC<{ job: Job }> = ({ job }) => {
-  const applyBy = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE');
-
-  return (
-    <div
-      className="relative rounded-2xl cursor-pointer p-5 flex flex-col justify-between min-h-[170px]"
-      style={{
-        background: 'rgba(255,255,255,0.03)',
-        backdropFilter: 'blur(18px)',
-        border: '1px solid rgba(255,255,255,0.12)',
-        boxShadow: '0 25px 60px -10px rgba(0,0,0,0.35)',
-      }}
-    >
-      <div>
-        <div className="flex items-start gap-4 mb-3">
-          <div
-            className="
-              w-14 h-14 rounded-xl
-              bg-gradient-to-br from-[#1f3f8b] to-[#3b6de8]
-              flex items-center justify-center
-              text-white font-bold text-lg shadow
-              flex-shrink-0
-            "
-          >
-            {job.companyLogo}
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3
-              className="text-lg font-bold mb-0"
-              style={{
-                fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                color: '#fff',
-              }}
-            >
-              {job.title}
-            </h3>
-            <div
-              className="text-sm"
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                color: 'rgba(255,255,255,0.75)',
-              }}
-            >
-              {job.company}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex text-xs gap-4 mb-2" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'Inter, sans-serif' }}>
-          <div className="flex items-center gap-1">
-            <MapPin size={12} />
-            <span>{job.location}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Clock size={12} />
-            <span>{job.omfattning}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex justify-between text-xs mt-4" style={{ color: 'rgba(255,255,255,0.6)', fontFamily: 'Inter, sans-serif' }}>
-        <div>{job.posted}</div>
-        <div>Ansök senast {applyBy}</div>
-      </div>
-    </div>
-  );
-};
 
 const JobsPage = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -480,10 +410,10 @@ const JobsPage = () => {
   }
 
   return (
-    <div className="relative">
+    <div className="min-h-screen relative">
       <RichBackground />
 
-      <div className="relative z-10 px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10">
         {/* Diskret halo bakom header för subtilt liv */}
         <div
           className="absolute top-24 left-1/2 -translate-x-1/2 w-[600px] h-[160px] rounded-full blur-3xl opacity-10 pointer-events-none"
@@ -515,11 +445,7 @@ const JobsPage = () => {
         {filteredJobs.length === 0 ? (
           <EmptyState clearFilters={clearFilters} />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-8 mb-16">
-            {filteredJobs.map(job => (
-              <JobCard key={job.id} job={job} />
-            ))}
-          </div>
+          <JobsList jobs={filteredJobs} />
         )}
       </div>
     </div>
