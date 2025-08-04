@@ -35,7 +35,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [openUpward, setOpenUpward] = useState(false);
-  const [maxHeight, setMaxHeight] = useState(280);
+  const [maxHeight, setMaxHeight] = useState(220); // cap lägre så den inte sträcker sig för långt
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [panelStyle, setPanelStyle] = useState<React.CSSProperties | null>(null);
@@ -72,12 +72,12 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
 
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
-    const shouldOpenUp = spaceBelow < 200 && spaceAbove > spaceBelow;
+    const shouldOpenUp = spaceBelow < 150 && spaceAbove > spaceBelow;
     setOpenUpward(shouldOpenUp);
 
     const computedMax = shouldOpenUp
-      ? Math.min(280, spaceAbove - 10)
-      : Math.min(280, spaceBelow - 10);
+      ? Math.min(220, spaceAbove - 10)
+      : Math.min(220, spaceBelow - 10);
     setMaxHeight(computedMax);
 
     // position relativt wrapper (wrapper är position: relative)
@@ -91,7 +91,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
       width: btn.offsetWidth,
       maxHeight: computedMax,
       overflow: 'auto',
-      zIndex: 50,
+      zIndex: 1000, // högre så den ligger över jobbkorten
       borderRadius: 12,
       background: 'rgba(31,42,72,0.95)',
       border: '1px solid rgba(255,255,255,0.15)',
