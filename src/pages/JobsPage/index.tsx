@@ -96,7 +96,22 @@ const JobsPage = () => {
   return (
     <section ref={sectionRef} className="relative py-32 overflow-hidden">
       <style>{`
-        @keyframes float-slow {
+        <JobsHeader filteredJobsCount={filteredJobs.length} />
+        <JobsFilters
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          selectedLocation={selectedLocation}
+          setSelectedLocation={setSelectedLocation}
+          selectedIndustry={selectedIndustry}
+          setSelectedIndustry={setSelectedIndustry}
+          selectedOmfattning={selectedOmfattning}
+          setSelectedOmfattning={setSelectedOmfattning}
+          locations={locations}
+          industries={industries}
+          omfattningar={omfattningar}
+          clearFilters={clearFilters}
+        />
+        <JobsList jobs={filteredJobs} />
           0%,100% { transform: translate(0,0); }
           50% { transform: translate(10px,6px); }
         }
