@@ -14,11 +14,13 @@ const SimpleHoverCard: React.FC<{
 }> = ({ children, className }) => (
   <div
     className={`
-      rounded-2xl transition-all duration-300 ease-out
+      relative z-0 rounded-2xl transition-all duration-300 ease-out
       hover:scale-105 hover:-translate-y-2 hover:shadow-2xl
+      hover:z-10
       ${className ?? ""}
       group
     `}
+    style={{ position: "relative" }}
   >
     {children}
   </div>
@@ -40,7 +42,12 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
               <Search size={24} className="text-white/40" />
             </div>
             <h3 className="text-xl text-white/80 mb-2">Inga tjänster hittades</h3>
-            <p className="text-white/60" style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}>Prova att ändra dina sökkriterier</p>
+            <p
+              className="text-white/60"
+              style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}
+            >
+              Prova att ändra dina sökkriterier
+            </p>
           </div>
         </div>
       </div>
@@ -51,7 +58,7 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
     <div className="px-8 pb-20">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-center">
-          {jobs.map(job => (
+          {jobs.map((job) => (
             <SimpleHoverCard
               key={job.id}
               className="
@@ -63,28 +70,33 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
               "
             >
               {/* Innehåll */}
-              <div 
+              <div
                 className="p-5 flex-1 flex flex-col"
                 onClick={() => handleJobClick(job.id)}
               >
                 <div className="flex items-start space-x-4 mb-4">
-                  <div className="
+                  <div
+                    className="
                       w-14 h-14 rounded-xl
                       bg-gradient-to-br from-gray-600 to-gray-800
                       flex items-center justify-center
                       text-white font-bold text-lg
                       shadow-lg flex-shrink-0
-                    ">
+                    "
+                  >
                     {job.companyLogo}
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3
                       className="text-lg text-gray-900 mb-2 leading-tight font-medium"
-                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                      style={{ fontFamily: "Zen Kaku Gothic Antique, sans-serif" }}
                     >
                       {job.title}
                     </h3>
-                    <div className="text-base text-gray-700" style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}>
+                    <div
+                      className="text-base text-gray-700"
+                      style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}
+                    >
                       {job.company}
                     </div>
                   </div>
@@ -93,31 +105,57 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
                 <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
                   <div className="flex items-center space-x-2">
                     <MapPin size={14} className="text-gray-400" />
-                    <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}>{job.location}</span>
+                    <span
+                      style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}
+                    >
+                      {job.location}
+                    </span>
                   </div>
                   <span className="w-1 h-1 bg-gray-400 rounded-full" />
                   <div className="flex items-center space-x-2">
                     <Clock size={14} className="text-gray-400" />
-                    <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}>{job.omfattning}</span>
+                    <span
+                      style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}
+                    >
+                      {job.omfattning}
+                    </span>
                   </div>
                   <span className="w-1 h-1 bg-gray-400 rounded-full" />
                   <div className="flex items-center space-x-2">
                     <Building size={14} className="text-gray-400" />
-                    <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}>{job.industry}</span>
+                    <span
+                      style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}
+                    >
+                      {job.industry}
+                    </span>
                   </div>
                 </div>
               </div>
 
               {/* Datum-footer */}
-              <div 
+              <div
                 className="p-5 pt-0 flex items-end justify-between"
                 onClick={() => handleJobClick(job.id)}
               >
-                <div className="text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}>{job.posted}</div>
+                <div
+                  className="text-sm text-gray-500"
+                  style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}
+                >
+                  {job.posted}
+                </div>
                 <div className="text-right text-sm text-gray-500">
-                  <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}>Apply by</div>
-                  <div className="text-gray-700" style={{ fontFamily: 'Inter, sans-serif', fontWeight: '400' }}>
-                    {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE')}
+                  <div
+                    style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}
+                  >
+                    Apply by
+                  </div>
+                  <div
+                    className="text-gray-700"
+                    style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}
+                  >
+                    {new Date(
+                      Date.now() + 14 * 24 * 60 * 60 * 1000
+                    ).toLocaleDateString("sv-SE")}
                   </div>
                 </div>
               </div>
