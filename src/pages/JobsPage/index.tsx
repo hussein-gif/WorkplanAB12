@@ -19,7 +19,7 @@ export interface Job {
   companyLogo: string;
 }
 
-// Rich, mörkblå bakgrund med parallax, glows, grid, vignette och noise
+// Mer diskret, professionell mörkblå bakgrund med subtil struktur och liv
 const RichBackground: React.FC = () => {
   const [mouse, setMouse] = useState({ x: 50, y: 50 });
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -37,128 +37,91 @@ const RichBackground: React.FC = () => {
   }, []);
 
   return (
-    <div ref={(el) => (containerRef.current = el)} className="absolute inset-0 pointer-events-none overflow-hidden">
+    <div
+      ref={(el) => (containerRef.current = el)}
+      className="absolute inset-0 pointer-events-none overflow-hidden"
+    >
       <style>{`
-        @keyframes floatSlow {
-          0%,100% { transform: translate(0,0); }
-          50% { transform: translate(8px,-6px); }
-        }
-        @keyframes floatSlowRev {
-          0%,100% { transform: translate(0,0); }
-          50% { transform: translate(-7px,5px); }
-        }
-        @keyframes pulseSmall {
-          0%,100% { opacity: 0.08; }
-          50% { opacity: 0.16; }
+        @keyframes fadePulse {
+          0%,100% { opacity: 0.03; }
+          50% { opacity: 0.07; }
         }
       `}</style>
 
-      {/* Basgradient: mörkblå utan lila */}
+      {/* Basgradient: djup mörkblå professionell ton */}
       <div
         className="absolute inset-0"
         style={{
-          background: 'linear-gradient(135deg, #0d1b35 0%, #112a5f 45%, #0d1b35 100%)',
+          background: 'linear-gradient(135deg, #0f233d 0%, #0c1d32 70%, #0f233d 100%)',
         }}
       />
 
-      {/* Parallax grid */}
+      {/* Subtil diagonal linje-textur för unikitet utan att dra uppmärksamhet */}
       <div
         className="absolute inset-0"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
+            repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 40px),
+            repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0 1px, transparent 1px 60px)
           `,
-          backgroundSize: '160px 160px',
-          transform: `translate(${(mouse.x - 50) * 0.08}px, ${(mouse.y - 50) * 0.08}px)`,
           mixBlendMode: 'overlay',
-          opacity: 0.85,
-        }}
-      />
-
-      {/* Flytande blå glows */}
-      <div
-        className="absolute w-[900px] h-[900px] rounded-full blur-3xl animate-floatSlow"
-        style={{
-          background: 'radial-gradient(circle at 30% 30%, rgba(59,130,246,0.35) 0%, transparent 70%)',
-          opacity: 0.25,
-          top: '-150px',
-          left: '-120px',
-          transform: `translate(${(mouse.x - 50) * 0.18}px, ${(mouse.y - 50) * 0.12}px)`,
-        }}
-      />
-      <div
-        className="absolute w-[700px] h-[700px] rounded-full blur-3xl animate-floatSlowRev"
-        style={{
-          background: 'radial-gradient(circle at 60% 50%, rgba(16,185,252,0.25) 0%, transparent 70%)',
-          opacity: 0.2,
-          right: '10%',
-          bottom: '120px',
-          transform: `translate(${(mouse.x - 50) * -0.15}px, ${(mouse.y - 50) * -0.08}px)`,
-        }}
-      />
-      <div
-        className="absolute w-[500px] h-[500px] rounded-full blur-2xl"
-        style={{
-          background: 'radial-gradient(circle at 50% 50%, rgba(125,211,252,0.12) 0%, transparent 75%)',
-          opacity: 0.15,
-          left: '15%',
-          top: '40%',
-          transform: `translate(${(mouse.x - 50) * 0.1}px, ${(mouse.y - 50) * 0.07}px)`,
-        }}
-      />
-
-      {/* Driftande soft overlay */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: 'radial-gradient(circle at 25% 35%, rgba(255,255,255,0.015) 0%, transparent 60%)',
-          mixBlendMode: 'soft-light',
-        }}
-      />
-
-      {/* Vignette */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.4) 100%)',
           pointerEvents: 'none',
+          transform: `translate(${(mouse.x - 50) * 0.02}px, ${(mouse.y - 50) * 0.02}px)`,
         }}
       />
 
-      {/* Subtil noise */}
-      <div
-        className="absolute inset-0"
-        aria-hidden="true"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")`,
-          mixBlendMode: 'overlay',
-          backgroundRepeat: 'repeat',
-        }}
-      />
-
-      {/* Pulserande små prickar */}
-      {Array.from({ length: 30 }).map((_, i) => {
-        const size = Math.random() * 2 + 1;
+      {/* Små subtila flytande rutor med lätt parallax och pulsering */}
+      {Array.from({ length: 15 }).map((_, i) => {
+        const size = Math.random() * 6 + 4; // 4–10px
         const top = Math.random() * 100;
         const left = Math.random() * 100;
-        const delay = Math.random() * 5;
+        const delay = Math.random() * 8;
         return (
           <div
             key={i}
-            className="absolute rounded-full"
+            className="absolute"
             style={{
               width: `${size}px`,
               height: `${size}px`,
               top: `${top}%`,
               left: `${left}%`,
-              backgroundColor: 'rgba(255,255,255,0.08)',
-              animation: `pulseSmall ${6 + Math.random() * 4}s ease-in-out ${delay}s infinite`,
+              backgroundColor: 'rgba(255,255,255,0.03)',
+              borderRadius: '2px',
+              transform: `translate(${(mouse.x - 50) * 0.018}px, ${(mouse.y - 50) * 0.018}px)`,
+              animation: `fadePulse ${10 + Math.random() * 10}s ease-in-out ${delay}s infinite`,
+              pointerEvents: 'none',
               mixBlendMode: 'screen',
             }}
           />
         );
       })}
+
+      {/* Mild halo bakom header/centralt fokus */}
+      <div
+        className="absolute top-24 left-1/2 -translate-x-1/2 w-[500px] h-[140px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 80%)',
+        }}
+      />
+
+      {/* Vignette för fokus mot mitten */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.45) 100%)',
+        }}
+      />
+
+      {/* Subtil noise-overlay för textur */}
+      <div
+        className="absolute inset-0"
+        aria-hidden="true"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E<filter id='n'%3E<feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")`,
+          mixBlendMode: 'overlay',
+          pointerEvents: 'none',
+        }}
+      />
     </div>
   );
 };
@@ -188,7 +151,13 @@ const LoadingPlaceholder = () => (
 // Tomtillstånd
 const EmptyState = ({ clearFilters }: { clearFilters: () => void }) => (
   <div className="py-20 text-center">
-    <h3 className="text-2xl text-white/80 mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}>
+    <h3
+      className="text-2xl text-white/80 mb-2"
+      style={{
+        fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+        fontWeight: 400,
+      }}
+    >
       Inga tjänster hittades
     </h3>
     <p className="text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
