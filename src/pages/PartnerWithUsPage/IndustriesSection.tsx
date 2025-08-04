@@ -11,7 +11,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2
-            className="text-4xl md:text-5xl text-white mb-6"
+            className="text-3xl md:text-4xl text-white mb-6"
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
               lineHeight: 1.1,
@@ -21,7 +21,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
             <span style={{ fontWeight: 500 }}>Lager &amp; Logistik</span>
           </h2>
           <p
-            className="text-xl text-white/70 max-w-2xl mx-auto"
+            className="text-lg text-white/70 max-w-2xl mx-auto"
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
