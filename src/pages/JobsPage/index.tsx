@@ -56,7 +56,7 @@ const RichBackground: React.FC = () => {
         }}
       />
 
-      {/* Subtil diagonal linje-textur för unikitet utan att dra uppmärksamhet */}
+      {/* Subtil diagonal linje-textur för unikhet utan att dra uppmärksamhet */}
       <div
         className="absolute inset-0"
         style={{
@@ -317,6 +317,15 @@ const JobsPage = () => {
   }, []);
 
   useEffect(() => {
+    console.log('Filter state changed:', {
+      searchTerm,
+      selectedLocation,
+      selectedIndustry,
+      selectedOmfattning,
+      showFeaturedOnly,
+      showUrgentOnly
+    });
+
     let filtered = jobs;
 
     if (searchTerm) {
@@ -350,6 +359,7 @@ const JobsPage = () => {
       filtered = filtered.filter(job => job.urgent);
     }
 
+    console.log('Filtered jobs count:', filtered.length);
     setFilteredJobs(filtered);
   }, [
     searchTerm,
@@ -379,7 +389,7 @@ const JobsPage = () => {
   }
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800">
       <RichBackground />
 
       <div className="relative z-10">
