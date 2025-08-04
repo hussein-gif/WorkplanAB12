@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { User, Briefcase, ArrowRight, Sparkles, Target, Zap } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import JobsHeader from './JobsHeader';
+import JobsFilters from './JobsFilters';
+import JobsList from './JobsList';
 
 const JobsPage = () => {
   const navigate = useNavigate();
