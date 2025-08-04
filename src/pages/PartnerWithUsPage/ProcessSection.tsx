@@ -13,7 +13,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
             Så går vår process till
           </h2>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
+          <p className="text-base text-white/70 max-w-2xl mx-auto">
             En tydlig 5-stegsprocess som ger er rätt kompetens – snabbt, tryggt och utan överraskningar.
           </p>
         </div>
