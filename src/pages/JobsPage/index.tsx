@@ -94,7 +94,8 @@ const JobsPage = () => {
   };
 
   return (
-    <ProfessionalBackground>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800">
+      <div className="relative z-10">
       <JobsHeader filteredJobsCount={filteredJobs.length} />
       <JobsFilters
         searchTerm={searchTerm}
@@ -111,7 +112,8 @@ const JobsPage = () => {
         clearFilters={clearFilters}
       />
       <JobsList jobs={filteredJobs} />
-    </ProfessionalBackground>
+      </div>
+    </div>
   );
 };
 
