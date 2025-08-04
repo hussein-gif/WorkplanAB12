@@ -112,19 +112,14 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                   </p>
                 </div>
                 
-                {/* Bottom Label with rounded pill */}
+                {/* Bottom Label */}
                 <div className="flex justify-start">
                   <div
-                    className="uppercase tracking-wider"
+                    className="text-xs font-medium uppercase tracking-wider"
                     style={{
                       fontFamily: 'Inter, sans-serif',
-                      fontSize: '12px',
                       fontWeight: 500,
-                      backgroundColor: 'rgba(255,255,255,0.9)',
-                      color: '#1f2937',
-                      padding: '4px 12px',
-                      borderRadius: '12px',
-                      letterSpacing: '0.05em',
+                      color: 'rgba(255,255,255,0.5)',
                     }}
                   >
                     {feature.label}
