@@ -120,7 +120,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             boxShadow: '0 30px 80px -10px rgba(0,0,0,0.5)',
             paddingTop: 4,
             paddingBottom: 4,
-            zIndex: 500, // ligger över jobbkorten (som har z-10) men under en navbar med t.ex. z-1000
+            zIndex: 400, // ligger över jobbkorten men under navbaren (sätt navbaren till t.ex. z-50 eller högre)
             fontFamily: 'Inter, sans-serif',
             transition: 'opacity .15s ease, transform .15s ease',
           }}
