@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import ReactDOM from 'react-dom';
 import { Search, MapPin, Building, Clock, X, ChevronDown } from 'lucide-react';
 
 interface JobsFiltersProps {
@@ -39,12 +38,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
   const [maxHeight, setMaxHeight] = useState(280);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const [panelPos, setPanelPos] = useState<{
-    top?: number;
-    bottom?: number;
-    left: number;
-    width: number;
-  } | null>(null);
+  const [panelStyle, setPanelStyle] = useState<React.CSSProperties | null>(null);
 
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
@@ -55,90 +49,64 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
+    const handleResize = () => setOpen(false);
+
     window.addEventListener('mousedown', handleOutside);
     window.addEventListener('keydown', handleEsc);
-    window.addEventListener('resize', () => setOpen(false));
+    window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('mousedown', handleOutside);
       window.removeEventListener('keydown', handleEsc);
-      window.removeEventListener('resize', () => setOpen(false));
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   useLayoutEffect(() => {
-    if (!open || !buttonRef.current) {
-      setPanelPos(null);
+    if (!open || !buttonRef.current || !wrapperRef.current) {
+      setPanelStyle(null);
       return;
     }
-    const rect = buttonRef.current.getBoundingClientRect();
+
+    const btn = buttonRef.current;
+    const rect = btn.getBoundingClientRect();
+
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     const shouldOpenUp = spaceBelow < 200 && spaceAbove > spaceBelow;
     setOpenUpward(shouldOpenUp);
+
     const computedMax = shouldOpenUp
       ? Math.min(280, spaceAbove - 10)
       : Math.min(280, spaceBelow - 10);
     setMaxHeight(computedMax);
-    setPanelPos({
-      left: rect.left,
-      width: rect.width,
-      top: shouldOpenUp ? undefined : rect.bottom + 6,
-      bottom: shouldOpenUp ? window.innerHeight - rect.top + 6 : undefined,
-    });
-  }, [open]);
 
-  const panel = open && panelPos
-    ? ReactDOM.createPortal(
-        <div
-          role="listbox"
-          aria-label={label}
-          className="bg-[#1f2a48] border border-white/20 rounded-xl shadow-xl ring-1 ring-black ring-opacity-5 overflow-auto text-sm"
-          style={{
-            position: 'fixed',
-            left: panelPos.left,
-            width: panelPos.width,
-            top: panelPos.top,
-            bottom: panelPos.bottom,
-            maxHeight: `${maxHeight}px`,
-            zIndex: 20000,
-            transformOrigin: openUpward ? 'bottom' : 'top',
-            transition: 'opacity .15s ease, transform .15s ease',
-          } as React.CSSProperties}
-        >
-          {options.length > 0 ? (
-            options.map((opt) => (
-              <div
-                key={opt}
-                role="option"
-                aria-selected={value === opt}
-                onClick={() => {
-                  onChange(opt);
-                  setOpen(false);
-                }}
-                className={`
-                  px-4 py-2 flex items-center justify-between cursor-pointer truncate
-                  ${value === opt ? 'bg-white/10 font-medium' : 'hover:bg-white/10'}
-                  text-white
-                `}
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                <span>{opt}</span>
-                {value === opt && (
-                  <span className="text-indigo-300" aria-hidden="true">
-                    ✓
-                  </span>
-                )}
-              </div>
-            ))
-          ) : (
-            <div className="px-4 py-2 text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Inga alternativ
-            </div>
-          )}
-        </div>,
-        document.body
-      )
-    : null;
+    // position relativt wrapper (wrapper är position: relative)
+    const buttonOffsetTop = btn.offsetTop;
+    const buttonOffsetLeft = btn.offsetLeft;
+    const buttonHeight = btn.offsetHeight;
+
+    const style: React.CSSProperties = {
+      position: 'absolute',
+      left: buttonOffsetLeft,
+      width: btn.offsetWidth,
+      maxHeight: computedMax,
+      overflow: 'auto',
+      zIndex: 50,
+      borderRadius: 12,
+      background: 'rgba(31,42,72,0.95)',
+      border: '1px solid rgba(255,255,255,0.15)',
+      boxShadow: '0 30px 80px -10px rgba(0,0,0,0.5)',
+      fontSize: 14,
+    };
+
+    if (shouldOpenUp) {
+      style.bottom = wrapperRef.current.clientHeight - buttonOffsetTop + 6;
+    } else {
+      style.top = buttonOffsetTop + buttonHeight + 6;
+    }
+
+    setPanelStyle(style);
+  }, [open]);
 
   return (
     <div className="relative" ref={(el) => (wrapperRef.current = el)}>
@@ -173,7 +141,41 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             />
           </div>
         </button>
-        {panel}
+
+        {open && panelStyle && (
+          <div role="listbox" aria-label={label} className="text-sm overflow-auto" style={panelStyle}>
+            {options.length > 0 ? (
+              options.map((opt) => (
+                <div
+                  key={opt}
+                  role="option"
+                  aria-selected={value === opt}
+                  onClick={() => {
+                    onChange(opt);
+                    setOpen(false);
+                  }}
+                  className={`
+                    px-4 py-2 flex items-center justify-between cursor-pointer truncate
+                    ${value === opt ? 'bg-white/10 font-medium' : 'hover:bg-white/10'}
+                    text-white
+                  `}
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span>{opt}</span>
+                  {value === opt && (
+                    <span className="text-indigo-300" aria-hidden="true">
+                      ✓
+                    </span>
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="px-4 py-2 text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Inga alternativ
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
