@@ -19,7 +19,7 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
               lineHeight: 1.1,
             }}
           >
-            Vårt löfte
+            Vårt Löfte
           </h3>
         </div>
 
