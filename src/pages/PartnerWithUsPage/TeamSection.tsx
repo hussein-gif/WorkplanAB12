@@ -15,19 +15,24 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
               fontWeight: 400, // regular
               lineHeight: 1.1,
+              margin: 0,
             }}
           >
             Teamet bakom Workplan
           </h2>
           <p
-            className="text-xl text-white/70 max-w-2xl mx-auto"
+            className="text-xl text-white/70 mx-auto"
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300, // light
+              lineHeight: 1.4,
+              maxWidth: '640px',
               margin: 0,
+              fontStyle: 'normal',
             }}
           >
-            Två dedikerade kontaktpersoner som tar ansvar från första behovsanalys till uppföljning – utan mellanhänder.
+            Två dedikerade kontaktpersoner som tar ansvar från första behovsanalys till uppföljning – utan
+            mellanhänder.
           </p>
         </div>
 
