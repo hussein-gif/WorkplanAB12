@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { Search, MapPin, Building, Clock, X, ChevronDown } from 'lucide-react';
 
 interface JobsFiltersProps {
@@ -35,139 +36,152 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [openUpward, setOpenUpward] = useState(false);
-  const [maxHeight, setMaxHeight] = useState(220);
+  const [computedMaxHeight, setComputedMaxHeight] = useState(220);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const wrapperRef = useRef<HTMLDivElement | null>(null);
-  const [panelStyle, setPanelStyle] = useState<React.CSSProperties | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+
+  const updatePosition = () => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const shouldOpenUp = spaceBelow < 160 && spaceAbove > spaceBelow;
+    setOpenUpward(shouldOpenUp);
+
+    const maxHeight = shouldOpenUp
+      ? Math.min(220, spaceAbove - 10)
+      : Math.min(220, spaceBelow - 10);
+    setComputedMaxHeight(maxHeight);
+
+    if (panelRef.current) {
+      const style: Partial<CSSStyleDeclaration> = {
+        width: `${rect.width}px`,
+        left: `${window.scrollX + rect.left}px`,
+        // up or down
+      };
+      if (shouldOpenUp) {
+        style.top = `${window.scrollY + rect.top - maxHeight - 6}px`;
+      } else {
+        style.top = `${window.scrollY + rect.bottom + 6}px`;
+      }
+      Object.assign(panelRef.current.style, style);
+    }
+  };
+
+  useEffect(() => {
+    if (open) {
+      updatePosition();
+    }
+  }, [open]);
 
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+      if (
+        panelRef.current &&
+        buttonRef.current &&
+        !panelRef.current.contains(e.target as Node) &&
+        !buttonRef.current.contains(e.target as Node)
+      ) {
         setOpen(false);
       }
     };
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
-    const handleResize = () => setOpen(false);
-
+    const handleScrollResize = () => {
+      if (open) {
+        requestAnimationFrame(updatePosition);
+      }
+    };
     window.addEventListener('mousedown', handleOutside);
     window.addEventListener('keydown', handleEsc);
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('scroll', handleScrollResize, true);
+    window.addEventListener('resize', handleScrollResize);
     return () => {
       window.removeEventListener('mousedown', handleOutside);
       window.removeEventListener('keydown', handleEsc);
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('scroll', handleScrollResize, true);
+      window.removeEventListener('resize', handleScrollResize);
     };
-  }, []);
-
-  useLayoutEffect(() => {
-    if (!open || !buttonRef.current || !wrapperRef.current) {
-      setPanelStyle(null);
-      return;
-    }
-
-    const btn = buttonRef.current;
-    const rect = btn.getBoundingClientRect();
-
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
-    const shouldOpenUp = spaceBelow < 160 && spaceAbove > spaceBelow;
-    setOpenUpward(shouldOpenUp);
-
-    const computedMax = shouldOpenUp
-      ? Math.min(220, spaceAbove - 10)
-      : Math.min(220, spaceBelow - 10);
-    setMaxHeight(computedMax);
-
-    const buttonOffsetTop = btn.offsetTop;
-    const buttonOffsetLeft = btn.offsetLeft;
-    const buttonHeight = btn.offsetHeight;
-
-    const style: React.CSSProperties = {
-      position: 'absolute',
-      left: buttonOffsetLeft,
-      width: btn.offsetWidth,
-      maxHeight: computedMax,
-      overflowY: 'auto',
-      zIndex: 99999, // mycket högt så den alltid ligger över jobbkorten
-      borderRadius: 12,
-      background: 'rgba(31,42,72,0.95)',
-      border: '1px solid rgba(255,255,255,0.15)',
-      boxShadow: '0 30px 80px -10px rgba(0,0,0,0.5)',
-      fontSize: 14,
-      paddingTop: 4,
-      paddingBottom: 4,
-      transition: 'opacity .15s ease, transform .15s ease',
-    };
-
-    if (shouldOpenUp) {
-      style.bottom = wrapperRef.current.clientHeight - buttonOffsetTop + 6;
-    } else {
-      style.top = buttonOffsetTop + buttonHeight + 6;
-    }
-
-    setPanelStyle(style);
   }, [open]);
 
-  return (
-    <div className="relative" ref={(el) => (wrapperRef.current = el)}>
-      <div className="relative">
-        <button
+  const panel = open
+    ? ReactDOM.createPortal(
+        <div
+          ref={(el) => (panelRef.current = el)}
+          role="listbox"
           aria-label={label}
-          type="button"
-          onClick={() => setOpen((o) => !o)}
-          ref={(el) => (buttonRef.current = el)}
-          className="w-full flex items-center justify-between gap-2 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm cursor-pointer appearance-none focus:outline-none transition duration-200"
-          style={{ fontFamily: 'Inter, sans-serif' }}
+          className="text-sm overflow-auto"
+          style={{
+            position: 'absolute',
+            maxHeight: computedMaxHeight,
+            borderRadius: 12,
+            background: 'rgba(31,42,72,0.95)',
+            border: '1px solid rgba(255,255,255,0.15)',
+            boxShadow: '0 30px 80px -10px rgba(0,0,0,0.5)',
+            paddingTop: 4,
+            paddingBottom: 4,
+            zIndex: 99999,
+            fontFamily: 'Inter, sans-serif',
+            transition: 'opacity .15s ease, transform .15s ease',
+            // width / top / left set in updatePosition
+          }}
         >
-          <div className="flex items-center gap-2 truncate">
-            <Icon size={16} className="text-white/40 flex-shrink-0" />
-            <span className="truncate" style={{ fontWeight: value ? 500 : 400 }}>
-              {value || placeholder || label}
-            </span>
-          </div>
-          <ChevronDown
-            size={16}
-            className={`text-white/60 transition-transform duration-200 ${open ? 'rotate-180' : 'rotate-0'}`}
-          />
-        </button>
-
-        {open && panelStyle && (
-          <div role="listbox" aria-label={label} style={panelStyle}>
-            {options.length > 0 ? (
-              options.map((opt) => (
-                <div
-                  key={opt}
-                  role="option"
-                  aria-selected={value === opt}
-                  onClick={() => {
-                    onChange(opt);
-                    setOpen(false);
-                  }}
-                  className={`
-                    px-4 py-2 flex items-center justify-between cursor-pointer truncate
-                    ${value === opt ? 'bg-white/10 font-medium' : 'hover:bg-white/10'}
-                    text-white
-                  `}
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  <span>{opt}</span>
-                  {value === opt && (
-                    <span className="text-indigo-300" aria-hidden="true">
-                      ✓
-                    </span>
-                  )}
-                </div>
-              ))
-            ) : (
-              <div className="px-4 py-2 text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
-                Inga alternativ
+          {options.length > 0 ? (
+            options.map((opt) => (
+              <div
+                key={opt}
+                role="option"
+                aria-selected={value === opt}
+                onClick={() => {
+                  onChange(opt);
+                  setOpen(false);
+                }}
+                className={`
+                  px-4 py-2 flex items-center justify-between cursor-pointer truncate
+                  ${value === opt ? 'bg-white/10 font-medium' : 'hover:bg-white/10'}
+                  text-white
+                `}
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                <span>{opt}</span>
+                {value === opt && (
+                  <span className="text-indigo-300" aria-hidden="true">
+                    ✓
+                  </span>
+                )}
               </div>
-            )}
-          </div>
-        )}
-      </div>
+            ))
+          ) : (
+            <div className="px-4 py-2 text-white/60">Inga alternativ</div>
+          )}
+        </div>,
+        document.body
+      )
+    : null;
+
+  return (
+    <div className="relative">
+      <button
+        aria-label={label}
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        ref={(el) => (buttonRef.current = el)}
+        className="w-full flex items-center justify-between gap-2 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm cursor-pointer appearance-none focus:outline-none transition duration-200"
+        style={{ fontFamily: 'Inter, sans-serif' }}
+      >
+        <div className="flex items-center gap-2 truncate">
+          <Icon size={16} className="text-white/40 flex-shrink-0" />
+          <span className="truncate" style={{ fontWeight: value ? 500 : 400 }}>
+            {value || placeholder || label}
+          </span>
+        </div>
+        <ChevronDown
+          size={16}
+          className={`text-white/60 transition-transform duration-200 ${open ? 'rotate-180' : 'rotate-0'}`}
+        />
+      </button>
+      {panel}
     </div>
   );
 };
