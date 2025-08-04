@@ -57,46 +57,36 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
 
   return (
     <div className="relative" ref={(el) => (wrapperRef.current = el)}>
-      <label
-        className="block text-white/80 text-sm mb-2"
-        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
-      >
-        {label}
-      </label>
       <div className="relative">
         <button
+          aria-label={label}
           type="button"
-          aria-haspopup="listbox"
-          aria-expanded={open}
           onClick={() => setOpen((o) => !o)}
-          className="w-full flex items-center justify-between pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm cursor-pointer appearance-none focus:bg-white/15 focus:border-white/40 transition-all duration-200 relative"
+          className="w-full flex items-center justify-between gap-2 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm cursor-pointer appearance-none focus:outline-none transition duration-200"
+          style={{ fontFamily: 'Inter, sans-serif' }}
         >
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-            <Icon size={16} className="text-white/40" />
+          <div className="flex items-center gap-2 truncate">
+            <Icon size={16} className="text-white/40 flex-shrink-0" />
+            <span className="truncate" style={{ fontWeight: value ? 500 : 400 }}>
+              {value || placeholder || label}
+            </span>
           </div>
-          <span
-            className="truncate text-left"
-            style={{ fontFamily: 'Inter, sans-serif', fontWeight: value ? 500 : 400 }}
-          >
-            {value || placeholder || `Alla ${label.toLowerCase()}`}
-          </span>
-          <div className="ml-2 flex items-center">
-            <ChevronDown
-              size={16}
-              className={`transition-transform duration-200 ${open ? 'rotate-180' : 'rotate-0'} text-white/60`}
-            />
-          </div>
+          <ChevronDown
+            size={16}
+            className={`text-white/60 transition-transform duration-200 ${open ? 'rotate-180' : 'rotate-0'}`}
+          />
         </button>
 
         {open && (
           <div
             role="listbox"
             aria-label={label}
-            className="mt-1 bg-[#1f2a48] border border-white/20 rounded-xl shadow-lg overflow-auto text-sm"
+            className="mt-2 bg-[#1f2a48] border border-white/20 rounded-xl shadow-lg overflow-auto text-sm"
             style={{
               maxHeight: 220,
-              zIndex: 50,
               fontFamily: 'Inter, sans-serif',
+              transition: 'opacity .2s ease, transform .2s ease',
+              zIndex: 10,
             }}
           >
             {options.length > 0 ? (
@@ -154,7 +144,6 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
   return (
     <div className="px-8 mb-12">
       <div className="max-w-7xl mx-auto">
-        {/* Filterpanel med dropdowns + valda filter inline */}
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 mb-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
             <div className="lg:col-span-2">
@@ -188,22 +177,26 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
               />
             </div>
             <div className="lg:col-span-5">
-              <label
-                className="block text-white/80 text-sm mb-2"
-                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
-              >
-                Sök
-              </label>
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
-                <input
-                  type="text"
-                  placeholder="Sök efter tjänster, företag, färdigheter..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                />
+                <div className="flex items-center gap-2 mb-1">
+                  <span
+                    className="text-white/80 text-sm"
+                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
+                  >
+                    Sök
+                  </span>
+                </div>
+                <div className="relative">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <input
+                    type="text"
+                    placeholder="Sök efter tjänster, företag, färdigheter..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    style={{ fontFamily: 'Inter, sans-serif' }}
+                  />
+                </div>
               </div>
             </div>
             <div className="lg:col-span-1 flex items-center" />
