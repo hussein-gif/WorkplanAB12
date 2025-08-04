@@ -16,17 +16,19 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
               fontWeight: 400,
               lineHeight: 1.1,
+              margin: 0,
             }}
           >
             <span style={{ fontWeight: 400 }}>Vår </span>
             <span style={{ fontWeight: 500 }}>Process</span>
           </h2>
           <p
-            className="text-xl text-white/70 max-w-2xl mx-auto"
+            className="text-base text-white/70 max-w-2xl mx-auto"
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
               lineHeight: 1.4,
+              margin: 0,
             }}
           >
             En tydlig 5-stegsprocess som ger er rätt kompetens – snabbt, tryggt och utan överraskningar.
