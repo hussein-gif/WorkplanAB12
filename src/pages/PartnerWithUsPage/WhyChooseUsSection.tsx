@@ -50,7 +50,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
             Workplan - Företagens Val
           </h2>
           <p
-            className="text-xl text-white/70 max-w-2xl mx-auto"
+            className="text-lg text-white/70 max-w-2xl mx-auto"
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300
