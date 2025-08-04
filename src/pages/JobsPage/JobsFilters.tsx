@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Search, MapPin, Building, Clock, X, ChevronDown } from 'lucide-react';
 
 interface JobsFiltersProps {
@@ -34,7 +34,11 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
   placeholder,
 }) => {
   const [open, setOpen] = useState(false);
+  const [openUpward, setOpenUpward] = useState(false);
+  const [maxHeight, setMaxHeight] = useState(220);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
+  const [panelStyle, setPanelStyle] = useState<React.CSSProperties | null>(null);
 
   useEffect(() => {
     const handleOutside = (e: MouseEvent) => {
@@ -45,15 +49,65 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
+    const handleResize = () => setOpen(false);
+
     window.addEventListener('mousedown', handleOutside);
     window.addEventListener('keydown', handleEsc);
-    window.addEventListener('resize', () => setOpen(false));
+    window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('mousedown', handleOutside);
       window.removeEventListener('keydown', handleEsc);
-      window.removeEventListener('resize', () => setOpen(false));
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
+
+  useLayoutEffect(() => {
+    if (!open || !buttonRef.current || !wrapperRef.current) {
+      setPanelStyle(null);
+      return;
+    }
+
+    const btn = buttonRef.current;
+    const rect = btn.getBoundingClientRect();
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    const shouldOpenUp = spaceBelow < 160 && spaceAbove > spaceBelow;
+    setOpenUpward(shouldOpenUp);
+
+    const computedMax = shouldOpenUp
+      ? Math.min(220, spaceAbove - 10)
+      : Math.min(220, spaceBelow - 10);
+    setMaxHeight(computedMax);
+
+    // position relativt wrapper (wrapper är position: relative)
+    const buttonOffsetTop = btn.offsetTop;
+    const buttonOffsetLeft = btn.offsetLeft;
+    const buttonHeight = btn.offsetHeight;
+
+    const style: React.CSSProperties = {
+      position: 'absolute',
+      left: buttonOffsetLeft,
+      width: btn.offsetWidth,
+      maxHeight: computedMax,
+      overflowY: 'auto',
+      zIndex: 1000, // säkra att den ligger över allt
+      borderRadius: 12,
+      background: 'rgba(31,42,72,0.95)',
+      border: '1px solid rgba(255,255,255,0.15)',
+      boxShadow: '0 30px 80px -10px rgba(0,0,0,0.5)',
+      fontSize: 14,
+      paddingTop: 4,
+      paddingBottom: 4,
+    };
+
+    if (shouldOpenUp) {
+      style.bottom = wrapperRef.current.clientHeight - buttonOffsetTop + 6;
+    } else {
+      style.top = buttonOffsetTop + buttonHeight + 6;
+    }
+
+    setPanelStyle(style);
+  }, [open]);
 
   return (
     <div className="relative" ref={(el) => (wrapperRef.current = el)}>
@@ -62,6 +116,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
           aria-label={label}
           type="button"
           onClick={() => setOpen((o) => !o)}
+          ref={(el) => (buttonRef.current = el)}
           className="w-full flex items-center justify-between gap-2 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm cursor-pointer appearance-none focus:outline-none transition duration-200"
           style={{ fontFamily: 'Inter, sans-serif' }}
         >
@@ -77,18 +132,8 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
           />
         </button>
 
-        {open && (
-          <div
-            role="listbox"
-            aria-label={label}
-            className="mt-2 bg-[#1f2a48] border border-white/20 rounded-xl shadow-lg overflow-auto text-sm"
-            style={{
-              maxHeight: 220,
-              fontFamily: 'Inter, sans-serif',
-              transition: 'opacity .2s ease, transform .2s ease',
-              zIndex: 10,
-            }}
-          >
+        {open && panelStyle && (
+          <div role="listbox" aria-label={label} style={panelStyle}>
             {options.length > 0 ? (
               options.map((opt) => (
                 <div
@@ -115,7 +160,9 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
                 </div>
               ))
             ) : (
-              <div className="px-4 py-2 text-white/60">Inga alternativ</div>
+              <div className="px-4 py-2 text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Inga alternativ
+              </div>
             )}
           </div>
         )}
