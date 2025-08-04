@@ -9,7 +9,10 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
     <section className="py-24 px-8 bg-white/5">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-medium text-white mb-4">
+          <h2
+            className="text-4xl md:text-5xl font-medium text-white mb-4"
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+          >
             Teamet bakom Workplan
           </h2>
           <p
@@ -32,7 +35,7 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
               Medgrundare & Affärsansvarig
             </p>
           </div>
-          
+
           <div className="text-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8">
             <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-2xl">
               AM
