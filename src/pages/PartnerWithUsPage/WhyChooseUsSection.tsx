@@ -50,10 +50,14 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
             Workplan - Företagens Val
           </h2>
           <p
-            className="text-lg text-white/70 max-w-2xl mx-auto"
+            className="max-w-2xl mx-auto"
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontWeight: 300
+              fontWeight: 300,
+              fontSize: '1rem',
+              color: 'rgba(255,255,255,0.7)',
+              marginTop: '0.25rem',
+              lineHeight: 1.4,
             }}
           >
             Fyra löften som gör bemanning enkel, träffsäker och trygg – från första kontakt till avslutat uppdrag.
@@ -100,7 +104,8 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       fontSize: '14px',
-                      fontWeight: 400
+                      fontWeight: 400,
+                      margin: 0,
                     }}
                   >
                     {feature.description}
