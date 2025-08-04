@@ -21,18 +21,14 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
             Teamet bakom Workplan
           </h2>
           <p
-            className="text-xl text-white/70 mx-auto"
+            className="text-xl text-white/70 max-w-2xl mx-auto leading-relaxed font-light"
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300, // light
-              lineHeight: 1.4,
-              maxWidth: '640px',
               margin: 0,
-              fontStyle: 'normal',
             }}
           >
-            Två dedikerade kontaktpersoner som tar ansvar från första behovsanalys till uppföljning – utan
-            mellanhänder.
+            Två dedikerade kontaktpersoner som tar ansvar från första behovsanalys till uppföljning – utan mellanhänder.
           </p>
         </div>
 
