@@ -16,10 +16,10 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
     <section id="kontakt-form" className="py-24 px-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-light text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '400' }}>
             Berätta om ert bemanningsbehov
           </h2>
-          <p className="text-white/70">
+          <p className="text-xl text-white/60 max-w-3xl mx-auto" style={{ fontFamily: 'Inter, sans-serif' }}>
             Fyll i formuläret – vi återkommer inom 24 timmar.
           </p>
         </div>

@@ -29,11 +29,12 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         {/* Main Heading (only one line) */}
         <h1
           className={`
-            text-5xl md:text-6xl lg:text-7xl text-white mb-6 tracking-tight leading-[0.95]
+            text-5xl md:text-6xl lg:text-7xl xl:text-8xl
+            font-light text-white leading-tight tracking-tight
             transition-all duration-1000 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
           `}
-          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
+          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 300 }}
         >
           Fyll kompetensgapet
         </h1>
@@ -41,11 +42,11 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         {/* Updated Subheading */}
         <p
           className={`
-            text-lg md:text-xl text-white/85 mb-12 font-light leading-relaxed max-w-4xl mx-auto
+            text-base md:text-lg text-white/80 italic leading-relaxed max-w-2xl mb-12
             transition-all duration-1000 delay-200 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}
-          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
+          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontStyle: 'italic' }}
         >
           Skräddarsytt, snabbt och säkert.
         </p>

@@ -10,7 +10,7 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
     <section aria-labelledby="vart-lofte" className="py-8 px-8 bg-white/5">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
-          <h3 id="vart-lofte" className="text-2xl font-light text-white mb-8">
+          <h3 id="vart-lofte" className="text-2xl font-bold text-white mb-6" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '400' }}>
             Vårt löfte
           </h3>
         </div>

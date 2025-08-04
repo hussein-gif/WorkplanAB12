@@ -10,10 +10,10 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
     <section id="how-it-works" className="py-24 px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '400' }}>
             Så går vår process till
           </h2>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
+          <p className="text-xl text-white/60 max-w-3xl mx-auto" style={{ fontFamily: 'Inter, sans-serif' }}>
             En tydlig 5-stegsprocess som ger er rätt kompetens – snabbt, tryggt och utan överraskningar.
           </p>
         </div>

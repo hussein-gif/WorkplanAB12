@@ -9,10 +9,10 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
     <section className="py-24 px-8 bg-white/5">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '400' }}>
             Teamet bakom Workplan
           </h2>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
+          <p className="text-xl text-white/60 max-w-3xl mx-auto" style={{ fontFamily: 'Inter, sans-serif' }}>
             Två dedikerade kontaktpersoner som tar ansvar från första behovsanalys till uppföljning – utan mellanhänder.
           </p>
         </div>
