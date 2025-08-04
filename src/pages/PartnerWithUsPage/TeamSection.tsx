@@ -9,26 +9,10 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
     <section className="py-24 px-8 bg-white/5">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2
-            className="text-4xl md:text-5xl text-white mb-6"
-            style={{
-              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-              fontWeight: 400, // regular
-              lineHeight: 1.1,
-              margin: 0,
-            }}
-          >
+          <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
             Teamet bakom Workplan
           </h2>
-          <p
-            className="text-xl text-white/70 max-w-2xl mx-auto"
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 300, // light
-              margin: 0,
-              lineHeight: 1.4,
-            }}
-          >
+          <p className="text-xl text-white/70 max-w-2xl mx-auto">
             Två dedikerade kontaktpersoner som tar ansvar från första behovsanalys till uppföljning – utan mellanhänder.
           </p>
         </div>
@@ -45,7 +29,7 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
               Medgrundare & Affärsansvarig
             </p>
           </div>
-
+          
           <div className="text-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8">
             <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-2xl">
               AM
