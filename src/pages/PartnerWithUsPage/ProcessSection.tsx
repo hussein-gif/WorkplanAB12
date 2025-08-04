@@ -23,7 +23,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             <span style={{ fontWeight: 500 }}>Process</span>
           </h2>
           <p
-            className="text-base text-white/70 max-w-2xl mx-auto"
+            className="text-base text-white/70 max-w-2xl mx-auto mt-2"
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
