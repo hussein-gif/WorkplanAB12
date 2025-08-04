@@ -16,7 +16,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
     <section id="kontakt-form" className="py-24 px-8">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-light text-white mb-4">
+          <h2 className="text-4xl md:text-6xl font-light text-white mb-4">
             Berätta om ert bemanningsbehov
           </h2>
           <p className="text-white/70">
@@ -93,7 +93,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             <div>
               <label htmlFor="epost" className="block text-white/80 text-sm font-medium mb-2">
-                E‑post *
+                E-post *
               </label>
               <input
                 type="email"
