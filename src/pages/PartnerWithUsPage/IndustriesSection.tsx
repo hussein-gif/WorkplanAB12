@@ -34,7 +34,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         <div className="max-w-2xl mx-auto mb-8">
           <div className="card p-8 text-center">
             <div className="icon-bg mb-6 mx-auto">
-              <Truck size={28} style={{ color: '#abaafe' }} />
+              <Truck size={28} className="text-white" />
             </div>
             <div>
               <h3
@@ -112,7 +112,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         .icon-bg {
           width: 4rem;
           height: 4rem;
-          background: #90d541;
+          background: #ABA176;
           border-radius: 0.5rem;
           display: flex;
           align-items: center;
