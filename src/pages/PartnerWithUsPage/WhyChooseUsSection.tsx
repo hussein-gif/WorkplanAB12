@@ -39,17 +39,34 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
 
   return (
     <section
-      className="py-24 px-8"
+      className="py-24 px-8 relative overflow-hidden"
       style={{
-        background:
-          'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(245,245,245,0.95) 100%)',
+        background: 'linear-gradient(135deg, #0f172a, #111827 75%)',
       }}
     >
-      <div className="max-w-6xl mx-auto">
+      {/* Subtle noise texture */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "url('data:image/svg+xml,%3Csvg width=\"120\" height=\"120\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"n\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.8\" numOctaves=\"2\" stitchTiles=\"stitch\"/%3E%3C/filter%3E%3Crect width=\"100%25\" height=\"100%25\" filter=\"url(%23n)\" opacity=\"0.04\"/%3E%3C/svg%3E')",
+          backgroundRepeat: 'repeat',
+          mixBlendMode: 'overlay',
+        }}
+      />
+      {/* Soft vignette */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.6) 100%)',
+        }}
+      />
+
+      <div className="relative z-10 max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2
             className={`
-              text-4xl md:text-5xl text-gray-900 mb-6
+              text-4xl md:text-5xl text-white mb-6
               transition-all duration-300
             `}
             style={{
@@ -65,7 +82,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
               fontSize: '1rem',
-              color: 'rgba(55, 65, 81, 0.8)',
+              color: 'rgba(255,255,255,0.75)',
               marginTop: '0.25rem',
               lineHeight: 1.4,
             }}
@@ -91,15 +108,13 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: `url(${feature.backgroundImage})` }}
               />
-
-              {/* Light overlay */}
-              <div className="absolute inset-0 bg-white/50 group-hover:bg-white/30 transition-all duration-200" />
-
+              {/* Dark overlay */}
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-200" />
               {/* Content */}
               <div className="relative z-10 h-full p-5 flex flex-col justify-between">
                 <div>
                   <h3
-                    className="text-gray-900 mb-3 leading-tight"
+                    className="text-white mb-3 leading-tight"
                     style={{
                       fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                       fontSize: '20px',
@@ -109,7 +124,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                     {feature.title}
                   </h3>
                   <p
-                    className="text-gray-700 leading-relaxed"
+                    className="text-white leading-relaxed"
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       fontSize: '14px',
@@ -126,7 +141,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       fontWeight: 500,
-                      color: 'rgba(55,65,81,0.7)',
+                      color: 'rgba(255,255,255,0.7)',
                     }}
                   >
                     {feature.label}
