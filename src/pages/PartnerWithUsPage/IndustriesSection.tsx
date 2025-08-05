@@ -80,7 +80,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         </div>
       </div>
 
-      {/* Clean background with wave pattern */}
+      {/* Updated Clean background with wave pattern */}
       <style>{`
         .industries-section {
           position: relative;
@@ -113,7 +113,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         .icon-bg {
           width: 4rem;
           height: 4rem;
-          background: #BAFD7D;
+          background: #72ab32;
           border-radius: 0.5rem;
           display: flex;
           align-items: center;
@@ -121,7 +121,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         }
         .contact-note {
           font-family: 'Inter, sans-serif';
-          font-weight: 500;
+          font-weight: 400;
           text-transform: uppercase;
           font-size: 0.75rem;
           color: rgba(255,255,255,0.5);
