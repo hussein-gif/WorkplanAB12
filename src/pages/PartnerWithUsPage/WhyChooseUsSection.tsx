@@ -39,55 +39,42 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
 
   return (
     <section className="py-24 px-8 relative overflow-hidden">
-      {/* Creative Animated Dark Background */}
+      {/* Light professional background with subtle motif */}
       <div
-        className="absolute inset-0 pointer-events-none overflow-hidden"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'linear-gradient(135deg, #0b1523 0%, #11263b 75%)',
+          background: 'linear-gradient(180deg, #ffffff 0%, #f5f7fa 100%)',
         }}
       />
-      {/* Moving Hex‐Grid Overlay */}
-      <svg
-        className="absolute inset-0 w-full h-full opacity-10 animate-pulse-slow"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <pattern id="hex" width="60" height="52" patternUnits="userSpaceOnUse">
-            <path
-              d="M30 0 L60 15 L60 45 L30 60 L0 45 L0 15 Z"
-              stroke="rgba(255,255,255,0.05)"
-              strokeWidth="1"
-              fill="none"
-            />
-          </pattern>
-          <linearGradient id="gradientLine" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="rgba(59,130,246,0.1)" />
-            <stop offset="100%" stopColor="rgba(16,185,129,0.1)" />
-          </linearGradient>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#hex)" />
-        <line
-          x1="0" y1="0"
-          x2="200%" y2="200%"
-          stroke="url(#gradientLine)"
-          strokeWidth="2"
-          className="animate-slide"
-        />
-      </svg>
+      {/* Subtle geometric pattern */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-10"
+        style={{
+          backgroundImage: `
+            radial-gradient(circle at 20% 20%, rgba(0,0,0,0.02) 1px, transparent 1px),
+            radial-gradient(circle at 80% 80%, rgba(0,0,0,0.02) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
+        }}
+      />
+      {/* Soft floating blobs */}
+      <div className="absolute -top-32 -left-32 w-80 h-80 bg-blue-100 rounded-full opacity-20 blur-2xl animate-float-slow" />
+      <div className="absolute bottom-[-4rem] right-1/4 w-72 h-72 bg-green-100 rounded-full opacity-15 blur-2xl animate-float-slow-reverse" />
+
       <style>{`
-        @keyframes slide {
-          0% { transform: translate(-50%, -50%); }
-          100% { transform: translate(50%, 50%); }
+        @keyframes float-slow {
+          0%,100% { transform: translate(0,0); }
+          50% { transform: translate(8px,-8px); }
         }
-        .animate-slide {
-          animation: slide 30s linear infinite;
+        @keyframes float-slow-reverse {
+          0%,100% { transform: translate(0,0); }
+          50% { transform: translate(-8px,8px); }
         }
-        @keyframes pulseSlow {
-          0%,100% { opacity: 0.08; }
-          50% { opacity: 0.12; }
+        .animate-float-slow {
+          animation: float-slow 25s ease-in-out infinite;
         }
-        .animate-pulse-slow {
-          animation: pulseSlow 10s ease-in-out infinite;
+        .animate-float-slow-reverse {
+          animation: float-slow-reverse 30s ease-in-out infinite;
         }
       `}</style>
 
@@ -95,7 +82,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
         <div className="text-center mb-16">
           <h2
             className={`
-              text-3xl sm:text-4xl font-light text-white mb-6
+              text-3xl sm:text-4xl font-light text-gray-900 mb-6
               transition-all duration-300
             `}
             style={{
@@ -111,7 +98,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
               fontSize: '1rem',
-              color: 'rgba(255,255,255,0.7)',
+              color: 'rgba(0,0,0,0.7)',
               marginTop: '0.25rem',
               lineHeight: 1.4,
             }}
@@ -137,13 +124,13 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: `url(${feature.backgroundImage})` }}
               />
-              {/* Dark Overlay */}
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/0 transition-all duration-200" />
+              {/* White overlay */}
+              <div className="absolute inset-0 bg-white/30 group-hover:bg-white/20 transition-all duration-200" />
               {/* Content */}
               <div className="relative z-10 h-full p-5 flex flex-col justify-between">
                 <div>
                   <h3
-                    className="text-white mb-3 leading-tight"
+                    className="text-gray-900 mb-3 leading-tight"
                     style={{
                       fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                       fontSize: '20px',
@@ -153,7 +140,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                     {feature.title}
                   </h3>
                   <p
-                    className="text-white leading-relaxed"
+                    className="text-gray-800 leading-relaxed"
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       fontSize: '14px',
@@ -168,11 +155,11 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 {/* Bottom Label */}
                 <div className="flex justify-start">
                   <div
-                    className="text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 group-hover:bg-white/15 transition-all duration-200"
+                    className="text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full bg-gray-100/50 group-hover:bg-gray-100/70 transition-all duration-200"
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       fontWeight: 500,
-                      color: 'rgba(255,255,255,0.8)',
+                      color: '#1f2937',
                     }}
                   >
                     {feature.label}
