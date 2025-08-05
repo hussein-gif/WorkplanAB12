@@ -84,6 +84,7 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
             <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
               <CheckCircle size={20} className="text-green-400" />
             </div>
+            <span>
               Snabb återkoppling – svar inom 24 timmar
             </span>
           </li>
@@ -91,6 +92,7 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
             <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
               <CheckCircle size={20} className="text-green-400" />
             </div>
+            <span>
               Transparent prissättning – inga dolda avgifter
             </span>
           </li>
@@ -98,6 +100,7 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
             <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center">
               <CheckCircle size={20} className="text-green-400" />
             </div>
+            <span>
               Personlig kontaktperson – samma rådgivare genom hela uppdraget
             </span>
           </li>
