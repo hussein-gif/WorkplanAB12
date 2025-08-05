@@ -81,26 +81,20 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         </div>
       </div>
 
-      {/* Simple animated background */}
+      {/* Clean gradient background with subtle accents */}
       <style>{`
         .industries-section {
           position: relative;
           overflow: hidden;
-          background: linear-gradient(135deg, #0a0f1f, #1a2238);
+          background: linear-gradient(135deg, #0f1b2a 0%, #1a2e4c 100%);
         }
         .industries-section::before {
           content: '';
           position: absolute;
-          top: -50%; left: -50%;
-          width: 200%; height: 200%;
-          background: repeating-linear-gradient(
-            45deg,
-            rgba(255,255,255,0.03) 0,
-            rgba(255,255,255,0.03) 1px,
-            transparent 1px,
-            transparent 10px
-          );
-          animation: movePattern 20s linear infinite;
+          inset: 0;
+          background:
+            radial-gradient(circle at top left, rgba(16,185,129,0.2), transparent 60%),
+            radial-gradient(circle at bottom right, rgba(59,130,246,0.2), transparent 60%);
           z-index: 0;
         }
         .industries-section .content {
@@ -109,21 +103,18 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         }
         .card {
           background: rgba(255,255,255,0.05);
-          backdrop-filter: blur(12px);
-          border: 1px solid rgba(255,255,255,0.15);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(255,255,255,0.1);
           border-radius: 1rem;
         }
         .icon-bg {
-          width: 4rem; height: 4rem;
-          background: linear-gradient(135deg, #10B981, #34D399);
-          border-radius: 0.75rem;
+          width: 4rem;
+          height: 4rem;
+          background: linear-gradient(135deg, #10B981, #3B82F6);
+          border-radius: 0.5rem;
           display: flex;
           align-items: center;
           justify-content: center;
-        }
-        @keyframes movePattern {
-          from { transform: translate(0,0); }
-          to { transform: translate(50%,50%); }
         }
       `}</style>
     </section>
