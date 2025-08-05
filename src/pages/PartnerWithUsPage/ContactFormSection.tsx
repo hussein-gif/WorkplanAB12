@@ -292,7 +292,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
         .contact-form-section {
           position: relative;
           background-color: #08132B;
-          background-image: radial-gradient(circle at top center, rgba(255,255,255,0.1), transparent 70%);
+          background-image: radial-gradient(circle at bottom center, rgba(255,255,255,0.1), transparent 70%);
         }
       `}</style>
     </section>
