@@ -86,7 +86,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         .industries-section {
           position: relative;
           overflow: hidden;
-          background-color: #0b1e3f;
+          background-color: #08132b;
         }
         .industries-section::before {
           content: '';
