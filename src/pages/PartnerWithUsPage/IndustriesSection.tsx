@@ -34,7 +34,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         <div className="max-w-2xl mx-auto mb-8">
           <div className="card p-8 text-center">
             <div className="icon-bg mb-6 mx-auto">
-              <Truck size={28} className="text-white" />
+              <Truck size={28} style={{ color: '#abaafe' }} />
             </div>
             <div>
               <h3
@@ -80,7 +80,6 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         </div>
       </div>
 
-      {/* Updated Clean background with wave pattern */}
       <style>{`
         .industries-section {
           position: relative;
