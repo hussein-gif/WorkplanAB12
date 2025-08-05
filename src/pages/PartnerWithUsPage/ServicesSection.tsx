@@ -35,17 +35,6 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
         background: 'linear-gradient(135deg, #0d1b2a 0%, #1a2a47 100%)'
       }}
     >
-      {/* Glow animation styles */}
-      <style>{`
-        @keyframes glow {
-          0%, 100% { box-shadow: 0 0 8px rgba(255,255,255,0.6); }
-          50% { box-shadow: 0 0 16px rgba(255,255,255,0.8); }
-        }
-        .glow-effect {
-          animation: glow 2s ease-in-out infinite;
-        }
-      `}</style>
-
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-16">
@@ -76,7 +65,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        {/* Frosted-Glass Cards with Neon-Blue Glow */}
+        {/* Frosted-Glass Cards with Static Blue Glow on Highlights */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {services.map((service, idx) => (
             <div
@@ -139,9 +128,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                 {service.body}
               </p>
 
-              {/* Highlight Pill pinned to bottom */}
+              {/* Highlight Pill pinned to bottom with static blue glow */}
               <div
-                className="glow-effect"
                 style={{
                   position: 'absolute',
                   bottom: '1rem',
@@ -150,18 +138,18 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                   fontWeight: 500,
                   fontSize: '0.75rem',
                   textTransform: 'uppercase',
-                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  backgroundColor: 'rgba(42,140,255,0.2)',
                   padding: '0.25rem 0.75rem',
                   borderRadius: '9999px',
-                  color: '#FFFFFF'
+                  color: '#FFFFFF',
+                  boxShadow: '0 0 12px rgba(42,140,255,0.7)'
                 }}
               >
                 {service.highlight}
               </div>
 
-              {/* Right-pointing arrow in a circle */}
+              {/* Right-pointing arrow in a circle with static blue glow */}
               <div
-                className="glow-effect"
                 style={{
                   position: 'absolute',
                   bottom: '1rem',
@@ -171,8 +159,9 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: 'rgba(255,255,255,0.2)',
-                  borderRadius: '50%'
+                  backgroundColor: 'rgba(42,140,255,0.2)',
+                  borderRadius: '50%',
+                  boxShadow: '0 0 12px rgba(42,140,255,0.7)'
                 }}
               >
                 <svg
