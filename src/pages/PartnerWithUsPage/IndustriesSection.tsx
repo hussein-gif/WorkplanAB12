@@ -108,6 +108,21 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         </div>
       </div>
 
+      {/* Wave Transition to Next Section */}
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-0" style={{ transform: 'translateY(1px)' }}>
+        <svg
+          className="relative block w-full h-12"
+          xmlns="http://www.w3.org/2000/svg"
+          preserveAspectRatio="none"
+          viewBox="0 0 1200 120"
+        >
+          <path
+            d="M0,0 C300,100 900,0 1200,100 L1200,120 L0,120 Z"
+            fill="#ffffff"
+          />
+        </svg>
+      </div>
+
       {/* Fade-in animation keyframes */}
       <style>{`
         @keyframes fadeInUp {
