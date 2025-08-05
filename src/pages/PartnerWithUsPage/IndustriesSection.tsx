@@ -112,7 +112,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         .icon-bg {
           width: 4rem;
           height: 4rem;
-          background: #082B0A;
+          background: #98AB76;
           border-radius: 0.5rem;
           display: flex;
           align-items: center;
