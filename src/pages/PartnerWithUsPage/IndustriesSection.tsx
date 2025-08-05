@@ -32,7 +32,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         </div>
 
         <div className="max-w-2xl mx-auto mb-8">
-          <div className="card p-8 text-center">
+          <div className="card p-8 text-center flex flex-col justify-between h-full">
             <div className="icon-bg mb-6 mx-auto">
               <Truck size={28} className="text-white" />
             </div>
@@ -56,7 +56,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
                 Orderplock, truckförare, lageradministration, skiftledare m.fl. Vi täcker bemanningsbehoven över hela flödet.
               </p>
             </div>
-            <div className="contact-note">
+            <div className="contact-note mt-auto">
               Snabb bemanning &amp; personlig kontakt
             </div>
           </div>
@@ -112,7 +112,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         .icon-bg {
           width: 4rem;
           height: 4rem;
-          background: #568324;
+          background: #4CAF50;
           border-radius: 0.5rem;
           display: flex;
           align-items: center;
@@ -120,11 +120,10 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         }
         .contact-note {
           font-family: 'Inter, sans-serif';
-          font-weight: 400;
-          text-transform: uppercase;
+          font-weight: 500;
+          text-transform: none;
           font-size: 0.75rem;
-          color: rgba(255,255,255,0.5);
-          margin-top: 1rem;
+          color: rgba(255,255,255,0.8);
         }
       `}</style>
     </section>
