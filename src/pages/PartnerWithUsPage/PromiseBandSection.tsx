@@ -9,10 +9,14 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
   return (
     <section
       aria-labelledby="vart-lofte"
-      className="py-8 px-4 bg-white rounded-xl shadow-lg"
+      className="relative py-8 px-4 bg-white rounded-xl shadow-lg overflow-hidden"
       style={{ fontFamily: 'Inter, sans-serif' }}
     >
-      <div className="max-w-4xl mx-auto text-center font-medium">
+      {/* Shine overlays for glossy effect */}
+      <div className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-br from-white/50 via-white/10 to-transparent transform -skew-x-12 opacity-50 pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-white/40 to-transparent transform skew-y-12 opacity-30 pointer-events-none" />
+
+      <div className="relative max-w-4xl mx-auto text-center font-medium">
         <h3
           id="vart-lofte"
           className="text-2xl md:text-3xl text-black font-medium mb-6"
