@@ -6,14 +6,14 @@ interface TeamSectionProps {
 
 const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
   return (
-    <section className="py-24 px-8 bg-white/5">
-      <div className="max-w-6xl mx-auto">
+    <section className="team-section">
+      <div className="content max-w-6xl mx-auto py-24 px-8">
         <div className="text-center mb-16">
           <h2
             className="text-4xl md:text-5xl font-normal text-white mb-4"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
           >
-            Teamet bakom Workplan
+            Teamet bakom <br />Workplan
           </h2>
           <p
             className="text-base text-white/70 max-w-2xl mx-auto leading-normal font-light"
@@ -24,31 +24,66 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <div className="text-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8">
-            <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-2xl">
-              JA
+          <div className="card p-8 text-center">
+            <div className="avatar bg-gradient-to-br from-blue-500 to-purple-600 mb-4 mx-auto">
+              <span className="text-white font-bold text-2xl">JA</span>
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2 break-words max-w-full">
+            <h3 className="text-xl font-semibold text-white mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
               Jawad Abbas
             </h3>
-            <p className="text-blue-400 font-medium break-words max-w-full">
+            <p className="text-blue-400 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
               Medgrundare & Affärsansvarig
             </p>
           </div>
-          
-          <div className="text-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8">
-            <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-2xl">
-              AM
+          <div className="card p-8 text-center">
+            <div className="avatar bg-gradient-to-br from-blue-500 to-purple-600 mb-4 mx-auto">
+              <span className="text-white font-bold text-2xl">AM</span>
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2 break-words max-w-full">
+            <h3 className="text-xl font-semibold text-white mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
               Arvin Mahmoudi
             </h3>
-            <p className="text-blue-400 font-medium break-words max-w-full">
+            <p className="text-blue-400 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
               Medgrundare & Leveranschef
             </p>
           </div>
         </div>
       </div>
+
+      {/* Reuse background styling from IndustriesSection */}
+      <style>{`
+        .team-section {
+          position: relative;
+          overflow: hidden;
+          background-color: #08132b;
+        }
+        .team-section::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><g fill='none' stroke='rgba(255,255,255,0.1)' stroke-width='2'><path d='M0 200 Q200 100 400 200 T800 200' /><path d='M0 300 Q200 200 400 300 T800 300' /><path d='M0 400 Q200 300 400 400 T800 400' /></g></svg>");
+          background-size: cover;
+          opacity: 0.4;
+          z-index: 0;
+        }
+        .team-section .content {
+          position: relative;
+          z-index: 1;
+        }
+        .card {
+          background: rgba(255,255,255,0.05);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 1rem;
+        }
+        .avatar {
+          width: 6rem;
+          height: 6rem;
+          border-radius: 9999px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      `}</style>
     </section>
   );
 };
