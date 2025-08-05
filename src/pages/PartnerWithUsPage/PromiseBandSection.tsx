@@ -9,7 +9,7 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
   return (
     <section
       aria-labelledby="vart-lofte"
-      className="py-8 px-4 bg-[#204CAB] rounded-xl shadow-lg"
+      className="py-8 px-4 bg-[#112859] rounded-xl shadow-lg"
     >
       <div className="max-w-4xl mx-auto text-center">
         <h3
