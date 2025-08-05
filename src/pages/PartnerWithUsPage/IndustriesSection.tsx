@@ -57,7 +57,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
               </p>
             </div>
             <div className="contact-note mt-auto">
-              Snabb bemanning &amp; personlig kontakt
+              SNABB BEMANNING &amp; PERSONLIG KONTAKT
             </div>
           </div>
         </div>
@@ -121,7 +121,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         .contact-note {
           font-family: 'Inter, sans-serif';
           font-weight: 500;
-          text-transform: none;
+          text-transform: uppercase;
           font-size: 0.75rem;
           color: rgba(255,255,255,0.8);
         }
