@@ -1,11 +1,4 @@
-import React from 'react';
-import { Truck } from 'lucide-react';
-
-interface IndustriesSectionProps {
-  isVisible: boolean;
-}
-
-const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
+tion: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
   return (
     <section className="relative py-24 px-8 overflow-hidden bg-gray-900">
       {/* Dynamic Dark Background with Subtle Patterns */}
