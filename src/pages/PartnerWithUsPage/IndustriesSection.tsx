@@ -1,4 +1,11 @@
-tion: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
+import React from 'react';
+import { Truck } from 'lucide-react';
+
+interface IndustriesSectionProps {
+  isVisible: boolean;
+}
+
+const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
   return (
     <section className="relative py-24 px-8 overflow-hidden bg-gray-900">
       {/* Dynamic Dark Background with Subtle Patterns */}
@@ -12,12 +19,23 @@ tion: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
             <pattern id="dots" patternUnits="userSpaceOnUse" width="20" height="20">
               <circle cx="2" cy="2" r="2" fill="rgba(255,255,255,0.03)" />
             </pattern>
+            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#10B981" stopOpacity="0.6" />
+              <stop offset="50%" stopColor="#059669" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#047857" stopOpacity="0.6" />
+            </linearGradient>
+            <filter id="blurWave">
+              <feGaussianBlur stdDeviation="30" />
+            </filter>
           </defs>
           {/* Soft gradient blobs */}
           <circle cx="15%" cy="25%" r="300" fill="url(#darkBlob)" />
           <circle cx="85%" cy="75%" r="350" fill="url(#darkBlob)" />
           {/* Dot pattern overlay */}
           <rect width="100%" height="100%" fill="url(#dots)" />
+          {/* Neon wave curve */}
+          <path d="M0,80 C300,20 900,140 1200,80" stroke="url(#waveGradient)" strokeWidth="8" fill="none" filter="url(#blurWave)" />
+          <path d="M0,100 C300,50 900,160 1200,100" stroke="url(#waveGradient)" strokeWidth="4" fill="none" filter="url(#blurWave)" />
         </svg>
       </div>
 
