@@ -8,34 +8,63 @@ interface IndustriesSectionProps {
 const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
   return (
     <section className="relative py-24 px-8 overflow-hidden bg-gray-900">
-      {/* Dynamic Dark Background with Subtle Patterns */}
+      {/* Futuristic Dark Background with Neon Waveforms */}
       <div className="absolute inset-0 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <radialGradient id="darkBlob" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="rgba(30,41,59,0.6)" />
+            {/* Gradient blobs for depth */}
+            <radialGradient id="blob1" cx="20%" cy="30%" r="40%">
+              <stop offset="0%" stopColor="rgba(16,185,129,0.4)" />
               <stop offset="100%" stopColor="transparent" />
             </radialGradient>
-            <pattern id="dots" patternUnits="userSpaceOnUse" width="20" height="20">
-              <circle cx="2" cy="2" r="2" fill="rgba(255,255,255,0.03)" />
-            </pattern>
-            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#10B981" stopOpacity="0.6" />
-              <stop offset="50%" stopColor="#059669" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#047857" stopOpacity="0.6" />
+            <radialGradient id="blob2" cx="80%" cy="70%" r="50%">
+              <stop offset="0%" stopColor="rgba(59,130,246,0.3)" />
+              <stop offset="100%" stopColor="transparent" />
+            </radialGradient>
+
+            {/* Neon gradient for waves */}
+            <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#10B981" stopOpacity="0.8" />
+              <stop offset="50%" stopColor="#34D399" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#047857" stopOpacity="0.8" />
             </linearGradient>
-            <filter id="blurWave">
-              <feGaussianBlur stdDeviation="30" />
+
+            {/* Glow filter */}
+            <filter id="glow" width="200%" height="200%" x="-50%" y="-50%">
+              <feGaussianBlur stdDeviation="30" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
             </filter>
           </defs>
-          {/* Soft gradient blobs */}
-          <circle cx="15%" cy="25%" r="300" fill="url(#darkBlob)" />
-          <circle cx="85%" cy="75%" r="350" fill="url(#darkBlob)" />
-          {/* Dot pattern overlay */}
-          <rect width="100%" height="100%" fill="url(#dots)" />
-          {/* Neon wave curve */}
-          <path d="M0,80 C300,20 900,140 1200,80" stroke="url(#waveGradient)" strokeWidth="8" fill="none" filter="url(#blurWave)" />
-          <path d="M0,100 C300,50 900,160 1200,100" stroke="url(#waveGradient)" strokeWidth="4" fill="none" filter="url(#blurWave)" />
+
+          {/* Subtle blobs */}
+          <circle cx="20%" cy="30%" r="300" fill="url(#blob1)" />
+          <circle cx="80%" cy="70%" r="400" fill="url(#blob2)" />
+
+          {/* Layered neon waves */}
+          <path
+            d="M0,80 C300,20 800,120 1200,60"
+            stroke="url(#neonGrad)"
+            strokeWidth="12"
+            fill="none"
+            filter="url(#glow)"
+          />
+          <path
+            d="M0,100 C300,60 800,140 1200,80"
+            stroke="url(#neonGrad)"
+            strokeWidth="8"
+            fill="none"
+            filter="url(#glow)"
+          />
+          <path
+            d="M0,120 C300,100 800,160 1200,100"
+            stroke="url(#neonGrad)"
+            strokeWidth="4"
+            fill="none"
+            filter="url(#glow)"
+          />
         </svg>
       </div>
 
