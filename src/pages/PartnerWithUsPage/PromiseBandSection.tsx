@@ -10,15 +10,12 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
     <section
       aria-labelledby="vart-lofte"
       className="py-8 px-4 bg-white rounded-xl shadow-lg"
+      style={{ fontFamily: 'Inter, sans-serif' }}
     >
-      <div className="max-w-4xl mx-auto text-center">
+      <div className="max-w-4xl mx-auto text-center font-medium">
         <h3
           id="vart-lofte"
-          className="text-2xl md:text-3xl text-black font-light mb-6"
-          style={{
-            fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-            lineHeight: 1.2,
-          }}
+          className="text-2xl md:text-3xl text-black font-medium mb-6"
         >
           Vårt Löfte
         </h3>
@@ -30,7 +27,7 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
             'Personlig kontaktperson – samma rådgivare genom hela uppdraget',
           ].map((text, idx) => (
             <li key={idx} className="flex flex-col items-center space-y-2">
-              <CheckCircle size={20} className="text-black mb-1" />
+              <CheckCircle size={20} className="text-[#3c5c17] mb-1" />
               <p className="text-black text-sm md:text-base">
                 {text}
               </p>
