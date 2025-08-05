@@ -17,22 +17,38 @@ interface ContactFormSectionProps {
     gdprAccept: boolean;
   };
   handleFormSubmit: (e: React.FormEvent) => void;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  handleInputChange: (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => void;
 }
 
 const ContactFormSection: React.FC<ContactFormSectionProps> = ({
   formData,
   handleFormSubmit,
-  handleInputChange
+  handleInputChange,
 }) => {
   return (
-    <section id="kontakt-form" className="py-24 px-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: '400' }}>
-            Kom igång med er bemanning
+    <section id="kontakt-form" className="contact-form-section">
+      <div className="max-w-4xl mx-auto py-24 px-8">
+        <div className="text-center mb-12">
+          <h2
+            className="text-4xl sm:text-5xl text-white mb-2"
+            style={{
+              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+              fontWeight: 400,
+            }}
+          >
+            Börja Bemanna
           </h2>
-          <p className="text-xl text-white/60 max-w-3xl mx-auto" style={{ fontFamily: 'Inter, sans-serif', fontWeight: '300' }}>
+          <p
+            className="text-base text-white/60 mb-8"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 300,
+            }}
+          >
             Berätta om ert behov så återkommer vi med ett skräddarsytt förslag.
           </p>
         </div>
@@ -46,7 +62,10 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   Förnamn *
                 </label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <User
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
+                    size={18}
+                  />
                   <input
                     type="text"
                     name="fornamn"
@@ -63,7 +82,10 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   Efternamn *
                 </label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <User
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
+                    size={18}
+                  />
                   <input
                     type="text"
                     name="efternamn"
@@ -77,14 +99,17 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               </div>
             </div>
 
-            {/* Company Information */}
+            {/* Company and Role */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">
                   Företag *
                 </label>
                 <div className="relative">
-                  <Building className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <Building
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
+                    size={18}
+                  />
                   <input
                     type="text"
                     name="foretag"
@@ -111,14 +136,17 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               </div>
             </div>
 
-            {/* Contact Information */}
+            {/* Contact Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">
                   E-post *
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <Mail
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
+                    size={18}
+                  />
                   <input
                     type="email"
                     name="epost"
@@ -135,7 +163,10 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   Telefon
                 </label>
                 <div className="relative">
-                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <Phone
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
+                    size={18}
+                  />
                   <input
                     type="tel"
                     name="telefon"
@@ -242,55 +273,28 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 className="w-4 h-4 text-blue-600 border-white/30 rounded focus:ring-blue-500 bg-white/10 mt-1"
               />
               <label className="text-white/70 text-sm leading-relaxed">
-                Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att kunna återkomma med information om bemanningslösningar. Läs mer i vår{' '}
-                <a 
-                  href="/privacy" 
-                  className="text-blue-400 hover:text-blue-300 underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  integritetspolicy
-                </a>
-                .
-              </label>
+                Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att kunna återkomma med information om bemanningslösningar. Läs mer i vår </label>
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
-              className="
-                w-full py-4 px-6
-                bg-blue-600 text-white rounded-xl
-                font-semibold text-lg tracking-wide
-                hover:bg-blue-700
-                transition-all duration-300
-                shadow-lg hover:shadow-xl
-                hover:scale-[1.02]
-                flex items-center justify-center space-x-2
-              "
+              className="w-full py-4 px-6 bg-blue-600 text-white rounded-xl font-semibold text-lg tracking-wide hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center space-x-2"
             >
               <Send size={20} />
               <span>Skicka förfrågan</span>
             </button>
           </form>
         </div>
-
-        {/* Additional Contact Info */}
-        <div className="text-center mt-12">
-          <p className="text-white/70 text-lg">
-            Föredrar du att ringa?{' '}
-            <a 
-              href="tel:+46812345678"
-              className="text-blue-400 hover:text-blue-300 font-semibold transition-colors"
-            >
-              +46 8 123 456 78
-            </a>
-          </p>
-          <p className="text-white/60 text-sm mt-2">
-            Vi återkommer inom 24 timmar med ett skräddarsytt förslag.
-          </p>
-        </div>
       </div>
+
+      <style>{`
+        .contact-form-section {
+          position: relative;
+          background-color: #08132B;
+          background-image: radial-gradient(circle at top center, rgba(255,255,255,0.1), transparent 70%);
+        }
+      `}</style>
     </section>
   );
 };
