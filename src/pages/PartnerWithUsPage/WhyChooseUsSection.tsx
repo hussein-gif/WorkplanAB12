@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Truck, Clock, Shield, Users } from 'lucide-react';
 
 interface WhyChooseUsSectionProps {
@@ -37,57 +37,84 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
     },
   ];
 
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = canvas.offsetHeight;
+
+    const particles: { x: number; y: number; size: number; speedX: number; speedY: number }[] = [];
+    const particleCount = 50;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 5 + 2,
+        speedX: Math.random() * 0.5 - 0.25,
+        speedY: Math.random() * 0.5 - 0.25,
+      });
+    }
+
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(59, 130, 246, 0.1)';
+      particles.forEach((particle) => {
+        particle.x += particle.speedX;
+        particle.y += particle.speedY;
+
+        if (particle.x < 0 || particle.x > canvas.width) particle.speedX *= -1;
+        if (particle.y < 0 || particle.y > canvas.height) particle.speedY *= -1;
+
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <section className="py-24 px-8 relative overflow-hidden">
-      {/* Light Animated Background */}
+      {/* Dynamic Gradient Background */}
       <div
         className="absolute inset-0 pointer-events-none overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, #ffffff 0%, #f1f5f9 75%)',
+          background: 'linear-gradient(135deg, #f0f7ff 0%, #e9d5ff 50%, #e0f2fe 100%)',
+          animation: 'gradientShift 15s ease-in-out infinite',
         }}
       />
-      {/* Subtle Geometric Pattern Overlay */}
-      <svg
-        className="absolute inset-0 w-full h-full opacity-5 animate-pulse-slow"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <pattern id="triangle" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path
-              d="M20 0 L40 20 L20 40 L0 20 Z"
-              stroke="rgba(59,130,246,0.1)"
-              strokeWidth="1"
-              fill="none"
-            />
-          </pattern>
-          <linearGradient id="gradientLine" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="rgba(59,130,246,0.2)" />
-            <stop offset="100%" stopColor="rgba(16,185,129,0.2)" />
-          </linearGradient>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#triangle)" />
-        <line
-          x1="0" y1="0"
-          x2="200%" y2="200%"
-          stroke="url(#gradientLine)"
-          strokeWidth="1.5"
-          className="animate-slide"
-        />
-      </svg>
+      {/* Particle Canvas */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full opacity-20"
+        style={{ pointerEvents: 'none' }}
+      />
       <style>{`
-        @keyframes slide {
-          0% { transform: translate(-50%, -50%); }
-          100% { transform: translate(50%, 50%); }
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
-        .animate-slide {
-          animation: slide 25s linear infinite;
-        }
-        @keyframes pulseSlow {
-          0%,100% { opacity: 0.05; }
-          50% { opacity: 0.08; }
-        }
-        .animate-pulse-slow {
-          animation: pulseSlow 8s ease-in-out infinite;
+        .gradient-shift {
+          animation: gradientShift 15s ease-in-out infinite;
         }
       `}</style>
 
@@ -137,8 +164,8 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: `url(${feature.backgroundImage})` }}
               />
-              {/* Light Overlay */}
-              <div className="absolute inset-0 bg-white/30 group-hover:bg-white/10 transition-all duration-200" />
+              {/* Light Overlay with Subtle Gradient */}
+              <div className="absolute inset-0 bg-gradient-to-b from-white/40 to-white/10 group-hover:bg-white/20 transition-all duration-200" />
               {/* Content */}
               <div className="relative z-10 h-full p-5 flex flex-col justify-between">
                 <div>
@@ -168,7 +195,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 {/* Bottom Label */}
                 <div className="flex justify-start">
                   <div
-                    className="text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full bg-gray-100/80 backdrop-blur-sm border border-gray-200/50 group-hover:bg-gray-200/90 transition-all duration-200"
+                    className="text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full bg-white/80 backdrop-blur-sm border border-gray-200/50 group-hover:bg-white/90 transition-all duration-200"
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       fontWeight: 500,
