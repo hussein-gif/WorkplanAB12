@@ -182,8 +182,8 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 border border-gray-100/50
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
               `}
-              style={{ transitionDelay: `${600 + index * 150}ms` }}
-            >
+              style={{ 
+                transitionDelay: `${600 + index * 150}ms`,
                 boxShadow: `
                   0 4px 20px rgba(0,0,0,0.08),
                   0 1px 3px rgba(0,0,0,0.05)
@@ -201,6 +201,8 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                   0 4px 20px rgba(0,0,0,0.08),
                   0 1px 3px rgba(0,0,0,0.05)
                 `;
+              }}
+            >
               {/* Background Image */}
               <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
