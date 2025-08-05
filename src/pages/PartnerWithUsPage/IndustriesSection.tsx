@@ -16,7 +16,6 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
               <stop offset="0%" stopColor="rgba(30,41,59,0.6)" />
               <stop offset="100%" stopColor="transparent" />
             </radialGradient>
-            </defs>
             <pattern id="dots" patternUnits="userSpaceOnUse" width="20" height="20">
               <circle cx="2" cy="2" r="2" fill="rgba(255,255,255,0.03)" />
             </pattern>
