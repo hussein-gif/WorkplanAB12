@@ -7,8 +7,8 @@ interface IndustriesSectionProps {
 
 const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
   return (
-    <section className="py-24 px-8 bg-white/5">
-      <div className="max-w-6xl mx-auto">
+    <section className="industries-section">
+      <div className="content max-w-6xl mx-auto py-24 px-8">
         <div className="text-center mb-16">
           <h2
             className="text-4xl md:text-5xl text-white mb-6"
@@ -40,6 +40,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
               className="text-2xl font-medium text-white mb-4 break-words max-w-full"
               style={{
                 fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                fontWeight: 500,
               }}
             >
               Lager &amp; Logistik
@@ -62,7 +63,6 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           </div>
         </div>
 
-        {/* Additional Contact Line */}
         <div className="text-center">
           <p className="text-white/70 text-lg">
             Behöver du kompetens utanför detta?{' '}
@@ -71,10 +71,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
               className="text-blue-400 font-semibold hover:underline hover:text-blue-300 transition-colors"
               onClick={(e) => {
                 e.preventDefault();
-                const element = document.getElementById('kontakt-form');
-                if (element) {
-                  element.scrollIntoView({ behavior: 'smooth' });
-                }
+                document.getElementById('kontakt-form')?.scrollIntoView({ behavior: 'smooth' });
               }}
             >
               Kontakta oss
@@ -83,6 +80,42 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           </p>
         </div>
       </div>
+
+      {/* Wave transition to next section */}
+      <div className="wave"></div>
+
+      {/* Component-scoped CSS */}
+      <style>{`
+        .industries-section {
+          position: relative;
+          overflow: hidden;
+          background-color: #0a0f1f;
+        }
+        .industries-section::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background:
+            radial-gradient(circle at 20% 30%, rgba(16,185,129,0.4) 0%, transparent 60%),
+            radial-gradient(circle at 80% 70%, rgba(59,130,246,0.3) 0%, transparent 60%),
+            linear-gradient(135deg, rgba(10,15,25,0.6) 0%, rgba(0,0,0,0.9) 100%);
+          mix-blend-mode: overlay;
+          z-index: 1;
+        }
+        .industries-section .content {
+          position: relative;
+          z-index: 2;
+        }
+        .industries-section .wave {
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          width: 100%;
+          height: 120px;
+          background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'><path d='M0,0 C300,80 900,0 1200,80 L1200,120 L0,120 Z' fill='%23ffffff'/></svg>") no-repeat bottom/cover;
+          z-index: 2;
+        }
+      `}</style>
     </section>
   );
 };
