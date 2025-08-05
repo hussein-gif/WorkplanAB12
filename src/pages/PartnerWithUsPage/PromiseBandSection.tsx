@@ -27,7 +27,7 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
             'Personlig kontaktperson – samma rådgivare genom hela uppdraget',
           ].map((text, idx) => (
             <li key={idx} className="flex flex-col items-center space-y-2">
-              <CheckCircle size={20} className="text-[#3c5c17] mb-1" />
+              <CheckCircle size={20} className="text-[#4CAF50] mb-1" />
               <p className="text-black text-sm md:text-base">
                 {text}
               </p>
