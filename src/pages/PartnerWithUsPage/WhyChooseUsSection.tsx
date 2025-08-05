@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Truck, Clock, Shield, Users } from 'lucide-react';
 
 interface WhyChooseUsSectionProps {
