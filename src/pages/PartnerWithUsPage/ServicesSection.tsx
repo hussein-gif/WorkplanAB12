@@ -1,10 +1,26 @@
 import React from 'react';
 
+import React, { useState, useEffect } from 'react';
+
 interface ServicesSectionProps {
   isVisible: boolean;
 }
 
 const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100,
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   const services = [
     {
       title: 'Tillsvidareanställning',
@@ -30,17 +46,61 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
 
   return (
     <section
-      className="py-24 px-8 relative"
-      style={{
-        background: 'linear-gradient(135deg, #0d1b2a 0%, #1a2a47 100%)'
-      }}
+      className="py-24 px-8 relative overflow-hidden"
     >
+      {/* Clean Professional Background */}
+      <div className="absolute inset-0">
+        {/* Soft gradient base */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 60%, #f1f5f9 100%)',
+          }}
+        />
+
+        {/* Subtle floating elements */}
+        <div 
+          className="absolute w-[700px] h-[700px] rounded-full opacity-[0.02] blur-3xl transition-all duration-1000"
+          style={{
+            background: `radial-gradient(circle, #6366f1 0%, transparent 70%)`,
+            left: `${mousePosition.x * 0.25}%`,
+            top: `${mousePosition.y * 0.2}%`,
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+        <div 
+          className="absolute w-[550px] h-[550px] rounded-full opacity-[0.015] blur-3xl transition-all duration-1000 delay-700"
+          style={{
+            background: `radial-gradient(circle, #0ea5e9 0%, transparent 70%)`,
+            right: `${mousePosition.x * 0.2}%`,
+            bottom: `${mousePosition.y * 0.25}%`,
+            transform: 'translate(50%, 50%)',
+          }}
+        />
+
+        {/* Geometric accent lines */}
+        <div 
+          className="absolute inset-0 opacity-[0.01]"
+          style={{
+            backgroundImage: `
+              repeating-linear-gradient(45deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 60px)
+            `,
+          }}
+        />
+
+        {/* Minimal decorative elements */}
+        <div className="absolute top-24 right-24 w-2 h-2 bg-indigo-200/30 rounded-full" />
+        <div className="absolute bottom-28 left-28 w-1.5 h-1.5 bg-sky-200/25 rounded-full" />
+        <div className="absolute top-1/2 right-1/3 w-1 h-1 bg-slate-300/20 rounded-full" />
+      </div>
+
       <div className="max-w-6xl mx-auto">
+        <div className="relative z-10">
         {/* Heading */}
         <div className="text-center mb-16">
           <h2
             style={{
-              color: '#FFFFFF',
+              color: '#1e293b',
               fontFamily: 'Zen Kaku Gothic Antique, serif',
               lineHeight: 1.2,
               fontSize: '3rem'
@@ -55,7 +115,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
               fontSize: '1rem', // mindre och mer professionellt
-              color: 'rgba(255,255,255,0.7)',
+              color: '#64748b',
               maxWidth: '40rem',
               margin: '0.5rem auto 0',
               lineHeight: 1.4,
@@ -75,19 +135,19 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                 backgroundColor: 'rgba(255, 255, 255, 0.08)',
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
+                border: '1px solid rgba(148, 163, 184, 0.2)',
                 borderRadius: '16px',
                 boxShadow: `
-                  0 8px 24px rgba(0, 0, 0, 0.2),
-                  0 0 12px rgba(42, 140, 255, 0.5)
+                  0 8px 24px rgba(0, 0, 0, 0.08),
+                  0 4px 12px rgba(59, 130, 246, 0.1)
                 `
               }}
               onMouseEnter={e =>
                 Object.assign(e.currentTarget.style, {
-                  backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
                   boxShadow: `
-                    0 12px 32px rgba(0, 0, 0, 0.25),
-                    0 0 16px rgba(42, 140, 255, 0.7)
+                    0 12px 32px rgba(0, 0, 0, 0.12),
+                    0 4px 16px rgba(59, 130, 246, 0.15)
                   `
                 })
               }
@@ -95,8 +155,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                 Object.assign(e.currentTarget.style, {
                   backgroundColor: 'rgba(255, 255, 255, 0.08)',
                   boxShadow: `
-                    0 8px 24px rgba(0, 0, 0, 0.2),
-                    0 0 12px rgba(42, 140, 255, 0.5)
+                    0 8px 24px rgba(0, 0, 0, 0.08),
+                    0 4px 12px rgba(59, 130, 246, 0.1)
                   `
                 })
               }
@@ -107,7 +167,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                   fontFamily: 'Zen Kaku Gothic Antique, serif',
                   fontWeight: 500,
                   fontSize: '1.5rem',
-                  color: '#FFFFFF',
+                  color: '#1e293b',
                   marginBottom: '1rem'
                 }}
               >
@@ -120,7 +180,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                   fontFamily: 'Inter, sans-serif',
                   fontWeight: 300,
                   fontSize: '1rem',
-                  color: 'rgba(255,255,255,0.8)',
+                  color: '#475569',
                   lineHeight: 1.6,
                   marginBottom: '3rem' // reserve space for pill and arrow
                 }}
@@ -138,10 +198,10 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                   fontWeight: 400,
                   fontSize: '0.75rem',
                   textTransform: 'uppercase',
-                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
                   padding: '0.25rem 0.75rem',
                   borderRadius: '9999px',
-                  color: '#FFFFFF'
+                  color: '#3b82f6'
                 }}
               >
                 {service.highlight}
@@ -158,7 +218,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
                   borderRadius: '50%'
                 }}
               >
@@ -171,7 +231,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                 >
                   <path
                     d="M3 2 L9 6 L3 10"
-                    stroke="white"
+                    stroke="#3b82f6"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -189,7 +249,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
               fontSize: '1rem',
-              color: 'rgba(255,255,255,0.7)'
+              color: '#64748b'
             }}
           >
             Osäker på vilket upplägg som passar?{' '}
@@ -198,7 +258,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
               style={{
                 fontFamily: 'Inter, sans-serif',
                 fontWeight: 500,
-                color: '#3DA9FC'
+                color: '#3b82f6'
               }}
               onClick={e => {
                 e.preventDefault();
@@ -211,6 +271,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
             </a>{' '}
             så guidar vi dig.
           </p>
+        </div>
         </div>
       </div>
     </section>
