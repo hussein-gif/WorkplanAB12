@@ -61,17 +61,17 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             >
               {/* Top: Number then Title */}
               <div>
-                <div className="text-blue-600 text-sm font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <div className="text-blue-600 text-sm mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
                   {`0${index + 1}.`}
                 </div>
-                <h3 className="text-gray-800 text-xl font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <h3 className="text-gray-800 text-xl mb-0" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
                   {step.title}
                 </h3>
               </div>
 
               {/* Bottom: Description */}
               <div>
-                <p className="text-gray-600 text-sm leading-relaxed mb-0" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <p className="text-gray-600 text-sm leading-relaxed mb-0" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
                   {step.description}
                 </p>
               </div>
