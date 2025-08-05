@@ -36,28 +36,27 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
             <div className="icon-bg mb-6 mx-auto">
               <Truck size={28} className="text-white" />
             </div>
-            <h3
-              className="text-2xl font-medium text-white mb-4 break-words max-w-full"
-              style={{
-                fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                fontWeight: 500,
-              }}
-            >
-              Lager &amp; Logistik
-            </h3>
-            <p
-              className="text-white/80 leading-relaxed mb-4 break-words max-w-full"
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 400,
-              }}
-            >
-              Orderplock, truckförare, lageradministration, skiftledare m.fl. Vi täcker bemanningsbehoven över hela flödet.
-            </p>
-            <div
-              className="text-xs font-medium text-white/50 uppercase tracking-wider"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
+            <div>
+              <h3
+                className="text-2xl font-medium text-white mb-4 break-words max-w-full"
+                style={{
+                  fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                  fontWeight: 500,
+                }}
+              >
+                Lager &amp; Logistik
+              </h3>
+              <p
+                className="text-white/80 leading-relaxed mb-4 break-words max-w-full"
+                style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 400,
+                }}
+              >
+                Orderplock, truckförare, lageradministration, skiftledare m.fl. Vi täcker bemanningsbehoven över hela flödet.
+              </p>
+            </div>
+            <div className="contact-note">
               Snabb bemanning &amp; personlig kontakt
             </div>
           </div>
@@ -81,7 +80,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         </div>
       </div>
 
-      {/* Clean gradient background with subtle accents */}
+      {/* Clean background with wave pattern */}
       <style>{`
         .industries-section {
           position: relative;
@@ -102,6 +101,10 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           z-index: 1;
         }
         .card {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 100%;
           background: rgba(255,255,255,0.05);
           backdrop-filter: blur(8px);
           border: 1px solid rgba(255,255,255,0.1);
@@ -110,11 +113,19 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         .icon-bg {
           width: 4rem;
           height: 4rem;
-          background: linear-gradient(135deg, #10B981, #3B82F6);
+          background: #BAFD7D;
           border-radius: 0.5rem;
           display: flex;
           align-items: center;
           justify-content: center;
+        }
+        .contact-note {
+          font-family: 'Inter, sans-serif';
+          font-weight: 500;
+          text-transform: uppercase;
+          font-size: 0.75rem;
+          color: rgba(255,255,255,0.5);
+          margin-top: 1rem;
         }
       `}</style>
     </section>
