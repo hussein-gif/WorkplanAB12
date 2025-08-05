@@ -10,7 +10,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
     { icon: Phone, title: 'Behovsanalys', description: 'Vi kartlägger mål, tidsram och kompetenskrav i ett kort uppstartssamtal.' },
     { icon: Search, title: 'Lösningsförslag', description: 'Ni får ett transparent förslag på bemanningsupplägg, tidsplan och pris.' },
     { icon: UserCheck, title: 'Sökning & urval', description: 'Aktiv search, annonsering vid behov och strukturerade intervjuer/screening.' },
-    { icon: Briefcase, title: 'Kandidatpresentation', description: 'En shortlist med matchade kandidater, referenser och våra rekommendationer.' },
+    { icon: Briefcase, title: 'Presentation', description: 'En shortlist med matchade kandidater, referenser och våra rekommendationer.' },
     { icon: Handshake, title: 'Start & uppföljning', description: 'Smidig onboarding och regelbunden uppföljning för att säkerställa kvalitet.' }
   ];
 
@@ -61,10 +61,10 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             >
               {/* Top: Number then Title */}
               <div>
-                <div className="text-blue-600 text-sm mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
+                <div className="text-blue-600 text-sm font-medium mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
                   {`0${index + 1}.`}
                 </div>
-                <h3 className="text-gray-800 text-xl mb-0" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
+                <h3 className="text-gray-800 text-xl font-medium mb-0" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
                   {step.title}
                 </h3>
               </div>
