@@ -35,6 +35,17 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
         background: 'linear-gradient(135deg, #0d1b2a 0%, #1a2a47 100%)'
       }}
     >
+      {/* Glow animation styles */}
+      <style>{`
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 8px rgba(255,255,255,0.6); }
+          50% { box-shadow: 0 0 16px rgba(255,255,255,0.8); }
+        }
+        .glow-effect {
+          animation: glow 2s ease-in-out infinite;
+        }
+      `}</style>
+
       <div className="max-w-6xl mx-auto">
         {/* Heading */}
         <div className="text-center mb-16">
@@ -54,7 +65,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
-              fontSize: '1rem', // mindre och mer professionellt
+              fontSize: '1rem',
               color: 'rgba(255,255,255,0.7)',
               maxWidth: '40rem',
               margin: '0.5rem auto 0',
@@ -122,7 +133,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                   fontSize: '1rem',
                   color: 'rgba(255,255,255,0.8)',
                   lineHeight: 1.6,
-                  marginBottom: '3rem' // reserve space for pill and arrow
+                  marginBottom: '3rem'
                 }}
               >
                 {service.body}
@@ -130,12 +141,13 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
 
               {/* Highlight Pill pinned to bottom */}
               <div
+                className="glow-effect"
                 style={{
                   position: 'absolute',
                   bottom: '1rem',
                   left: '1.5rem',
-                  fontFamily: 'Syne, sans-serif',
-                  fontWeight: 400,
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 500,
                   fontSize: '0.75rem',
                   textTransform: 'uppercase',
                   backgroundColor: 'rgba(255,255,255,0.2)',
@@ -149,6 +161,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
 
               {/* Right-pointing arrow in a circle */}
               <div
+                className="glow-effect"
                 style={{
                   position: 'absolute',
                   bottom: '1rem',
