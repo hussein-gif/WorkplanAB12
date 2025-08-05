@@ -32,8 +32,8 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         </div>
 
         <div className="max-w-2xl mx-auto mb-8">
-          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8 text-center">
-            <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6 mx-auto">
+          <div className="card p-8 text-center">
+            <div className="icon-bg mb-6 mx-auto">
               <Truck size={28} className="text-white" />
             </div>
             <h3
@@ -81,39 +81,49 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         </div>
       </div>
 
-      {/* Wave transition to next section */}
-      <div className="wave"></div>
-
-      {/* Component-scoped CSS */}
+      {/* Simple animated background */}
       <style>{`
         .industries-section {
           position: relative;
           overflow: hidden;
-          background-color: #0a0f1f;
+          background: linear-gradient(135deg, #0a0f1f, #1a2238);
         }
         .industries-section::before {
           content: '';
           position: absolute;
-          inset: 0;
-          background:
-            radial-gradient(circle at 20% 30%, rgba(16,185,129,0.4) 0%, transparent 60%),
-            radial-gradient(circle at 80% 70%, rgba(59,130,246,0.3) 0%, transparent 60%),
-            linear-gradient(135deg, rgba(10,15,25,0.6) 0%, rgba(0,0,0,0.9) 100%);
-          mix-blend-mode: overlay;
-          z-index: 1;
+          top: -50%; left: -50%;
+          width: 200%; height: 200%;
+          background: repeating-linear-gradient(
+            45deg,
+            rgba(255,255,255,0.03) 0,
+            rgba(255,255,255,0.03) 1px,
+            transparent 1px,
+            transparent 10px
+          );
+          animation: movePattern 20s linear infinite;
+          z-index: 0;
         }
         .industries-section .content {
           position: relative;
-          z-index: 2;
+          z-index: 1;
         }
-        .industries-section .wave {
-          position: absolute;
-          bottom: -1px;
-          left: 0;
-          width: 100%;
-          height: 120px;
-          background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'><path d='M0,0 C300,80 900,0 1200,80 L1200,120 L0,120 Z' fill='%23ffffff'/></svg>") no-repeat bottom/cover;
-          z-index: 2;
+        .card {
+          background: rgba(255,255,255,0.05);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255,255,255,0.15);
+          border-radius: 1rem;
+        }
+        .icon-bg {
+          width: 4rem; height: 4rem;
+          background: linear-gradient(135deg, #10B981, #34D399);
+          border-radius: 0.75rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        @keyframes movePattern {
+          from { transform: translate(0,0); }
+          to { transform: translate(50%,50%); }
         }
       `}</style>
     </section>
