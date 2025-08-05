@@ -14,7 +14,7 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
       <div className="max-w-4xl mx-auto text-center">
         <h3
           id="vart-lofte"
-          className="text-2xl md:text-3xl text-white font-light mb-6"
+          className="text-2xl md:text-3xl text-black font-light mb-6"
           style={{
             fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
             lineHeight: 1.2,
@@ -30,8 +30,8 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
             'Personlig kontaktperson – samma rådgivare genom hela uppdraget',
           ].map((text, idx) => (
             <li key={idx} className="flex flex-col items-center space-y-2">
-              <CheckCircle size={20} className="text-white mb-1" />
-              <p className="text-white text-sm md:text-base">
+              <CheckCircle size={20} className="text-black mb-1" />
+              <p className="text-black text-sm md:text-base">
                 {text}
               </p>
             </li>
