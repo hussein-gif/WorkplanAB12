@@ -13,7 +13,7 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
             className="text-4xl md:text-5xl font-normal text-white mb-4"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
           >
-            Teamet bakom <br />Workplan
+            Teamet Bakom Workplan
           </h2>
           <p
             className="text-base text-white/70 max-w-2xl mx-auto leading-normal font-light"
