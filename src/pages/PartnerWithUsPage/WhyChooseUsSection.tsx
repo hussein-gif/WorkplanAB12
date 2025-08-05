@@ -9,42 +9,52 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
   const features = [
     {
       title: 'Djup branschkännedom',
-      description: 'Vårt team förstår er vardag inom lager och logistik och kan snabbt sätta oss in i era behov.',
+      description:
+        'Vårt team förstår er vardag inom lager och logistik och kan snabbt sätta oss in i era behov.',
       label: 'SPECIALISTER PÅ ERT OMRÅDE',
-      backgroundImage: 'https://images.pexels.com/photos/4481259/pexels-photo-4481259.jpeg'
+      backgroundImage: 'https://images.pexels.com/photos/4481259/pexels-photo-4481259.jpeg',
     },
     {
       title: 'Effektiv process',
-      description: 'Vi kickar igång direkt och håller er uppdaterade genom hela kedjan – utan onödiga väntetider.',
+      description:
+        'Vi kickar igång direkt och håller er uppdaterade genom hela kedjan – utan onödiga väntetider.',
       label: 'SNABB ÅTERKOPPLING',
-      backgroundImage: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg'
+      backgroundImage: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg',
     },
     {
       title: 'Träffsäker matchning',
-      description: 'Strukturerad screening, referenser och kulturpassning säkerställer rätt person på rätt plats.',
+      description:
+        'Strukturerad screening, referenser och kulturpassning säkerställer rätt person på rätt plats.',
       label: 'NOGGRANT URVAL',
-      backgroundImage: 'https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg'
+      backgroundImage: 'https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg',
     },
     {
       title: 'En kontakt – hela vägen',
-      description: 'Du får en dedikerad konsult som ansvarar för dialog, rapportering och uppföljning.',
+      description:
+        'Du får en dedikerad konsult som ansvarar för dialog, rapportering och uppföljning.',
       label: 'PERSONLIG SERVICE',
-      backgroundImage: 'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg'
-    }
+      backgroundImage: 'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg',
+    },
   ];
 
   return (
-    <section className="py-24 px-8">
+    <section
+      className="py-24 px-8"
+      style={{
+        background:
+          'linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(245,245,245,0.95) 100%)',
+      }}
+    >
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2
             className={`
-              text-4xl md:text-5xl text-white mb-6
+              text-4xl md:text-5xl text-gray-900 mb-6
               transition-all duration-300
             `}
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-              fontWeight: 400
+              fontWeight: 400,
             }}
           >
             Workplan - Företagens Val
@@ -55,7 +65,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
               fontSize: '1rem',
-              color: 'rgba(255,255,255,0.7)',
+              color: 'rgba(55, 65, 81, 0.8)',
               marginTop: '0.25rem',
               lineHeight: 1.4,
             }}
@@ -77,30 +87,29 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
               style={{ transitionDelay: `${600 + index * 150}ms` }}
             >
               {/* Background Image */}
-              <div 
+              <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: `url(${feature.backgroundImage})` }}
               />
-              
-              {/* Dark Overlay - removed on hover */}
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/0 transition-all duration-200" />
-              
-              {/* Content Container */}
+
+              {/* Light overlay */}
+              <div className="absolute inset-0 bg-white/50 group-hover:bg-white/30 transition-all duration-200" />
+
+              {/* Content */}
               <div className="relative z-10 h-full p-5 flex flex-col justify-between">
-                {/* Top Content */}
                 <div>
-                  <h3 
-                    className="text-white mb-3 leading-tight"
+                  <h3
+                    className="text-gray-900 mb-3 leading-tight"
                     style={{
                       fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                       fontSize: '20px',
-                      fontWeight: 500
+                      fontWeight: 500,
                     }}
                   >
                     {feature.title}
                   </h3>
-                  <p 
-                    className="text-white leading-relaxed"
+                  <p
+                    className="text-gray-700 leading-relaxed"
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       fontSize: '14px',
@@ -111,15 +120,13 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                     {feature.description}
                   </p>
                 </div>
-                
-                {/* Bottom Label */}
                 <div className="flex justify-start">
                   <div
                     className="text-xs font-medium uppercase tracking-wider"
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       fontWeight: 500,
-                      color: 'rgba(255,255,255,0.5)',
+                      color: 'rgba(55,65,81,0.7)',
                     }}
                   >
                     {feature.label}
