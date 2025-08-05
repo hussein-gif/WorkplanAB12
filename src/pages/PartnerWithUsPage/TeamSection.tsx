@@ -28,7 +28,7 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
             <div className="avatar bg-gradient-to-br from-blue-500 to-purple-600 mb-4 mx-auto">
               <span className="text-white font-bold text-2xl">JA</span>
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <h3 className="text-xl font-medium text-white mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}>
               Jawad Abbas
             </h3>
             <p className="text-blue-400 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
