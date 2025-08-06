@@ -52,7 +52,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
       <div className="relative z-10 max-w-4xl mx-auto py-24 px-8">
         <div className="text-center mb-12">
           <h2
-            className="text-4xl sm:text-5xl text-white mb-2 font-medium"
+            className="text-4xl sm:text-5xl text-white font-medium mb-2"
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
             }}
@@ -65,6 +65,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
           <form onSubmit={handleFormSubmit} className="space-y-6">
             {/* Personal Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Förnamn */}
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">
                   Förnamn *
@@ -86,6 +87,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 </div>
               </div>
 
+              {/* Efternamn */}
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">
                   Efternamn *
@@ -130,7 +132,6 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   />
                 </div>
               </div>
-
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">
                   Titel/Roll
@@ -168,7 +169,6 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   />
                 </div>
               </div>
-
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">
                   Telefon
@@ -239,45 +239,27 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               </div>
             </div>
 
-            {/* Location */}
-            <div>
-              <label className="block text-white/80 text-sm font-medium mb-2">
-                Plats/Ort
-              </label>
-              <input
-                type="text"
-                name="plats"
-                value={formData.plats}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                placeholder="Var ska arbetet utföras?"
-              />
-            </div>
-
-            {/* Message */}
-            <div>
-              <label className="block text-white/80 text-sm font-medium mb-2">
-                Meddelande *
-              </label>
-              <div className="relative">
-                <MessageSquare className="absolute left-4 top-4 text-white/40" size={18} />
-                <textarea
-                  name="meddelande"
-                  value={formData.meddelande}
+            {/* Location & Message */}
+            <div className="space-y-6">
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  Plats/Ort
+                </label>
+                <input
+                  type="text"
+                  name="plats"
+                  value={formData.plats}
                   onChange={handleInputChange}
-                  required
-                  rows={4}
-                  className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300 resize-none"
-                  placeholder="Beskriv ert bemanningsbehov, vilka roller ni söker, specifika krav eller önskemål..."
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                  placeholder="Var ska arbetet utföras?"
                 />
               </div>
-            </div>
-
-            {/* GDPR Consent & Submit */}
-            <div className="flex items-center justify-between pt-4">
-              <label className="flex items-start space-x-3">
-                <input
-                  type="checkbox"
-                  name="gdprAccept"
-                  checked={formData.gdprAccept}
-                  onChange={handleInputChange}
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  Meddelande *
+                </label>
+                <div className="relative">
+                  <MessageSquare className="absolute left-4 top-4 text-white/40" size={18} />
+                  <textarea
+                    name="meddelande"
+                    value={formData.med...
