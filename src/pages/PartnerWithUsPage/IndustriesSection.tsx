@@ -38,7 +38,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
                 Lager &amp; Logistik
               </h3>
               <p
-                className="text-white/80 leading-relaxed mb-4 break-words max-w-full"
+                className="text-white/80 leading-relaxed break-words max-w-full"
                 style={{
                   fontFamily: 'Inter, sans-serif',
                   fontWeight: 400,
@@ -46,9 +46,6 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
               >
                 Orderplock, truckförare, lageradministration, skiftledare m.fl. Vi täcker bemanningsbehoven över hela flödet.
               </p>
-            </div>
-            <div className="contact-note mt-auto">
-              SNABB BEMANNING &amp; PERSONLIG KONTAKT
             </div>
           </div>
         </div>
@@ -95,9 +92,9 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           flex-direction: column;
           justify-content: space-between;
           height: 100%;
-          background: rgba(255,255,255,0.05);
-          backdrop-filter: blur(8px);
-          border: 1px solid rgba(255,255,255,0.1);
+          background: rgba(255, 255, 255, 0.15);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
           border-radius: 1rem;
         }
         .icon-bg {
@@ -108,12 +105,6 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           display: flex;
           align-items: center;
           justify-content: center;
-        }
-        .contact-note {
-          font-family: 'Inter, sans-serif';
-          font-weight: 500;
-          font-size: 0.875rem;
-          color: rgba(255,255,255,0.8);
         }
       `}</style>
     </section>
