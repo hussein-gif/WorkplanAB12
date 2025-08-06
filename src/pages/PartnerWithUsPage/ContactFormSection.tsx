@@ -270,12 +270,12 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
         .contact-form-section {
           position: relative;
           overflow: hidden;
-          /* Gradient från mörk bakgrund till ljus nederkant */
+          /* Lättare, mer subtil gradient */
           background: linear-gradient(
             180deg,
             #08132B 0%,
-            #08132B 60%,
-            #F0F4F8 100%
+            rgba(8, 19, 43, 0.9) 60%,
+            rgba(8, 19, 43, 0.7) 100%
           );
         }
       `}</style>
