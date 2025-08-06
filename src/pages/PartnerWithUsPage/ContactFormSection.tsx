@@ -31,50 +31,25 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
 }) => {
   return (
     <section id="kontakt-form" className="contact-form-section relative">
-      {/* Wave continuation from previous section */}
-      <div
-        className="absolute top-0 left-0 w-full h-20 overflow-hidden pointer-events-none"
-        style={{ zIndex: 0 }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          className="w-full h-full"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M0,0 C300,100 900,0 1200,100 L1200,120 L0,120 Z"
-            fill="#08132B"
-          />
+      {/* Wave continuation */}
+      <div className="absolute top-0 left-0 w-full h-20 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" className="w-full h-full" preserveAspectRatio="none">
+          <path d="M0,0 C300,100 900,0 1200,100 L1200,120 L0,120 Z" fill="#08132B" />
         </svg>
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto py-24 px-8">
-        <div className="text-center mb-12">
-          <h2
-            className="text-4xl sm:text-5xl text-white font-medium mb-2"
-            style={{
-              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-            }}
-          >
-            Börja Bemanna
-          </h2>
-        </div>
+        <h2 className="text-4xl sm:text-5xl text-white font-medium text-center mb-8" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
+          Börja Bemanna
+        </h2>
 
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 shadow-lg">
           <form onSubmit={handleFormSubmit} className="space-y-6">
-            {/* Personal Information */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Förnamn */}
               <div>
-                <label className="block text-white/80 text-sm font-medium mb-2">
-                  Förnamn *
-                </label>
+                <label className="block text-white/80 text-sm font-medium mb-2">Förnamn *</label>
                 <div className="relative">
-                  <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
-                    size={18}
-                  />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
                   <input
                     type="text"
                     name="fornamn"
@@ -86,17 +61,10 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   />
                 </div>
               </div>
-
-              {/* Efternamn */}
               <div>
-                <label className="block text-white/80 text-sm font-medium mb-2">
-                  Efternamn *
-                </label>
+                <label className="block text-white/80 text-sm font-medium mb-2">Efternamn *</label>
                 <div className="relative">
-                  <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
-                    size={18}
-                  />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
                   <input
                     type="text"
                     name="efternamn"
@@ -110,17 +78,11 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               </div>
             </div>
 
-            {/* Company & Role */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-white/80 text-sm font-medium mb-2">
-                  Företag *
-                </label>
+                <label className="block text-white/80 text-sm font-medium mb-2">Företag *</label>
                 <div className="relative">
-                  <Building
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
-                    size={18}
-                  />
+                  <Building className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
                   <input
                     type="text"
                     name="foretag"
@@ -133,9 +95,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 </div>
               </div>
               <div>
-                <label className="block text-white/80 text-sm font-medium mb-2">
-                  Titel/Roll
-                </label>
+                <label className="block text-white/80 text-sm font-medium mb-2">Titel/Roll</label>
                 <input
                   type="text"
                   name="titel"
@@ -147,17 +107,11 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               </div>
             </div>
 
-            {/* Contact Info */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-white/80 text-sm font-medium mb-2">
-                  E-post *
-                </label>
+                <label className="block text-white/80 text-sm font-medium mb-2">E-post *</label>
                 <div className="relative">
-                  <Mail
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
-                    size={18}
-                  />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
                   <input
                     type="email"
                     name="epost"
@@ -170,38 +124,30 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 </div>
               </div>
               <div>
-                <label className="block text-white/80 text-sm font-medium mb-2">
-                  Telefon
-                </label>
+                <label className="block text-white/80 text-sm font-medium mb-2">Telefon</label>
                 <div className="relative">
-                  <Phone
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
-                    size={18}
-                  />
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
                   <input
                     type="tel"
                     name="telefon"
                     value={formData.telefon}
                     onChange={handleInputChange}
-                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    className="w-full pl-12 pr-4 py-3 bg-white/10	border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                     placeholder="+46 XX XXX XX XX"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Project Details */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-white/80 text-sm font-medium mb-2">
-                  Typ av behov *
-                </label>
+                <label className="block text-white/80 text-sm font-medium mb-2">Typ av behov *</label>
                 <select
                   name="typAvBehov"
                   value={formData.typAvBehov}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300 appearance-none cursor-pointer"
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:bg-white/15	focus:border-white/40 focus:outline-none transition-all duration-300 appearance-none cursor-pointer"
                 >
                   <option value="">Välj typ</option>
                   <option value="tillsvidare">Tillsvidareanställning</option>
@@ -212,54 +158,104 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 </select>
               </div>
               <div>
-                <label className="block text-white/80 text-sm font-medium mb-2">
-                  Antal personer
-                </label>
+                <label className="block text-white/80 text-sm font-medium mb-2">Antal personer</label>
                 <input
                   type="text"
                   name="antalPersoner"
                   value={formData.antalPersoner}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                  className="w-full px-4 py-3 bg-white/10	border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                   placeholder="t.ex. 2-3 personer"
                 />
               </div>
               <div>
-                <label className="block text-white/80 text-sm font-medium mb-2">
-                  Önskad start
-                </label>
+                <label className="block text-white/80 text-sm font-medium mb-2">Önskad start</label>
                 <input
                   type="text"
                   name="onskadStart"
                   value={formData.onskadStart}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                  className="w-full px-4 py-3 bg-white/10	border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                   placeholder="t.ex. Omgående, Mars 2025"
                 />
               </div>
             </div>
 
-            {/* Location & Message */}
             <div className="space-y-6">
               <div>
-                <label className="block text-white/80 text-sm font-medium mb-2">
-                  Plats/Ort
-                </label>
+                <label className="block text-white/80 text-sm font-medium mb-2">Plats/Ort</label>
                 <input
                   type="text"
                   name="plats"
                   value={formData.plats}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                  className="w-full px-4 py-3 bg-white/10;border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus;border-white/40 focus:outline-none transition-all duration-300"
                   placeholder="Var ska arbetet utföras?"
                 />
               </div>
               <div>
-                <label className="block text-white/80 text-sm font-medium mb-2">
-                  Meddelande *
-                </label>
+                <label className="block text-white/80 text-sm font-medium mb-2">Meddelande *</label>
                 <div className="relative">
                   <MessageSquare className="absolute left-4 top-4 text-white/40" size={18} />
                   <textarea
                     name="meddelande"
-                    value={formData.med...
+                    value={formData.meddelande}
+                    onChange={handleInputChange}
+                    required
+                    rows={4}
+                    className="w-full pl-12 pr-4 py-3 bg-white/10;border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus;border-white/40 focus:outline-none transition-all duration-300 resize-none"
+                    placeholder="Beskriv ert bemanningsbehov..."
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-4">
+              <label className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  name="gdprAccept"
+                  checked={formData.gdprAccept}
+                  onChange={handleInputChange}
+                  required
+                  className="w-4 h-4 text-blue-600;border-white/30 rounded focus:ring-blue-500 bg-white/10 mt-1"
+                />
+                <span className="text-white/70 text-sm leading-relaxed" style={{ maxWidth: '80%' }}>
+                  Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att kunna återkomma med information om bemanningslösningar.
+                </span>
+              </label>
+              <button
+                type="submit"
+                className="py-3 px-6 bg-blue-600 text-white rounded-xl font-semibold text-lg tracking-wide hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center space-x-2"
+              >
+                <Send size={20} />
+                <span>Skicka</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <style>{`
+        .contact-form-section {
+          position: relative;
+          overflow: hidden;
+          background-color: #08132B;
+        }
+        .contact-form-section::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 60%;
+          height: 50px;
+          background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+          pointer-events: none;
+        }
+      `}</style>
+    </section>
+  );
+};
+
+export default ContactFormSection;
