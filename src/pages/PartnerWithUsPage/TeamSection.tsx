@@ -1,91 +1,304 @@
 import React from 'react';
+import { Send, Building, User, Mail, Phone, MessageSquare } from 'lucide-react';
 
-interface TeamSectionProps {
-  isVisible: boolean;
+interface ContactFormSectionProps {
+  formData: {
+    fornamn: string;
+    efternamn: string;
+    foretag: string;
+    titel: string;
+    epost: string;
+    telefon: string;
+    typAvBehov: string;
+    antalPersoner: string;
+    onskadStart: string;
+    plats: string;
+    meddelande: string;
+    gdprAccept: boolean;
+  };
+  handleFormSubmit: (e: React.FormEvent) => void;
+  handleInputChange: (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => void;
 }
 
-const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
+const ContactFormSection: React.FC<ContactFormSectionProps> = ({
+  formData,
+  handleFormSubmit,
+  handleInputChange,
+}) => {
   return (
-    <section className="team-section">
-      <div className="content max-w-6xl mx-auto py-24 px-8">
-        <div className="text-center mb-16">
+    <section id="kontakt-form" className="contact-form-section relative">
+      {/* Wave continuation from previous section */}
+      <div className="absolute -top-1 left-0 w-full overflow-hidden leading-0" style={{ transform: 'translateY(-1px)' }}>
+        <svg className="relative block w-full h-6" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1200 120">
+          <path d="M0,100 C300,0 900,100 1200,0 L1200,120 L0,120 Z" fill="#08132B" />
+        </svg>
+      </div>
+
+      <div className="max-w-4xl mx-auto py-24 px-8">
+        <div className="text-center mb-12">
           <h2
-            className="text-4xl md:text-5xl font-normal text-white mb-4"
-            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
+            className="text-4xl sm:text-5xl text-white mb-2"
+            style={{
+              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+              fontWeight: 400,
+            }}
           >
-            Teamet Bakom Workplan
+            Börja Bemanna
           </h2>
           <p
-            className="text-base text-white/70 max-w-2xl mx-auto leading-normal font-light"
-            style={{ fontFamily: 'Inter, sans-serif' }}
+            className="text-base text-white/60 mb-8"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 300,
+            }}
           >
-            Två dedikerade kontaktpersoner som tar ansvar från första behovsanalys till uppföljning – utan mellanhänder.
+            Berätta om ert behov så återkommer vi med ett skräddarsytt förslag.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <div className="card p-8 text-center">
-            <div className="avatar bg-gradient-to-br from-blue-500 to-purple-600 mb-4 mx-auto">
-              <span className="text-white font-bold text-2xl">JA</span>
+        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 shadow-lg">
+          <form onSubmit={handleFormSubmit} className="space-y-6">
+            {/* Personal Information */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  Förnamn *
+                </label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <input
+                    type="text"
+                    name="fornamn"
+                    value={formData.fornamn}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="Ditt förnamn"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  Efternamn *
+                </label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <input
+                    type="text"
+                    name="efternamn"
+                    value={formData.efternamn}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="Ditt efternamn"
+                  />
+                </div>
+              </div>
             </div>
-            <h3 className="text-xl font-medium text-white mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}>
-              Jawad Abbas
-            </h3>
-            <p className="text-blue-400 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Medgrundare & Affärsansvarig
-            </p>
-          </div>
-          <div className="card p-8 text-center">
-            <div className="avatar bg-gradient-to-br from-blue-500 to-purple-600 mb-4 mx-auto">
-              <span className="text-white font-bold text-2xl">AM</span>
+
+            {/* Company and Role */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  Företag *
+                </label>
+                <div className="relative">
+                  <Building className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <input
+                    type="text"
+                    name="foretag"
+                    value={formData.foretag}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="Ert företagsnamn"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  Titel/Roll
+                </label>
+                <input
+                  type="text"
+                  name="titel"
+                    value={formData.titel}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="Din titel"
+                  />
+              </div>
             </div>
-            <h3 className="text-xl font-medium text-white mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}>
-              Arvin Mahmoudi
-            </h3>
-            <p className="text-blue-400 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Medgrundare & Leveranschef
-            </p>
-          </div>
+
+            {/* Contact Info */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  E-post *
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <input
+                    type="email"
+                    name="epost"
+                    value={formData.epost}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="din@email.com"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  Telefon
+                </label>
+                <div className="relative">
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <input
+                    type="tel"
+                    name="telefon"
+                    value={formData.telefon}
+                    onChange={handleInputChange}
+                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="+46 XX XXX XX XX"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Project Details */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  Typ av behov *
+                </label>
+                <select
+                  name="typAvBehov"
+                  value={formData.typAvBehov}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300 appearance-none cursor-pointer"
+                >
+                  <option value="">Välj typ</option>
+                  <option value="tillsvidare">Tillsvidareanställning</option>
+                  <option value="vikariat">Vikariat</option>
+                  <option value="timanstallning">Timanställning</option>
+                  <option value="projekt">Projektanställning</option>
+                  <option value="konsult">Konsultuppdrag</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  Antal personer
+                </label>
+                <input
+                  type="text"
+                  name="antalPersoner"
+                    value={formData.antalPersoner}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="t.ex. 2-3 personer"
+                  />
+              </div>
+              <div>
+                <label className="block text-white/80 text-sm font-medium mb-2">
+                  Önskad start
+                </label>
+                <input
+                  type="text"
+                  name="onskadStart"
+                    value={formData.onskadStart}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="t.ex. Omgående, Mars 2025"
+                  />
+              </div>
+            </div>
+
+            {/* Location */}
+            <div>
+              <label className="block text-white/80 text-sm font-medium mb-2">
+                Plats/Ort
+              </label>
+              <input
+                type="text"
+                name="plats"
+                    value={formData.plats}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="Var ska arbetet utföras?"
+                  />
+            </div>
+
+            {/* Message */}
+            <div>
+              <label className="block text-white/80 text-sm font-medium mb-2">
+                Meddelande *
+              </label>
+              <div className="relative">
+                <MessageSquare className="absolute left-4 top-4 text-white/40" size={18} />
+                <textarea
+                  name="meddelande"
+                    value={formData.meddelande}
+                    onChange={handleInputChange}
+                    required
+                    rows={4}
+                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300 resize-none"
+                    placeholder="Beskriv ert bemanningsbehov, vilka roller ni söker, specifika krav eller önskemål..."
+                  />
+              </div>
+            </div>
+
+            {/* GDPR Consent */}
+            <div className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                    name="gdprAccept"
+                    checked={formData.gdprAccept}
+                    onChange={handleInputChange}
+                    required
+                    className="w-4 h-4 text-blue-600 border-white/30 rounded focus:ring-blue-500 bg-white/10 mt-1"
+              />
+              <label className="text-white/70 text-sm leading-relaxed">
+                Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att kunna återkomma med information om bemanningslösningar. Läs mer i vår            
+              </label>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="w-full py-4 px-6 bg-blue-600 text-white rounded-3xl font-semibold text-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center space-x-2"
+            >
+              <Send size={20} />
+              <span>Skicka förfrågan</span>
+            </button>
+          </form>
         </div>
       </div>
 
-      {/* Reuse background styling from IndustriesSection */}
       <style>{`
-        .team-section {
+        .contact-form-section {
           position: relative;
-          overflow: hidden;
-          background-color: #08132b;
+          background-color: #08132B;
         }
-        .team-section::before {
+        /* Continue wave from above */
+        .contact-form-section::before {
           content: '';
           position: absolute;
-          inset: 0;
-          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><g fill='none' stroke='rgba(255,255,255,0.1)' stroke-width='2'><path d='M0 200 Q200 100 400 200 T800 200' /><path d='M0 300 Q200 200 400 300 T800 300' /><path d='M0 400 Q200 300 400 400 T800 400' /></g></svg>");
-          background-size: cover;
-          opacity: 0.4;
-          z-index: 0;
-        }
-        .team-section .content {
-          position: relative;
-          z-index: 1;
-        }
-        .card {
-          background: rgba(255,255,255,0.05);
-          backdrop-filter: blur(8px);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 1rem;
-        }
-        .avatar {
-          width: 6rem;
-          height: 6rem;
-          border-radius: 9999px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          top: -1px;
+          left: 0;
+          width: 100%;
+          height: 80px;
+          background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'><path d='M0,0 C300,100 900,0 1200,100 L1200,120 L0,120 Z' fill='%2308132B'/></svg>") no-repeat top/100% 100%;
         }
       `}</style>
     </section>
   );
 };
 
-export default TeamSection;
+export default ContactFormSection;
