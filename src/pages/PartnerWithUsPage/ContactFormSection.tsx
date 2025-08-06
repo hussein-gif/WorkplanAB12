@@ -29,7 +29,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
   handleFormSubmit,
   handleInputChange,
 }) => {
-  // Defensive handling for undefined formData
+  // Defensive handling för undefined formData
   const safeFormData = formData || {
     fornamn: '',
     efternamn: '',
@@ -47,7 +47,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
 
   return (
     <section id="kontakt-form" className="contact-form-section relative">
-      {/* Wave continuation up top */}
+      {/* Wave uppe */}
       <div
         className="absolute top-0 left-0 w-full h-20 overflow-hidden pointer-events-none"
         style={{ zIndex: 0 }}
@@ -258,7 +258,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   placeholder="Var ska arbetet utföras?"
                 />
               </div>
-              <div>
+              <div> 
                 <label className="block text-white/80 text-sm font-medium mb-2">
                   Meddelande *
                 </label>
@@ -294,8 +294,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   className="text-white/70 text-sm leading-relaxed"
                   style={{ maxWidth: '80%' }}
                 >
-                  Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att
-                  kunna återkomma med information om bemanningslösningar.
+                  Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att kunna återkomma med information om bemanningslösningar.
                 </span>
               </label>
               <button
@@ -314,13 +313,25 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
         .contact-form-section {
           position: relative;
           overflow: hidden;
-          /* Subtil gradient: mörk upptill, mycket lätt ljus ton längst ner */
-          background: linear-gradient(
-            180deg,
-            #08132B 0%,
-            #08132B 85%,
-            #E8EFF4 100%
+          background-color: #08132B;
+        }
+
+        /* Exakt samma “glow”-gradient i botten som på bilden */
+        .contact-form-section::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 120%;
+          height: 220px;
+          background: radial-gradient(
+            ellipse at top center,
+            rgba(255, 255, 255, 0.6) 0%,
+            rgba(255, 255, 255, 0) 75%
           );
+          pointer-events: none;
+          z-index: 0;
         }
       `}</style>
     </section>
