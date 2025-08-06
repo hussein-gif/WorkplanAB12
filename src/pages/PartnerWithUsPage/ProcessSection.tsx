@@ -1,5 +1,5 @@
-import React from 'react';
-import { Phone, Search, UserCheck, Briefcase, Handshake } from 'lucide-react';
+import React, { useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ProcessSectionProps {
   isVisible: boolean;
@@ -7,16 +7,24 @@ interface ProcessSectionProps {
 
 const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   const steps = [
-    { icon: Phone, title: 'Behovsanalys', description: 'Vi kartlägger mål, tidsram och kompetenskrav i ett kort uppstartssamtal.' },
-    { icon: Search, title: 'Lösningsförslag', description: 'Ni får ett transparent förslag på bemanningsupplägg, tidsplan och pris.' },
-    { icon: UserCheck, title: 'Sökning & urval', description: 'Aktiv search, annonsering vid behov och strukturerade intervjuer/screening.' },
-    { icon: Briefcase, title: 'Presentation', description: 'En shortlist med matchade kandidater, referenser och våra rekommendationer.' },
-    { icon: Handshake, title: 'Start & uppföljning', description: 'Smidig onboarding och regelbunden uppföljning för att säkerställa kvalitet.' }
+    { title: 'Behovsanalys', description: 'Vi kartlägger mål, tidsram och kompetenskrav i ett kort uppstartssamtal.' },
+    { title: 'Lösningsförslag', description: 'Ni får ett transparent förslag på bemanningsupplägg, tidsplan och pris.' },
+    { title: 'Sökning & urval', description: 'Aktiv search, annonsering vid behov och strukturerade intervjuer/screening.' },
+    { title: 'Presentation', description: 'En shortlist med matchade kandidater, referenser och våra rekommendationer.' },
+    { title: 'Start & uppföljning', description: 'Smidig onboarding och regelbunden uppföljning för att säkerställa kvalitet.' },
   ];
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (!scrollRef.current) return;
+    const scrollAmount = scrollRef.current.clientWidth * 0.8;
+    scrollRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+  };
 
   return (
     <section id="how-it-works" className="relative py-24 px-8 overflow-hidden bg-white">
-      {/* Restore dynamic background shapes */}
+      {/* Dynamisk SVG-bakgrund – behålls precis som innan */}
       <div className="absolute inset-0 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -24,8 +32,19 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
               <stop offset="0%" stopColor="rgba(59,130,246,0.15)" />
               <stop offset="100%" stopColor="transparent" />
             </radialGradient>
-            <pattern id="zigzag" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
-              <path d="M0 5 l5 -5 l5 5" stroke="rgba(16,185,129,0.05)" strokeWidth="2" fill="none" />
+            <pattern
+              id="zigzag"
+              patternUnits="userSpaceOnUse"
+              width="10"
+              height="10"
+              patternTransform="rotate(45)"
+            >
+              <path
+                d="M0 5 l5 -5 l5 5"
+                stroke="rgba(16,185,129,0.05)"
+                strokeWidth="2"
+                fill="none"
+              />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#zigzag)" />
@@ -34,9 +53,12 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
         </svg>
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto">
+      <div className="relative z-10 max-w-4xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-light text-gray-800 mb-6" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
+          <h2
+            className="text-4xl md:text-5xl font-light text-gray-800 mb-6"
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+          >
             <span style={{ fontWeight: 400 }}>Vår </span>
             <span style={{ fontWeight: 500 }}>Process</span>
           </h2>
@@ -45,38 +67,70 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-          {steps.map((step, index) => (
-            <div
-              key={index}
-              className={`relative p-6 rounded-lg shadow-lg transition-all duration-500 ease-out bg-white bg-opacity-80 backdrop-blur-lg ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'}`}
-              style={{
-                transitionDelay: `${index * 150}ms`,
-                minHeight: '320px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                border: '1px solid rgba(59,130,246,0.2)'
-              }}
-            >
-              {/* Top: Number then Title */}
-              <div>
-                <div className="text-blue-600 text-sm font-medium mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
-                  {`0${index + 1}.`}
-                </div>
-                <h3 className="text-gray-800 text-xl font-medium mb-0" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
-                  {step.title}
-                </h3>
-              </div>
+        {/* Pilar */}
+        <button
+          onClick={() => handleScroll('left')}
+          className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg"
+        >
+          <ChevronLeft className="w-6 h-6 text-gray-600" />
+        </button>
+        <button
+          onClick={() => handleScroll('right')}
+          className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg"
+        >
+          <ChevronRight className="w-6 h-6 text-gray-600" />
+        </button>
 
-              {/* Bottom: Description */}
-              <div>
-                <p className="text-gray-600 text-sm leading-relaxed mb-0" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
-                  {step.description}
-                </p>
-              </div>
+        {/* Scrollbar-hide kräver ev. plugin, annars visa standard-scrollbar */}
+        <div ref={scrollRef} className="overflow-x-auto">
+          <div className="inline-block min-w-max">
+            {/* Sifferrad med linjer emellan */}
+            <div className="flex items-center">
+              {steps.map((_, idx) => (
+                <React.Fragment key={idx}>
+                  <div className="w-40 flex-shrink-0 text-center">
+                    <span
+                      className="block text-6xl font-light"
+                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                    >
+                      {`0${idx + 1}`}
+                    </span>
+                  </div>
+                  {idx < steps.length - 1 && (
+                    <div className="flex-grow border-t border-gray-300/50"></div>
+                  )}
+                </React.Fragment>
+              ))}
             </div>
-          ))}
+
+            {/* Rubriker */}
+            <div className="mt-6 flex">
+              {steps.map((step, idx) => (
+                <div key={idx} className="w-40 flex-shrink-0 text-center px-2">
+                  <h3
+                    className="text-xl font-medium"
+                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                  >
+                    {step.title}
+                  </h3>
+                </div>
+              ))}
+            </div>
+
+            {/* Beskrivningar */}
+            <div className="mt-2 flex">
+              {steps.map((step, idx) => (
+                <div key={idx} className="w-40 flex-shrink-0 text-center px-2">
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
+                  >
+                    {step.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
