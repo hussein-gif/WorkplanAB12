@@ -24,7 +24,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
 
   return (
     <section id="how-it-works" className="relative py-24 px-8 overflow-hidden bg-white">
-      {/* Dynamisk SVG-bakgrund – oförändrat */}
+      {/* -- Oförändrad SVG-bakgrund -- */}
       <div className="absolute inset-0 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -32,19 +32,8 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
               <stop offset="0%" stopColor="rgba(59,130,246,0.15)" />
               <stop offset="100%" stopColor="transparent" />
             </radialGradient>
-            <pattern
-              id="zigzag"
-              patternUnits="userSpaceOnUse"
-              width="10"
-              height="10"
-              patternTransform="rotate(45)"
-            >
-              <path
-                d="M0 5 l5 -5 l5 5"
-                stroke="rgba(16,185,129,0.05)"
-                strokeWidth="2"
-                fill="none"
-              />
+            <pattern id="zigzag" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
+              <path d="M0 5 l5 -5 l5 5" stroke="rgba(16,185,129,0.05)" strokeWidth="2" fill="none" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#zigzag)" />
@@ -83,11 +72,11 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
 
         <div ref={scrollRef} className="overflow-x-auto">
           <div className="inline-block min-w-max">
-            {/* Sifferrad med linjer emellan */}
+            {/* 1) Siffror med stora mellanrum + streck */}
             <div className="flex items-center">
               {steps.map((_, idx) => (
                 <React.Fragment key={idx}>
-                  <div className="w-48 flex-shrink-0 text-center">
+                  <div className="w-64 flex-shrink-0 text-center">
                     <span
                       className="block text-9xl font-light"
                       style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
@@ -96,16 +85,16 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                     </span>
                   </div>
                   {idx < steps.length - 1 && (
-                    <div className="flex-grow border-t border-gray-300/50"></div>
+                    <div className="flex-grow h-px bg-gray-300/50 mx-12"></div>
                   )}
                 </React.Fragment>
               ))}
             </div>
 
-            {/* Rubriker */}
+            {/* 2) Rubriker */}
             <div className="mt-8 flex">
               {steps.map((step, idx) => (
-                <div key={idx} className="w-48 flex-shrink-0 text-center px-2">
+                <div key={idx} className="w-64 flex-shrink-0 text-center px-2">
                   <h3
                     className="text-3xl md:text-4xl font-medium"
                     style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
@@ -116,10 +105,10 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
               ))}
             </div>
 
-            {/* Beskrivningar */}
+            {/* 3) Beskrivningar */}
             <div className="mt-4 flex">
               {steps.map((step, idx) => (
-                <div key={idx} className="w-48 flex-shrink-0 text-center px-2">
+                <div key={idx} className="w-64 flex-shrink-0 text-center px-2">
                   <p
                     className="text-sm leading-relaxed"
                     style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
