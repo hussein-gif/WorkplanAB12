@@ -5,7 +5,6 @@ import ServicesSection from './ServicesSection';
 import ProcessSection from './ProcessSection';
 import IndustriesSection from './IndustriesSection';
 import PromiseBandSection from './PromiseBandSection';
-import TeamSection from './TeamSection';
 import ContactFormSection from './ContactFormSection';
 
 const PartnerWithUsPage = () => {
@@ -123,8 +122,6 @@ const PartnerWithUsPage = () => {
         <IndustriesSection isVisible={isVisible} />
         
         <PromiseBandSection isVisible={isVisible} />
-        
-        <TeamSection isVisible={isVisible} />
         
         <ContactFormSection 
           formData={formData}
