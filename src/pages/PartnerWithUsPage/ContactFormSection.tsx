@@ -29,6 +29,22 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
   handleFormSubmit,
   handleInputChange,
 }) => {
+  // Defensive handling for undefined formData
+  const safeFormData = formData || {
+    fornamn: '',
+    efternamn: '',
+    foretag: '',
+    titel: '',
+    epost: '',
+    telefon: '',
+    typAvBehov: '',
+    antalPersoner: '',
+    onskadStart: '',
+    plats: '',
+    meddelande: '',
+    gdprAccept: false,
+  };
+
   return (
     <section id="kontakt-form" className="contact-form-section relative">
       {/* Wave continuation */}
@@ -53,7 +69,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   <input
                     type="text"
                     name="fornamn"
-                    value={formData.fornamn}
+                    value={safeFormData.fornamn}
                     onChange={handleInputChange}
                     required
                     className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
@@ -68,7 +84,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   <input
                     type="text"
                     name="efternamn"
-                    value={formData.efternamn}
+                    value={safeFormData.efternamn}
                     onChange={handleInputChange}
                     required
                     className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
@@ -86,7 +102,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   <input
                     type="text"
                     name="foretag"
-                    value={formData.foretag}
+                    value={safeFormData.foretag}
                     onChange={handleInputChange}
                     required
                     className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
@@ -99,7 +115,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 <input
                   type="text"
                   name="titel"
-                  value={formData.titel}
+                  value={safeFormData.titel}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                   placeholder="Din titel"
@@ -115,7 +131,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   <input
                     type="email"
                     name="epost"
-                    value={formData.epost}
+                    value={safeFormData.epost}
                     onChange={handleInputChange}
                     required
                     className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
@@ -130,7 +146,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   <input
                     type="tel"
                     name="telefon"
-                    value={formData.telefon}
+                    value={safeFormData.telefon}
                     onChange={handleInputChange}
                     className="w-full pl-12 pr-4 py-3 bg-white/10	border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                     placeholder="+46 XX XXX XX XX"
@@ -144,7 +160,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 <label className="block text-white/80 text-sm font-medium mb-2">Typ av behov *</label>
                 <select
                   name="typAvBehov"
-                  value={formData.typAvBehov}
+                  value={safeFormData.typAvBehov}
                   onChange={handleInputChange}
                   required
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:bg-white/15	focus:border-white/40 focus:outline-none transition-all duration-300 appearance-none cursor-pointer"
@@ -162,7 +178,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 <input
                   type="text"
                   name="antalPersoner"
-                  value={formData.antalPersoner}
+                  value={safeFormData.antalPersoner}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-white/10	border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                   placeholder="t.ex. 2-3 personer"
@@ -173,7 +189,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 <input
                   type="text"
                   name="onskadStart"
-                  value={formData.onskadStart}
+                  value={safeFormData.onskadStart}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-white/10	border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                   placeholder="t.ex. Omgående, Mars 2025"
@@ -187,7 +203,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 <input
                   type="text"
                   name="plats"
-                  value={formData.plats}
+                  value={safeFormData.plats}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-white/10;border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus;border-white/40 focus:outline-none transition-all duration-300"
                   placeholder="Var ska arbetet utföras?"
@@ -199,7 +215,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   <MessageSquare className="absolute left-4 top-4 text-white/40" size={18} />
                   <textarea
                     name="meddelande"
-                    value={formData.meddelande}
+                    value={safeFormData.meddelande}
                     onChange={handleInputChange}
                     required
                     rows={4}
@@ -215,7 +231,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 <input
                   type="checkbox"
                   name="gdprAccept"
-                  checked={formData.gdprAccept}
+                  checked={safeFormData.gdprAccept}
                   onChange={handleInputChange}
                   required
                   className="w-4 h-4 text-blue-600;border-white/30 rounded focus:ring-blue-500 bg-white/10 mt-1"
