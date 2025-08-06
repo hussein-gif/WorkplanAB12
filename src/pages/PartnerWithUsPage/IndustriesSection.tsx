@@ -10,16 +10,6 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
     <section className="industries-section">
       <div className="content max-w-6xl mx-auto py-24 px-8">
         <div className="text-center mb-16">
-          <h2
-            className="text-4xl md:text-5xl text-white mb-6"
-            style={{
-              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-              lineHeight: 1.1,
-            }}
-          >
-            <span style={{ fontWeight: 400 }}>Specialister på </span>
-            <span style={{ fontWeight: 500 }}>Lager &amp; Logistik</span>
-          </h2>
           <p
             className="text-lg text-white/70 max-w-2xl mx-auto"
             style={{
@@ -119,7 +109,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           justify-content: center;
         }
         .contact-note {
-          font-family: 'Zen Kaku Gothic Antique, sans-serif';
+          font-family: 'Inter, sans-serif';
           font-weight: 500;
           text-transform: uppercase;
           font-size: 0.75rem;
