@@ -285,9 +285,12 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
         .contact-form-section {
           position: relative;
           background-color: #08132B;
-          background-image: radial-gradient(circle at bottom center, rgba(255,255,255,0.1), transparent 70%);
-        }
-      `}</style>
+          background-image:
+            radial-gradient(circle at bottom center, rgba(255,255,255,0.1), transparent 70%),
+            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><g fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='2'><path d='M0 200 Q200 100 400 200 T800 200' /><path d='M0 300 Q200 200 400 300 T800 300' /><path d='M0 400 Q200 300 400 400 T800 400' /></g></svg>");
+          background-size: cover;
+          background-position: center;
+        }`</style>
     </section>
   );
 };
