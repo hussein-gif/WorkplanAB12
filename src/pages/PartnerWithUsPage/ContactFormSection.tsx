@@ -255,7 +255,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 Plats/Ort
               </label>
               <input
-                type="text`
+                type="text"
                 name="plats"
                     value={formData.plats}
                     onChange={handleInputChange}
