@@ -8,8 +8,8 @@ interface IndustriesSectionProps {
 const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
   return (
     <section className="industries-section">
-      <div className="content max-w-6xl mx-auto py-24 px-8">
-        <div className="text-center mb-16">
+      <div className="content max-w-6xl mx-auto py-16 px-8">
+        <div className="text-center mb-12">
           <h2
             className="text-4xl md:text-5xl text-white mb-6"
             style={{
@@ -21,7 +21,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
             Specialister på Lager &amp; Logistik
           </h2>
 
-          <div className="max-w-2xl mx-auto mb-8">
+          <div className="max-w-2xl mx-auto">
             <div className="card p-8 text-center flex flex-col justify-between h-full">
               <div className="icon-bg mb-6 mx-auto">
                 <Truck size={28} className="text-white" />
@@ -49,10 +49,9 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
             </div>
           </div>
         </div>
-      </div>
 
       {/* Footer call-to-action moved to bottom of section */}
-      <div className="text-center py-8">
+      <div className="text-center py-4">
         <p className="text-white/70 text-lg"
            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
           Behöver du kompetens utanför detta?{' '}
