@@ -290,11 +290,11 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
         .contact-form-section::before {
           content: '';
           position: absolute;
-          top: 0;
+          top: -1px;
           left: 0;
           width: 100%;
-          height: 24px;
-          background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'><path d='M0,100 C300,0 900,100 1200,0 L1200,120 L0,120 Z' fill='%2308132B'/></svg>") no-repeat top/100% 100%;
+          height: 80px;
+          background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120'><path d='M0,0 C300,100 900,0 1200,100 L1200,120 L0,120 Z' fill='%2308132B'/></svg>") no-repeat top/100% 100%;
         }
       `}</style>
     </section>
