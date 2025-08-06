@@ -20,52 +20,54 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           >
             Specialister på Lager &amp; Logistik
           </h2>
-        </div>
 
-        <div className="max-w-2xl mx-auto mb-8">
-          <div className="card p-8 text-center flex flex-col justify-between h-full">
-            <div className="icon-bg mb-6 mx-auto">
-              <Truck size={28} className="text-white" />
-            </div>
-            <div>
-              <h3
-                className="text-2xl font-medium text-white mb-4 break-words max-w-full"
-                style={{
-                  fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                  fontWeight: 500,
-                }}
-              >
-                Lager &amp; Logistik
-              </h3>
-              <p
-                className="text-white/80 leading-relaxed break-words max-w-full"
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontWeight: 400,
-                }}
-              >
-                Orderplock, truckförare, lageradministration, skiftledare m.fl. Vi täcker bemanningsbehoven över hela flödet.
-              </p>
+          <div className="max-w-2xl mx-auto mb-8">
+            <div className="card p-8 text-center flex flex-col justify-between h-full">
+              <div className="icon-bg mb-6 mx-auto">
+                <Truck size={28} className="text-white" />
+              </div>
+              <div>
+                <h3
+                  className="text-2xl font-medium text-white mb-4 break-words max-w-full"
+                  style={{
+                    fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                    fontWeight: 500,
+                  }}
+                >
+                  Lager &amp; Logistik
+                </h3>
+                <p
+                  className="text-white/80 leading-relaxed break-words max-w-full"
+                  style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: 400,
+                  }}
+                >
+                  Orderplock, truckförare, lageradministration, skiftledare m.fl. Vi täcker bemanningsbehoven över hela flödet.
+                </p>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="text-center">
-          <p className="text-white/70 text-lg">
-            Behöver du kompetens utanför detta?{' '}
-            <a
-              href="#kontakt-form"
-              className="text-blue-400 font-semibold hover:underline hover:text-blue-300 transition-colors"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('kontakt-form')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              Kontakta oss
-            </a>{' '}
-            så hjälper vi dig.
-          </p>
-        </div>
+      {/* Footer call-to-action moved to bottom of section */}
+      <div className="text-center py-8">
+        <p className="text-white/70 text-lg"
+           style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
+          Behöver du kompetens utanför detta?{' '}
+          <a
+            href="#kontakt-form"
+            className="text-blue-400 font-semibold hover:underline hover:text-blue-300 transition-colors"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById('kontakt-form')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            Kontakta oss
+          </a>{' '}
+          så hjälper vi dig.
+        </p>
       </div>
 
       <style>{`
