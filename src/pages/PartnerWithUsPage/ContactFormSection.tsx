@@ -52,23 +52,13 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
       <div className="relative z-10 max-w-4xl mx-auto py-24 px-8">
         <div className="text-center mb-12">
           <h2
-            className="text-4xl sm:text-5xl text-white mb-2"
+            className="text-4xl sm:text-5xl text-white mb-2 font-medium"
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-              fontWeight: 400,
             }}
           >
             Börja Bemanna
           </h2>
-          <p
-            className="text-base text-white/60 mb-8"
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 300,
-            }}
-          >
-            Berätta om ert behov så återkommer vi med ett skräddarsytt förslag.
-          </p>
         </div>
 
         <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 shadow-lg">
@@ -147,12 +137,12 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 </label>
                 <input
                   type="text"
-                    name="titel"
-                    value={formData.titel}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                    placeholder="Din titel"
-                  />
+                  name="titel"
+                  value={formData.titel}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                  placeholder="Din titel"
+                />
               </div>
             </div>
 
@@ -208,10 +198,10 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 </label>
                 <select
                   name="typAvBehov"
-                    value={formData.typAvBehov}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300 appearance-none cursor-pointer"
+                  value={formData.typAvBehov}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300 appearance-none cursor-pointer"
                 >
                   <option value="">Välj typ</option>
                   <option value="tillsvidare">Tillsvidareanställning</option>
@@ -227,12 +217,12 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 </label>
                 <input
                   type="text"
-                    name="antalPersoner"
-                    value={formData.antalPersoner}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                    placeholder="t.ex. 2-3 personer"
-                  />
+                  name="antalPersoner"
+                  value={formData.antalPersoner}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                  placeholder="t.ex. 2-3 personer"
+                />
               </div>
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">
@@ -240,12 +230,12 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 </label>
                 <input
                   type="text"
-                    name="onskadStart"
-                    value={formData.onskadStart}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                    placeholder="t.ex. Omgående, Mars 2025"
-                  />
+                  name="onskadStart"
+                  value={formData.onskadStart}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                  placeholder="t.ex. Omgående, Mars 2025"
+                />
               </div>
             </div>
 
@@ -257,11 +247,11 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               <input
                 type="text"
                 name="plats"
-                    value={formData.plats}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                    placeholder="Var ska arbetet utföras?"
-                  />
+                value={formData.plats}
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                placeholder="Var ska arbetet utföras?"
+              />
             </div>
 
             {/* Message */}
@@ -273,13 +263,13 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 <MessageSquare className="absolute left-4 top-4 text-white/40" size={18} />
                 <textarea
                   name="meddelande"
-                    value={formData.meddelande}
-                    onChange={handleInputChange}
-                    required
-                    rows={4}
-                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300 resize-none"
-                    placeholder="Beskriv ert bemanningsbehov, vilka roller ni söker, specifika krav eller önskemål..."
-                  />
+                  value={formData.meddelande}
+                  onChange={handleInputChange}
+                  required
+                  rows={4}
+                  className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300 resize-none"
+                  placeholder="Beskriv ert bemanningsbehov, vilka roller ni söker, specifika krav eller önskemål..."
+                />
               </div>
             </div>
 
@@ -288,43 +278,6 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               <label className="flex items-start space-x-3">
                 <input
                   type="checkbox"
-                    name="gdprAccept"
-                    checked={formData.gdprAccept}
-                    onChange={handleInputChange}
-                    required
-                    className="w-4 h-4 text-blue-600 border-white/30 rounded focus:ring-blue-500 bg-white/10 mt-1"
-                />
-                <span className="text-white/70 text-sm leading-relaxed" style={{ maxWidth: '80%' }}>
-                  Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att kunna återkomma med information om bemanningslösningar.
-                </span>
-              </label>
-              <button
-                type="submit"
-                className="py-3 px-6 bg-blue-600 text-white rounded-xl font-semibold text-lg tracking-wide hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center space-x-2"
-              >
-                <Send size={20} />
-                <span>Skicka</span>
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <style>{`
-        .contact-form-section {
-          position: relative;
-          overflow: hidden;
-          background-color: #08132B;
-        }
-        .contact-form-section .absolute {
-          z-index: 0;
-        }
-        .contact-form-section .relative.z-10 {
-          z-index: 10;
-        }
-      `}</style>
-    </section>
-  );
-};
-
-export default ContactFormSection;
+                  name="gdprAccept"
+                  checked={formData.gdprAccept}
+                  onChange={handleInputChange}
