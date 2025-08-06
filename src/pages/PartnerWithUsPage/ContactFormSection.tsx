@@ -30,7 +30,14 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
   handleInputChange,
 }) => {
   return (
-    <section id="kontakt-form" className="contact-form-section">
+    <section id="kontakt-form" className="contact-form-section relative">
+      {/* Wave continuation from previous section */}
+      <div className="absolute -top-1 left-0 w-full overflow-hidden leading-0" style={{ transform: 'translateY(-1px)' }}>
+        <svg className="relative block w-full h-6" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1200 120">
+          <path d="M0,100 C300,0 900,100 1200,0 L1200,120 L0,120 Z" fill="#08132B" />
+        </svg>
+      </div>
+
       <div className="max-w-4xl mx-auto py-24 px-8">
         <div className="text-center mb-12">
           <h2
@@ -62,10 +69,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   Förnamn *
                 </label>
                 <div className="relative">
-                  <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
-                    size={18}
-                  />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
                   <input
                     type="text"
                     name="fornamn"
@@ -82,10 +86,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   Efternamn *
                 </label>
                 <div className="relative">
-                  <User
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
-                    size={18}
-                  />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
                   <input
                     type="text"
                     name="efternamn"
@@ -106,10 +107,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   Företag *
                 </label>
                 <div className="relative">
-                  <Building
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
-                    size={18}
-                  />
+                  <Building className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
                   <input
                     type="text"
                     name="foretag"
@@ -128,11 +126,11 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 <input
                   type="text"
                   name="titel"
-                  value={formData.titel}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                  placeholder="Din titel"
-                />
+                    value={formData.titel}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="Din titel"
+                  />
               </div>
             </div>
 
@@ -143,10 +141,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   E-post *
                 </label>
                 <div className="relative">
-                  <Mail
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
-                    size={18}
-                  />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
                   <input
                     type="email"
                     name="epost"
@@ -163,10 +158,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   Telefon
                 </label>
                 <div className="relative">
-                  <Phone
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40"
-                    size={18}
-                  />
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
                   <input
                     type="tel"
                     name="telefon"
@@ -207,11 +199,11 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 <input
                   type="text"
                   name="antalPersoner"
-                  value={formData.antalPersoner}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                  placeholder="t.ex. 2-3 personer"
-                />
+                    value={formData.antalPersoner}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="t.ex. 2-3 personer"
+                  />
               </div>
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">
@@ -220,11 +212,11 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 <input
                   type="text"
                   name="onskadStart"
-                  value={formData.onskadStart}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                  placeholder="t.ex. Omgående, Mars 2025"
-                />
+                    value={formData.onskadStart}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="t.ex. Omgående, Mars 2025"
+                  />
               </div>
             </div>
 
@@ -236,11 +228,11 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               <input
                 type="text"
                 name="plats"
-                value={formData.plats}
-                onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                placeholder="Var ska arbetet utföras?"
-              />
+                    value={formData.plats}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="Var ska arbetet utföras?"
+                  />
             </div>
 
             {/* Message */}
@@ -252,13 +244,13 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 <MessageSquare className="absolute left-4 top-4 text-white/40" size={18} />
                 <textarea
                   name="meddelande"
-                  value={formData.meddelande}
-                  onChange={handleInputChange}
-                  required
-                  rows={4}
-                  className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300 resize-none"
-                  placeholder="Beskriv ert bemanningsbehov, vilka roller ni söker, specifika krav eller önskemål..."
-                />
+                    value={formData.meddelande}
+                    onChange={handleInputChange}
+                    required
+                    rows={4}
+                    className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300 resize-none"
+                    placeholder="Beskriv ert bemanningsbehov, vilka roller ni söker, specifika krav eller önskemål..."
+                  />
               </div>
             </div>
 
@@ -266,20 +258,21 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
             <div className="flex items-start space-x-3">
               <input
                 type="checkbox"
-                name="gdprAccept"
-                checked={formData.gdprAccept}
-                onChange={handleInputChange}
-                required
-                className="w-4 h-4 text-blue-600 border-white/30 rounded focus:ring-blue-500 bg-white/10 mt-1"
+                    name="gdprAccept"
+                    checked={formData.gdprAccept}
+                    onChange={handleInputChange}
+                    required
+                    className="w-4 h-4 text-blue-600 border-white/30 rounded focus:ring-blue-500 bg-white/10 mt-1"
               />
               <label className="text-white/70 text-sm leading-relaxed">
-                Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att kunna återkomma med information om bemanningslösningar. Läs mer i vår </label>
+                Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att kunna återkomma med information om bemanningslösningar. Läs mer i vår            
+              </label>
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full py-4 px-6 bg-blue-600 text-white rounded-xl font-semibold text-lg tracking-wide hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center space-x-2"
+              className="w-full py-4 px-6 bg-blue-600 text-white rounded-3xl font-semibold text-lg hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center justify-center space-x-2"
             >
               <Send size={20} />
               <span>Skicka förfrågan</span>
