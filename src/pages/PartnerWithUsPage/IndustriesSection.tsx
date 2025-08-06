@@ -10,15 +10,16 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
     <section className="industries-section">
       <div className="content max-w-6xl mx-auto py-24 px-8">
         <div className="text-center mb-16">
-          <p
-            className="text-lg text-white/70 max-w-2xl mx-auto"
+          <h2
+            className="text-4xl md:text-5xl text-white mb-6"
             style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 300,
+              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+              lineHeight: 1.1,
+              fontWeight: 500,
             }}
           >
-            Vi bemannar hela logistikkedjan – från inleverans till distribution. Rätt kompetens, när du behöver den.
-          </p>
+            Specialister på Lager &amp; Logistik
+          </h2>
         </div>
 
         <div className="max-w-2xl mx-auto mb-8">
@@ -111,8 +112,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
         .contact-note {
           font-family: 'Inter, sans-serif';
           font-weight: 500;
-          text-transform: uppercase;
-          font-size: 0.75rem;
+          font-size: 0.875rem;
           color: rgba(255,255,255,0.8);
         }
       `}</style>
