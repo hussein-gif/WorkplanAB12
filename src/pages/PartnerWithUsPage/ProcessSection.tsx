@@ -24,7 +24,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
 
   return (
     <section id="how-it-works" className="relative py-24 px-8 overflow-hidden bg-white">
-      {/* Dynamisk SVG-bakgrund – behålls precis som innan */}
+      {/* Dynamisk SVG-bakgrund – oförändrat */}
       <div className="absolute inset-0 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -81,16 +81,15 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           <ChevronRight className="w-6 h-6 text-gray-600" />
         </button>
 
-        {/* Scrollbar-hide kräver ev. plugin, annars visa standard-scrollbar */}
         <div ref={scrollRef} className="overflow-x-auto">
           <div className="inline-block min-w-max">
             {/* Sifferrad med linjer emellan */}
             <div className="flex items-center">
               {steps.map((_, idx) => (
                 <React.Fragment key={idx}>
-                  <div className="w-40 flex-shrink-0 text-center">
+                  <div className="w-48 flex-shrink-0 text-center">
                     <span
-                      className="block text-6xl font-light"
+                      className="block text-9xl font-light"
                       style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
                     >
                       {`0${idx + 1}`}
@@ -104,11 +103,11 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             </div>
 
             {/* Rubriker */}
-            <div className="mt-6 flex">
+            <div className="mt-8 flex">
               {steps.map((step, idx) => (
-                <div key={idx} className="w-40 flex-shrink-0 text-center px-2">
+                <div key={idx} className="w-48 flex-shrink-0 text-center px-2">
                   <h3
-                    className="text-xl font-medium"
+                    className="text-3xl md:text-4xl font-medium"
                     style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
                   >
                     {step.title}
@@ -118,9 +117,9 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             </div>
 
             {/* Beskrivningar */}
-            <div className="mt-2 flex">
+            <div className="mt-4 flex">
               {steps.map((step, idx) => (
-                <div key={idx} className="w-40 flex-shrink-0 text-center px-2">
+                <div key={idx} className="w-48 flex-shrink-0 text-center px-2">
                   <p
                     className="text-sm leading-relaxed"
                     style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
