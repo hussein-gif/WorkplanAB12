@@ -33,12 +33,45 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
       className="py-24 px-8 relative overflow-hidden"
       style={{ backgroundColor: '#08132B' }}
     >
-      {/* Subtle hex-pattern + colored blobs */}
+      {/* Restored subtle hex-pattern + colored blobs background */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* ...same as before... */}
+        <defs>
+          <pattern
+            id="hexPattern"
+            width="80"
+            height="70"
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(30)"
+          >
+            <path
+              d="M40 0 L80 20 L80 50 L40 70 L0 50 L0 20 Z"
+              stroke="rgba(255,255,255,0.03)"
+              strokeWidth="1"
+              fill="none"
+            />
+          </pattern>
+          <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="100" />
+          </filter>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#hexPattern)" />
+        <circle
+          cx="25%"
+          cy="25%"
+          r="200"
+          fill="rgba(29,78,216,0.3)"
+          filter="url(#blur)"
+        />
+        <circle
+          cx="75%"
+          cy="75%"
+          r="180"
+          fill="rgba(16,185,129,0.25)"
+          filter="url(#blur)"
+        />
       </svg>
 
       <div className="relative z-10 max-w-6xl mx-auto">
@@ -46,21 +79,24 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
         <div className="text-center mb-16">
           <h2
             className="text-4xl sm:text-5xl font-medium text-white mb-6"
-            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', lineHeight: 1.2 }}
+            style={{
+              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+              lineHeight: 1.2,
+            }}
           >
             Våra Bemanningstjänster
           </h2>
         </div>
 
-        {/* Frosted-glass cards with stronger blur */}
+        {/* Frosted-glass cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {services.map((service, idx) => (
             <div
               key={idx}
               className="relative p-6 transition-all duration-300 ease-out hover:scale-[1.02]"
               style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',       // Slightly more transparent
-                backdropFilter: 'blur(24px)',                       // Increased blur
+                backgroundColor: 'rgba(255, 255, 255, 0.04)', // more transparent
+                backdropFilter: 'blur(24px)',                // heavy blur
                 WebkitBackdropFilter: 'blur(24px)',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 borderRadius: '16px',
@@ -68,24 +104,24 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                   0 8px 24px rgba(0, 0, 0, 0.2),
                   0 0 12px rgba(42, 140, 255, 0.5)
                 `,
-                cursor: 'default'
+                cursor: 'default',
               }}
               onMouseEnter={e =>
                 Object.assign(e.currentTarget.style, {
-                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.06)',
                   boxShadow: `
                     0 12px 32px rgba(0, 0, 0, 0.25),
                     0 0 16px rgba(42, 140, 255, 0.7)
-                  `
+                  `,
                 })
               }
               onMouseLeave={e =>
                 Object.assign(e.currentTarget.style, {
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
                   boxShadow: `
                     0 8px 24px rgba(0, 0, 0, 0.2),
                     0 0 12px rgba(42, 140, 255, 0.5)
-                  `
+                  `,
                 })
               }
             >
@@ -95,7 +131,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                   fontWeight: 500,
                   fontSize: '1.5rem',
                   color: '#FFFFFF',
-                  marginBottom: '1rem'
+                  marginBottom: '1rem',
                 }}
               >
                 {service.title}
@@ -108,7 +144,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                   fontSize: '1rem',
                   color: 'rgba(255,255,255,0.8)',
                   lineHeight: 1.6,
-                  marginBottom: '3rem'
+                  marginBottom: '3rem',
                 }}
               >
                 {service.body}
@@ -127,7 +163,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                   padding: '0.25rem 0.75rem',
                   borderRadius: '9999px',
                   color: '#FFFFFF',
-                  boxShadow: '0 0 12px rgba(42,140,255,0.7)'
+                  boxShadow: '0 0 12px rgba(42,140,255,0.7)',
                 }}
               >
                 {service.highlight}
@@ -145,7 +181,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                   justifyContent: 'center',
                   backgroundColor: 'rgba(42,140,255,0.2)',
                   borderRadius: '50%',
-                  boxShadow: '0 0 12px rgba(42,140,255,0.7)'
+                  boxShadow: '0 0 12px rgba(42,140,255,0.7)',
                 }}
               >
                 <svg
@@ -168,14 +204,14 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
           ))}
         </div>
 
-        {/* Contact Prompt unchanged */}
+        {/* Contact Prompt */}
         <div className="text-center">
           <p
             style={{
               fontFamily: 'Inter, sans-serif',
               fontWeight: 300,
               fontSize: '1rem',
-              color: 'rgba(255,255,255,0.7)'
+              color: 'rgba(255,255,255,0.7)',
             }}
           >
             Osäker på vilket upplägg som passar?{' '}
@@ -184,7 +220,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
               style={{
                 fontFamily: 'Inter, sans-serif',
                 fontWeight: 500,
-                color: '#3DA9FC'
+                color: '#3DA9FC',
               }}
               onClick={e => {
                 e.preventDefault();
