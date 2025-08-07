@@ -47,8 +47,8 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
-    // scroll shorter distance for a gentler feel
-    const scrollAmount = scrollRef.current.clientWidth * 0.4;
+    // Fast 200px scroll ger ett kortare, mjukare steg
+    const scrollAmount = 200;
     scrollRef.current.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth',
@@ -58,9 +58,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   useEffect(() => {
     updateScrollButtons();
     window.addEventListener('resize', updateScrollButtons);
-    return () => {
-      window.removeEventListener('resize', updateScrollButtons);
-    };
+    return () => void window.removeEventListener('resize', updateScrollButtons);
   }, []);
 
   return (
@@ -113,7 +111,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        {/* Navigeringspilar */}
+        {/* Pilar */}
         {canScrollLeft && (
           <button
             onClick={() => handleScroll('left')}
@@ -131,7 +129,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </button>
         )}
 
-        {/* Scrollbar med steg */}
+        {/* Scrollbar */}
         <div
           ref={scrollRef}
           onScroll={updateScrollButtons}
@@ -139,10 +137,9 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
         >
           <div className="inline-block min-w-max flex items-start">
             {steps.map((step, idx) => {
-              // vill ta bort extra "mt" för de steg där rubrik och brödtext ska ligga direkt under siffran:
-              const titleMarginTop = idx === 2 || idx === 4 ? 'mt-0' : 'mt-4';
-              // vill ha brödtext på samma linje som rubriken i steg 1 (idx 0) och 4 (idx 3):
-              const descMarginTop = idx === 0 || idx === 3 ? 'mt-0' : 'mt-2';
+              // Nollställ marginaler för just de steg som ska ligga tight
+              const isTightTitle = idx === 2 || idx === 4;     // steg 3 & 5
+              const isTightDesc = idx === 0 || idx === 3;      // steg 1 & 4
 
               return (
                 <React.Fragment key={idx}>
@@ -155,16 +152,24 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                     >
                       {`0${idx + 1}`}
                     </span>
+
+                    {/* Titel */}
                     <h3
-                      className={`text-3xl md:text-4xl font-medium ${titleMarginTop}`}
+                      className={`text-3xl md:text-4xl font-medium ${
+                        isTightTitle ? 'mt-0' : 'mt-4'
+                      }`}
                       style={{
                         fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                       }}
                     >
                       {step.title}
                     </h3>
+
+                    {/* Beskrivning */}
                     <p
-                      className={`text-sm leading-relaxed ${descMarginTop}`}
+                      className={`text-sm leading-relaxed ${
+                        isTightDesc ? 'mt-0' : 'mt-2'
+                      }`}
                       style={{
                         fontFamily: 'Inter, sans-serif',
                         fontWeight: 400,
@@ -174,6 +179,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                     </p>
                   </div>
 
+                  {/* Linje mellan */}
                   {idx < steps.length - 1 && (
                     <div className="mx-12 self-center h-px bg-gray-300/50 flex-grow" />
                   )}
