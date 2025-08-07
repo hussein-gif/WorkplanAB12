@@ -62,7 +62,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
 
   return (
     <section id="how-it-works" className="relative py-12 px-8 overflow-hidden bg-white">
-      {/* SVG background */}
+      {/* SVG-background */}
       <div className="absolute inset-0 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -92,13 +92,13 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto">
-        {/* Title */}
+        {/* Titel */}
         <div className="text-center mb-8">
           <h2
             className="text-4xl md:text-5xl font-medium text-gray-800 mb-4"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
-            Vår Process
+            Våra Bemanningstjänster
           </h2>
           <p
             className="text-lg text-gray-600 max-w-2xl mx-auto font-light"
@@ -127,53 +127,50 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             </button>
           )}
 
+          {/* Scrollable container */}
           <div ref={scrollRef} onScroll={updateScrollButtons} className="overflow-x-auto">
-            <div className="inline-block min-w-max flex items-start">
+            <div className="inline-flex items-start space-x-12 px-4">
               {steps.map((step, idx) => {
                 const tightTitle = idx === 2 || idx === 4;
                 const tightDesc = idx === 0 || idx === 3;
 
                 return (
-                  <React.Fragment key={idx}>
-                    <div className="flex flex-col items-center w-64 flex-shrink-0 px-2">
-                      <span
-                        className="block text-9xl font-light"
-                        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                      >
-                        {`0${idx + 1}`}
-                      </span>
-                      <h3
-                        className={`text-3xl md:text-4xl font-medium text-center ${
-                          tightTitle ? 'mt-0' : 'mt-4'
-                        }`}
-                        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                      >
-                        {step.title}
-                      </h3>
-                      <p
-                        className={`text-sm leading-relaxed text-center ${
-                          tightDesc ? 'mt-0' : 'mt-2'
-                        }`}
-                        style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
-                      >
-                        {step.description}
-                      </p>
-                    </div>
-                    {idx < steps.length - 1 && (
-                      <div className="mx-12 self-center h-px bg-gray-300/50 flex-grow" />
-                    )}
-                  </React.Fragment>
+                  <div key={idx} className="flex flex-col items-start w-64 flex-shrink-0">
+                    <span
+                      className="block text-9xl font-light"
+                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                    >
+                      {`0${idx + 1}`}
+                    </span>
+                    <h3
+                      className={`text-3xl md:text-4xl font-medium text-left ${
+                        tightTitle ? 'mt-0' : 'mt-4'
+                      }`}
+                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                    >
+                      {step.title}
+                    </h3>
+                    <p
+                      className={`text-sm leading-relaxed text-left ${
+                        tightDesc ? 'mt-0' : 'mt-2'
+                      }`}
+                      style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
+                    >
+                      {step.description}
+                    </p>
+                  </div>
                 );
               })}
             </div>
 
-            {/* Fade overlays only when scrollable */}
+            {/* Left fade overlay */}
             {canScrollLeft && (
               <div
                 className="absolute top-0 bottom-0 left-0 w-12 pointer-events-none z-10"
                 style={{ background: 'linear-gradient(to right, white, transparent)' }}
               />
             )}
+            {/* Right fade overlay */}
             {canScrollRight && (
               <div
                 className="absolute top-0 bottom-0 right-0 w-12 pointer-events-none z-10"
