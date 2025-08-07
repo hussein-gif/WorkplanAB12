@@ -37,6 +37,22 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
     return () => window.removeEventListener('resize', updateScrollButtons);
   }, []);
 
+  // build a mask only on the side(s) that are scrollable
+  const maskImage = (() => {
+    if (canScrollLeft && canScrollRight) {
+      return 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)';
+    }
+    if (canScrollLeft) {
+      // fade only on left
+      return 'linear-gradient(to right, transparent, black 15%, black 100%)';
+    }
+    if (canScrollRight) {
+      // fade only on right
+      return 'linear-gradient(to right, black 0%, black 85%, transparent)';
+    }
+    return 'none';
+  })();
+
   return (
     <section id="how-it-works" className="relative py-12 px-8 overflow-hidden bg-white">
       {/* SVG-background */}
@@ -53,7 +69,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </defs>
           <rect width="100%" height="100%" fill="url(#zigzag)" />
           <circle cx="25%" cy="20%" r="300" fill="url(#bgBlob)" />
-          <circle cx="80%" cy="75%" r="350" fill="url(#bgBlob)" />
+          <circle cx="80%" cy="75%" r="300" fill="url(#bgBlob)" />
         </svg>
       </div>
 
@@ -99,12 +115,8 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             onScroll={updateScrollButtons}
             className="overflow-x-auto"
             style={{
-              WebkitMaskImage: canScrollLeft || canScrollRight
-                ? 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
-                : 'none',
-              maskImage: canScrollLeft || canScrollRight
-                ? 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
-                : 'none',
+              WebkitMaskImage: maskImage,
+              maskImage: maskImage,
             }}
           >
             <div className="inline-flex items-start gap-6 px-4">
