@@ -151,7 +151,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                         {`0${idx + 1}`}
                       </span>
                       <h3
-                        className={`text-3xl md:text-4xl font-medium ${
+                        className={`text-3xl md:text-4xl font-medium text-center ${
                           tightTitle ? 'mt-0' : 'mt-4'
                         }`}
                         style={{
@@ -161,9 +161,9 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                         {step.title}
                       </h3>
                       <p
-                        className={`text-sm leading-relaxed ${
+                        className={`text-sm leading-relaxed text-center ${
                           tightDesc ? 'mt-0' : 'mt-2'
-                        } text-center`}
+                        }`}
                         style={{
                           fontFamily: 'Inter, sans-serif',
                           fontWeight: 400,
