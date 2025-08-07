@@ -9,102 +9,105 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
     {
       title: 'Tillsvidareanställning',
       body: 'Rätt kompetens från start – vi säkerställer att kandidaten matchar kravprofil och roll.',
-      highlight: 'Långsiktig lösning'
+      highlight: 'Långsiktig lösning',
     },
     {
       title: 'Timanställda & Vikarier',
       body: 'Snabb tillsättning vid sjukfrånvaro, arbetstoppar eller korta projekt.',
-      highlight: 'Skalbar bemanning'
+      highlight: 'Skalbar bemanning',
     },
     {
       title: 'Säsongsvikariat',
       body: 'Trygg bemanning under intensiva perioder – planerad och kostnadseffektiv.',
-      highlight: 'Förutsägbar täckning'
+      highlight: 'Förutsägbar täckning',
     },
     {
       title: 'Provanställning',
       body: 'Testa kompetensen i skarpt läge innan ni tar anställningsbeslut.',
-      highlight: 'Riskminimering'
-    }
+      highlight: 'Riskminimering',
+    },
   ];
 
   return (
     <section
-      className="py-24 px-8 relative"
-      style={{
-        background: 'linear-gradient(135deg, #0d1b2a 0%, #1a2a47 100%)'
-      }}
+      className="py-24 px-8 relative overflow-hidden"
+      style={{ backgroundColor: '#08132B' }}
     >
-      <div className="max-w-6xl mx-auto">
-        {/* Heading */}
+      {/* Subtle hex-pattern + colored blobs for depth */}
+      <svg
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <pattern
+            id="hexPattern"
+            width="80"
+            height="70"
+            patternUnits="userSpaceOnUse"
+            patternTransform="rotate(30)"
+          >
+            <path
+              d="M40 0 L80 20 L80 50 L40 70 L0 50 L0 20 Z"
+              stroke="rgba(255,255,255,0.03)"
+              strokeWidth="1"
+              fill="none"
+            />
+          </pattern>
+          <filter id="blur" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="100" />
+          </filter>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#hexPattern)" />
+        <circle
+          cx="25%"
+          cy="25%"
+          r="200"
+          fill="rgba(29,78,216,0.3)"
+          filter="url(#blur)"
+        />
+        <circle
+          cx="75%"
+          cy="75%"
+          r="180"
+          fill="rgba(16,185,129,0.25)"
+          filter="url(#blur)"
+        />
+      </svg>
+
+      <div className="relative z-10 max-w-6xl mx-auto">
+        {/* Heading: entire text medium bold */}
         <div className="text-center mb-16">
           <h2
-            style={{
-              color: '#FFFFFF',
-              fontFamily: 'Zen Kaku Gothic Antique, serif',
-              lineHeight: 1.2,
-              fontSize: '3rem'
-            }}
+            className="text-4xl sm:text-5xl font-medium text-white mb-6"
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', lineHeight: 1.2 }}
           >
-            <span style={{ fontWeight: 400 }}>Våra </span>
-            <span style={{ fontWeight: 500 }}>Bemanningstjänster</span>
+            Våra Bemanningstjänster
           </h2>
-          <p
-            className="mt-4"
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 300,
-              fontSize: '1rem',
-              color: 'rgba(255,255,255,0.7)',
-              maxWidth: '40rem',
-              margin: '0.5rem auto 0',
-              lineHeight: 1.4,
-            }}
-          >
-            Flexibla bemanningslösningar skräddarsydda för dina affärsbehov.
-          </p>
+          {/* Subtitle removed */}
         </div>
 
-        {/* Frosted-Glass Cards with Static Blue Glow on Highlights */}
+        {/* Frosted-glass cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {services.map((service, idx) => (
             <div
               key={idx}
-              className="relative p-6 cursor-default transition-all duration-300 ease-out hover:scale-[1.02]"
+              className="relative p-6 transition-all duration-300 ease-out hover:scale-[1.02]"
               style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                backgroundColor: 'rgba(255,255,255,0.08)',
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
-                border: '1px solid rgba(255, 255, 255, 0.15)',
+                border: '1px solid rgba(255,255,255,0.15)',
                 borderRadius: '16px',
                 boxShadow: `
-                  0 8px 24px rgba(0, 0, 0, 0.2),
-                  0 0 12px rgba(42, 140, 255, 0.5)
-                `
+                  0 8px 24px rgba(0,0,0,0.2),
+                  0 0 12px rgba(42,140,255,0.5)
+                `,
+                cursor: 'default' // not clickable
               }}
-              onMouseEnter={e =>
-                Object.assign(e.currentTarget.style, {
-                  backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                  boxShadow: `
-                    0 12px 32px rgba(0, 0, 0, 0.25),
-                    0 0 16px rgba(42, 140, 255, 0.7)
-                  `
-                })
-              }
-              onMouseLeave={e =>
-                Object.assign(e.currentTarget.style, {
-                  backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                  boxShadow: `
-                    0 8px 24px rgba(0, 0, 0, 0.2),
-                    0 0 12px rgba(42, 140, 255, 0.5)
-                  `
-                })
-              }
             >
-              {/* Card Title */}
               <h3
                 style={{
-                  fontFamily: 'Zen Kaku Gothic Antique, serif',
+                  fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                   fontWeight: 500,
                   fontSize: '1.5rem',
                   color: '#FFFFFF',
@@ -114,7 +117,6 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                 {service.title}
               </h3>
 
-              {/* Card Body */}
               <p
                 style={{
                   fontFamily: 'Inter, sans-serif',
@@ -128,7 +130,6 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                 {service.body}
               </p>
 
-              {/* Highlight Pill pinned to bottom with static blue glow */}
               <div
                 style={{
                   position: 'absolute',
@@ -148,7 +149,6 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
                 {service.highlight}
               </div>
 
-              {/* Right-pointing arrow in a circle with static blue glow */}
               <div
                 style={{
                   position: 'absolute',
@@ -184,7 +184,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
           ))}
         </div>
 
-        {/* Contact Prompt */}
+        {/* Contact Prompt unchanged */}
         <div className="text-center">
           <p
             style={{
