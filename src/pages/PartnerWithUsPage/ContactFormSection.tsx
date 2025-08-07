@@ -29,6 +29,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
   handleFormSubmit,
   handleInputChange,
 }) => {
+  // Defensive handling för undefined formData
   const safeFormData = formData || {
     fornamn: '',
     efternamn: '',
@@ -144,12 +145,12 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 </label>
                 <input
                   type="text"
-                    name="titel"
-                    value={safeFormData.titel}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                    placeholder="Din titel"
-                  />
+                  name="titel"
+                  value={safeFormData.titel}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                  placeholder="Din titel"
+                />
               </div>
             </div>
 
@@ -209,10 +210,9 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 >
                   <option value="">Välj typ</option>
                   <option value="tillsvidare">Tillsvidareanställning</option>
-                  <option value="vikariat">Vikariat</option>
-                  <option value="timanstallning">Timanställning</option>
-                  <option value="projekt">Projektanställning</option>
-                  <option value="konsult">Konsultuppdrag</option>
+                  <option value="vikariat_tim">Vikariat / Timanställd</option>
+                  <option value="säsongvikariat">Säsongvikariat</option>
+                  <option value="provanställning">Provanställning</option>
                 </select>
               </div>
               <div>
@@ -257,7 +257,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   placeholder="Var ska arbetet utföras?"
                 />
               </div>
-              <div>
+              <div> 
                 <label className="block text-white/80 text-sm font-medium mb-2">
                   Meddelande *
                 </label>
