@@ -29,7 +29,6 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
   handleFormSubmit,
   handleInputChange,
 }) => {
-  // Defensive handling för undefined formData
   const safeFormData = formData || {
     fornamn: '',
     efternamn: '',
@@ -145,12 +144,12 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 </label>
                 <input
                   type="text"
-                  name="titel"
-                  value={safeFormData.titel}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                  placeholder="Din titel"
-                />
+                    name="titel"
+                    value={safeFormData.titel}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
+                    placeholder="Din titel"
+                  />
               </div>
             </div>
 
@@ -258,7 +257,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   placeholder="Var ska arbetet utföras?"
                 />
               </div>
-              <div> 
+              <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">
                   Meddelande *
                 </label>
@@ -316,7 +315,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
           background-color: #08132B;
         }
 
-        /* Exakt samma “glow”-gradient i botten som på bilden */
+        /* Glow-gradient i botten, nu vänd 180° (ellipse at bottom center) */
         .contact-form-section::after {
           content: '';
           position: absolute;
@@ -326,7 +325,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
           width: 120%;
           height: 220px;
           background: radial-gradient(
-            ellipse at top center,
+            ellipse at bottom center,
             rgba(255, 255, 255, 0.6) 0%,
             rgba(255, 255, 255, 0) 75%
           );
