@@ -112,7 +112,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        {/* Navigeringspilar */}
+        {/* Pilar */}
         {canScrollLeft && (
           <button
             onClick={() => handleScroll('left')}
@@ -130,7 +130,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </button>
         )}
 
-        {/* Scrollbar med steg */}
+        {/* Scrollcontainer */}
         <div
           ref={scrollRef}
           onScroll={updateScrollButtons}
@@ -138,25 +138,26 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
         >
           <div className="inline-block min-w-max flex items-start">
             {steps.map((step, idx) => {
-              // vi vill ta bort extra marginal för steg 3 & 5
+              const isStep3 = idx === 2;
+              // tighta marginaler enligt tidigare
               const titleMargin = idx === 2 || idx === 4 ? 'mt-0' : 'mt-4';
-              // beskrivningen börjar direkt ovanför rubriken för steg 1 & 4
               const descMargin = idx === 0 || idx === 3 ? 'mt-0' : 'mt-2';
 
               return (
                 <React.Fragment key={idx}>
-                  <div className="flex flex-col items-start w-64 flex-shrink-0 px-2">
-                    {/* nummer */}
+                  <div
+                    className={`flex flex-col w-64 flex-shrink-0 px-2 ${
+                      isStep3 ? 'items-center' : 'items-start'
+                    }`}
+                  >
                     <span
-                      className="self-center block text-9xl font-light"
+                      className="block text-9xl font-light self-center"
                       style={{
                         fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                       }}
                     >
                       {`0${idx + 1}`}
                     </span>
-
-                    {/* rubrik */}
                     <h3
                       className={`text-3xl md:text-4xl font-medium ${titleMargin}`}
                       style={{
@@ -165,8 +166,6 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                     >
                       {step.title}
                     </h3>
-
-                    {/* beskrivning */}
                     <p
                       className={`text-sm leading-relaxed ${descMargin}`}
                       style={{
@@ -177,8 +176,6 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                       {step.description}
                     </p>
                   </div>
-
-                  {/* linje mellan steg */}
                   {idx < steps.length - 1 && (
                     <div className="mx-12 self-center h-px bg-gray-300/50 flex-grow" />
                   )}
