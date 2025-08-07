@@ -47,7 +47,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
-    const scrollAmount = 200; // kortare, mjukare scroll
+    const scrollAmount = 200; // kort, mjuk scroll
     scrollRef.current.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth',
@@ -57,9 +57,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   useEffect(() => {
     updateScrollButtons();
     window.addEventListener('resize', updateScrollButtons);
-    return () => {
-      window.removeEventListener('resize', updateScrollButtons);
-    };
+    return () => window.removeEventListener('resize', updateScrollButtons);
   }, []);
 
   return (
@@ -97,7 +95,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto">
-        {/* Titel */}
+        {/* Rubrik */}
         <div className="text-center mb-16">
           <h2
             className="text-4xl md:text-5xl font-light text-gray-800 mb-6"
@@ -130,7 +128,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </button>
         )}
 
-        {/* Scrollcontainer */}
+        {/* Steg-scroll */}
         <div
           ref={scrollRef}
           onScroll={updateScrollButtons}
@@ -139,16 +137,15 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           <div className="inline-block min-w-max flex items-start">
             {steps.map((step, idx) => {
               const isStep3 = idx === 2;
-              // tighta marginaler enligt tidigare
               const titleMargin = idx === 2 || idx === 4 ? 'mt-0' : 'mt-4';
               const descMargin = idx === 0 || idx === 3 ? 'mt-0' : 'mt-2';
 
               return (
                 <React.Fragment key={idx}>
                   <div
-                    className={`flex flex-col w-64 flex-shrink-0 px-2 ${
+                    className={`flex flex-col w-64 flex-shrink-0 ${
                       isStep3 ? 'items-center' : 'items-start'
-                    }`}
+                    } ${isStep3 ? 'pl-6' : 'px-2'}`}
                   >
                     <span
                       className="block text-9xl font-light self-center"
