@@ -23,7 +23,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
     {
       title: 'Träffsäker matchning',
       description:
-        'Strukturerad screening, referenser och kulturpassning säkerställer rätt person på rätt plats.',
+        'Strukturerad screening, referenser och kulturpassning säkerställer rätt person på rätt plats för just ert behov.',
       label: 'NOGGRANT URVAL',
       backgroundImage: 'https://i.ibb.co/Qjvp4Fvq/IMAGE-2025-08-07-19-41-36.jpg',
     },
@@ -63,7 +63,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
       </svg>
 
       <div className="relative z-10 max-w-6xl mx-auto">
-        {/* Heading unchanged */}
+        {/* Heading */}
         <div className="text-center mb-16">
           <h2
             className="text-3xl sm:text-4xl font-light text-gray-800 mb-6"
@@ -102,35 +102,36 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 style={{ backgroundImage: `url(${feature.backgroundImage})` }}
               />
 
-              {/* Badge top-right */}
+              {/* Label top-right, smaller */}
               <div className="absolute top-4 right-4 z-10">
                 <div
-                  className="text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full
+                  className="text-[10px] font-light uppercase tracking-wider px-3 py-1 rounded-full
                              bg-gray-100 border border-gray-200 transition-all duration-200"
-                  style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, color: 'rgba(55,65,81,0.8)' }}
+                  style={{ fontFamily: 'Inter, sans-serif', color: 'rgba(55,65,81,0.8)' }}
                 >
                   {feature.label}
                 </div>
               </div>
 
-              {/* Title & description at bottom */}
+              {/* Title & description at bottom, white and font-light */}
               <div className="absolute inset-x-0 bottom-0 z-10 p-5 bg-gradient-to-t from-black/60 to-transparent">
                 <h3
-                  className="text-white mb-2 leading-tight"
+                  className="text-white mb-2 leading-tight font-light"
                   style={{
                     fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                     fontSize: '20px',
-                    fontWeight: 500,
                   }}
                 >
                   {feature.title}
                 </h3>
                 <p
-                  className="text-white/90 leading-relaxed"
+                  className={`
+                    text-white/90 leading-relaxed font-light
+                    ${index === 2 ? 'line-clamp-3 overflow-hidden' : ''}
+                  `}
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontSize: '14px',
-                    fontWeight: 400,
                     margin: 0,
                   }}
                 >
