@@ -47,8 +47,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
-    // Fast 200px scroll ger ett kortare, mjukare steg
-    const scrollAmount = 200;
+    const scrollAmount = 200; // kortare, mjukare scroll
     scrollRef.current.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth',
@@ -58,7 +57,9 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   useEffect(() => {
     updateScrollButtons();
     window.addEventListener('resize', updateScrollButtons);
-    return () => void window.removeEventListener('resize', updateScrollButtons);
+    return () => {
+      window.removeEventListener('resize', updateScrollButtons);
+    };
   }, []);
 
   return (
@@ -111,7 +112,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        {/* Pilar */}
+        {/* Navigeringspilar */}
         {canScrollLeft && (
           <button
             onClick={() => handleScroll('left')}
@@ -129,7 +130,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </button>
         )}
 
-        {/* Scrollbar */}
+        {/* Scrollbar med steg */}
         <div
           ref={scrollRef}
           onScroll={updateScrollButtons}
@@ -137,15 +138,17 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
         >
           <div className="inline-block min-w-max flex items-start">
             {steps.map((step, idx) => {
-              // Nollställ marginaler för just de steg som ska ligga tight
-              const isTightTitle = idx === 2 || idx === 4;     // steg 3 & 5
-              const isTightDesc = idx === 0 || idx === 3;      // steg 1 & 4
+              // vi vill ta bort extra marginal för steg 3 & 5
+              const titleMargin = idx === 2 || idx === 4 ? 'mt-0' : 'mt-4';
+              // beskrivningen börjar direkt ovanför rubriken för steg 1 & 4
+              const descMargin = idx === 0 || idx === 3 ? 'mt-0' : 'mt-2';
 
               return (
                 <React.Fragment key={idx}>
-                  <div className="flex flex-col items-center w-64 flex-shrink-0 px-2">
+                  <div className="flex flex-col items-start w-64 flex-shrink-0 px-2">
+                    {/* nummer */}
                     <span
-                      className="block text-9xl font-light"
+                      className="self-center block text-9xl font-light"
                       style={{
                         fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                       }}
@@ -153,11 +156,9 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                       {`0${idx + 1}`}
                     </span>
 
-                    {/* Titel */}
+                    {/* rubrik */}
                     <h3
-                      className={`text-3xl md:text-4xl font-medium ${
-                        isTightTitle ? 'mt-0' : 'mt-4'
-                      }`}
+                      className={`text-3xl md:text-4xl font-medium ${titleMargin}`}
                       style={{
                         fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                       }}
@@ -165,11 +166,9 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                       {step.title}
                     </h3>
 
-                    {/* Beskrivning */}
+                    {/* beskrivning */}
                     <p
-                      className={`text-sm leading-relaxed ${
-                        isTightDesc ? 'mt-0' : 'mt-2'
-                      }`}
+                      className={`text-sm leading-relaxed ${descMargin}`}
                       style={{
                         fontFamily: 'Inter, sans-serif',
                         fontWeight: 400,
@@ -179,7 +178,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                     </p>
                   </div>
 
-                  {/* Linje mellan */}
+                  {/* linje mellan steg */}
                   {idx < steps.length - 1 && (
                     <div className="mx-12 self-center h-px bg-gray-300/50 flex-grow" />
                   )}
