@@ -23,7 +23,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
     {
       title: 'Träffsäker matchning',
       description:
-        'Strukturerad screening, referenser och kulturpassning säkerställer rätt person på rätt plats för just ert behov.',
+        'Strukturerad screening, referenser och kulturpassning säkerställer rätt person på rätt plats.',
       label: 'NOGGRANT URVAL',
       backgroundImage: 'https://i.ibb.co/Qjvp4Fvq/IMAGE-2025-08-07-19-41-36.jpg',
     },
