@@ -13,7 +13,6 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
         'Vårt team förstår er vardag inom lager och logistik och kan snabbt sätta oss in i era behov.',
       label: 'SPECIALISTER PÅ ERT OMRÅDE',
       backgroundImage: 'https://i.ibb.co/hJykWM0G/IMAGE-2025-08-07-19-36-02.jpg',
-      useBlend: false,
     },
     {
       title: 'Effektiv process',
@@ -21,7 +20,6 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
         'Vi kickar igång direkt och håller er uppdaterade genom hela kedjan – utan onödiga väntetider.',
       label: 'SNABB ÅTERKOPPLING',
       backgroundImage: 'https://i.ibb.co/wrwTrGJ9/IMAGE-2025-08-07-19-42-10.jpg',
-      useBlend: true,
     },
     {
       title: 'Träffsäker matchning',
@@ -29,7 +27,6 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
         'Strukturerad screening, referenser och kulturpassning säkerställer rätt person på rätt plats.',
       label: 'NOGGRANT URVAL',
       backgroundImage: 'https://i.ibb.co/Qjvp4Fvq/IMAGE-2025-08-07-19-41-36.jpg',
-      useBlend: true,
     },
     {
       title: 'En kontakt – hela vägen',
@@ -37,7 +34,6 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
         'Du får en dedikerad konsult som ansvarar för dialog, rapportering och uppföljning.',
       label: 'PERSONLIG SERVICE',
       backgroundImage: 'https://i.ibb.co/KcgmytRM/IMAGE-2025-08-07-19-40-50.jpg',
-      useBlend: true,
     },
   ];
 
@@ -125,20 +121,15 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
               `}
               style={{ transitionDelay: `${600 + index * 150}ms` }}
             >
-              {/* Bakgrundsbild */}
+              {/* Bakgrundsbild utan blend */}
               <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{
                   backgroundImage: `url(${feature.backgroundImage})`,
-                  opacity: feature.useBlend ? 0.2 : 1,
-                  mixBlendMode: feature.useBlend ? 'overlay' : 'normal',
+                  opacity: 1,
+                  mixBlendMode: 'normal',
                 }}
               />
-
-              {/* Vit halvtransparent overlay */}
-              {feature.useBlend && (
-                <div className="absolute inset-0 bg-white/80 group-hover:bg-white/60 transition-all duration-200" />
-              )}
 
               {/* Innehåll */}
               <div className="relative z-10 h-full p-5 flex flex-col justify-between">
@@ -169,7 +160,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 {/* Label */}
                 <div className="flex justify-start">
                   <div
-                    className="text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full bg-gray-100 border border-gray-200 group-hover:bg-gray-200 transition-all duration-200"
+                    className="text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full bg-gray-100 border border-gray-200 transition-all duration-200"
                     style={{
                       fontFamily: 'Inter, sans-serif',
                       fontWeight: 500,
