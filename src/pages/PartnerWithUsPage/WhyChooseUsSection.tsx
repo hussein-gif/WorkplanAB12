@@ -12,7 +12,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
       description:
         'Vårt team förstår er vardag inom lager och logistik och kan snabbt sätta oss in i era behov.',
       label: 'SPECIALISTER PÅ ERT OMRÅDE',
-      backgroundImage: 'https://images.pexels.com/photos/4481259/pexels-photo-4481259.jpeg',
+      backgroundImage: 'https://i.ibb.co/hJykWM0G/IMAGE-2025-08-07-19-36-02.jpg',
     },
     {
       title: 'Effektiv process',
