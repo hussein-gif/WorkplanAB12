@@ -47,7 +47,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
-    const scrollAmount = 200; // kort, mjuk scroll
+    const scrollAmount = 200; // kortare, mjukare scroll
     scrollRef.current.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth',
@@ -95,7 +95,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto">
-        {/* Rubrik */}
+        {/* Titel */}
         <div className="text-center mb-16">
           <h2
             className="text-4xl md:text-5xl font-light text-gray-800 mb-6"
@@ -143,9 +143,9 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
               return (
                 <React.Fragment key={idx}>
                   <div
-                    className={`flex flex-col w-64 flex-shrink-0 px-2 ${
+                    className={`flex flex-col w-64 flex-shrink-0 ${
                       isStep3 ? 'items-center' : 'items-start'
-                    }`}
+                    } px-2`}
                   >
                     <span
                       className="block text-9xl font-light self-center"
@@ -156,9 +156,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                       {`0${idx + 1}`}
                     </span>
                     <h3
-                      className={`text-3xl md:text-4xl font-medium ${titleMargin} ${
-                        isStep3 ? 'text-center' : 'text-left'
-                      }`}
+                      className={`text-3xl md:text-4xl font-medium ${titleMargin} text-center`}
                       style={{
                         fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                       }}
@@ -167,7 +165,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                     </h3>
                     <p
                       className={`text-sm leading-relaxed ${descMargin} ${
-                        isStep3 ? 'text-center' : 'text-left'
+                        isStep3 ? 'text-left' : 'text-center'
                       }`}
                       style={{
                         fontFamily: 'Inter, sans-serif',
