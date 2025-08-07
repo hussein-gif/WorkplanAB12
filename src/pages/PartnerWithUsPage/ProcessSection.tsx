@@ -8,27 +8,27 @@ interface ProcessSectionProps {
 const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   const steps = [
     {
-      title: 'Behovsanalys',
+      title: 'Analys',
       description:
         'Vi kartlägger mål, tidsram och kompetenskrav i ett kort uppstartssamtal.',
     },
     {
-      title: 'Lösningsförslag',
+      title: 'Strategi',
       description:
         'Ni får ett transparent förslag på bemanningsupplägg, tidsplan och pris.',
     },
     {
-      title: 'Sökning & urval',
+      title: 'Urval',
       description:
         'Aktiv search, annonsering vid behov och strukturerade intervjuer/screening.',
     },
     {
-      title: 'Presentation',
+      title: 'Upplägg',
       description:
         'En shortlist med matchade kandidater, referenser och våra rekommendationer.',
     },
     {
-      title: 'Start & uppföljning',
+      title: 'Uppstart',
       description:
         'Smidig onboarding och regelbunden uppföljning för att säkerställa kvalitet.',
     },
@@ -127,17 +127,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             </button>
           )}
 
-          <div
-            ref={scrollRef}
-            onScroll={updateScrollButtons}
-            className="overflow-x-auto"
-            style={{
-              WebkitMaskImage:
-                'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
-              maskImage:
-                'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
-            }}
-          >
+          <div ref={scrollRef} onScroll={updateScrollButtons} className="overflow-x-auto">
             <div className="inline-block min-w-max flex items-start">
               {steps.map((step, idx) => {
                 const tightTitle = idx === 2 || idx === 4;
@@ -176,6 +166,20 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                 );
               })}
             </div>
+
+            {/* Fade overlays only when scrollable */}
+            {canScrollLeft && (
+              <div
+                className="absolute top-0 bottom-0 left-0 w-12 pointer-events-none z-10"
+                style={{ background: 'linear-gradient(to right, white, transparent)' }}
+              />
+            )}
+            {canScrollRight && (
+              <div
+                className="absolute top-0 bottom-0 right-0 w-12 pointer-events-none z-10"
+                style={{ background: 'linear-gradient(to left, white, transparent)' }}
+              />
+            )}
           </div>
         </div>
       </div>
