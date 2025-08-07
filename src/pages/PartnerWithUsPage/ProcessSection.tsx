@@ -127,7 +127,17 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             </button>
           )}
 
-          <div ref={scrollRef} onScroll={updateScrollButtons} className="overflow-x-auto">
+          <div
+            ref={scrollRef}
+            onScroll={updateScrollButtons}
+            className="overflow-x-auto"
+            style={{
+              WebkitMaskImage:
+                'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+              maskImage:
+                'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+            }}
+          >
             <div className="inline-block min-w-max flex items-start">
               {steps.map((step, idx) => {
                 const tightTitle = idx === 2 || idx === 4;
@@ -167,20 +177,6 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
               })}
             </div>
           </div>
-
-          {/* Fade overlays only when scrollable */}
-          {canScrollLeft && (
-            <div
-              className="absolute top-0 bottom-0 left-0 w-12 pointer-events-none z-10"
-              style={{ background: 'linear-gradient(to right, white, transparent)' }}
-            />
-          )}
-          {canScrollRight && (
-            <div
-              className="absolute top-0 bottom-0 right-0 w-12 pointer-events-none z-10"
-              style={{ background: 'linear-gradient(to left, white, transparent)' }}
-            />
-          )}
         </div>
       </div>
     </section>
