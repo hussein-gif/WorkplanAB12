@@ -33,7 +33,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
       className="py-24 px-8 relative overflow-hidden"
       style={{ backgroundColor: '#08132B' }}
     >
-      {/* Restored subtle hex-pattern + colored blobs background */}
+      {/* Subtle hex-pattern + colored blobs */}
       <svg
         className="absolute inset-0 w-full h-full pointer-events-none"
         xmlns="http://www.w3.org/2000/svg"
@@ -95,8 +95,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
               key={idx}
               className="relative p-6 transition-all duration-300 ease-out hover:scale-[1.02]"
               style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.04)', // more transparent
-                backdropFilter: 'blur(24px)',                // heavy blur
+                backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                backdropFilter: 'blur(24px)',
                 WebkitBackdropFilter: 'blur(24px)',
                 border: '1px solid rgba(255, 255, 255, 0.15)',
                 borderRadius: '16px',
@@ -217,11 +217,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
             Osäker på vilket upplägg som passar?{' '}
             <a
               href="#kontakt-form"
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 500,
-                color: '#3DA9FC',
-              }}
+              className="font-medium text-[#3DA9FC] hover:underline"
               onClick={e => {
                 e.preventDefault();
                 document
