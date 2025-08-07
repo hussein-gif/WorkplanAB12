@@ -11,7 +11,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
       <div className="content max-w-6xl mx-auto py-16 px-8 relative z-10">
         <div className="text-center mb-12">
           <h2
-            className="text-4xl md:text-5xl text-white mb-6 font-medium"
+            className="text-3xl md:text-4xl text-white mb-6 font-medium"
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
               lineHeight: 1.1,
@@ -58,13 +58,13 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
 
         <div className="text-center py-4">
           <p
-            className="text-white/70 text-lg"
+            className="text-white/70 text-lg font-light"
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
             Behöver du kompetens utanför detta?{' '}
             <a
               href="#kontakt-form"
-              className="text-blue-400 font-semibold hover:underline hover:text-blue-300 transition-colors"
+              className="text-blue-400 font-medium hover:underline hover:text-blue-300 transition-colors"
               onClick={(e) => {
                 e.preventDefault();
                 document.getElementById('kontakt-form')?.scrollIntoView({ behavior: 'smooth' });
