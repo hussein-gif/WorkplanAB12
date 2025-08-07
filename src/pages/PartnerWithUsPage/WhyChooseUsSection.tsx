@@ -47,8 +47,12 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
       <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="hexLight" width="60" height="52" patternUnits="userSpaceOnUse">
-            <path d="M30 0 L60 15 L60 45 L30 60 L0 45 L0 15 Z"
-                  stroke="rgba(0,0,0,0.03)" strokeWidth="1" fill="none" />
+            <path
+              d="M30 0 L60 15 L60 45 L30 60 L0 45 L0 15 Z"
+              stroke="rgba(0,0,0,0.03)"
+              strokeWidth="1"
+              fill="none"
+            />
           </pattern>
           <filter id="blurSmall"><feGaussianBlur stdDeviation="80" /></filter>
         </defs>
@@ -97,10 +101,10 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 style={{ backgroundImage: `url(${feature.backgroundImage})` }}
               />
 
-              {/* Badge top-right */}
+              {/* Badge top-right (smaller text) */}
               <div className="absolute top-4 right-4 z-10">
                 <div
-                  className="px-3 py-1 rounded-full bg-black/40 text-white uppercase text-xs tracking-wide"
+                  className="px-3 py-1 rounded-full bg-black/40 text-white uppercase text-[9px] tracking-wide font-medium"
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
                   {feature.label}
