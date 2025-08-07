@@ -110,75 +110,75 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        {/* Pilar */}
-        {canScrollLeft && (
-          <button
-            onClick={() => handleScroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg"
-          >
-            <ChevronLeft className="w-6 h-6 text-gray-600" />
-          </button>
-        )}
-        {canScrollRight && (
-          <button
-            onClick={() => handleScroll('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg"
-          >
-            <ChevronRight className="w-6 h-6 text-gray-600" />
-          </button>
-        )}
+        {/* Scroll + Pilar i en relativ wrapper */}
+        <div className="relative">
+          {canScrollLeft && (
+            <button
+              onClick={() => handleScroll('left')}
+              className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg"
+            >
+              <ChevronLeft className="w-6 h-6 text-gray-600" />
+            </button>
+          )}
+          {canScrollRight && (
+            <button
+              onClick={() => handleScroll('right')}
+              className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg"
+            >
+              <ChevronRight className="w-6 h-6 text-gray-600" />
+            </button>
+          )}
 
-        {/* Steg-scroll */}
-        <div
-          ref={scrollRef}
-          onScroll={updateScrollButtons}
-          className="overflow-x-auto"
-        >
-          <div className="inline-block min-w-max flex items-start">
-            {steps.map((step, idx) => {
-              const isStep3 = idx === 2;
-              const titleMargin = idx === 2 || idx === 4 ? 'mt-0' : 'mt-4';
-              const descMargin = idx === 0 || idx === 3 ? 'mt-0' : 'mt-2';
+          <div
+            ref={scrollRef}
+            onScroll={updateScrollButtons}
+            className="overflow-x-auto"
+          >
+            <div className="inline-block min-w-max flex items-start">
+              {steps.map((step, idx) => {
+                const isTightTitle = idx === 2 || idx === 4; // steg 3 & 5
+                const isTightDesc = idx === 0 || idx === 3;  // steg 1 & 4
 
-              return (
-                <React.Fragment key={idx}>
-                  <div
-                    className={`flex flex-col w-64 flex-shrink-0 px-2 ${
-                      isStep3 ? 'items-center' : 'items-start'
-                    }`}
-                  >
-                    <span
-                      className="block text-9xl font-light self-center"
-                      style={{
-                        fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                      }}
-                    >
-                      {`0${idx + 1}`}
-                    </span>
-                    <h3
-                      className={`text-3xl md:text-4xl font-medium ${titleMargin} text-center`}
-                      style={{
-                        fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                      }}
-                    >
-                      {step.title}
-                    </h3>
-                    <p
-                      className={`text-sm leading-relaxed ${descMargin} text-center`}
-                      style={{
-                        fontFamily: 'Inter, sans-serif',
-                        fontWeight: 400,
-                      }}
-                    >
-                      {step.description}
-                    </p>
-                  </div>
-                  {idx < steps.length - 1 && (
-                    <div className="mx-12 self-center h-px bg-gray-300/50 flex-grow" />
-                  )}
-                </React.Fragment>
-              );
-            })}
+                return (
+                  <React.Fragment key={idx}>
+                    <div className="flex flex-col items-center w-64 flex-shrink-0 px-2">
+                      <span
+                        className="block text-9xl font-light"
+                        style={{
+                          fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                        }}
+                      >
+                        {`0${idx + 1}`}
+                      </span>
+                      <h3
+                        className={`text-3xl md:text-4xl font-medium ${
+                          isTightTitle ? 'mt-0' : 'mt-4'
+                        }`}
+                        style={{
+                          fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                        }}
+                      >
+                        {step.title}
+                      </h3>
+                      <p
+                        className={`text-sm leading-relaxed ${
+                          isTightDesc ? 'mt-0' : 'mt-2'
+                        } text-center`}
+                        style={{
+                          fontFamily: 'Inter, sans-serif',
+                          fontWeight: 400,
+                        }}
+                      >
+                        {step.description}
+                      </p>
+                    </div>
+                    {idx < steps.length - 1 && (
+                      <div className="mx-12 self-center h-px bg-gray-300/50 flex-grow" />
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
