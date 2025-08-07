@@ -86,7 +86,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
               key={index}
               className={`
                 group relative w-full h-[350px] rounded-xl overflow-hidden shadow-lg
-                transition-all duration-200 ease-out cursor-pointer bg-white
+                transition-all duration-200 ease-out cursor-pointer
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
               `}
               style={{ transitionDelay: `${600 + index * 150}ms` }}
@@ -97,12 +97,11 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 style={{ backgroundImage: `url(${feature.backgroundImage})` }}
               />
 
-              {/* Label top-right, extra small */}
+              {/* Badge top-right */}
               <div className="absolute top-4 right-4 z-10">
                 <div
-                  className="text-[10px] font-light uppercase tracking-wider px-3 py-1 rounded-full
-                             bg-gray-100 border border-gray-200 transition-all duration-200"
-                  style={{ fontFamily: 'Inter, sans-serif', color: 'rgba(55,65,81,0.8)' }}
+                  className="px-3 py-1 rounded-full bg-black/40 text-white uppercase text-xs tracking-wide"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
                 >
                   {feature.label}
                 </div>
@@ -121,8 +120,8 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 </h3>
                 <p
                   className={`
-                    text-gray-600 leading-relaxed font-light
                     ${index === 2 ? 'line-clamp-3 overflow-hidden' : ''}
+                    text-gray-300 leading-relaxed font-light
                   `}
                   style={{
                     fontFamily: 'Inter, sans-serif',
