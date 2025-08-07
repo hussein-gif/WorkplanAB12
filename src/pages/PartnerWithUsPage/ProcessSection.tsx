@@ -7,31 +7,11 @@ interface ProcessSectionProps {
 
 const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   const steps = [
-    {
-      title: 'Analys',
-      description:
-        'Vi kartlägger mål, tidsram och kompetenskrav i ett kort uppstartssamtal.',
-    },
-    {
-      title: 'Strategi',
-      description:
-        'Ni får ett transparent förslag på bemanningsupplägg, tidsplan och pris.',
-    },
-    {
-      title: 'Urval',
-      description:
-        'Aktiv search, annonsering vid behov och strukturerade intervjuer/screening.',
-    },
-    {
-      title: 'Upplägg',
-      description:
-        'En shortlist med matchade kandidater, referenser och våra rekommendationer.',
-    },
-    {
-      title: 'Uppstart',
-      description:
-        'Smidig onboarding och regelbunden uppföljning för att säkerställa kvalitet.',
-    },
+    { title: 'Analys', description: 'Vi kartlägger mål, tidsram och kompetenskrav i ett kort uppstartssamtal.' },
+    { title: 'Strategi', description: 'Ni får ett transparent förslag på bemanningsupplägg, tidsplan och pris.' },
+    { title: 'Urval', description: 'Aktiv search, annonsering vid behov och strukturerade intervjuer/screening.' },
+    { title: 'Upplägg', description: 'En shortlist med matchade kandidater, referenser och våra rekommendationer.' },
+    { title: 'Uppstart', description: 'Smidig onboarding och regelbunden uppföljning för att säkerställa kvalitet.' },
   ];
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -48,10 +28,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   const handleScroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
     const scrollAmount = 200;
-    scrollRef.current.scrollBy({
-      left: direction === 'left' ? -scrollAmount : scrollAmount,
-      behavior: 'smooth',
-    });
+    scrollRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -70,19 +47,8 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
               <stop offset="0%" stopColor="rgba(59,130,246,0.15)" />
               <stop offset="100%" stopColor="transparent" />
             </radialGradient>
-            <pattern
-              id="zigzag"
-              patternUnits="userSpaceOnUse"
-              width="10"
-              height="10"
-              patternTransform="rotate(45)"
-            >
-              <path
-                d="M0 5 l5 -5 l5 5"
-                stroke="rgba(16,185,129,0.05)"
-                strokeWidth="2"
-                fill="none"
-              />
+            <pattern id="zigzag" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
+              <path d="M0 5 l5 -5 l5 5" stroke="rgba(16,185,129,0.05)" strokeWidth="2" fill="none" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#zigzag)" />
@@ -92,13 +58,13 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto">
-        {/* Titel */}
+        {/* Title */}
         <div className="text-center mb-8">
           <h2
             className="text-4xl md:text-5xl font-medium text-gray-800 mb-4"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
-            Våra Bemanningstjänster
+            Vår Process
           </h2>
           <p
             className="text-lg text-gray-600 max-w-2xl mx-auto font-light"
@@ -127,56 +93,57 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             </button>
           )}
 
-          {/* Scrollable container */}
-          <div ref={scrollRef} onScroll={updateScrollButtons} className="overflow-x-auto">
+          {/* Steps container */}
+          <div
+            ref={scrollRef}
+            onScroll={updateScrollButtons}
+            className="overflow-x-auto"
+            style={{
+              WebkitMaskImage:
+                canScrollLeft || canScrollRight
+                  ? 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+                  : 'none',
+              maskImage:
+                canScrollLeft || canScrollRight
+                  ? 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+                  : 'none',
+            }}
+          >
             <div className="inline-flex items-start space-x-12 px-4">
-              {steps.map((step, idx) => {
-                const tightTitle = idx === 2 || idx === 4;
-                const tightDesc = idx === 0 || idx === 3;
-
-                return (
-                  <div key={idx} className="flex flex-col items-start w-64 flex-shrink-0">
-                    <span
-                      className="block text-9xl font-light"
-                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                    >
-                      {`0${idx + 1}`}
-                    </span>
+              {steps.map((step, idx) => (
+                <React.Fragment key={idx}>
+                  {/* Number */}
+                  <span
+                    className="text-9xl font-light whitespace-nowrap"
+                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                  >
+                    {`0${idx + 1}`}
+                  </span>
+                  {/* Vertical separator line */}
+                  {idx < steps.length - 1 && (
+                    <div className="h-24 border-r border-gray-300/50 self-center" />
+                  )}
+                  {/* Text block */}
+                  <div className="flex flex-col items-start w-64 flex-shrink-0">
                     <h3
-                      className={`text-3xl md:text-4xl font-medium text-left ${
-                        tightTitle ? 'mt-0' : 'mt-4'
-                      }`}
-                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                      className="text-3xl md:text-4xl font-medium text-left"
+                      style={{
+                        fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                        marginTop: '0.5rem',
+                      }}
                     >
                       {step.title}
                     </h3>
                     <p
-                      className={`text-sm leading-relaxed text-left ${
-                        tightDesc ? 'mt-0' : 'mt-2'
-                      }`}
+                      className="text-sm leading-relaxed text-left mt-2"
                       style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
                     >
                       {step.description}
                     </p>
                   </div>
-                );
-              })}
+                </React.Fragment>
+              ))}
             </div>
-
-            {/* Left fade overlay */}
-            {canScrollLeft && (
-              <div
-                className="absolute top-0 bottom-0 left-0 w-12 pointer-events-none z-10"
-                style={{ background: 'linear-gradient(to right, white, transparent)' }}
-              />
-            )}
-            {/* Right fade overlay */}
-            {canScrollRight && (
-              <div
-                className="absolute top-0 bottom-0 right-0 w-12 pointer-events-none z-10"
-                style={{ background: 'linear-gradient(to left, white, transparent)' }}
-              />
-            )}
           </div>
         </div>
       </div>
