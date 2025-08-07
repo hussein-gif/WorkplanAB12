@@ -12,7 +12,6 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
       description:
         'Vårt team förstår er vardag inom lager och logistik och kan snabbt sätta oss in i era behov.',
       label: 'SPECIALISTER PÅ ERT OMRÅDE',
-      // Din bild som vanlig bakgrund
       backgroundImage: 'https://i.ibb.co/hJykWM0G/IMAGE-2025-08-07-19-36-02.jpg',
       useBlend: false,
     },
@@ -21,7 +20,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
       description:
         'Vi kickar igång direkt och håller er uppdaterade genom hela kedjan – utan onödiga väntetider.',
       label: 'SNABB ÅTERKOPPLING',
-      backgroundImage: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg',
+      backgroundImage: 'https://i.ibb.co/wrwTrGJ9/IMAGE-2025-08-07-19-42-10.jpg',
       useBlend: true,
     },
     {
@@ -29,7 +28,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
       description:
         'Strukturerad screening, referenser och kulturpassning säkerställer rätt person på rätt plats.',
       label: 'NOGGRANT URVAL',
-      backgroundImage: 'https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg',
+      backgroundImage: 'https://i.ibb.co/Qjvp4Fvq/IMAGE-2025-08-07-19-41-36.jpg',
       useBlend: true,
     },
     {
@@ -37,7 +36,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
       description:
         'Du får en dedikerad konsult som ansvarar för dialog, rapportering och uppföljning.',
       label: 'PERSONLIG SERVICE',
-      backgroundImage: 'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg',
+      backgroundImage: 'https://i.ibb.co/KcgmytRM/IMAGE-2025-08-07-19-40-50.jpg',
       useBlend: true,
     },
   ];
@@ -131,7 +130,6 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{
                   backgroundImage: `url(${feature.backgroundImage})`,
-                  // Första kortet utan blend/opacity, övriga med overlay
                   opacity: feature.useBlend ? 0.2 : 1,
                   mixBlendMode: feature.useBlend ? 'overlay' : 'normal',
                 }}
