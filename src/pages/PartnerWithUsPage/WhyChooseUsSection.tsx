@@ -23,7 +23,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
     {
       title: 'Träffsäker matchning',
       description:
-        'Strukturerad screening, referenser och kulturpassning säkerställer rätt person på rätt plats.',
+        'Strukturerad screening, referenser och kulturpassning säkerställer rätt person på rätt plats för just ert behov.',
       label: 'NOGGRANT URVAL',
       backgroundImage: 'https://i.ibb.co/Qjvp4Fvq/IMAGE-2025-08-07-19-41-36.jpg',
     },
@@ -62,11 +62,11 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
       </svg>
 
       <div className="relative z-10 max-w-6xl mx-auto">
-        {/* Section heading */}
+        {/* Section heading: slightly larger and bold */}
         <div className="text-center mb-16">
           <h2
-            className="text-3xl sm:text-4xl font-light text-gray-800 mb-6"
-            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
+            className="text-4xl sm:text-5xl font-semibold text-gray-800 mb-6"
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
             Workplan - Företagens Val
           </h2>
@@ -89,8 +89,8 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
             <div
               key={index}
               className={`
-                group relative w-full h-[350px] rounded-xl overflow-hidden shadow-lg
-                transition-all duration-200 ease-out cursor-pointer
+                relative w-full h-[350px] rounded-xl overflow-hidden shadow-lg
+                transition-all duration-200 ease-out bg-white
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
               `}
               style={{ transitionDelay: `${600 + index * 150}ms` }}
@@ -125,7 +125,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 <p
                   className={`
                     ${index === 2 ? 'line-clamp-3 overflow-hidden' : ''}
-                    text-gray-300 leading-relaxed font-light
+                    text-gray-400 leading-relaxed font-light
                   `}
                   style={{
                     fontFamily: 'Inter, sans-serif',
