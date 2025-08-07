@@ -99,48 +99,42 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             onScroll={updateScrollButtons}
             className="overflow-x-auto"
             style={{
-              WebkitMaskImage:
-                canScrollLeft || canScrollRight
-                  ? 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
-                  : 'none',
-              maskImage:
-                canScrollLeft || canScrollRight
-                  ? 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
-                  : 'none',
+              WebkitMaskImage: canScrollLeft || canScrollRight
+                ? 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+                : 'none',
+              maskImage: canScrollLeft || canScrollRight
+                ? 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
+                : 'none',
             }}
           >
-            <div className="inline-flex items-start space-x-12 px-4">
+            <div className="inline-flex items-start gap-8 px-4">
               {steps.map((step, idx) => (
                 <React.Fragment key={idx}>
-                  {/* Number */}
-                  <span
-                    className="text-9xl font-light whitespace-nowrap"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    {`0${idx + 1}`}
-                  </span>
-                  {/* Vertical separator line */}
-                  {idx < steps.length - 1 && (
-                    <div className="h-24 border-r border-gray-300/50 self-center" />
-                  )}
-                  {/* Text block */}
+                  {/* Number + Text */}
                   <div className="flex flex-col items-start w-64 flex-shrink-0">
+                    <span
+                      className="text-9xl font-light"
+                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                    >
+                      {`0${idx + 1}`}
+                    </span>
                     <h3
-                      className="text-3xl md:text-4xl font-medium text-left"
-                      style={{
-                        fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                        marginTop: '0.5rem',
-                      }}
+                      className="text-3xl md:text-4xl font-medium text-left mt-2"
+                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
                     >
                       {step.title}
                     </h3>
                     <p
-                      className="text-sm leading-relaxed text-left mt-2"
+                      className="text-sm leading-relaxed text-left mt-1"
                       style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
                     >
                       {step.description}
                     </p>
                   </div>
+                  {/* Horizontal separator */}
+                  {idx < steps.length - 1 && (
+                    <div className="self-center flex-shrink-0 w-12 h-px bg-gray-300/50" />
+                  )}
                 </React.Fragment>
               ))}
             </div>
