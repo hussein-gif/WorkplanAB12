@@ -107,7 +107,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                 : 'none',
             }}
           >
-            <div className="inline-flex items-start gap-8 px-4">
+            <div className="inline-flex items-start gap-6 px-4">
               {steps.map((step, idx) => (
                 <React.Fragment key={idx}>
                   {/* Number + Text */}
@@ -132,9 +132,9 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                     </p>
                   </div>
 
-                  {/* -- horizontal line between steps -- */}
+                  {/* Thicker, centered separator */}
                   {idx < steps.length - 1 && (
-                    <div className="self-center flex-shrink-0 w-32 h-px bg-gray-300/50" />
+                    <div className="self-center flex-shrink-0 flex-1 h-1 bg-gray-300/50 transform -translate-y-4" />
                   )}
                 </React.Fragment>
               ))}
