@@ -143,9 +143,9 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
               return (
                 <React.Fragment key={idx}>
                   <div
-                    className={`flex flex-col w-64 flex-shrink-0 ${
+                    className={`flex flex-col w-64 flex-shrink-0 px-2 ${
                       isStep3 ? 'items-center' : 'items-start'
-                    } px-2`}
+                    }`}
                   >
                     <span
                       className="block text-9xl font-light self-center"
@@ -164,9 +164,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                       {step.title}
                     </h3>
                     <p
-                      className={`text-sm leading-relaxed ${descMargin} ${
-                        isStep3 ? 'text-left' : 'text-center'
-                      }`}
+                      className={`text-sm leading-relaxed ${descMargin} text-center`}
                       style={{
                         fontFamily: 'Inter, sans-serif',
                         fontWeight: 400,
