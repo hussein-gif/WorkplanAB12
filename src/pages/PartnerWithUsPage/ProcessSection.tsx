@@ -63,7 +63,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   return (
     <section
       id="how-it-works"
-      className="relative py-24 px-8 overflow-hidden bg-white"
+      className="relative py-12 px-8 overflow-hidden bg-white"
     >
       {/* SVG-bakgrund */}
       <div className="absolute inset-0 pointer-events-none">
@@ -96,9 +96,9 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
 
       <div className="relative z-10 max-w-4xl mx-auto">
         {/* Titel */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-8">
           <h2
-            className="text-4xl md:text-5xl font-light text-gray-800 mb-6"
+            className="text-4xl md:text-5xl font-light text-gray-800 mb-4"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
             <span style={{ fontWeight: 400 }}>Vår </span>
@@ -110,7 +110,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        {/* Scroll + Pilar i en relativ wrapper */}
+        {/* Scroll + Pilar */}
         <div className="relative">
           {canScrollLeft && (
             <button
@@ -136,8 +136,8 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           >
             <div className="inline-block min-w-max flex items-start">
               {steps.map((step, idx) => {
-                const isTightTitle = idx === 2 || idx === 4; // steg 3 & 5
-                const isTightDesc = idx === 0 || idx === 3;  // steg 1 & 4
+                const tightTitle = idx === 2 || idx === 4; // steg 3 & 5
+                const tightDesc = idx === 0 || idx === 3;  // steg 1 & 4
 
                 return (
                   <React.Fragment key={idx}>
@@ -152,7 +152,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                       </span>
                       <h3
                         className={`text-3xl md:text-4xl font-medium ${
-                          isTightTitle ? 'mt-0' : 'mt-4'
+                          tightTitle ? 'mt-0' : 'mt-4'
                         }`}
                         style={{
                           fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
@@ -162,7 +162,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                       </h3>
                       <p
                         className={`text-sm leading-relaxed ${
-                          isTightDesc ? 'mt-0' : 'mt-2'
+                          tightDesc ? 'mt-0' : 'mt-2'
                         } text-center`}
                         style={{
                           fontFamily: 'Inter, sans-serif',
