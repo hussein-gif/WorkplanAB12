@@ -62,7 +62,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
 
   return (
     <section id="how-it-works" className="relative py-12 px-8 overflow-hidden bg-white">
-      {/* SVG-bakgrund */}
+      {/* SVG background */}
       <div className="absolute inset-0 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -70,8 +70,19 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
               <stop offset="0%" stopColor="rgba(59,130,246,0.15)" />
               <stop offset="100%" stopColor="transparent" />
             </radialGradient>
-            <pattern id="zigzag" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
-              <path d="M0 5 l5 -5 l5 5" stroke="rgba(16,185,129,0.05)" strokeWidth="2" fill="none" />
+            <pattern
+              id="zigzag"
+              patternUnits="userSpaceOnUse"
+              width="10"
+              height="10"
+              patternTransform="rotate(45)"
+            >
+              <path
+                d="M0 5 l5 -5 l5 5"
+                stroke="rgba(16,185,129,0.05)"
+                strokeWidth="2"
+                fill="none"
+              />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#zigzag)" />
@@ -81,7 +92,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto">
-        {/* Titel */}
+        {/* Title */}
         <div className="text-center mb-8">
           <h2
             className="text-4xl md:text-5xl font-medium text-gray-800 mb-4"
@@ -97,7 +108,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        {/* Scroll + Pilar */}
+        {/* Scroll + Arrows */}
         <div className="relative">
           {canScrollLeft && (
             <button
@@ -116,12 +127,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
             </button>
           )}
 
-          {/* Scrollbar with fading sides only when scrollable */}
-          <div
-            ref={scrollRef}
-            onScroll={updateScrollButtons}
-            className="overflow-x-auto relative"
-          >
+          <div ref={scrollRef} onScroll={updateScrollButtons} className="overflow-x-auto">
             <div className="inline-block min-w-max flex items-start">
               {steps.map((step, idx) => {
                 const tightTitle = idx === 2 || idx === 4;
@@ -160,22 +166,21 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                 );
               })}
             </div>
-
-            {/* Left fade overlay */}
-            {canScrollLeft && (
-              <div
-                className="absolute top-0 bottom-0 left-0 w-12 pointer-events-none z-20"
-                style={{ background: 'linear-gradient(to right, white, transparent)' }}
-              />
-            )}
-            {/* Right fade overlay */}
-            {canScrollRight && (
-              <div
-                className="absolute top-0 bottom-0 right-0 w-12 pointer-events-none z-20"
-                style={{ background: 'linear-gradient(to left, white, transparent)' }}
-              />
-            )}
           </div>
+
+          {/* Fade overlays only when scrollable */}
+          {canScrollLeft && (
+            <div
+              className="absolute top-0 bottom-0 left-0 w-12 pointer-events-none z-10"
+              style={{ background: 'linear-gradient(to right, white, transparent)' }}
+            />
+          )}
+          {canScrollRight && (
+            <div
+              className="absolute top-0 bottom-0 right-0 w-12 pointer-events-none z-10"
+              style={{ background: 'linear-gradient(to left, white, transparent)' }}
+            />
+          )}
         </div>
       </div>
     </section>
