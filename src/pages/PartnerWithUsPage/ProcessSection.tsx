@@ -61,11 +61,8 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   }, []);
 
   return (
-    <section
-      id="how-it-works"
-      className="relative py-12 px-8 overflow-hidden bg-white"
-    >
-      {/* SVG-bakgrund */}
+    <section id="how-it-works" className="relative py-12 px-8 overflow-hidden bg-white">
+      {/* SVG-background */}
       <div className="absolute inset-0 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -73,19 +70,8 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
               <stop offset="0%" stopColor="rgba(59,130,246,0.15)" />
               <stop offset="100%" stopColor="transparent" />
             </radialGradient>
-            <pattern
-              id="zigzag"
-              patternUnits="userSpaceOnUse"
-              width="10"
-              height="10"
-              patternTransform="rotate(45)"
-            >
-              <path
-                d="M0 5 l5 -5 l5 5"
-                stroke="rgba(16,185,129,0.05)"
-                strokeWidth="2"
-                fill="none"
-              />
+            <pattern id="zigzag" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
+              <path d="M0 5 l5 -5 l5 5" stroke="rgba(16,185,129,0.05)" strokeWidth="2" fill="none" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#zigzag)" />
@@ -95,30 +81,28 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto">
-        {/* Titel */}
+        {/* Title */}
         <div className="text-center mb-8">
           <h2
             className="text-4xl md:text-5xl font-medium text-gray-800 mb-4"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
-            <span>Vår </span>
-            <span>Process</span>
+            Vår Process
           </h2>
           <p
             className="text-lg text-gray-600 max-w-2xl mx-auto font-light"
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
-            En tydlig 5-stegsprocess som ger er rätt kompetens – snabbt, tryggt
-            och utan överraskningar.
+            En tydlig 5-stegsprocess som ger er rätt kompetens – snabbt, tryggt och utan överraskningar.
           </p>
         </div>
 
-        {/* Scroll + Pilar + gradient-mask */}
+        {/* Scroll + Arrows + Fade Masks */}
         <div className="relative">
           {canScrollLeft && (
             <button
               onClick={() => handleScroll('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg z-10"
+              className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg z-20"
             >
               <ChevronLeft className="w-6 h-6 text-gray-600" />
             </button>
@@ -126,17 +110,13 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           {canScrollRight && (
             <button
               onClick={() => handleScroll('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg z-10"
+              className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg z-20"
             >
               <ChevronRight className="w-6 h-6 text-gray-600" />
             </button>
           )}
 
-          <div
-            ref={scrollRef}
-            onScroll={updateScrollButtons}
-            className="overflow-x-auto"
-          >
+          <div ref={scrollRef} onScroll={updateScrollButtons} className="overflow-x-auto">
             <div className="inline-block min-w-max flex items-start">
               {steps.map((step, idx) => {
                 const tightTitle = idx === 2 || idx === 4;
@@ -147,9 +127,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                     <div className="flex flex-col items-center w-64 flex-shrink-0 px-2">
                       <span
                         className="block text-9xl font-light"
-                        style={{
-                          fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                        }}
+                        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
                       >
                         {`0${idx + 1}`}
                       </span>
@@ -157,9 +135,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                         className={`text-3xl md:text-4xl font-medium text-center ${
                           tightTitle ? 'mt-0' : 'mt-4'
                         }`}
-                        style={{
-                          fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                        }}
+                        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
                       >
                         {step.title}
                       </h3>
@@ -167,10 +143,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                         className={`text-sm leading-relaxed text-center ${
                           tightDesc ? 'mt-0' : 'mt-2'
                         }`}
-                        style={{
-                          fontFamily: 'Inter, sans-serif',
-                          fontWeight: 300,
-                        }}
+                        style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
                       >
                         {step.description}
                       </p>
@@ -185,19 +158,9 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </div>
 
           {/* Left fade mask */}
-          <div
-            className="absolute top-0 bottom-0 left-0 w-16 pointer-events-none"
-            style={{
-              background: 'linear-gradient(to right, white, transparent)',
-            }}
-          />
+          <div className="absolute top-0 bottom-0 left-0 w-16 pointer-events-none z-10 bg-gradient-to-r from-white to-transparent" />
           {/* Right fade mask */}
-          <div
-            className="absolute top-0 bottom-0 right-0 w-16 pointer-events-none"
-            style={{
-              background: 'linear-gradient(to left, white, transparent)',
-            }}
-          />
+          <div className="absolute top-0 bottom-0 right-0 w-16 pointer-events-none z-10 bg-gradient-to-l from-white to-transparent" />
         </div>
       </div>
     </section>
