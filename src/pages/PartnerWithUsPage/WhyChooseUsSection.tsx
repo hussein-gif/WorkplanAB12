@@ -1,5 +1,4 @@
 import React from 'react';
-import { Truck, Clock, Shield, Users } from 'lucide-react';
 
 interface WhyChooseUsSectionProps {
   isVisible: boolean;
@@ -39,19 +38,12 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
 
   return (
     <section className="py-24 px-8 relative overflow-hidden">
-      {/* Light Gradient Background */}
+      {/* Background gradients & patterns unchanged */}
       <div
         className="absolute inset-0 pointer-events-none overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%)',
-        }}
+        style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%)' }}
       />
-
-      {/* Subtle Hexagon Pattern + Soft Blobs */}
-      <svg
-        className="absolute inset-0 w-full h-full"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+      <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="hexLight" width="60" height="52" patternUnits="userSpaceOnUse">
             <path
@@ -65,34 +57,17 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
             <feGaussianBlur stdDeviation="80" />
           </filter>
         </defs>
-
         <rect width="100%" height="100%" fill="url(#hexLight)" />
-
-        <circle
-          cx="20%"
-          cy="15%"
-          r="200"
-          fill="rgba(59,130,246,0.1)"
-          filter="url(#blurSmall)"
-        />
-
-        <circle
-          cx="80%"
-          cy="85%"
-          r="180"
-          fill="rgba(16,185,129,0.1)"
-          filter="url(#blurSmall)"
-        />
+        <circle cx="20%" cy="15%" r="200" fill="rgba(59,130,246,0.1)" filter="url(#blurSmall)" />
+        <circle cx="80%" cy="85%" r="180" fill="rgba(16,185,129,0.1)" filter="url(#blurSmall)" />
       </svg>
 
       <div className="relative z-10 max-w-6xl mx-auto">
+        {/* Heading unchanged */}
         <div className="text-center mb-16">
           <h2
-            className="text-3xl sm:text-4xl font-light text-gray-800 mb-6 transition-all duration-300"
-            style={{
-              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-              fontWeight: 400,
-            }}
+            className="text-3xl sm:text-4xl font-light text-gray-800 mb-6"
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
           >
             Workplan - Företagens Val
           </h2>
@@ -115,61 +90,52 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
             <div
               key={index}
               className={`
-                group relative w-full h-[350px] rounded-xl overflow-hidden 
-                shadow-lg transition-all duration-200 ease-out cursor-pointer bg-white 
+                group relative w-full h-[350px] rounded-xl overflow-hidden shadow-lg
+                transition-all duration-200 ease-out cursor-pointer bg-white
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
               `}
               style={{ transitionDelay: `${600 + index * 150}ms` }}
             >
-              {/* Bakgrundsbild utan blend */}
+              {/* Background image */}
               <div
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{
-                  backgroundImage: `url(${feature.backgroundImage})`,
-                  opacity: 1,
-                  mixBlendMode: 'normal',
-                }}
+                style={{ backgroundImage: `url(${feature.backgroundImage})` }}
               />
 
-              {/* Innehåll */}
-              <div className="relative z-10 h-full p-5 flex flex-col justify-between">
-                <div>
-                  <h3
-                    className="text-gray-800 mb-3 leading-tight"
-                    style={{
-                      fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                      fontSize: '20px',
-                      fontWeight: 500,
-                    }}
-                  >
-                    {feature.title}
-                  </h3>
-                  <p
-                    className="text-gray-600 leading-relaxed"
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontSize: '14px',
-                      fontWeight: 400,
-                      margin: 0,
-                    }}
-                  >
-                    {feature.description}
-                  </p>
+              {/* Badge top-right */}
+              <div className="absolute top-4 right-4 z-10">
+                <div
+                  className="text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full
+                             bg-gray-100 border border-gray-200 transition-all duration-200"
+                  style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, color: 'rgba(55,65,81,0.8)' }}
+                >
+                  {feature.label}
                 </div>
+              </div>
 
-                {/* Label */}
-                <div className="flex justify-start">
-                  <div
-                    className="text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full bg-gray-100 border border-gray-200 transition-all duration-200"
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontWeight: 500,
-                      color: 'rgba(55,65,81,0.8)',
-                    }}
-                  >
-                    {feature.label}
-                  </div>
-                </div>
+              {/* Title & description at bottom */}
+              <div className="absolute inset-x-0 bottom-0 z-10 p-5 bg-gradient-to-t from-black/60 to-transparent">
+                <h3
+                  className="text-white mb-2 leading-tight"
+                  style={{
+                    fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                    fontSize: '20px',
+                    fontWeight: 500,
+                  }}
+                >
+                  {feature.title}
+                </h3>
+                <p
+                  className="text-white/90 leading-relaxed"
+                  style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    margin: 0,
+                  }}
+                >
+                  {feature.description}
+                </p>
               </div>
             </div>
           ))}
