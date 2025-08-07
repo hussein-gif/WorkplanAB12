@@ -12,7 +12,9 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
       description:
         'Vårt team förstår er vardag inom lager och logistik och kan snabbt sätta oss in i era behov.',
       label: 'SPECIALISTER PÅ ERT OMRÅDE',
+      // Din bild som vanlig bakgrund
       backgroundImage: 'https://i.ibb.co/hJykWM0G/IMAGE-2025-08-07-19-36-02.jpg',
+      useBlend: false,
     },
     {
       title: 'Effektiv process',
@@ -20,6 +22,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
         'Vi kickar igång direkt och håller er uppdaterade genom hela kedjan – utan onödiga väntetider.',
       label: 'SNABB ÅTERKOPPLING',
       backgroundImage: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg',
+      useBlend: true,
     },
     {
       title: 'Träffsäker matchning',
@@ -27,6 +30,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
         'Strukturerad screening, referenser och kulturpassning säkerställer rätt person på rätt plats.',
       label: 'NOGGRANT URVAL',
       backgroundImage: 'https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg',
+      useBlend: true,
     },
     {
       title: 'En kontakt – hela vägen',
@@ -34,6 +38,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
         'Du får en dedikerad konsult som ansvarar för dialog, rapportering och uppföljning.',
       label: 'PERSONLIG SERVICE',
       backgroundImage: 'https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg',
+      useBlend: true,
     },
   ];
 
@@ -53,7 +58,6 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
         xmlns="http://www.w3.org/2000/svg"
       >
         <defs>
-          {/* Hexagon pattern, mycket låg opacitet */}
           <pattern id="hexLight" width="60" height="52" patternUnits="userSpaceOnUse">
             <path
               d="M30 0 L60 15 L60 45 L30 60 L0 45 L0 15 Z"
@@ -62,16 +66,13 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
               fill="none"
             />
           </pattern>
-          {/* Sudda, färgade cirklar för djup */}
           <filter id="blurSmall">
             <feGaussianBlur stdDeviation="80" />
           </filter>
         </defs>
 
-        {/* Hexagon overlay */}
         <rect width="100%" height="100%" fill="url(#hexLight)" />
 
-        {/* Ljusgrå blob i övre vänster */}
         <circle
           cx="20%"
           cy="15%"
@@ -80,7 +81,6 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
           filter="url(#blurSmall)"
         />
 
-        {/* Ljusgrön blob i nedre höger */}
         <circle
           cx="80%"
           cy="85%"
@@ -93,7 +93,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
       <div className="relative z-10 max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2
-            className={`text-3xl sm:text-4xl font-light text-gray-800 mb-6 transition-all duration-300`}
+            className="text-3xl sm:text-4xl font-light text-gray-800 mb-6 transition-all duration-300"
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
               fontWeight: 400,
@@ -119,7 +119,11 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
           {features.map((feature, index) => (
             <div
               key={index}
-              className={`group relative w-full h-[350px] rounded-xl overflow-hidden shadow-lg transition-all duration-200 ease-out cursor-pointer bg-white ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+              className={`
+                group relative w-full h-[350px] rounded-xl overflow-hidden 
+                shadow-lg transition-all duration-200 ease-out cursor-pointer bg-white 
+                ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
+              `}
               style={{ transitionDelay: `${600 + index * 150}ms` }}
             >
               {/* Bakgrundsbild */}
@@ -127,13 +131,16 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{
                   backgroundImage: `url(${feature.backgroundImage})`,
-                  mixBlendMode: 'overlay',
-                  opacity: 0.2,
+                  // Första kortet utan blend/opacity, övriga med overlay
+                  opacity: feature.useBlend ? 0.2 : 1,
+                  mixBlendMode: feature.useBlend ? 'overlay' : 'normal',
                 }}
               />
 
               {/* Vit halvtransparent overlay */}
-              <div className="absolute inset-0 bg-white/80 group-hover:bg-white/60 transition-all duration-200" />
+              {feature.useBlend && (
+                <div className="absolute inset-0 bg-white/80 group-hover:bg-white/60 transition-all duration-200" />
+              )}
 
               {/* Innehåll */}
               <div className="relative z-10 h-full p-5 flex flex-col justify-between">
