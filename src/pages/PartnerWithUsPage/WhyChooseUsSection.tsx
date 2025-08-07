@@ -38,24 +38,19 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
 
   return (
     <section className="py-24 px-8 relative overflow-hidden">
-      {/* Background gradients & patterns unchanged */}
+      {/* Light Gradient Background */}
       <div
         className="absolute inset-0 pointer-events-none overflow-hidden"
         style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%)' }}
       />
+      {/* Hexagon pattern + blobs */}
       <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="hexLight" width="60" height="52" patternUnits="userSpaceOnUse">
-            <path
-              d="M30 0 L60 15 L60 45 L30 60 L0 45 L0 15 Z"
-              stroke="rgba(0,0,0,0.03)"
-              strokeWidth="1"
-              fill="none"
-            />
+            <path d="M30 0 L60 15 L60 45 L30 60 L0 45 L0 15 Z"
+                  stroke="rgba(0,0,0,0.03)" strokeWidth="1" fill="none" />
           </pattern>
-          <filter id="blurSmall">
-            <feGaussianBlur stdDeviation="80" />
-          </filter>
+          <filter id="blurSmall"><feGaussianBlur stdDeviation="80" /></filter>
         </defs>
         <rect width="100%" height="100%" fill="url(#hexLight)" />
         <circle cx="20%" cy="15%" r="200" fill="rgba(59,130,246,0.1)" filter="url(#blurSmall)" />
@@ -63,7 +58,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
       </svg>
 
       <div className="relative z-10 max-w-6xl mx-auto">
-        {/* Heading */}
+        {/* Section heading */}
         <div className="text-center mb-16">
           <h2
             className="text-3xl sm:text-4xl font-light text-gray-800 mb-6"
@@ -102,7 +97,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 style={{ backgroundImage: `url(${feature.backgroundImage})` }}
               />
 
-              {/* Label top-right, smaller */}
+              {/* Label top-right, extra small */}
               <div className="absolute top-4 right-4 z-10">
                 <div
                   className="text-[10px] font-light uppercase tracking-wider px-3 py-1 rounded-full
@@ -113,10 +108,10 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 </div>
               </div>
 
-              {/* Title & description at bottom, white and font-light */}
+              {/* Title & description at bottom */}
               <div className="absolute inset-x-0 bottom-0 z-10 p-5 bg-gradient-to-t from-black/60 to-transparent">
                 <h3
-                  className="text-white mb-2 leading-tight font-light"
+                  className="text-white mb-2 leading-tight font-medium"
                   style={{
                     fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                     fontSize: '20px',
@@ -126,7 +121,7 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
                 </h3>
                 <p
                   className={`
-                    text-white/90 leading-relaxed font-light
+                    text-gray-600 leading-relaxed font-light
                     ${index === 2 ? 'line-clamp-3 overflow-hidden' : ''}
                   `}
                   style={{
