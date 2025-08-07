@@ -131,9 +131,10 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                       {step.description}
                     </p>
                   </div>
-                  {/* Horizontal separator */}
+
+                  {/* -- horizontal line between steps -- */}
                   {idx < steps.length - 1 && (
-                    <div className="self-center flex-shrink-0 flex-1 h-px bg-gray-300/50" />
+                    <div className="self-center flex-shrink-0 w-32 h-px bg-gray-300/50" />
                   )}
                 </React.Fragment>
               ))}
