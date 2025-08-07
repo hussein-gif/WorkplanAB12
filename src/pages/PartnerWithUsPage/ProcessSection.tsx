@@ -47,7 +47,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
-    const scrollAmount = 200; // kortare, mjukare scroll
+    const scrollAmount = 200;
     scrollRef.current.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth',
@@ -65,7 +65,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
       id="how-it-works"
       className="relative py-12 px-8 overflow-hidden bg-white"
     >
-      {/* SVG-bakgrund */}
+      {/* SVG background */}
       <div className="absolute inset-0 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -95,37 +95,40 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto">
-        {/* Titel */}
+        {/* Title */}
         <div className="text-center mb-8">
           <h2
-            className="text-4xl md:text-5xl font-light text-gray-800 mb-4"
+            className="text-4xl md:text-5xl font-medium text-gray-800 mb-4"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
-            <span style={{ fontWeight: 400 }}>Vår </span>
-            <span style={{ fontWeight: 500 }}>Process</span>
+            <span>Vår </span>
+            <span>Process</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p
+            className="text-lg text-gray-600 max-w-2xl mx-auto font-light"
+            style={{ fontFamily: 'Inter, sans-serif' }}
+          >
             En tydlig 5-stegsprocess som ger er rätt kompetens – snabbt, tryggt
             och utan överraskningar.
           </p>
         </div>
 
-        {/* Scroll + Pilar */}
+        {/* Scroll + Arrows */}
         <div className="relative">
           {canScrollLeft && (
             <button
               onClick={() => handleScroll('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg"
+              className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-[#08132B] rounded-full shadow-lg"
             >
-              <ChevronLeft className="w-6 h-6 text-gray-600" />
+              <ChevronLeft className="w-6 h-6 text-white" />
             </button>
           )}
           {canScrollRight && (
             <button
               onClick={() => handleScroll('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg"
+              className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-[#08132B] rounded-full shadow-lg"
             >
-              <ChevronRight className="w-6 h-6 text-gray-600" />
+              <ChevronRight className="w-6 h-6 text-white" />
             </button>
           )}
 
@@ -136,8 +139,8 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           >
             <div className="inline-block min-w-max flex items-start">
               {steps.map((step, idx) => {
-                const tightTitle = idx === 2 || idx === 4; // steg 3 & 5
-                const tightDesc = idx === 0 || idx === 3;  // steg 1 & 4
+                const tightTitle = idx === 2 || idx === 4;
+                const tightDesc = idx === 0 || idx === 3;
 
                 return (
                   <React.Fragment key={idx}>
@@ -166,7 +169,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                         }`}
                         style={{
                           fontFamily: 'Inter, sans-serif',
-                          fontWeight: 400,
+                          fontWeight: 300,
                         }}
                       >
                         {step.description}
