@@ -42,13 +42,13 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
     if (!scrollRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
     setCanScrollLeft(scrollLeft > 0);
-    // add a small epsilon to avoid flicker at exact end
     setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 1);
   };
 
   const handleScroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
-    const scrollAmount = scrollRef.current.clientWidth * 0.8;
+    // scroll shorter distance for a gentler feel
+    const scrollAmount = scrollRef.current.clientWidth * 0.4;
     scrollRef.current.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth',
@@ -56,9 +56,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   };
 
   useEffect(() => {
-    // initialize button visibility
     updateScrollButtons();
-    // update on resize
     window.addEventListener('resize', updateScrollButtons);
     return () => {
       window.removeEventListener('resize', updateScrollButtons);
@@ -70,7 +68,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
       id="how-it-works"
       className="relative py-24 px-8 overflow-hidden bg-white"
     >
-      {/* Oförändrad SVG-bakgrund */}
+      {/* SVG-bakgrund */}
       <div className="absolute inset-0 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -100,7 +98,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto">
-        {/* Rubrik */}
+        {/* Titel */}
         <div className="text-center mb-16">
           <h2
             className="text-4xl md:text-5xl font-light text-gray-800 mb-6"
@@ -115,7 +113,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        {/* Pilar */}
+        {/* Navigeringspilar */}
         {canScrollLeft && (
           <button
             onClick={() => handleScroll('left')}
@@ -133,43 +131,55 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </button>
         )}
 
-        {/* Stegcontainer */}
+        {/* Scrollbar med steg */}
         <div
           ref={scrollRef}
           onScroll={updateScrollButtons}
           className="overflow-x-auto"
         >
           <div className="inline-block min-w-max flex items-start">
-            {steps.map((step, idx) => (
-              <React.Fragment key={idx}>
-                {/* Varje steg: nummer, titel, beskrivning */}
-                <div className="flex flex-col items-center w-64 flex-shrink-0 px-2">
-                  <span
-                    className="block text-9xl font-light"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    {`0${idx + 1}`}
-                  </span>
-                  <h3
-                    className="text-3xl md:text-4xl font-medium mt-4"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    className="text-sm leading-relaxed mt-2"
-                    style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
-                  >
-                    {step.description}
-                  </p>
-                </div>
+            {steps.map((step, idx) => {
+              // vill ta bort extra "mt" för de steg där rubrik och brödtext ska ligga direkt under siffran:
+              const titleMarginTop = idx === 2 || idx === 4 ? 'mt-0' : 'mt-4';
+              // vill ha brödtext på samma linje som rubriken i steg 1 (idx 0) och 4 (idx 3):
+              const descMarginTop = idx === 0 || idx === 3 ? 'mt-0' : 'mt-2';
 
-                {/* Linje mellan steg */}
-                {idx < steps.length - 1 && (
-                  <div className="mx-12 self-center h-px bg-gray-300/50 flex-grow" />
-                )}
-              </React.Fragment>
-            ))}
+              return (
+                <React.Fragment key={idx}>
+                  <div className="flex flex-col items-center w-64 flex-shrink-0 px-2">
+                    <span
+                      className="block text-9xl font-light"
+                      style={{
+                        fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                      }}
+                    >
+                      {`0${idx + 1}`}
+                    </span>
+                    <h3
+                      className={`text-3xl md:text-4xl font-medium ${titleMarginTop}`}
+                      style={{
+                        fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                      }}
+                    >
+                      {step.title}
+                    </h3>
+                    <p
+                      className={`text-sm leading-relaxed ${descMarginTop}`}
+                      style={{
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: 400,
+                      }}
+                    >
+                      {step.description}
+                    </p>
+                  </div>
+
+                  {idx < steps.length - 1 && (
+                    <div className="mx-12 self-center h-px bg-gray-300/50 flex-grow" />
+                  )}
+                </React.Fragment>
+              );
+            })}
           </div>
         </div>
       </div>
