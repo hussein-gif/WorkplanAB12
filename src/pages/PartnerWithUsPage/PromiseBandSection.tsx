@@ -26,9 +26,9 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
 
         <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { title: 'Snabb återkoppling', subtitle: 'svar inom 24 timmar' },
-            { title: 'Transparent prissättning', subtitle: 'inga dolda avgifter' },
-            { title: 'Personlig kontaktperson', subtitle: 'samma rådgivare genom hela uppdraget' },
+            { title: 'Snabb återkoppling', subtitle: 'Svar inom 24 timmar' },
+            { title: 'Transparent prissättning', subtitle: 'Snga dolda avgifter' },
+            { title: 'Personlig kontaktperson', subtitle: 'Samma rådgivare genom hela uppdraget' },
           ].map(({ title, subtitle }, idx) => (
             <li key={idx} className="flex flex-col items-center space-y-2">
               <CheckCircle size={20} className="text-[#4CAF50] mb-1" />
