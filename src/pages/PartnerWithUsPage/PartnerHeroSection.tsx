@@ -50,7 +50,8 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           }`}
           style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 600 }}
         >
-          Fyll <span className="bg-clip-text text-transparent bg-gradient-to-r from-emerald-300 via-emerald-200 to-cyan-200">kompetensgapet</span>
+          <span className="block">Bygg Teamet</span>
+          <span className="block">Som Klarar Morgondagen</span>
         </h1>
 
         {/* Subheading with a bit more substance */}
@@ -88,16 +89,26 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           </button>
         </div>
 
-        {/* Trust indicators */}
+        {/* BETRODD AV */}
         <div
-          className={`mt-10 md:mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-left transition-all duration-700 delay-500 ${
+          className={`mt-12 md:mt-16 transition-all duration-700 delay-400 ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
           }`}
         >
-          <div className="flex items-center justify-center sm:justify-start gap-3 text-white/90">
-            <ShieldCheck size={20} className="text-emerald-300" />
-            <span className="text-sm md:text-base" style={{ fontFamily: 'Inter, sans-serif' }}>Kvalitetssäkrade kandidater</span>
+          <div className="text-center">
+            <div
+              className="text-sm md:text-base tracking-wide uppercase"
+              style={{ fontFamily: 'Inter, sans-serif', color: '#D1D5DB', fontWeight: 400 }}
+            >
+              BETRODD AV
+            </div>
+            <img
+              src="https://i.ibb.co/p6dcGGHk/Namnl-s-design.png"
+              alt="Betrodd av logotyp"
+              className="h-10 md:h-12 mt-3 mx-auto object-contain opacity-90"
+            />
           </div>
+        </div>
           <div className="flex items-center justify-center sm:justify-start gap-3 text-white/90">
             <Clock3 size={20} className="text-emerald-300" />
             <span className="text-sm md:text-base" style={{ fontFamily: 'Inter, sans-serif' }}>Snabb tillsättning</span>
@@ -108,16 +119,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           </div>
         </div>
 
-        {/* Scroll cue */}
-        <div
-          className={`mt-12 flex justify-center transition-all duration-700 delay-700 ${
-            isVisible ? 'opacity-100' : 'opacity-0'
-          }`}
-        >
-          <div className="inline-flex items-center gap-2 text-white/60 text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>
-            <ArrowDown size={16} className="animate-bounce" />
-            Scrolla
-          </div>
+        
         </div>
       </div>
 
