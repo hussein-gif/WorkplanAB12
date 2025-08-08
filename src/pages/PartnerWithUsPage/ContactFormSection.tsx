@@ -446,17 +446,13 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               </label>
               <button
                 type="submit"
-                className="btn-pro relative group inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl text-white text-base tracking-wide transition-all duration-300 bg-gradient-to-r from-[#2642FF] via-[#2EA0FF] to-[#1BE4FF] shadow-[0_8px_28px_rgba(30,144,255,0.35)] hover:shadow-[0_14px_42px_rgba(30,144,255,0.45)] hover:translate-y-[-1px] active:translate-y-0"
+                className="btn-min group inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white text-base tracking-wide transition-all duration-200"
               >
-                <span className="absolute inset-[1.5px] rounded-[1rem] bg-[#0A1838]/95 backdrop-blur-[2px]" />
-                <span className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 btn-sheen" />
-                <span className="relative flex items-center gap-2">
-                  <Send size={20} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-                  <span
-                    style={{ fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif', fontWeight: 500 }}
-                  >
-                    Skicka
-                  </span>
+                <Send size={18} className="transition-transform duration-200 group-hover:translate-x-0.5" />
+                <span
+                  style={{ fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif', fontWeight: 500 }}
+                >
+                  Skicka
                 </span>
               </button>
             </div>
@@ -503,6 +499,25 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
         }
         .btn-sheen { position:absolute; inset: 1px; border-radius: var(--btn-radius); background: linear-gradient(110deg, transparent, rgba(255,255,255,0.16), transparent); transform: translateX(-130%); }
         .btn-pro:hover .btn-sheen { animation: btnShine 1.1s ease-out; }
+        
+        /* Minimal pro button – enkel, ren design */
+        .btn-min {
+          border: 1px solid rgba(255, 255, 255, 0.22);
+          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #1F3FA9;
+          border-radius: 0.75rem; /* matchar rounded-xl */
+          box-shadow: 0 8px 20px rgba(31, 63, 169, 0.30);
+        }
+        .btn-min:hover {
+          background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #2A53C6;
+          box-shadow: 0 10px 28px rgba(31, 63, 169, 0.36);
+        }
+        .btn-min:active {
+          box-shadow: inset 0 2px 8px rgba(0,0,0,0.25), 0 6px 18px rgba(31, 63, 169, 0.26);
+        }
+        .btn-min:focus-visible {
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(59,130,246,.35), 0 0 0 1px rgba(255,255,255,.2) inset;
+        }
       `}</style>
     </section>
   );
