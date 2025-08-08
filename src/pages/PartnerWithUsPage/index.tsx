@@ -54,6 +54,12 @@ const PartnerWithUsPage = () => {
     }));
   };
 
+  const handleServiceSelect = (serviceType: string) => {
+    setFormData(prev => ({
+      ...prev,
+      typAvBehov: serviceType
+    }));
+  };
   const scrollToContact = () => {
     const element = document.getElementById('kontakt-form');
     if (element) {
@@ -116,7 +122,7 @@ const PartnerWithUsPage = () => {
         
         <WhyChooseUsSection isVisible={isVisible} />
         
-        <ServicesSection isVisible={isVisible} />
+        <ServicesSection isVisible={isVisible} onServiceSelect={handleServiceSelect} />
         
         <ProcessSection isVisible={isVisible} />
         

@@ -2,32 +2,47 @@ import React from 'react';
 
 interface ServicesSectionProps {
   isVisible: boolean;
+  onServiceSelect?: (serviceType: string) => void;
 }
 
-const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
+const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible, onServiceSelect }) => {
   const services = [
     {
+      id: 'tillsvidare',
       title: 'Tillsvidareanställning',
       body: 'Rätt kompetens från start – vi säkerställer att kandidaten matchar kravprofil och roll.',
       highlight: 'Långsiktig lösning',
     },
     {
+      id: 'vikariat_tim',
       title: 'Timanställda & Vikarier',
       body: 'Snabb tillsättning vid sjukfrånvaro, arbetstoppar eller korta projekt.',
       highlight: 'Skalbar bemanning',
     },
     {
+      id: 'säsongvikariat',
       title: 'Säsongsvikariat',
       body: 'Trygg bemanning under intensiva perioder – planerad och kostnadseffektiv.',
       highlight: 'Förutsägbar täckning',
     },
     {
+      id: 'provanställning',
       title: 'Provanställning',
       body: 'Testa kompetensen i skarpt läge innan ni tar anställningsbeslut.',
       highlight: 'Riskminimering',
     },
   ];
 
+  const handleServiceClick = (serviceId: string) => {
+    if (onServiceSelect) {
+      onServiceSelect(serviceId);
+    }
+    // Scroll to contact form
+    const contactForm = document.getElementById('kontakt-form');
+    if (contactForm) {
+      contactForm.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   return (
     <section
       className="py-24 px-8 relative overflow-hidden"
@@ -93,7 +108,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible }) => {
           {services.map((service, idx) => (
             <div
               key={idx}
-              className="relative p-6 transition-all duration-300 ease-out hover:scale-[1.02]"
+              className="relative p-6 transition-all duration-300 ease-out hover:scale-[1.02] cursor-pointer"
+              onClick={() => handleServiceClick(service.id)}
               style={{
                 backgroundColor: 'rgba(255, 255, 255, 0.04)',
                 backdropFilter: 'blur(24px)',
