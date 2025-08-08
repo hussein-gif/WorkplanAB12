@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Clock, Target, Users } from 'lucide-react';
 
 interface WhyChooseCandidatesSectionProps {
@@ -147,7 +147,5 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
     </section>
   );
 };
-
-import { useState, useEffect } from 'react';
 
 export default WhyChooseCandidatesSection;
