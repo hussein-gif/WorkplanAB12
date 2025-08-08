@@ -212,7 +212,7 @@ const ForCandidatesPage = () => {
           {/* Background Image */}
           <div className="absolute inset-0">
             <img
-              src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg"
+              src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg"
               alt="Professionals collaborating"
               className="w-full h-full object-cover"
             />
