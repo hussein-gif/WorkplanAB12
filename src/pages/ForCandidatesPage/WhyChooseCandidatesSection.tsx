@@ -37,50 +37,53 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
 
   return (
     <section className="relative py-24 px-8 bg-white overflow-hidden">
-      {/* Subtle design background */}
+      {/* Background design layers (safe for JSX) */}
       <div
         aria-hidden
-        className={`pointer-events-none absolute -top-20 -right-24 w-[32rem] h-[32rem] rounded-full blur-3xl opacity-60 transition-all duration-700 ${
-          isVisible ? 'opacity-60' : 'opacity-40'
-        }`}
-        style={{
-          background:
-            'radial-gradient(ellipse at center, rgba(8,19,43,0.08), rgba(8,19,43,0) 60%)',
-        }}
-      />
-      <div
-        aria-hidden
-        className={`pointer-events-none absolute -bottom-24 -left-24 w-[36rem] h-[36rem] rounded-full blur-3xl opacity-60 transition-all duration-700 ${
-          isVisible ? 'opacity-60' : 'opacity-40'
-        }`}
-        style={{
-          background:
-            'radial-gradient(ellipse at center, rgba(2,132,199,0.08), rgba(2,132,199,0) 60%)',
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0"
+        className="absolute inset-0 pointer-events-none"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(8,19,43,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(8,19,43,0.04) 1px, transparent 1px)",
-          backgroundSize: "24px 24px, 24px 24px",
-          backgroundPosition: "0 0, 0 0",
+            'linear-gradient(rgba(8,19,43,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(8,19,43,0.04) 1px, transparent 1px)',
+          backgroundSize: '22px 22px, 22px 22px',
+          backgroundPosition: '0 0, 0 0',
         }}
       />
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-40" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(8,19,43,0.05) 0px, rgba(8,19,43,0.05) 1px, transparent 1px, transparent 14px)', WebkitMaskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,.95), transparent 70%)', maskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,.95), transparent 70%)' }} />
-      <div aria-hidden className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[120%] h-[120px] opacity-10 rotate-[-2deg]" style={{ background: 'linear-gradient(90deg, rgba(8,19,43,0) 0%, rgba(8,19,43,0.06) 20%, rgba(8,19,43,0.06) 80%, rgba(8,19,43,0) 100%)' }} /></pattern></defs><rect width=\\'100%\\' height=\\'100%\\' fill=\\'url(%23d)\\'/></svg>')",
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute -top-24 -right-24 w-[28rem] h-[28rem] rounded-full blur-3xl transition-opacity duration-700 ${
+          isVisible ? 'opacity-50' : 'opacity-30'
+        }`}
+        style={{
+          background: 'radial-gradient(ellipse at center, rgba(11,39,77,0.10), rgba(11,39,77,0) 60%)',
+        }}
+      />
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute -bottom-24 -left-24 w-[32rem] h-[32rem] rounded-full blur-3xl transition-opacity duration-700 ${
+          isVisible ? 'opacity-50' : 'opacity-30'
+        }`}
+        style={{
+          background: 'radial-gradient(ellipse at center, rgba(2,132,199,0.08), rgba(2,132,199,0) 60%)',
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[120%] h-32 opacity-10 rotate-[-2deg]"
+        style={{
+          background:
+            'linear-gradient(90deg, rgba(8,19,43,0) 0%, rgba(8,19,43,0.06) 20%, rgba(8,19,43,0.06) 80%, rgba(8,19,43,0) 100%)',
         }}
       />
 
       <div className="relative max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2
-            className="text-3xl md:text-4xl font-semibold text-black mb-4"
+            className="text-3xl md:text-4xl font-semibold text-black"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
             Därför Väljer Kandidater Oss
-          </h2></div>
+          </h2>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {benefits.map((benefit, index) => (
@@ -89,7 +92,12 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
               className="group relative bg-white border border-gray-200 rounded-2xl p-8 shadow-[0_8px_24px_rgba(8,19,43,0.06)] hover:shadow-[0_14px_32px_rgba(8,19,43,0.08)] transition-shadow"
             >
               {/* subtle gradient ring on hover */}
-              <div className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{background: 'linear-gradient(135deg, rgba(8,19,43,0.08), rgba(8,19,43,0.02))'}}/>
+              <div
+                className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(8,19,43,0.08), rgba(8,19,43,0.02))',
+                }}
+              />
 
               <div
                 className={`relative w-16 h-16 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center mb-6 mx-auto shadow-[0_8px_16px_rgba(8,19,43,0.08)]`}
