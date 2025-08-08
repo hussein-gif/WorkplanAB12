@@ -27,7 +27,7 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
           <div className="card p-8 text-center">
             <div className="avatar bg-gradient-to-br from-blue-500 to-purple-600 mb-4 mx-auto">
               <img
-                src="https://i.ibb.co/jZ4vVc47/Black-and-White-Modern-Linkedln-Profile-Picture-1.png"
+                src="https://i.ibb.co/WNwzR4vM/Black-and-White-Modern-Linkedln-Profile-Picture-4.png"
                 alt="Jawad Abbas"
                 className="w-full h-full rounded-full object-cover"
               />
@@ -45,7 +45,7 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
           <div className="card p-8 text-center">
             <div className="avatar bg-gradient-to-br from-blue-500 to-purple-600 mb-4 mx-auto">
               <img
-                src="https://i.ibb.co/Nz73MqJ/Black-and-White-Modern-Linkedln-Profile-Picture-2.png"
+                src="https://i.ibb.co/cpq3pkZ/Black-and-White-Modern-Linkedln-Profile-Picture-3.png"
                 alt="Arvin Mahmoudi"
                 className="w-full h-full rounded-full object-cover"
               />
