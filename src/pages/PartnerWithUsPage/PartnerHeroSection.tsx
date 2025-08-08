@@ -63,7 +63,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
 
         {/* Subheading */}
         <p
-          className={`text-base md:text-xl text-white/85 mb-10 md:mb-12 font-light leading-relaxed max-w-3xl mx-auto transition-all duration-1000 delay-150 transform ${
+          className={`text-base md:text-xl text-gray-300 mb-10 md:mb-12 font-light leading-relaxed max-w-3xl mx-auto transition-all duration-1000 delay-150 transform ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
           }`}
           style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
