@@ -23,18 +23,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
 
         <div className="max-w-2xl mx-auto mb-8">
           <div className="card p-8 text-center flex flex-col justify-between h-full">
-            <div
-              className="icon-bg mb-6 mx-auto"
-              style={{
-                background: '#2E8B57',
-                width: '4rem',
-                height: '4rem',
-                borderRadius: '0.5rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
+            <div className="icon-bg icon-3d mb-6 mx-auto">
               <Truck size={28} className="text-white" />
             </div>
             <div>
@@ -92,10 +81,8 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           opacity: 0.4;
           z-index: 0;
         }
-        .industries-section .content {
-          position: relative;
-          z-index: 1;
-        }
+        .industries-section .content { position: relative; z-index: 1; }
+
         .card {
           display: flex;
           flex-direction: column;
@@ -106,8 +93,55 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           border: 1px solid rgba(255,255,255,0.1);
           border-radius: 1rem;
         }
+
+        /* Icon container */
         .icon-bg {
-          /* styling via inline style above */
+          width: 4rem;
+          height: 4rem;
+          border-radius: 0.75rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        /* 3D, professionell stil med samma gröna som knappen (#189A4C / hover #1FB259) */
+        .icon-3d {
+          position: relative;
+          background: linear-gradient(180deg, #1FB259 0%, #189A4C 55%, #147C43 100%);
+          border: 1px solid rgba(255,255,255,0.18);
+          box-shadow:
+            0 10px 22px rgba(20, 124, 67, 0.35),
+            0 2px 6px rgba(0,0,0,0.25),
+            inset 0 1px 0 rgba(255,255,255,0.16),
+            inset 0 -1px 0 rgba(0,0,0,0.25);
+          transition: transform .18s ease, box-shadow .18s ease;
+        }
+        .icon-3d:hover {
+          transform: translateY(-1px);
+          box-shadow:
+            0 14px 28px rgba(20, 124, 67, 0.42),
+            0 4px 10px rgba(0,0,0,0.28),
+            inset 0 1px 0 rgba(255,255,255,0.18),
+            inset 0 -1px 0 rgba(0,0,0,0.28);
+        }
+        .icon-3d::before {
+          content: '';
+          position: absolute;
+          inset: 1px;
+          border-radius: inherit;
+          background:
+            radial-gradient(ellipse at 50% 18%, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.08) 28%, rgba(255,255,255,0) 40%),
+            linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0));
+          pointer-events: none;
+        }
+        .icon-3d::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: linear-gradient(135deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0) 32%);
+          mix-blend-mode: soft-light;
+          pointer-events: none;
         }
       `}</style>
     </section>
