@@ -17,8 +17,8 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       {/* Background Image (unchanged) */}
       <div className="absolute inset-0">
         <img
-          src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg"
-          alt="Business professionals in meeting discussing partnership"
+          src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg"
+          alt="Professionals collaborating"
           className="w-full h-full object-cover"
         />
         {/* Dark vignette + gradient tint for depth */}
@@ -49,7 +49,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-8 text-center">
+      <div className="relative z-10 max-w-5xl px-6 md:px-8 text-left mx-auto md:mx-0 md:ml-16 lg:ml-24 xl:ml-32">
         {/* Main Heading updated to two lines, all white */}
         <h1
           className={`text-5xl md:text-6xl lg:text-7xl text-white mb-5 tracking-tight leading-[0.95] transition-all duration-1000 transform ${
@@ -63,7 +63,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
 
         {/* Subheading */}
         <p
-          className={`text-base md:text-xl text-gray-300 mb-10 md:mb-12 font-light leading-relaxed max-w-3xl mx-auto transition-all duration-1000 delay-150 transform ${
+          className={`text-base md:text-xl text-gray-300 mb-10 md:mb-12 font-light leading-relaxed max-w-3xl md:mx-0 transition-all duration-1000 delay-150 transform ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
           }`}
           style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
@@ -73,7 +73,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
 
         {/* CTA Buttons */}
         <div
-          className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center transition-all duration-1000 delay-300 transform ${
+          className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-start items-start transition-all duration-1000 delay-300 transform ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
           }`}
         >
