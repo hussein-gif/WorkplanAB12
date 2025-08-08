@@ -17,7 +17,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       {/* Background Image (unchanged) */}
       <div className="absolute inset-0">
         <img
-          src="https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg"
+          src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg"
           alt="Business professionals in meeting discussing partnership"
           className="w-full h-full object-cover"
         />
