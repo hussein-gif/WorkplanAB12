@@ -63,7 +63,10 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
         className="pointer-events-none absolute inset-0 opacity-[0.06]"
         style={{
           backgroundImage:
-            "url('data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 64 64\\' fill=\\'none\\'><defs><pattern id=\\'d\\' width=\\'32\\' height=\\'32\\' patternUnits=\\'userSpaceOnUse\\'><circle cx=\\'1\\' cy=\\'1\\' r=\\'.8\\' fill=\\'%2308132B\\' opacity=\\'0.35\\'/></pattern></defs><rect width=\\'100%\\' height=\\'100%\\' fill=\\'url(%23d)\\'/></svg>')",
+            "url('data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' viewBox=\\'0 0 64 64\\' fill=\\'none\\'><defs><pattern id=\\'d\\' width=\\'32\\' height=\\'32\\' patternUnits=\\'userSpaceOnUse\\'><circle cx=\\'1\\' cy=\\'1\\' r=\\'.8\\' fill=\\'%2308132B\\' opacity=\\'0.35\\'/>
+      <div aria-hidden className="pointer-events-none absolute -top-40 -right-28 w-[34rem] h-[34rem] rounded-full blur-2xl opacity-60" style={{ background: 'conic-gradient(from 210deg at 50% 50%, rgba(8,19,43,0.10), rgba(2,132,199,0.06), rgba(8,19,43,0.10))' }} />
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-40" style={{ backgroundImage: 'repeating-linear-gradient(135deg, rgba(8,19,43,0.05) 0px, rgba(8,19,43,0.05) 1px, transparent 1px, transparent 14px)', WebkitMaskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,.95), transparent 70%)', maskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,.95), transparent 70%)' }} />
+      <div aria-hidden className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[120%] h-[120px] opacity-10 rotate-[-2deg]" style={{ background: 'linear-gradient(90deg, rgba(8,19,43,0) 0%, rgba(8,19,43,0.06) 20%, rgba(8,19,43,0.06) 80%, rgba(8,19,43,0) 100%)' }} /></pattern></defs><rect width=\\'100%\\' height=\\'100%\\' fill=\\'url(%23d)\\'/></svg>')",
         }}
       />
 
@@ -74,14 +77,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
             Därför Väljer Kandidater Oss
-          </h2>
-          <p
-            className="text-gray-600 max-w-2xl mx-auto"
-            style={{ fontFamily: 'Inter, sans-serif' }}
-          >
-            Vi skapar trygga uppdrag med tydliga villkor, personlig kontakt och snabb återkoppling.
-          </p>
-        </div>
+          </h2></div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {benefits.map((benefit, index) => (
