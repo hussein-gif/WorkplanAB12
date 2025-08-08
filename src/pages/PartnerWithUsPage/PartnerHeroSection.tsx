@@ -111,7 +111,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
 
       {/* BETRODD AV pinned bottom */}
       <div className={`trusted absolute left-1/2 -translate-x-1/2 bottom-2 md:bottom-3 lg:bottom-4 z-10 text-center transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="text-xs md:text-sm tracking-wide uppercase" style={{ fontFamily: 'Inter, sans-serif', color: '#D1D5DB', fontWeight: 500 }}>BETRODD AV</div>
+        <div className="text-xs md:text-sm tracking-wide uppercase relative -translate-y-[4px]" style={{ fontFamily: 'Inter, sans-serif', color: '#D1D5DB', fontWeight: 500 }}>BETRODD AV</div>
         <img
           src="https://i.ibb.co/W4J67ydJ/Namnl-s-design-1-removebg-preview.png"
           alt="Betrodd av logotyp"
