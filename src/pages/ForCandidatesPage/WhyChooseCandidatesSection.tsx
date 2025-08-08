@@ -114,6 +114,18 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
 
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-medium text-black mb-6">
+            Därför Väljer Kandidater Oss
+          </h2>
+        </div>
+
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-medium text-black mb-6">
+            Därför Väljer Kandidater Oss
+          </h2>
+        </div>
+
+        <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-medium text-gray-900 mb-6">
             Därför Väljer Kandidater Oss
           </h2>
