@@ -461,6 +461,8 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
       </div>
 
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
         .contact-form-section {
           position: relative;
           overflow: hidden;
@@ -503,20 +505,20 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
         /* Minimal pro button – enkel, ren design */
         .btn-min {
           border: 1px solid rgba(255, 255, 255, 0.22);
-          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #1F3FA9;
+          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #167E9B; /* teal base */
           border-radius: 0.75rem; /* matchar rounded-xl */
-          box-shadow: 0 8px 20px rgba(31, 63, 169, 0.30);
+          box-shadow: 0 8px 20px rgba(22, 126, 155, 0.30);
         }
         .btn-min:hover {
-          background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #2A53C6;
-          box-shadow: 0 10px 28px rgba(31, 63, 169, 0.36);
+          background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #1F95AD; /* hover teal */
+          box-shadow: 0 10px 28px rgba(22, 126, 155, 0.36);
         }
         .btn-min:active {
-          box-shadow: inset 0 2px 8px rgba(0,0,0,0.25), 0 6px 18px rgba(31, 63, 169, 0.26);
+          box-shadow: inset 0 2px 8px rgba(0,0,0,0.25), 0 6px 18px rgba(22, 126, 155, 0.26);
         }
         .btn-min:focus-visible {
           outline: none;
-          box-shadow: 0 0 0 3px rgba(59,130,246,.35), 0 0 0 1px rgba(255,255,255,.2) inset;
+          box-shadow: 0 0 0 3px rgba(34, 197, 244, .35), 0 0 0 1px rgba(255,255,255,.2) inset; /* cyan-ish focus som passar temat */
         }
       `}</style>
     </section>
