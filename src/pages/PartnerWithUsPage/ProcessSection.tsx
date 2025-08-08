@@ -54,7 +54,10 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   })();
 
   return (
-    <section id="how-it-works" className="relative py-12 px-8 overflow-hidden bg-white">
+    <section className="relative py-12 px-8 overflow-hidden bg-white">
+      {/* Scroll target positioned at the very top of the section */}
+      <div id="how-it-works" className="absolute -top-20" />
+      
       {/* SVG-background */}
       <div className="absolute inset-0 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
