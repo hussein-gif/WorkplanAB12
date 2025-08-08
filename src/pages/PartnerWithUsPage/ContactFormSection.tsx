@@ -1,5 +1,5 @@
-import React from 'react';
-import { Send, Building, User, Mail, Phone, MessageSquare } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Send, Building, User, Mail, Phone, MessageSquare, ChevronDown, Check } from 'lucide-react';
 
 interface ContactFormSectionProps {
   formData: {
@@ -24,6 +24,145 @@ interface ContactFormSectionProps {
   ) => void;
 }
 
+// --- Smooth, professionell custom dropdown ---
+interface Option {
+  value: string;
+  label: string;
+}
+
+const SmoothSelect: React.FC<{
+  name: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: Option[];
+  required?: boolean;
+  placeholder?: string;
+}> = ({ name, value, onChange, options, required, placeholder = 'Välj' }) => {
+  const [open, setOpen] = useState(false);
+  const [hoverIndex, setHoverIndex] = useState<number>(-1);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const selected = options.find((o) => o.value === value);
+
+  useEffect(() => {
+    const onClickOutside = (e: MouseEvent) => {
+      if (
+        menuRef.current &&
+        buttonRef.current &&
+        !menuRef.current.contains(e.target as Node) &&
+        !buttonRef.current.contains(e.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', onClickOutside);
+    return () => document.removeEventListener('mousedown', onClickOutside);
+  }, []);
+
+  useEffect(() => {
+    if (open) {
+      const idx = Math.max(
+        0,
+        options.findIndex((o) => o.value === value)
+      );
+      setHoverIndex(idx);
+    }
+  }, [open, options, value]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!open && (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      setOpen(true);
+      return;
+    }
+    if (open) {
+      if (e.key === 'Escape') {
+        setOpen(false);
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setHoverIndex((i) => Math.min(i + 1, options.length - 1));
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setHoverIndex((i) => Math.max(i - 1, 0));
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        const opt = options[hoverIndex];
+        if (opt) {
+          onChange(opt.value);
+          setOpen(false);
+        }
+      }
+    }
+  };
+
+  return (
+    <div className="relative" onKeyDown={handleKeyDown}>
+      <button
+        type="button"
+        ref={buttonRef}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((o) => !o)}
+        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300 flex items-center justify-between"
+      >
+        <span className={selected ? 'text-white' : 'text-white/50'}>
+          {selected ? selected.label : placeholder}
+        </span>
+        <ChevronDown
+          size={18}
+          className={`ml-2 transition-transform ${open ? 'rotate-180' : ''} text-white/60`}
+        />
+      </button>
+
+      <div
+        ref={menuRef}
+        className={`absolute left-0 right-0 mt-2 origin-top rounded-xl backdrop-blur-md border border-white/20 bg-[#0b1a3a]/90 shadow-2xl transition-all duration-200 ease-out z-20 ${
+          open
+            ? 'opacity-100 scale-100 translate-y-0'
+            : 'opacity-0 scale-95 -translate-y-1 pointer-events-none'
+        }`}
+        role="listbox"
+        tabIndex={-1}
+      >
+        <ul className="py-1 max-h-56 overflow-auto">
+          {options.map((opt, idx) => {
+            const isActive = idx === hoverIndex;
+            const isSelected = opt.value === value;
+            return (
+              <li key={opt.value}>
+                <button
+                  type="button"
+                  role="option"
+                  aria-selected={isSelected}
+                  onMouseEnter={() => setHoverIndex(idx)}
+                  onClick={() => {
+                    onChange(opt.value);
+                    setOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-2.5 flex items-center justify-between transition-colors select-none ${
+                    isSelected
+                      ? 'bg-white/10 text-white'
+                      : isActive
+                      ? 'bg-white/5 text-white'
+                      : 'text-white/90'
+                  }`}
+                >
+                  <span>{opt.label}</span>
+                  {isSelected && <Check size={16} className="opacity-80" />}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      {/* Hidden input to preserve form semantics/validation */}
+      <input type="hidden" name={name} value={value} required={required} />
+    </div>
+  );
+};
+
 const ContactFormSection: React.FC<ContactFormSectionProps> = ({
   formData,
   handleFormSubmit,
@@ -44,6 +183,14 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
     meddelande: '',
     gdprAccept: false,
   };
+
+  const typOptions: Option[] = [
+    { value: '', label: 'Välj typ' },
+    { value: 'tillsvidare', label: 'Tillsvidareanställning' },
+    { value: 'vikariat_tim', label: 'Vikariat / Timanställd' },
+    { value: 'säsongvikariat', label: 'Säsongvikariat' },
+    { value: 'provanställning', label: 'Provanställning' },
+  ];
 
   return (
     <section id="kontakt-form" className="contact-form-section relative">
@@ -201,19 +348,20 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 <label className="block text-white/80 text-sm font-medium mb-2">
                   Typ av behov *
                 </label>
-                <select
+                {/* --- Replaced native <select> with SmoothSelect --- */}
+                <SmoothSelect
                   name="typAvBehov"
                   value={safeFormData.typAvBehov}
-                  onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300 appearance-none cursor-pointer"
-                >
-                  <option value="">Välj typ</option>
-                  <option value="tillsvidare">Tillsvidareanställning</option>
-                  <option value="vikariat_tim">Vikariat / Timanställd</option>
-                  <option value="säsongvikariat">Säsongvikariat</option>
-                  <option value="provanställning">Provanställning</option>
-                </select>
+                  placeholder="Välj typ"
+                  options={typOptions}
+                  onChange={(val) => {
+                    const event = {
+                      target: { name: 'typAvBehov', value: val },
+                    } as unknown as React.ChangeEvent<HTMLSelectElement>;
+                    handleInputChange(event);
+                  }}
+                />
               </div>
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">
@@ -257,7 +405,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   placeholder="Var ska arbetet utföras?"
                 />
               </div>
-              <div> 
+              <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">
                   Meddelande *
                 </label>
