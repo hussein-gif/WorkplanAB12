@@ -13,11 +13,11 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
   scrollToProcess,
 }) => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-start overflow-hidden">
       {/* Background Image (unchanged) */}
       <div className="absolute inset-0">
         <img
-          src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg"
+          src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg"
           alt="Professionals collaborating"
           className="w-full h-full object-cover"
         />
@@ -49,7 +49,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl px-6 md:px-8 text-left mx-auto md:mx-0 md:ml-16 lg:ml-24 xl:ml-32">
+      <div className="relative z-10 max-w-5xl w-full px-6 md:px-8 text-left ml-6 md:ml-16 lg:ml-24 xl:ml-32 mr-auto">
         {/* Main Heading updated to two lines, all white */}
         <h1
           className={`text-5xl md:text-6xl lg:text-7xl text-white mb-5 tracking-tight leading-[0.95] transition-all duration-1000 transform ${
