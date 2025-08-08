@@ -50,23 +50,12 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-6 md:px-8 text-center">
-        {/* Top badge */}
-        <div
-          className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/15 bg-white/5 backdrop-blur-sm text-white/80 text-sm tracking-wide mb-6 transition-all duration-700 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-          }`}
-          style={{ fontFamily: 'Inter, sans-serif' }}
-        >
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400" />
-          Bemanning för lager & logistik
-        </div>
-
         {/* Main Heading updated to two lines, all white */}
         <h1
           className={`text-5xl md:text-6xl lg:text-7xl text-white mb-5 tracking-tight leading-[0.95] transition-all duration-1000 transform ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
           }`}
-          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 600 }}
+          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 700 }}
         >
           <span className="block">Bygg Teamet</span>
           <span className="block">Som Klarar Morgondagen</span>
