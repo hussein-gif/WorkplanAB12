@@ -446,10 +446,18 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               </label>
               <button
                 type="submit"
-                className="py-3 px-6 bg-blue-600 text-white rounded-xl font-semibold text-lg tracking-wide hover:bg-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] flex items-center space-x-2"
+                className="btn-pro relative group inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl text-white text-base tracking-wide transition-all duration-300 bg-gradient-to-r from-[#2642FF] via-[#2EA0FF] to-[#1BE4FF] shadow-[0_8px_28px_rgba(30,144,255,0.35)] hover:shadow-[0_14px_42px_rgba(30,144,255,0.45)] hover:translate-y-[-1px] active:translate-y-0"
               >
-                <Send size={20} />
-                <span>Skicka</span>
+                <span className="absolute inset-[1.5px] rounded-[1rem] bg-[#0A1838]/95 backdrop-blur-[2px]" />
+                <span className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 btn-sheen" />
+                <span className="relative flex items-center gap-2">
+                  <Send size={20} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+                  <span
+                    style={{ fontFamily: 'Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif', fontWeight: 500 }}
+                  >
+                    Skicka
+                  </span>
+                </span>
               </button>
             </div>
           </form>
@@ -480,6 +488,21 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
           pointer-events: none;
           z-index: 0;
         }
+        
+        /* Inter för knapptypsnitt */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+        /* Subtila effekter för den nya knappen */
+        :root { --btn-radius: 1rem; }
+        .btn-pro:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(59,130,246,.35), 0 0 0 1px rgba(255,255,255,.2) inset; }
+
+        /* Shimmer / sheen vid hover */
+        @keyframes btnShine {
+          0% { transform: translateX(-130%); }
+          100% { transform: translateX(130%); }
+        }
+        .btn-sheen { position:absolute; inset: 1px; border-radius: var(--btn-radius); background: linear-gradient(110deg, transparent, rgba(255,255,255,0.16), transparent); transform: translateX(-130%); }
+        .btn-pro:hover .btn-sheen { animation: btnShine 1.1s ease-out; }
       `}</style>
     </section>
   );
