@@ -17,8 +17,8 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       {/* Background Image (unchanged) */}
       <div className="absolute inset-0">
         <img
-          src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg"
-          alt="Professionals collaborating"
+          src="https://images.pexels.com/photos/3182812/pexels-photo-3182812.jpeg"
+          alt="Business professionals in meeting discussing partnership"
           className="w-full h-full object-cover"
         />
         {/* Dark vignette + gradient tint for depth */}
