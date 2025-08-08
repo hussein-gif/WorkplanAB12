@@ -16,6 +16,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
         'Vi matchar dig med uppdrag som passar dina mål och ditt schema. Du får snabb återkoppling.',
       highlight: 'Snabb återkoppling',
       color: 'from-blue-500 to-blue-600',
+      variant: 'blue',
     },
     {
       icon: Target,
@@ -24,6 +25,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
         'Klara avtal, korrekt lön i tid och full transparens genom hela uppdraget.',
       highlight: 'Tryggt & transparent',
       color: 'from-emerald-500 to-emerald-600',
+      variant: 'emerald',
     },
     {
       icon: Users,
@@ -32,6 +34,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
         'En dedikerad kontaktperson stöttar dig från ansökan till avslutat uppdrag.',
       highlight: 'Personlig service',
       color: 'from-purple-500 to-purple-600',
+      variant: 'purple',
     },
   ];
 
@@ -87,48 +90,59 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {benefits.map((benefit, index) => (
-            <div
-              key={index}
-              className="group relative bg-white border border-gray-200 rounded-2xl p-8 shadow-[0_8px_24px_rgba(8,19,43,0.06)] hover:shadow-[0_14px_32px_rgba(8,19,43,0.08)] transition-shadow"
-            >
-              {/* subtle gradient ring on hover */}
-              <div
-                className="absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(8,19,43,0.08), rgba(8,19,43,0.02))',
-                }}
-              />
-
-              <div
-                className={`relative w-16 h-16 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center mb-6 mx-auto shadow-[0_8px_16px_rgba(8,19,43,0.08)]`}
-              >
-                <benefit.icon size={28} className="text-white" />
-              </div>
-              <h3
-                className="text-xl font-semibold text-gray-900 mb-3 text-center"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                {benefit.title}
-              </h3>
-              <p
-                className="text-gray-600 leading-relaxed mb-5 text-center"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                {benefit.description}
-              </p>
-              <div
-                className="text-[11px] font-medium uppercase tracking-wider text-gray-700/70 text-center inline-block px-3 py-1 rounded-full bg-gray-100"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                {benefit.highlight}
+            <div key={index} className={`card-pro is-${benefit.variant} group relative rounded-2xl p-[1px]`}>
+              <div className="card-inner relative rounded-2xl p-8 bg-white overflow-hidden shadow-[0_8px_24px_rgba(8,19,43,0.06)] hover:shadow-[0_14px_32px_rgba(8,19,43,0.08)] transition-all">
+                <div className="card-pattern absolute inset-0 pointer-events-none" />
+                <div className={`icon-3d relative w-16 h-16 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center mb-6 mx-auto`}>
+                  <benefit.icon size={28} className="text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  {benefit.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed mb-5 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  {benefit.description}
+                </p>
+                <div className="card-chip text-[11px] font-medium uppercase tracking-wider text-gray-800 text-center inline-block px-3 py-1 rounded-full bg-gray-100">
+                  {benefit.highlight}
+                </div>
               </div>
             </div>
+          ))}
+        </div>
+      </div>
           ))}
         </div>
       </div>
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+        /* Card: gradient border wrapper per variant */
+        .card-pro.is-blue { background: linear-gradient(135deg, rgba(59,130,246,0.45), rgba(8,19,43,0.12)); }
+        .card-pro.is-emerald { background: linear-gradient(135deg, rgba(16,185,129,0.45), rgba(8,19,43,0.12)); }
+        .card-pro.is-purple { background: linear-gradient(135deg, rgba(168,85,247,0.45), rgba(8,19,43,0.12)); }
+
+        .card-inner:hover { transform: translateY(-2px); }
+
+        /* Subtle inner pattern */
+        .card-pattern { 
+          background-image: linear-gradient(rgba(8,19,43,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(8,19,43,0.02) 1px, transparent 1px);
+          background-size: 18px 18px, 18px 18px; 
+          opacity: .35; 
+        }
+
+        /* Icon container 3D feel */
+        .icon-3d { 
+          box-shadow: 0 10px 18px rgba(8,19,43,.08), inset 0 1px 0 rgba(255,255,255,.45);
+        }
+        .icon-3d::after {
+          content: ''; position: absolute; inset: 1px; border-radius: inherit;
+          background: radial-gradient(ellipse at 50% 22%, rgba(255,255,255,.6), transparent 55%);
+          pointer-events: none;
+        }
+
+        /* Highlight chip refinement */
+        .card-chip { box-shadow: 0 2px 6px rgba(8,19,43,0.06); }
       `}</style>
     </section>
   );
