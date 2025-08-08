@@ -13,6 +13,20 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
   openFAQ,
   toggleFAQ,
 }) => {
+  const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth) * 100,
+        y: (e.clientY / window.innerHeight) * 100,
+      });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   const navigate = useNavigate();
 
   const faqs = [
@@ -43,7 +57,81 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
   ];
 
   return (
-    <section className="py-24 px-8 bg-white/5">
+    <section className="relative py-24 px-8 overflow-hidden" style={{ backgroundColor: '#08132B' }}>
+      {/* Creative Dark Background */}
+      <div className="absolute inset-0 pointer-events-none">
+        {/* Complex geometric patterns */}
+        <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="trianglePattern" width="100" height="87" patternUnits="userSpaceOnUse">
+              <path
+                d="M50 0 L100 87 L0 87 Z"
+                stroke="rgba(255,255,255,0.04)"
+                strokeWidth="1"
+                fill="none"
+              />
+              <path
+                d="M25 43.5 L75 43.5"
+                stroke="rgba(59,130,246,0.06)"
+                strokeWidth="0.5"
+              />
+            </pattern>
+            <filter id="blurFAQ">
+              <feGaussianBlur stdDeviation="120" />
+            </filter>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#trianglePattern)" />
+          <circle cx="20%" cy="30%" r="300" fill="rgba(99,102,241,0.18)" filter="url(#blurFAQ)" />
+          <circle cx="80%" cy="70%" r="250" fill="rgba(16,185,129,0.15)" filter="url(#blurFAQ)" />
+        </svg>
+
+        {/* Interactive floating elements */}
+        <div
+          className="absolute w-[700px] h-[700px] rounded-full opacity-25 blur-3xl transition-all duration-1000"
+          style={{
+            background: 'radial-gradient(circle, rgba(99,102,241,0.35) 0%, transparent 70%)',
+            left: `${mousePosition.x * 0.35}%`,
+            top: `${mousePosition.y * 0.25}%`,
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+        <div
+          className="absolute w-[600px] h-[600px] rounded-full opacity-20 blur-3xl transition-all duration-1000 delay-600"
+          style={{
+            background: 'radial-gradient(circle, rgba(16,185,129,0.3) 0%, transparent 70%)',
+            right: `${mousePosition.x * 0.25}%`,
+            bottom: `${mousePosition.y * 0.3}%`,
+            transform: 'translate(50%, 50%)',
+          }}
+        />
+
+        {/* Sophisticated grid */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)
+            `,
+            backgroundSize: '100px 100px',
+            transform: `translate(${mousePosition.x * 0.015}px, ${mousePosition.y * 0.015}px)`,
+          }}
+        />
+
+        {/* Noise texture */}
+        <div
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='150' height='150' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E")`,
+          }}
+        />
+
+        {/* Floating accent elements */}
+        <div className="absolute top-16 right-24 w-3 h-3 bg-blue-400/25 rounded-full animate-pulse" />
+        <div className="absolute bottom-24 left-16 w-2 h-2 bg-emerald-400/20 rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-2/3 right-1/3 w-1.5 h-1.5 bg-purple-400/15 rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
+      </div>
+
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-medium text-white mb-6">
@@ -102,5 +190,7 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
     </section>
   );
 };
+
+import { useState, useEffect } from 'react';
 
 export default CandidatesFAQSection;
