@@ -36,11 +36,11 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
       color: 'from-purple-500 to-purple-600',
       variant: 'purple',
     },
-  ];
+  ] as const;
 
   return (
     <section className="relative py-24 px-8 bg-white overflow-hidden">
-      {/* Background design layers (safe for JSX) */}
+      {/* Background design layers (balanced JSX) */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
@@ -71,7 +71,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[120%] h-32 opacity-10 rotate-[-2deg]"
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[120%] h-32 opacity-10 -rotate-2"
         style={{
           background:
             'linear-gradient(90deg, rgba(8,19,43,0) 0%, rgba(8,19,43,0.06) 20%, rgba(8,19,43,0.06) 80%, rgba(8,19,43,0) 100%)',
@@ -89,28 +89,30 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {benefits.map((benefit, index) => (
-            <div key={index} className={`card-pro is-${benefit.variant} group relative rounded-2xl p-[1px]`}>
-              <div className="card-inner relative rounded-2xl p-8 bg-white overflow-hidden shadow-[0_8px_24px_rgba(8,19,43,0.06)] hover:shadow-[0_14px_32px_rgba(8,19,43,0.08)] transition-all">
-                <div className="card-pattern absolute inset-0 pointer-events-none" />
-                <div className={`icon-3d relative w-16 h-16 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center mb-6 mx-auto`}>
-                  <benefit.icon size={28} className="text-white" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  {benefit.title}
-                </h3>
-                <p className="text-gray-600 leading-relaxed mb-5 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
-                  {benefit.description}
-                </p>
-                <div className="card-chip text-[11px] font-medium uppercase tracking-wider text-gray-800 text-center inline-block px-3 py-1 rounded-full bg-gray-100">
-                  {benefit.highlight}
+          {benefits.map((benefit, index) => {
+            const Icon = benefit.icon;
+            return (
+              <div key={index} className={`card-pro is-${benefit.variant} group relative rounded-2xl p-[1px]`}>
+                <div className="card-inner relative rounded-2xl p-8 bg-white overflow-hidden shadow-[0_8px_24px_rgba(8,19,43,0.06)] hover:shadow-[0_14px_32px_rgba(8,19,43,0.08)] transition-all">
+                  <div className="card-pattern absolute inset-0 pointer-events-none" />
+
+                  <div className={`icon-3d relative w-16 h-16 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center mb-6 mx-auto`}>
+                    <Icon size={28} className="text-white" />
+                  </div>
+
+                  <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    {benefit.title}
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed mb-5 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    {benefit.description}
+                  </p>
+                  <div className="card-chip text-[11px] font-medium uppercase tracking-wider text-gray-800 text-center inline-block px-3 py-1 rounded-full bg-gray-100">
+                    {benefit.highlight}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
