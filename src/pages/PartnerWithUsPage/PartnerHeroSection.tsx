@@ -55,7 +55,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           className={`text-5xl md:text-6xl lg:text-7xl text-white mb-5 tracking-tight leading-[0.95] transition-all duration-1000 transform ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
           }`}
-          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 600 }}
+          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
         >
           <span className="block">Bygg Teamet</span>
           <span className="block">Som Klarar Morgondagen</span>
