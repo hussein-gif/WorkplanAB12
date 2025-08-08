@@ -66,7 +66,7 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({
     <section id="featured-jobs" className="py-24 px-8 bg-white/5">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
+          <h2 className="text-4xl md:text-5xl font-medium text-white mb-6">
             Lediga Jobb
           </h2>
         </div>

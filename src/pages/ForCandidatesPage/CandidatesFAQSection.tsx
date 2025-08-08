@@ -46,8 +46,8 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
     <section className="py-24 px-8 bg-white/5">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-6">
-            Vanliga frågor & svar
+          <h2 className="text-4xl md:text-5xl font-medium text-white mb-6">
+            Vanliga Frågor & Svar
           </h2>
         </div>
 
