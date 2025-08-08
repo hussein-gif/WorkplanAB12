@@ -111,15 +111,15 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-        /* Primary hero button styled to match site green (emerald) theme */
+        /* Primary hero button styled to match site blue (navy) theme */
         .btn-hero-bg {
-          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #189A4C;
-          box-shadow: 0 10px 24px rgba(24,154,76,0.32);
+          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #0B274D;
+          box-shadow: 0 10px 24px rgba(11,39,77,0.32);
           border: 1px solid rgba(255,255,255,0.18);
           transition: all .2s ease;
         }
-        button:hover > .btn-hero-bg { background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #1FB259; box-shadow: 0 14px 32px rgba(24,154,76,0.38); }
-        button:active > .btn-hero-bg { box-shadow: inset 0 2px 8px rgba(0,0,0,0.24), 0 8px 22px rgba(24,154,76,0.26); }
+        button:hover > .btn-hero-bg { background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #123B7A; box-shadow: 0 14px 32px rgba(18,59,122,0.38); }
+        button:active > .btn-hero-bg { box-shadow: inset 0 2px 8px rgba(0,0,0,0.24), 0 8px 22px rgba(11,39,77,0.26); }
       `}</style>
     </section>
   );
