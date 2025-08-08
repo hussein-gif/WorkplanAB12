@@ -107,26 +107,16 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           </button>
         </div>
 
-        {/* BETRODD AV */}
-        <div
-          className={`mt-12 md:mt-16 transition-all duration-700 delay-400 ${
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-          }`}
-        >
-          <div className="text-center">
-            <div
-              className="text-sm md:text-base tracking-wide uppercase"
-              style={{ fontFamily: 'Inter, sans-serif', color: '#D1D5DB', fontWeight: 400 }}
-            >
-              BETRODD AV
-            </div>
-            <img
-              src="https://i.ibb.co/4gXqmqP9/Namnl-s-design-removebg-preview.png"
-              alt="Betrodd av logotyp"
-              className="h-10 md:h-12 mt-3 mx-auto object-contain opacity-90"
-            />
-          </div>
         </div>
+
+      {/* BETRODD AV pinned bottom */}
+      <div className={`trusted absolute left-1/2 -translate-x-1/2 bottom-6 z-10 text-center transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+        <div className="text-xs md:text-sm tracking-wide uppercase" style={{ fontFamily: 'Inter, sans-serif', color: '#D1D5DB', fontWeight: 400 }}>BETRODD AV</div>
+        <img
+          src="https://i.ibb.co/4gXqmqP9/Namnl-s-design-removebg-preview.png"
+          alt="Betrodd av logotyp"
+          className="h-16 md:h-20 lg:h-24 mt-2 mx-auto object-contain"
+        />
       </div>
 
       <style>{`
