@@ -121,7 +121,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
               BETRODD AV
             </div>
             <img
-              src="https://i.ibb.co/p6dcGGHk/Namnl-s-design.png"
+              src="https://i.ibb.co/4gXqmqP9/Namnl-s-design-removebg-preview.png"
               alt="Betrodd av logotyp"
               className="h-10 md:h-12 mt-3 mx-auto object-contain opacity-90"
             />
