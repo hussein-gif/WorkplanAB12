@@ -36,7 +36,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
     <section className="py-24 px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-medium text-white mb-6">
+          <h2 className="text-3xl md:text-4xl font-medium text-white mb-6">
             Därför Väljer Kandidater Oss
           </h2>
         </div>
