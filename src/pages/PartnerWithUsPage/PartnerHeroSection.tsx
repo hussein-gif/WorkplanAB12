@@ -24,10 +24,28 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         {/* Dark vignette + gradient tint for depth */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/55 to-black/85" />
         {/* Soft color orbs to add life without stealing focus */}
-        <div className="pointer-events-none absolute -top-24 -left-24 w-[40rem] h-[40rem] rounded-full opacity-25 blur-3xl" style={{background: 'radial-gradient(ellipse at center, rgba(24,154,76,0.55), rgba(24,154,76,0) 60%)'}}/>
-        <div className="pointer-events-none absolute -bottom-32 -right-16 w-[36rem] h-[36rem] rounded-full opacity-20 blur-3xl" style={{background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.45), rgba(59,130,246,0) 60%)'}}/>
+        <div
+          className="pointer-events-none absolute -top-24 -left-24 w-[40rem] h-[40rem] rounded-full opacity-25 blur-3xl"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, rgba(24,154,76,0.55), rgba(24,154,76,0) 60%)',
+          }}
+        />
+        <div
+          className="pointer-events-none absolute -bottom-32 -right-16 w-[36rem] h-[36rem] rounded-full opacity-20 blur-3xl"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, rgba(59,130,246,0.45), rgba(59,130,246,0) 60%)',
+          }}
+        />
         {/* Subtle noise overlay */}
-        <div className="absolute inset-0 opacity-[0.12] mix-blend-overlay" style={{backgroundImage: 'url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><filter id=\'n\'><feTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'2\' stitchTiles=\'stitch\'/></filter><rect width=\'100%\' height=\'100%\' filter=\'url(%23n)\' opacity=\'0.6\'/></svg>")'}}/>
+        <div
+          className="absolute inset-0 opacity-[0.12] mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><filter id=\'n\'><feTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'2\' stitchTiles=\'stitch\'/></filter><rect width=\'100%\' height=\'100%\' filter=\'url(%23n)\' opacity=\'0.6\'/></svg>')",
+          }}
+        />
       </div>
 
       {/* Content */}
@@ -43,7 +61,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           Bemanning för lager & logistik
         </div>
 
-        {/* Main Heading with gradient accent */}
+        {/* Main Heading updated to two lines, all white */}
         <h1
           className={`text-5xl md:text-6xl lg:text-7xl text-white mb-5 tracking-tight leading-[0.95] transition-all duration-1000 transform ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
@@ -54,7 +72,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           <span className="block">Som Klarar Morgondagen</span>
         </h1>
 
-        {/* Subheading with a bit more substance */}
+        {/* Subheading */}
         <p
           className={`text-base md:text-xl text-white/85 mb-10 md:mb-12 font-light leading-relaxed max-w-3xl mx-auto transition-all duration-1000 delay-150 transform ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
@@ -108,18 +126,6 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
               className="h-10 md:h-12 mt-3 mx-auto object-contain opacity-90"
             />
           </div>
-        </div>
-          <div className="flex items-center justify-center sm:justify-start gap-3 text-white/90">
-            <Clock3 size={20} className="text-emerald-300" />
-            <span className="text-sm md:text-base" style={{ fontFamily: 'Inter, sans-serif' }}>Snabb tillsättning</span>
-          </div>
-          <div className="flex items-center justify-center sm:justify-start gap-3 text-white/90">
-            <Repeat size={20} className="text-emerald-300" />
-            <span className="text-sm md:text-base" style={{ fontFamily: 'Inter, sans-serif' }}>Flexibla upplägg</span>
-          </div>
-        </div>
-
-        
         </div>
       </div>
 
