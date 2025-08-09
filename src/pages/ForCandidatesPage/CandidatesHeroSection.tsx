@@ -14,7 +14,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg"
+          src="https://images.pexels.com/photos/3182773/pexels-photo-3182773.jpeg"
           alt="Professional team meeting and collaboration"
           className="w-full h-full object-cover"
         />
