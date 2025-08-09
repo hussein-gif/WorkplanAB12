@@ -16,7 +16,6 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
         'Vi matchar dig med uppdrag som passar dina mål och ditt schema. Du får snabb återkoppling.',
       highlight: 'Snabb återkoppling',
       color: 'from-blue-500 to-blue-600',
-      variant: 'blue',
     },
     {
       icon: Target,
@@ -25,7 +24,6 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
         'Klara avtal, korrekt lön i tid och full transparens genom hela uppdraget.',
       highlight: 'Tryggt & transparent',
       color: 'from-emerald-500 to-emerald-600',
-      variant: 'emerald',
     },
     {
       icon: Users,
@@ -34,13 +32,12 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
         'En dedikerad kontaktperson stöttar dig från ansökan till avslutat uppdrag.',
       highlight: 'Personlig service',
       color: 'from-purple-500 to-purple-600',
-      variant: 'purple',
     },
   ] as const;
 
   return (
     <section className="relative py-24 px-8 bg-white overflow-hidden">
-      {/* Background design layers (balanced JSX) */}
+      {/* Background design layers (safe for JSX) */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
@@ -96,24 +93,28 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
                 key={index}
                 className="group relative bg-white border border-gray-200 rounded-2xl p-8 shadow-[0_8px_24px_rgba(8,19,43,0.06)] hover:shadow-[0_14px_32px_rgba(8,19,43,0.08)] transition-shadow"
               >
-                <div className="card-pattern absolute inset-0 pointer-events-none" />
+                <div className="card-pattern absolute inset-0 pointer-events-none rounded-2xl" />
                 <div className={`icon-3d relative w-16 h-16 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center mb-6 mx-auto`}>
                   <Icon size={28} className="text-white" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <h3
+                  className="text-xl font-semibold text-gray-900 mb-3 text-center"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
                   {benefit.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed mb-5 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <p
+                  className="text-gray-600 leading-relaxed mb-5 text-center"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
                   {benefit.description}
                 </p>
-                <div className="card-chip text-[11px] font-medium uppercase tracking-wider text-gray-800 text-center inline-block px-3 py-1 rounded-full bg-gray-100">
+                <div
+                  className="text-[11px] font-medium uppercase tracking-wider text-gray-800 text-center inline-block px-3 py-1 rounded-full bg-gray-100"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
                   {benefit.highlight}
                 </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
               </div>
             );
           })}
@@ -139,9 +140,6 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
           background: radial-gradient(ellipse at 50% 22%, rgba(255,255,255,.6), transparent 55%);
           pointer-events: none;
         }
-
-        /* Highlight chip refinement */
-        .card-chip { box-shadow: 0 2px 6px rgba(8,19,43,0.06); }
       `}</style>
     </section>
   );
