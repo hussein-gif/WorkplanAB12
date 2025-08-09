@@ -1,4 +1,4 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Minus } from 'lucide-react';
 
@@ -34,15 +34,6 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
     <rect width="100%" height="100%" filter="url(#n)" opacity="0.3"/>
   </svg>`;
   const noiseDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(noiseSvg)}`;
-
-  // refs för att mäta höjden på varje svar
-  const contentRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const heightMap = useRef<number[]>([]);
-
-  useLayoutEffect(() => {
-    // uppdatera lagrade höjder (bra om text/viewport ändras)
-    heightMap.current = contentRefs.current.map((el) => (el ? el.scrollHeight : 0));
-  });
 
   return (
     <section
@@ -121,50 +112,40 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
         </div>
 
         <div className="max-w-4xl mx-auto space-y-4 mb-8">
-          {faqs.map((faq, index) => {
-            const isOpen = openFAQ === index;
-            const maxH = heightMap.current[index] ?? 0;
-
-            return (
-              <div
-                key={index}
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl overflow-hidden"
+          {faqs.map((faq, index) => (
+            <div
+              key={index}
+              className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl overflow-hidden"
+            >
+              <button
+                onClick={() => toggleFAQ(index)}
+                className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-white/5 transition-colors"
+                aria-expanded={openFAQ === index}
+                aria-controls={`faq-answer-${index}`}
               >
-                <button
-                  onClick={() => toggleFAQ(index)}
-                  className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-white/5 transition-colors"
-                  aria-expanded={isOpen}
-                  aria-controls={`faq-answer-${index}`}
-                >
-                  <h3 className="text-lg font-semibold text-white pr-4">
-                    {faq.question}
-                  </h3>
-                  {isOpen ? (
-                    <Minus size={20} className="text-white/60 flex-shrink-0" />
-                  ) : (
-                    <Plus size={20} className="text-white/60 flex-shrink-0" />
-                  )}
-                </button>
+                <h3 className="text-lg font-semibold text-white pr-4">
+                  {faq.question}
+                </h3>
+                {openFAQ === index ? (
+                  <Minus size={20} className="text-white/60 flex-shrink-0" />
+                ) : (
+                  <Plus size={20} className="text-white/60 flex-shrink-0" />
+                )}
+              </button>
 
-                {/* Smooth collapse container */}
-                <div
-                  id={`faq-answer-${index}`}
-                  className={`faq-collapse ${isOpen ? 'open' : ''}`}
-                  style={{
-                    maxHeight: isOpen ? maxH : 0,
-                  }}
-                  aria-hidden={!isOpen}
-                >
-                  <div
-                    ref={(el) => (contentRefs.current[index] = el)}
-                    className="px-8 pb-6"
-                  >
-                    <p className="text-white/80 leading-relaxed">{faq.answer}</p>
-                  </div>
+              <div
+                id={`faq-answer-${index}`}
+                className={`faq-collapse ${openFAQ === index ? 'open' : ''}`}
+                style={{
+                  maxHeight: openFAQ === index ? '500px' : '0',
+                }}
+              >
+                <div className="px-8 pb-6">
+                  <p className="text-white/80 leading-relaxed">{faq.answer}</p>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
 
         <div className="text-center">
@@ -188,22 +169,15 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
           overflow: hidden;
           max-height: 0;
           transition:
-            max-height 480ms cubic-bezier(0.22, 1, 0.36, 1),
-            opacity 360ms ease,
-            transform 360ms ease;
+            max-height 300ms cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 300ms ease,
+            transform 300ms ease;
           opacity: 0;
           transform: translateY(-4px);
         }
         .faq-collapse.open {
           opacity: 1;
           transform: translateY(0);
-        }
-
-        /* reduce motion */
-        @media (prefers-reduced-motion: reduce) {
-          .faq-collapse {
-            transition: none !important;
-          }
         }
       `}</style>
     </section>
