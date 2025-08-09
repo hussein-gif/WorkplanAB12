@@ -31,12 +31,12 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({ isVisible }) 
   const noiseDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(noiseSvg)}`;
 
   const featuredJobs = [
-    { id:'1', title:'Senior Software Engineer', company:'TechFlow', location:'Stockholm', type:'Heltid', posted:'2 dagar sedan', companyLogo:'T' },
-    { id:'2', title:'Marketing Manager',        company:'GrowthCo',  location:'Göteborg', type:'Heltid', posted:'1 dag sedan',    companyLogo:'G' },
-    { id:'3', title:'UX Designer',              company:'DesignStudio',location:'Remote',   type:'Konsult',posted:'3 timmar sedan', companyLogo:'D' },
-    { id:'4', title:'Data Analyst',             company:'DataInsights',location:'Malmö',    type:'Heltid', posted:'1 dag sedan',    companyLogo:'D' },
-    { id:'5', title:'Project Manager',          company:'BuildCorp',   location:'Uppsala',  type:'Heltid', posted:'4 dagar sedan',  companyLogo:'B' },
-    { id:'6', title:'DevOps Engineer',          company:'CloudTech',   location:'Stockholm',type:'Heltid', posted:'6 timmar sedan', companyLogo:'C' },
+    { id: '1', title: 'Senior Software Engineer', company: 'TechFlow', location: 'Stockholm', type: 'Heltid', posted: '2 dagar sedan', companyLogo: 'T' },
+    { id: '2', title: 'Marketing Manager', company: 'GrowthCo', location: 'Göteborg', type: 'Heltid', posted: '1 dag sedan', companyLogo: 'G' },
+    { id: '3', title: 'UX Designer', company: 'DesignStudio', location: 'Remote', type: 'Konsult', posted: '3 timmar sedan', companyLogo: 'D' },
+    { id: '4', title: 'Data Analyst', company: 'DataInsights', location: 'Malmö', type: 'Heltid', posted: '1 dag sedan', companyLogo: 'D' },
+    { id: '5', title: 'Project Manager', company: 'BuildCorp', location: 'Uppsala', type: 'Heltid', posted: '4 dagar sedan', companyLogo: 'B' },
+    { id: '6', title: 'DevOps Engineer', company: 'CloudTech', location: 'Stockholm', type: 'Heltid', posted: '6 timmar sedan', companyLogo: 'C' },
   ];
 
   return (
@@ -102,19 +102,13 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({ isVisible }) 
         <div className="text-center mb-16">
           <h2
             className="text-3xl md:text-4xl font-medium text-white mb-3"
-            style={{
-              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-              fontWeight: 500,
-            }}
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
             Lediga Jobb
           </h2>
           <p
             className="text-white/60 max-w-2xl mx-auto"
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 300,
-            }}
+            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
           >
             Upptäck utvalda roller från seriösa arbetsgivare. Klicka för detaljer och ansök direkt.
           </p>
@@ -184,7 +178,14 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({ isVisible }) 
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
             <div className="relative flex items-center space-x-2">
-              <span className="font-medium">Se Alla Jobb</span>
+              <span
+                style={{
+                  fontFamily: 'Inter, sans-serif',
+                  fontWeight: 500
+                }}
+              >
+                Se Alla Jobb
+              </span>
             </div>
           </button>
         </div>
