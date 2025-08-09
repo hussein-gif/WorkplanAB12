@@ -17,6 +17,19 @@ const SimpleHoverCard: React.FC<{ children: React.ReactNode; className?: string 
 const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({ isVisible }) => {
   const navigate = useNavigate();
 
+  const noiseSvg = `<?xml version="1.0" encoding="UTF-8"?>
+  <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+    <filter id="n">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" />
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 1" />
+      </feComponentTransfer>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#n)" opacity="0.3" />
+  </svg>`;
+  const noiseDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(noiseSvg)}`;
+
   const featuredJobs = [
     { id:'1', title:'Senior Software Engineer', company:'TechFlow', location:'Stockholm', type:'Heltid', posted:'2 dagar sedan', companyLogo:'T' },
     { id:'2', title:'Marketing Manager',        company:'GrowthCo',  location:'Göteborg', type:'Heltid', posted:'1 dag sedan',    companyLogo:'G' },
@@ -28,6 +41,63 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({ isVisible }) 
 
   return (
     <section id="featured-jobs" className="relative py-24 px-8" style={{ backgroundColor: '#08132B' }}>
+      {/* Artistic background */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute inset-0"
+          style={{
+            background: [
+              'radial-gradient(800px 500px at 10% 15%, rgba(49,104,255,0.28), rgba(49,104,255,0) 60%)',
+              'radial-gradient(700px 420px at 85% 30%, rgba(0,196,204,0.22), rgba(0,196,204,0) 62%)',
+              'radial-gradient(600px 360px at 30% 90%, rgba(120,119,198,0.18), rgba(120,119,198,0) 64%)',
+              'radial-gradient(900px 540px at 75% 80%, rgba(0,122,255,0.16), rgba(0,122,255,0) 65%)'
+            ].join(','),
+            mixBlendMode: 'screen',
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-20 rotate-[-8deg]"
+          style={{
+            backgroundImage:
+              'linear-gradient( to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0) 70% )',
+            maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+          }}
+        />
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1100px] h-[1100px] opacity-15"
+          style={{
+            background:
+              'conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.12) 0deg, rgba(255,255,255,0) 60deg, rgba(255,255,255,0.12) 120deg, rgba(255,255,255,0) 180deg, rgba(255,255,255,0.12) 240deg, rgba(255,255,255,0) 300deg, rgba(255,255,255,0.12) 360deg)',
+            WebkitMaskImage: 'radial-gradient(circle at center, transparent 0, black 28%, black 55%, transparent 70%)',
+            maskImage: 'radial-gradient(circle at center, transparent 0, black 28%, black 55%, transparent 70%)',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: [
+              'radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,0.35) 50%, transparent 51%)',
+              'radial-gradient(1px 1px at 60% 10%, rgba(255,255,255,0.25) 50%, transparent 51%)',
+              'radial-gradient(1px 1px at 80% 70%, rgba(255,255,255,0.25) 50%, transparent 51%)',
+              'radial-gradient(1px 1px at 35% 80%, rgba(255,255,255,0.2) 50%, transparent 51%)'
+            ].join(', '),
+            opacity: 0.25,
+          }}
+        />
+        <div
+          className="absolute inset-0 opacity-[0.08]"
+          style={{ backgroundImage: `url(${noiseDataUrl})` }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(1200px 700px at 50% 20%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.25) 100%)',
+          }}
+        />
+      </div>
+
       <div className="relative max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-medium text-white mb-3">Lediga Jobb</h2>
