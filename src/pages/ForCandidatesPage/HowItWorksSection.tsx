@@ -14,34 +14,49 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
 
   return (
     <section className="relative py-24 px-8 bg-white overflow-hidden">
-      {/* Background design */}
+      {/* --- NY bakgrund: mesh + band + botten-glow --- */}
+      {/* Mesh (lager av radial-gradients) */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage:
-            'linear-gradient(rgba(8,19,43,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(8,19,43,0.04) 1px, transparent 1px)',
-          backgroundSize: '24px 24px, 24px 24px',
-          backgroundPosition: '0 0, 0 0',
+          backgroundImage: `
+            radial-gradient(60rem 60rem at -10% 10%, rgba(11,39,77,0.06), transparent 60%),
+            radial-gradient(50rem 50rem at 110% 20%, rgba(18,59,122,0.06), transparent 60%),
+            radial-gradient(50rem 50rem at 20% 110%, rgba(2,132,199,0.06), transparent 60%)
+          `,
+          backgroundRepeat: 'no-repeat',
         }}
       />
+      {/* Diagonalt band 1 */}
       <div
         aria-hidden
-        className={`pointer-events-none absolute -top-24 -right-24 w-[36rem] h-[36rem] rounded-full blur-3xl transition-opacity duration-700 ${isVisible ? 'opacity-60' : 'opacity-40'}`}
-        style={{ background: 'radial-gradient(ellipse at center, rgba(11,39,77,0.10), rgba(11,39,77,0) 60%)' }}
+        className={`pointer-events-none absolute -left-1/3 top-1/4 w-[140%] h-40 -rotate-3 transition-opacity duration-700 ${isVisible ? 'opacity-[0.12]' : 'opacity-0'}`}
+        style={{
+          background:
+            'linear-gradient(90deg, rgba(11,39,77,0) 0%, rgba(11,39,77,0.18) 25%, rgba(11,39,77,0.18) 75%, rgba(11,39,77,0) 100%)',
+        }}
       />
+      {/* Diagonalt band 2 */}
       <div
         aria-hidden
-        className={`pointer-events-none absolute -bottom-24 -left-24 w-[40rem] h-[40rem] rounded-full blur-3xl transition-opacity duration-700 ${isVisible ? 'opacity-60' : 'opacity-40'}`}
-        style={{ background: 'radial-gradient(ellipse at center, rgba(2,132,199,0.10), rgba(2,132,199,0) 60%)' }}
+        className={`pointer-events-none absolute -right-1/3 bottom-1/4 w-[140%] h-40 rotate-3 transition-opacity duration-700 ${isVisible ? 'opacity-[0.10]' : 'opacity-0'}`}
+        style={{
+          background:
+            'linear-gradient(90deg, rgba(2,132,199,0) 0%, rgba(2,132,199,0.16) 25%, rgba(2,132,199,0.16) 75%, rgba(2,132,199,0) 100%)',
+        }}
       />
+      {/* Svag glow i botten */}
       <div
         aria-hidden
-        className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 w-[120%] h-40 opacity-[0.12] -rotate-2"
-        style={{ background: 'linear-gradient(90deg, rgba(8,19,43,0) 0%, rgba(8,19,43,0.08) 20%, rgba(8,19,43,0.08) 80%, rgba(8,19,43,0) 100%)' }}
+        className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 w-[110%] h-32"
+        style={{
+          background: 'radial-gradient(ellipse at bottom, rgba(11,39,77,0.10), transparent 60%)',
+          opacity: 0.2,
+        }}
       />
 
-      {/* Content (text -> svart) */}
+      {/* --- Content (oförändrat, text svart) --- */}
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-medium text-black">
@@ -71,8 +86,8 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
             Redo?{' '}
             <button
               onClick={() => {
-                const element = document.getElementById('featured-jobs');
-                if (element) element.scrollIntoView({ behavior: 'smooth' });
+                const el = document.getElementById('featured-jobs');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
               className="font-bold text-black hover:opacity-70 transition-colors underline"
             >
