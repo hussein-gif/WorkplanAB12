@@ -14,8 +14,8 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg"
-          alt="Diverse team of professionals collaborating in modern office"
+          src="https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg"
+          alt="Professional woman working confidently at modern workspace"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/80" />
