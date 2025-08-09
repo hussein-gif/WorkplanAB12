@@ -24,62 +24,69 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
            linear-gradient(180deg, #f1f7ff 0%, #eefaff 45%, #f0fff8 100%)`,
       }}
     >
-      {/* =================== NY BAKGRUND: Layered waves + diagonal band + pattern =================== */}
+      {/* =================== BAKGRUND =================== */}
       <div aria-hidden className="absolute inset-0 -z-20 pointer-events-none">
-        
-
-        {/* Diagonal "ribbon" genom sektionen */}
+        {/* Gradient-mesh bas */}
         <div
-          className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[130%] h-56 -rotate-3 rounded-[32px] transition-opacity duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
+          className="absolute inset-0"
           style={{
-            background: 'linear-gradient(90deg, rgba(2,132,199,0.10) 0%, rgba(99,102,241,0.12) 50%, rgba(16,185,129,0.10) 100%)',
-            boxShadow: '0 20px 60px rgba(15, 23, 42, 0.08) inset, 0 1px 0 rgba(255,255,255,0.6) inset',
+            background:
+              `radial-gradient(1200px 600px at -10% -20%, rgba(56,189,248,0.18) 0%, rgba(56,189,248,0.00) 60%),
+               radial-gradient(900px 700px at 115% 0%, rgba(16,185,129,0.16) 0%, rgba(16,185,129,0.00) 55%),
+               radial-gradient(1000px 700px at 50% 120%, rgba(99,102,241,0.14) 0%, rgba(99,102,241,0.00) 65%),
+               linear-gradient(180deg, #f1f7ff 0%, #eefaff 45%, #f0fff8 100%)`,
           }}
         />
 
-        {/* Subtilt prickmönster (maskat så det bara syns i mitten) */}
+        {/* ABSTRACT SMOKE EFFECT (#08132B) */}
+        <svg className="absolute inset-0" viewBox="0 0 1440 900" preserveAspectRatio="none">
+          <defs>
+            {/* Fractal brus för displacement */}
+            <filter id="smokeDistort" x="-20%" y="-20%" width="140%" height="140%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.006" numOctaves="3" seed="8" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="80" xChannelSelector="R" yChannelSelector="G" />
+              <feGaussianBlur stdDeviation="8" />
+            </filter>
+            {/* Färg */}
+            <linearGradient id="smokeStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#08132B" stopOpacity="0.25" />
+              <stop offset="50%" stopColor="#08132B" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="#08132B" stopOpacity="0.25" />
+            </linearGradient>
+          </defs>
+
+          {/* Vågband höger */}
+          <g filter="url(#smokeDistort)" opacity="0.9">
+            <path d="M 900 50 C 1050 120, 1180 260, 1320 320 C 1460 380, 1500 520, 1380 600 C 1260 680, 1060 720, 940 800" stroke="url(#smokeStroke)" strokeWidth="90" fill="none" />
+            <path d="M 1040 0 C 1160 80, 1260 180, 1380 260 C 1500 340, 1460 460, 1340 520 C 1220 580, 1100 620, 980 700" stroke="url(#smokeStroke)" strokeWidth="60" fill="none" />
+          </g>
+
+          {/* Vågband vänster */}
+          <g filter="url(#smokeDistort)" opacity="0.65">
+            <path d="M -40 640 C 120 560, 260 500, 420 480 C 580 460, 720 520, 820 600 C 920 680, 860 780, 720 820 C 580 860, 380 840, 220 780" stroke="url(#smokeStroke)" strokeWidth="80" fill="none" />
+            <path d="M -60 520 C 100 460, 240 420, 360 420 C 520 420, 640 460, 760 560 C 840 620, 780 700, 660 740" stroke="url(#smokeStroke)" strokeWidth="48" fill="none" />
+          </g>
+
+          {/* Långsam rörelse när sektionen är synlig */}
+          <animateTransform attributeName="transform" attributeType="XML" type="translate" from="0 0" to="10 -6" dur="18s" repeatCount="indefinite" begin="0s" />
+        </svg>
+
+        {/* Diskret rutnät (maskat) */}
         <div
-          className="absolute inset-0 opacity-30"
+          className="absolute inset-0 opacity-25"
           style={{
-            backgroundImage: 'radial-gradient(rgba(15,23,42,0.08) 1px, transparent 1px)',
-            backgroundSize: '18px 18px',
-            maskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)',
-            WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)',
+            backgroundImage:
+              'linear-gradient(to right, rgba(15,23,42,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.06) 1px, transparent 1px)',
+            backgroundSize: '28px 28px',
+            maskImage: 'radial-gradient(90rem 70rem at 50% 45%, black, transparent 80%)',
+            WebkitMaskImage: 'radial-gradient(90rem 70rem at 50% 45%, black, transparent 80%)',
           }}
         />
 
-        {/* TOP waves */}
-        <svg className="absolute top-0 left-1/2 -translate-x-1/2 w-[160%] h-[240px]" viewBox="0 0 1440 240" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="waveTopGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="rgba(14,165,233,0.18)" />
-              <stop offset="50%" stopColor="rgba(99,102,241,0.20)" />
-              <stop offset="100%" stopColor="rgba(16,185,129,0.18)" />
-            </linearGradient>
-          </defs>
-          <path d="M0,140 C180,90 360,170 540,130 C720,90 900,150 1080,120 C1260,90 1350,110 1440,100 L1440,0 L0,0 Z" fill="url(#waveTopGrad)" opacity="0.55" />
-          <path d="M0,170 C200,120 380,190 560,150 C740,110 920,170 1100,140 C1280,110 1360,130 1440,120 L1440,0 L0,0 Z" fill="url(#waveTopGrad)" opacity="0.35" />
-          <path d="M0,200 C220,150 400,210 580,170 C760,130 940,190 1120,160 C1300,130 1370,150 1440,140 L1440,0 L0,0 Z" fill="url(#waveTopGrad)" opacity="0.22" />
-        </svg>
-
-        {/* BOTTOM waves */}
-        <svg className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[160%] h-[260px]" viewBox="0 0 1440 260" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="waveBottomGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="rgba(16,185,129,0.18)" />
-              <stop offset="50%" stopColor="rgba(14,165,233,0.20)" />
-              <stop offset="100%" stopColor="rgba(99,102,241,0.18)" />
-            </linearGradient>
-          </defs>
-          <path d="M0,120 C180,160 360,100 540,140 C720,180 900,120 1080,150 C1260,180 1350,160 1440,170 L1440,260 L0,260 Z" fill="url(#waveBottomGrad)" opacity="0.55" />
-          <path d="M0,90 C200,130 380,70 560,110 C740,150 920,90 1100,120 C1280,150 1360,130 1440,140 L1440,260 L0,260 Z" fill="url(#waveBottomGrad)" opacity="0.32" />
-          <path d="M0,60 C220,100 400,40 580,80 C760,120 940,60 1120,90 C1300,120 1370,100 1440,110 L1440,260 L0,260 Z" fill="url(#waveBottomGrad)" opacity="0.20" />
-        </svg>
-
-        {/* Grain/struktur för mer "taktkänsla" */}
-        <svg className="absolute inset-0 mix-blend-multiply opacity-[0.06]" aria-hidden>
+        {/* Grain/struktur */}
+        <svg className="absolute inset-0 mix-blend-multiply opacity-[0.05]" aria-hidden>
           <filter id="grain">
-            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/>
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/>
           </filter>
           <rect width="100%" height="100%" filter="url(#grain)" />
         </svg>
