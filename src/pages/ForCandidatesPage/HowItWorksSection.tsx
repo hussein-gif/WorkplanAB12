@@ -13,11 +13,20 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
   ];
 
   return (
-    <section className="relative py-28 px-6 overflow-hidden bg-white text-black" aria-label="Så går det till">
+    <section
+      className="relative py-28 px-6 overflow-hidden text-black"
+      aria-label="Så går det till"
+      style={{
+        background:
+          `radial-gradient(1200px 600px at -10% -20%, rgba(56,189,248,0.18) 0%, rgba(56,189,248,0.00) 60%),
+           radial-gradient(900px 700px at 115% 0%, rgba(16,185,129,0.16) 0%, rgba(16,185,129,0.00) 55%),
+           radial-gradient(1000px 700px at 50% 120%, rgba(99,102,241,0.14) 0%, rgba(99,102,241,0.00) 65%),
+           linear-gradient(180deg, #f1f7ff 0%, #eefaff 45%, #f0fff8 100%)`,
+      }}
+    >
       {/* =================== NY BAKGRUND: Layered waves + diagonal band + pattern =================== */}
       <div aria-hidden className="absolute inset-0 -z-20 pointer-events-none">
-        {/* Basljus */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, #ffffff 0%, #f7faff 60%, #ffffff 100%)' }} />
+        
 
         {/* Diagonal "ribbon" genom sektionen */}
         <div
