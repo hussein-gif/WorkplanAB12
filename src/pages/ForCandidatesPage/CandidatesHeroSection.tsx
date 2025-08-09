@@ -47,7 +47,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
           Vi matchar dig med rätt jobb – snabbt och utan krångel.
         </p>
 
-        {/* Knapp med grön stil */}
+        {/* Knapp - mörkblå variant */}
         <button
           onClick={handleBrowseRoles}
           className={`
@@ -64,19 +64,19 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@200;400&family=Inter:wght@300;500&display=swap');
 
-        /* Grön variant av hero-knappen */
+        /* Mörkblå hero-knapp (samma som PartnerHeroSection) */
         .btn-hero-bg {
-          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #189A4C;
-          box-shadow: 0 10px 24px rgba(24,154,76,0.32);
+          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #0B274D;
+          box-shadow: 0 10px 24px rgba(11,39,77,0.32);
           border: 1px solid rgba(255,255,255,0.18);
           transition: all .2s ease;
         }
         button:hover > .btn-hero-bg { 
-          background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #1BB857; 
-          box-shadow: 0 14px 32px rgba(27,184,87,0.38); 
+          background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #123B7A; 
+          box-shadow: 0 14px 32px rgba(18,59,122,0.38); 
         }
         button:active > .btn-hero-bg { 
-          box-shadow: inset 0 2px 8px rgba(0,0,0,0.24), 0 8px 22px rgba(24,154,76,0.26); 
+          box-shadow: inset 0 2px 8px rgba(0,0,0,0.24), 0 8px 22px rgba(11,39,77,0.26); 
         }
       `}</style>
     </section>
