@@ -18,7 +18,7 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({
       company: 'TechFlow',
       location: 'Stockholm',
       type: 'Heltid',
-      companyLogo: 'T'
+      companyLogo: 'T',
     },
     {
       id: '2',
@@ -26,7 +26,7 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({
       company: 'GrowthCo',
       location: 'Göteborg',
       type: 'Heltid',
-      companyLogo: 'G'
+      companyLogo: 'G',
     },
     {
       id: '3',
@@ -34,7 +34,7 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({
       company: 'DesignStudio',
       location: 'Remote',
       type: 'Konsult',
-      companyLogo: 'D'
+      companyLogo: 'D',
     },
     {
       id: '4',
@@ -42,7 +42,7 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({
       company: 'DataInsights',
       location: 'Malmö',
       type: 'Heltid',
-      companyLogo: 'D'
+      companyLogo: 'D',
     },
     {
       id: '5',
@@ -50,7 +50,7 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({
       company: 'CloudTech',
       location: 'Stockholm',
       type: 'Heltid',
-      companyLogo: 'C'
+      companyLogo: 'C',
     },
     {
       id: '6',
@@ -58,51 +58,110 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({
       company: 'BuildCorp',
       location: 'Uppsala',
       type: 'Heltid',
-      companyLogo: 'B'
-    }
+      companyLogo: 'B',
+    },
   ];
 
   return (
-    <section id="featured-jobs" className="py-24 px-8 bg-white/5">
-      <div className="max-w-7xl mx-auto">
+    <section
+      id="featured-jobs"
+      className="relative py-24 px-8"
+      style={{ backgroundColor: '#08132B' }}
+    >
+      {/* Decorative background layers */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* Subtle grid */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
+            backgroundSize: '56px 56px',
+            maskImage:
+              'radial-gradient(circle at 30% 20%, black 0%, transparent 60%), radial-gradient(circle at 80% 70%, black 0%, transparent 55%), linear-gradient(black, black)'
+          }}
+        />
+
+        {/* Soft spotlight gradients */}
+        <div
+          className="absolute -top-24 -left-24 w-[520px] h-[520px] rounded-full opacity-40 blur-3xl"
+          style={{
+            background:
+              'radial-gradient(circle at center, rgba(49,104,255,0.35), rgba(49,104,255,0) 60%)',
+          }}
+        />
+        <div
+          className="absolute bottom-0 right-[-120px] w-[640px] h-[640px] rounded-full opacity-30 blur-3xl"
+          style={{
+            background:
+              'radial-gradient(circle at center, rgba(0,196,204,0.28), rgba(0,196,204,0) 60%)',
+          }}
+        />
+
+        {/* Accent conic ring */}
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] opacity-20"
+          style={{
+            background:
+              'conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.08), rgba(255,255,255,0) 30%, rgba(255,255,255,0.08) 60%, rgba(255,255,255,0) 100%)',
+            maskImage:
+              'radial-gradient(circle at center, black 20%, transparent 60%)',
+          }}
+        />
+
+        {/* Fine noise for texture */}
+        <div
+          className="absolute inset-0 opacity-[0.09]"
+          style={{
+            backgroundImage:
+              'url("data:image/svg+xml;utf8,<?xml version=\'1.0\' encoding=\'UTF-8\'?><svg xmlns=\'http://www.w3.org/2000/svg\' width=\'120\' height=\'120\' viewBox=\'0 0 120 120\'><filter id=\'n\'><feTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'2\' stitchTiles=\'stitch\'/><feColorMatrix type=\'saturate\' values=\'0\'/><feComponentTransfer><feFuncA type=\'table\' tableValues=\'0 1\'/></feComponentTransfer></filter><rect width=\'100%\' height=\'100%\' filter=\'url(#n)\' opacity=\'0.35\'/></svg>")',
+          }}
+        />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-medium text-white mb-6">
+          <h2 className="text-3xl md:text-4xl font-medium text-white mb-3">
             Lediga Jobb
           </h2>
+          <p className="text-white/60 max-w-2xl mx-auto">
+            Upptäck utvalda roller från seriösa arbetsgivare. Klicka för detaljer
+            och ansök direkt.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredJobs.map((job, index) => (
             <div
               key={index}
-              className="bg-white/95 backdrop-blur-sm border border-white/20 rounded-2xl p-6 cursor-pointer hover:scale-105 transition-transform duration-300"
+              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 cursor-pointer hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/20 transition-all duration-300"
               onClick={() => navigate(`/job/${job.id}`)}
             >
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-semibold text-sm">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/20 to-white/5 flex items-center justify-center text-white font-semibold text-sm ring-1 ring-inset ring-white/20">
                   {job.companyLogo}
                 </div>
                 <div>
-                  <div className="text-sm font-medium text-gray-900">{job.company}</div>
+                  <div className="text-sm font-medium text-white/90">{job.company}</div>
                 </div>
               </div>
 
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+              <h3 className="text-lg font-semibold text-white mb-3">
                 {job.title}
               </h3>
 
-              <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
+              <div className="flex items-center space-x-4 text-sm text-white/70 mb-4">
                 <div className="flex items-center space-x-1">
-                  <MapPin size={14} className="text-gray-400" />
+                  <MapPin size={14} className="text-white/50" />
                   <span>{job.location}</span>
                 </div>
                 <div className="flex items-center space-x-1">
-                  <Clock size={14} className="text-gray-400" />
+                  <Clock size={14} className="text-white/50" />
                   <span>{job.type}</span>
                 </div>
               </div>
 
-              <button className="w-full py-3 px-4 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors">
+              <button className="w-full py-3 px-4 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-500 transition-colors">
                 Ansök Nu
               </button>
             </div>
@@ -112,7 +171,7 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({
         <div className="text-center mt-12">
           <button
             onClick={() => navigate('/jobs')}
-            className="px-8 py-4 bg-blue-600 text-white rounded-xl font-semibold text-lg tracking-wide hover:bg-blue-700 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="px-8 py-4 bg-blue-600 text-white rounded-xl font-semibold text-lg tracking-wide hover:bg-blue-500 hover:scale-[1.02] transition-all duration-300 shadow-lg shadow-black/30"
           >
             Se Alla Jobb
           </button>
