@@ -54,12 +54,10 @@ const MissionValuesSection: React.FC = () => {
           <path 
             d="M0,200 Q200,100 400,200 T800,200 L800,300 Q600,400 400,300 T0,300 Z" 
             fill="url(#waveGradient1)"
-            style={{ animation: 'wave-flow-1 20s ease-in-out infinite' }}
           />
           <path 
             d="M0,400 Q300,300 600,400 T1200,400 L1200,500 Q900,600 600,500 T0,500 Z" 
             fill="url(#waveGradient2)"
-            style={{ animation: 'wave-flow-2 25s ease-in-out infinite reverse' }}
           />
         </svg>
 
@@ -73,7 +71,6 @@ const MissionValuesSection: React.FC = () => {
               radial-gradient(circle at 50% 50%, rgba(255,255,255,0.2) 1.5px, transparent 1.5px)
             `,
             backgroundSize: '100px 100px, 150px 150px, 80px 80px',
-            animation: 'pattern-drift 40s linear infinite',
           }}
         />
 
@@ -91,7 +88,6 @@ const MissionValuesSection: React.FC = () => {
               rgba(59,130,246,0.2) 360deg)`,
             borderRadius: '50%',
             filter: 'blur(40px)',
-            animation: 'spiral-rotate 60s linear infinite',
           }}
         />
         <div 
@@ -105,7 +101,6 @@ const MissionValuesSection: React.FC = () => {
               rgba(16,185,129,0.15) 360deg)`,
             borderRadius: '50%',
             filter: 'blur(50px)',
-            animation: 'spiral-rotate 45s linear infinite reverse',
           }}
         />
 
@@ -120,7 +115,6 @@ const MissionValuesSection: React.FC = () => {
               top: `${Math.random() * 100}%`,
               left: `${Math.random() * 100}%`,
               backgroundColor: `rgba(${Math.random() > 0.5 ? '59,130,246' : Math.random() > 0.5 ? '16,185,129' : '168,85,247'},${Math.random() * 0.3 + 0.1})`,
-              animation: `particle-float-${i % 3 + 1} ${15 + Math.random() * 10}s ease-in-out ${Math.random() * 5}s infinite`,
             }}
           />
         ))}
