@@ -17,8 +17,16 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
       className="relative py-28 px-6 overflow-hidden text-black"
       aria-label="Så går det till"
       style={{
-        backgroundImage: "url('https://i.ibb.co/7NgpwsQy/image.png')",
-        backgroundSize: 'cover',
+        backgroundColor: '#ffffff',
+        // Subtil, professionell bakgrund: mjuka färgfläckar + diskret grid som påminner om din nuvarande stil.
+        backgroundImage: `
+          radial-gradient(1000px 600px at 110% -10%, rgba(56,189,248,0.12) 0%, rgba(56,189,248,0) 60%),
+          radial-gradient(800px 500px at -10% 110%, rgba(99,102,241,0.12) 0%, rgba(99,102,241,0) 60%),
+          radial-gradient(600px 400px at 50% -20%, rgba(236,72,153,0.08) 0%, rgba(236,72,153,0) 60%),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='1' cy='1' r='1' fill='%23000' opacity='0.06'/%3E%3C/svg%3E")
+        `,
+        backgroundBlendMode: 'screen, screen, screen, normal',
+        backgroundSize: 'cover, cover, cover, 16px 16px',
         backgroundPosition: 'center',
       }}
     >
