@@ -16,14 +16,52 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
     <section
       className="relative py-28 px-6 overflow-hidden text-black"
       aria-label="Så går det till"
-      style={{
-        backgroundImage: "url('https://i.ibb.co/7NgpwsQy/image.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-      }}
     >
+      {/* ===== NY LEVANDE BAKGRUND ===== */}
+      <div className="absolute inset-0 -z-10">
+        <svg
+          width="100%"
+          height="100%"
+          preserveAspectRatio="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* Gradient bakgrund */}
+          <defs>
+            <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#f9fbff" />
+              <stop offset="100%" stopColor="#f0faff" />
+            </linearGradient>
+            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="rgba(56,189,248,0.25)" />
+              <stop offset="50%" stopColor="rgba(99,102,241,0.25)" />
+              <stop offset="100%" stopColor="rgba(16,185,129,0.25)" />
+            </linearGradient>
+          </defs>
+
+          {/* Bas-gradient */}
+          <rect width="100%" height="100%" fill="url(#bgGradient)" />
+
+          {/* Abstrakt wave/smoke shape */}
+          <path
+            d="M0,200 C300,100 600,300 900,200 C1200,100 1500,300 1800,200 L1800,600 L0,600 Z"
+            fill="url(#waveGradient)"
+            opacity="0.4"
+          >
+            <animateTransform
+              attributeName="transform"
+              attributeType="XML"
+              type="translate"
+              from="-200 0"
+              to="200 0"
+              dur="12s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </svg>
+      </div>
+
       {/* =================== CONNECTOR-LINJE mellan kort (diskret) =================== */}
-      <svg className="pointer-events-none absolute left-1/2 top-[290px] -z-10 h-[220px] w-[1400px] -translate-x-1/2 opacity-70" viewBox="0 0 1400 220" preserveAspectRatio="none" aria-hidden>
+      <svg className="pointer-events-none absolute left-1/2 top-[290px] -z-0 h-[220px] w-[1400px] -translate-x-1/2 opacity-70" viewBox="0 0 1400 220" preserveAspectRatio="none" aria-hidden>
         <defs>
           <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="rgba(14,165,233,0.45)" />
@@ -38,7 +76,9 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
       <div className="relative max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-medium tracking-tight">Så Går Det Till</h2>
-          <p className="mt-3 text-black/60 max-w-2xl mx-auto">En tydlig process från ansökan till anställning – enkelt och professionellt.</p>
+          <p className="mt-3 text-black/60 max-w-2xl mx-auto">
+            En tydlig process från ansökan till anställning – enkelt och professionellt.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-14">
