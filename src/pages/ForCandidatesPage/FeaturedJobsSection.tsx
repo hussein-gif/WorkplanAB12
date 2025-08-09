@@ -6,7 +6,7 @@ interface FeaturedJobsSectionProps {
   isVisible: boolean;
 }
 
-const SimpleHoverCard: React.FC<{ children: React.ReactNode; className?: string }>=({ children, className }) => (
+const SimpleHoverCard: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
   <div
     className={`rounded-2xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-2 hover:shadow-2xl ${className ?? ''} group`}
   >
@@ -100,12 +100,28 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({ isVisible }) 
 
       <div className="relative max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-medium text-white mb-3">Lediga Jobb</h2>
-          <p className="text-white/60 max-w-2xl mx-auto">Upptäck utvalda roller från seriösa arbetsgivare. Klicka för detaljer och ansök direkt.</p>
+          <h2
+            className="text-3xl md:text-4xl font-medium text-white mb-3"
+            style={{
+              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+              fontWeight: 500,
+            }}
+          >
+            Lediga Jobb
+          </h2>
+          <p
+            className="text-white/60 max-w-2xl mx-auto"
+            style={{
+              fontFamily: 'Inter, sans-serif',
+              fontWeight: 300,
+            }}
+          >
+            Upptäck utvalda roller från seriösa arbetsgivare. Klicka för detaljer och ansök direkt.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
-          {featuredJobs.map((job, idx) => (
+          {featuredJobs.map((job) => (
             <SimpleHoverCard
               key={job.id}
               className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
