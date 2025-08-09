@@ -119,13 +119,13 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-        /* Card: gradient border wrapper per variant */
-        .card-pro { position: relative; border-radius: 1rem; overflow: visible; }
-        .card-pro.is-blue { --accent: rgba(59,130,246,0.35); background: linear-gradient(135deg, rgba(59,130,246,0.45), rgba(8,19,43,0.12)); }
-        .card-pro.is-emerald { --accent: rgba(16,185,129,0.35); background: linear-gradient(135deg, rgba(16,185,129,0.45), rgba(8,19,43,0.12)); }
-        .card-pro.is-purple { --accent: rgba(168,85,247,0.35); background: linear-gradient(135deg, rgba(168,85,247,0.45), rgba(8,19,43,0.12)); }
+        /* Wrapper: only for underglow; no visible background to avoid variant diffs */
+        .card-pro { position: relative; border-radius: 1rem; overflow: visible; background: transparent; }
+        .card-pro.is-blue { --accent: rgba(59,130,246,0.45); }
+        .card-pro.is-emerald { --accent: rgba(16,185,129,0.45); }
+        .card-pro.is-purple { --accent: rgba(168,85,247,0.45); }
 
-        /* Uniform variant underglow below every card */
+        /* Uniform underglow for ALL cards */
         .card-pro::after {
           content: '';
           position: absolute;
@@ -133,17 +133,30 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
           height: 24px; border-radius: 9999px;
           background: var(--accent, rgba(8,19,43,0.12));
           filter: blur(10px);
-          opacity: .55; transition: opacity .2s ease, transform .2s ease;
+          opacity: .6; transition: opacity .2s ease, transform .2s ease;
         }
-        .card-pro:hover::after { opacity: .7; transform: translateY(-2px); }
+        .card-pro:hover::after { opacity: .75; transform: translateY(-2px); }
 
-        .card-inner:hover { transform: translateY(-2px); }
+        /* INNER: gradient border is applied here so all cards look identical except color */
+        .card-inner { 
+          border: 1px solid transparent; border-radius: 1rem; 
+          background: 
+            linear-gradient(#ffffff, #ffffff) padding-box,
+            var(--border, linear-gradient(135deg, rgba(8,19,43,0.12), rgba(8,19,43,0.12))) border-box;
+          transition: transform .2s ease, box-shadow .2s ease; 
+        }
+        .card-inner:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(8,19,43,0.08); }
+
+        /* Per-variant border gradient (consistent thickness/contrast) */
+        .card-pro.is-blue .card-inner { --border: linear-gradient(135deg, rgba(59,130,246,0.45), rgba(59,130,246,0.15)); }
+        .card-pro.is-emerald .card-inner { --border: linear-gradient(135deg, rgba(16,185,129,0.45), rgba(16,185,129,0.15)); }
+        .card-pro.is-purple .card-inner { --border: linear-gradient(135deg, rgba(168,85,247,0.45), rgba(168,85,247,0.15)); }
 
         /* Subtle inner pattern */
         .card-pattern { 
           background-image: linear-gradient(rgba(8,19,43,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(8,19,43,0.02) 1px, transparent 1px);
           background-size: 18px 18px, 18px 18px; 
-          opacity: .35; 
+          opacity: .28; 
         }
 
         /* Icon container 3D feel */
