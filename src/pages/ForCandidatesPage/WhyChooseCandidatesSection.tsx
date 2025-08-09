@@ -135,10 +135,17 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
 
                 {/* Highlight längst ner */}
                 <div
-                  className="absolute bottom-5 left-1/2 -translate-x-1/2 text-[11px] uppercase tracking-wider text-gray-800 text-center inline-block px-3 py-1 rounded-full bg-gray-100"
+                  className="absolute bottom-5 left-1/2 -translate-x-1/2 text-[12px] tracking-wide text-center inline-block px-4 py-1 rounded-full"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontWeight: 500,
+                    backgroundColor: 'rgba(0,0,0,0.04)',
+                    color:
+                      benefit.variant === 'blue'
+                        ? 'rgb(59,130,246)'
+                        : benefit.variant === 'emerald'
+                        ? 'rgb(16,185,129)'
+                        : 'rgb(168,85,247)',
                   }}
                 >
                   {benefit.highlight}
