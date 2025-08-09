@@ -16,10 +16,120 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
     <section
       className="relative py-28 px-6 overflow-hidden text-black"
       aria-label="Så går det till"
-      style={{
-        backgroundColor: '#ffffff'
-      }}
     >
+      {/* =================== CREATIVE ABSTRACT SMOKE BACKGROUND =================== */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Base white background */}
+        <div className="absolute inset-0 bg-white" />
+        
+        {/* Flowing smoke gradients with organic shapes */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(ellipse 1200px 800px at 15% 20%, rgba(59,130,246,0.08) 0%, transparent 45%),
+              radial-gradient(ellipse 1000px 600px at 85% 10%, rgba(139,92,246,0.06) 0%, transparent 50%),
+              radial-gradient(ellipse 800px 1200px at 70% 80%, rgba(236,72,153,0.05) 0%, transparent 40%),
+              radial-gradient(ellipse 600px 400px at 30% 70%, rgba(16,185,129,0.07) 0%, transparent 55%),
+              radial-gradient(ellipse 900px 500px at 90% 60%, rgba(245,158,11,0.04) 0%, transparent 45%)
+            `,
+            animation: 'smokeFlow 25s ease-in-out infinite'
+          }}
+        />
+        
+        {/* Layered organic shapes */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: `
+              conic-gradient(from 45deg at 20% 30%, transparent 0deg, rgba(59,130,246,0.03) 60deg, transparent 120deg, rgba(139,92,246,0.04) 180deg, transparent 240deg, rgba(236,72,153,0.03) 300deg, transparent 360deg),
+              conic-gradient(from 180deg at 80% 70%, transparent 0deg, rgba(16,185,129,0.04) 90deg, transparent 180deg, rgba(245,158,11,0.03) 270deg, transparent 360deg)
+            `,
+            animation: 'smokeRotate 35s linear infinite'
+          }}
+        />
+        
+        {/* Flowing wave patterns */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M0,300 Q250,200 500,300 T1000,300 L1000,400 Q750,500 500,400 T0,400 Z' fill='rgba(59,130,246,0.02)'/%3E%3Cpath d='M0,600 Q250,500 500,600 T1000,600 L1000,700 Q750,800 500,700 T0,700 Z' fill='rgba(139,92,246,0.015)'/%3E%3C/svg%3E")
+            `,
+            backgroundSize: '100% 100%',
+            animation: 'waveFlow 20s ease-in-out infinite'
+          }}
+        />
+        
+        {/* Floating particles */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              radial-gradient(2px 2px at 20% 30%, rgba(59,130,246,0.4), transparent),
+              radial-gradient(2px 2px at 40% 70%, rgba(139,92,246,0.3), transparent),
+              radial-gradient(1px 1px at 90% 40%, rgba(236,72,153,0.4), transparent),
+              radial-gradient(1px 1px at 60% 20%, rgba(16,185,129,0.3), transparent),
+              radial-gradient(2px 2px at 80% 80%, rgba(245,158,11,0.3), transparent),
+              radial-gradient(1px 1px at 10% 60%, rgba(59,130,246,0.2), transparent)
+            `,
+            backgroundSize: '300px 300px, 400px 400px, 200px 200px, 350px 350px, 250px 250px, 180px 180px',
+            animation: 'particleFloat 30s linear infinite'
+          }}
+        />
+        
+        {/* Subtle mesh overlay */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `
+              linear-gradient(90deg, rgba(59,130,246,0.01) 1px, transparent 1px),
+              linear-gradient(rgba(139,92,246,0.01) 1px, transparent 1px)
+            `,
+            backgroundSize: '60px 60px',
+            animation: 'meshShift 40s ease-in-out infinite'
+          }}
+        />
+        
+        {/* Organic blob shapes */}
+        <div 
+          className="absolute top-10 left-10 w-32 h-32 rounded-full opacity-20 blur-2xl"
+          style={{
+            background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%)',
+            animation: 'blobFloat1 18s ease-in-out infinite'
+          }}
+        />
+        <div 
+          className="absolute top-1/3 right-20 w-24 h-40 rounded-full opacity-15 blur-xl"
+          style={{
+            background: 'radial-gradient(ellipse, rgba(139,92,246,0.4) 0%, transparent 60%)',
+            animation: 'blobFloat2 22s ease-in-out infinite'
+          }}
+        />
+        <div 
+          className="absolute bottom-20 left-1/4 w-28 h-28 rounded-full opacity-25 blur-2xl"
+          style={{
+            background: 'radial-gradient(circle, rgba(236,72,153,0.3) 0%, transparent 80%)',
+            animation: 'blobFloat3 16s ease-in-out infinite'
+          }}
+        />
+        <div 
+          className="absolute bottom-1/3 right-1/3 w-20 h-36 rounded-full opacity-20 blur-xl"
+          style={{
+            background: 'radial-gradient(ellipse, rgba(16,185,129,0.35) 0%, transparent 65%)',
+            animation: 'blobFloat4 20s ease-in-out infinite'
+          }}
+        />
+        
+        {/* Vignette effect */}
+        <div 
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(ellipse at center, transparent 40%, rgba(255,255,255,0.1) 100%)'
+          }}
+        />
+      </div>
+
       {/* =================== CREATIVE ABSTRACT SMOKE BACKGROUND =================== */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Flowing smoke gradients with organic shapes */}
