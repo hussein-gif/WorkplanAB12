@@ -27,25 +27,53 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
 
   return (
     <section
-      className="relative py-24 px-8 overflow-hidden"
-      style={{ background: 'linear-gradient(180deg, #ffffff 0%, #fbfcff 100%)' }}
+      className="relative py-24 px-8 overflow-hidden bg-white"
+      aria-label="Så går det till"
     >
-      {/* Mesh (organiska färgfläckar) */}
+      {/* ===== Lager 1: Mjuk aurora-gradient (maskad för djup) ===== */}
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 -z-10 pointer-events-none"
+      >
+        {/* Basljus + aurora-toner */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(120deg, #f9fbff 0%, #f7fff9 35%, #f6fbff 100%)',
+          }}
+        />
+
+        {/* Aurora-bubblor (blur för mjukhet) */}
+        <div className="absolute -top-40 -right-32 w-[52rem] h-[52rem] rounded-full blur-3xl bg-gradient-to-br from-sky-300/35 via-indigo-300/25 to-emerald-300/25" />
+        <div className="absolute -bottom-48 -left-40 w-[60rem] h-[60rem] rounded-full blur-3xl bg-gradient-to-tr from-emerald-300/25 via-cyan-300/20 to-indigo-300/20" />
+
+        {/* Maskad highlight upptill för fokus mot innehållet */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: 'radial-gradient(80rem 40rem at 50% 6%, rgba(255,255,255,0.9), rgba(255,255,255,0.4) 60%, transparent 70%)',
+          }}
+        />
+      </div>
+
+      {/* ===== Lager 2: Diskret rutnät (professionell tech-känsla) ===== */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-10 opacity-[0.25] pointer-events-none"
         style={{
           backgroundImage:
-            'radial-gradient(60rem 60rem at -10% 10%, rgba(11,39,77,0.06), transparent 60%),' +
-            'radial-gradient(52rem 52rem at 110% 20%, rgba(2,132,199,0.07), transparent 60%),' +
-            'radial-gradient(48rem 48rem at 20% 120%, rgba(17,94,89,0.05), transparent 60%)',
-          backgroundRepeat: 'no-repeat',
+            'linear-gradient(to right, rgba(11,39,77,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(11,39,77,0.08) 1px, transparent 1px)',
+          backgroundSize: '24px 24px',
+          maskImage: 'radial-gradient(80rem 60rem at 50% 40%, black, transparent 80%)',
+          WebkitMaskImage: 'radial-gradient(80rem 60rem at 50% 40%, black, transparent 80%)',
         }}
       />
-      {/* Diagonala beams */}
+
+      {/* ===== Lager 3: Diagonala gradient-linjer (visas när sektionen är i view) ===== */}
       <div
         aria-hidden
-        className={`absolute -left-1/3 top-1/4 w-[140%] h-40 -rotate-3 pointer-events-none transition-opacity duration-700 ${
+        className={`absolute -left-1/3 top-1/4 w-[140%] h-40 -rotate-3 pointer-events-none transition-opacity duration-700 motion-safe:duration-700 ${
           isVisible ? 'opacity-[0.12]' : 'opacity-0'
         }`}
         style={{
@@ -56,7 +84,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
       />
       <div
         aria-hidden
-        className={`absolute -right-1/3 bottom-1/4 w-[140%] h-40 rotate-3 pointer-events-none transition-opacity duration-700 ${
+        className={`absolute -right-1/3 bottom-1/4 w-[140%] h-40 rotate-3 pointer-events-none transition-opacity duration-700 motion-safe:duration-700 ${
           isVisible ? 'opacity-[0.10]' : 'opacity-0'
         }`}
         style={{
@@ -65,21 +93,26 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
           filter: 'blur(10px)',
         }}
       />
-      {/* Vignette för fokus i botten */}
+
+      {/* ===== Lager 4: Subtil vignette längst ned för att rama in sektionen ===== */}
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 -z-10 pointer-events-none"
         style={{
-          background:
-            'radial-gradient(120rem 80rem at 50% 110%, rgba(8,19,43,0.10), transparent 60%)',
+          background: 'radial-gradient(120rem 80rem at 50% 110%, rgba(8,19,43,0.10), transparent 60%)',
           opacity: 0.18,
         }}
       />
 
-      {/* Content (svart text) */}
+      {/* ===== Innehåll ===== */}
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-medium text-black">Så Går Det Till</h2>
+          <h2 className="text-3xl md:text-4xl font-medium text-black tracking-tight">
+            Så Går Det Till
+          </h2>
+          <p className="mt-3 text-black/60 max-w-2xl mx-auto">
+            En tydlig process från ansökan till anställning – enkelt och professionellt.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
@@ -87,8 +120,13 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
             const Icon = step.icon;
             return (
               <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Icon size={24} className="text-white" />
+                {/* Ikon med subtil gradientring (professionell touch) */}
+                <div className="relative mx-auto mb-6">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-sky-400/50 via-indigo-400/40 to-fuchsia-400/40 blur-xl" />
+                  <div className="relative w-16 h-16 rounded-full bg-white shadow-sm ring-1 ring-black/5 grid place-items-center mx-auto">
+                    <div className="absolute inset-[-2px] rounded-full bg-gradient-to-br from-blue-500 to-purple-600 -z-10" />
+                    <Icon size={24} className="text-white relative z-10" />
+                  </div>
                 </div>
                 <h3 className="text-lg font-semibold text-black mb-3">{step.title}</h3>
                 <p className="text-black text-sm leading-relaxed max-w-xs mx-auto">
@@ -108,7 +146,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
                 const el = document.getElementById('featured-jobs');
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="font-bold text-black hover:opacity-70 transition-colors underline"
+              className="font-bold text-black hover:opacity-70 transition-opacity underline"
             >
               Bläddra bland jobben ovan.
             </button>
