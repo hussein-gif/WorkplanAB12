@@ -92,24 +92,28 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
             return (
-              <div key={index} className={`card-pro is-${benefit.variant} group relative rounded-2xl p-[1px]`}>
-                <div className="card-inner relative rounded-2xl p-8 bg-white overflow-hidden shadow-[0_8px_24px_rgba(8,19,43,0.06)] hover:shadow-[0_14px_32px_rgba(8,19,43,0.08)] transition-all">
-                  <div className="card-pattern absolute inset-0 pointer-events-none" />
-
-                  <div className={`icon-3d relative w-16 h-16 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center mb-6 mx-auto`}>
-                    <Icon size={28} className="text-white" />
-                  </div>
-
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    {benefit.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed mb-5 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    {benefit.description}
-                  </p>
-                  <div className="card-chip text-[11px] font-medium uppercase tracking-wider text-gray-800 text-center inline-block px-3 py-1 rounded-full bg-gray-100">
-                    {benefit.highlight}
-                  </div>
+              <div
+                key={index}
+                className="group relative bg-white border border-gray-200 rounded-2xl p-8 shadow-[0_8px_24px_rgba(8,19,43,0.06)] hover:shadow-[0_14px_32px_rgba(8,19,43,0.08)] transition-shadow"
+              >
+                <div className="card-pattern absolute inset-0 pointer-events-none" />
+                <div className={`icon-3d relative w-16 h-16 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center mb-6 mx-auto`}>
+                  <Icon size={28} className="text-white" />
                 </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  {benefit.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed mb-5 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  {benefit.description}
+                </p>
+                <div className="card-chip text-[11px] font-medium uppercase tracking-wider text-gray-800 text-center inline-block px-3 py-1 rounded-full bg-gray-100">
+                  {benefit.highlight}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
               </div>
             );
           })}
@@ -119,44 +123,11 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-        /* Wrapper: only for underglow; no visible background to avoid variant diffs */
-        .card-pro { position: relative; border-radius: 1rem; overflow: visible; background: transparent; }
-        .card-pro.is-blue { --accent: rgba(59,130,246,0.45); }
-        .card-pro.is-emerald { --accent: rgba(16,185,129,0.45); }
-        .card-pro.is-purple { --accent: rgba(168,85,247,0.45); }
-
-        /* Uniform underglow for ALL cards */
-        .card-pro::after {
-          content: '';
-          position: absolute;
-          left: 24px; right: 24px; bottom: -14px;
-          height: 24px; border-radius: 9999px;
-          background: var(--accent, rgba(8,19,43,0.12));
-          filter: blur(10px);
-          opacity: .6; transition: opacity .2s ease, transform .2s ease;
-        }
-        .card-pro:hover::after { opacity: .75; transform: translateY(-2px); }
-
-        /* INNER: gradient border is applied here so all cards look identical except color */
-        .card-inner { 
-          border: 1px solid transparent; border-radius: 1rem; 
-          background: 
-            linear-gradient(#ffffff, #ffffff) padding-box,
-            var(--border, linear-gradient(135deg, rgba(8,19,43,0.12), rgba(8,19,43,0.12))) border-box;
-          transition: transform .2s ease, box-shadow .2s ease; 
-        }
-        .card-inner:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(8,19,43,0.08); }
-
-        /* Per-variant border gradient (consistent thickness/contrast) */
-        .card-pro.is-blue .card-inner { --border: linear-gradient(135deg, rgba(59,130,246,0.45), rgba(59,130,246,0.15)); }
-        .card-pro.is-emerald .card-inner { --border: linear-gradient(135deg, rgba(16,185,129,0.45), rgba(16,185,129,0.15)); }
-        .card-pro.is-purple .card-inner { --border: linear-gradient(135deg, rgba(168,85,247,0.45), rgba(168,85,247,0.15)); }
-
-        /* Subtle inner pattern */
+        /* Subtle inner pattern (same for all cards) */
         .card-pattern { 
           background-image: linear-gradient(rgba(8,19,43,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(8,19,43,0.02) 1px, transparent 1px);
           background-size: 18px 18px, 18px 18px; 
-          opacity: .28; 
+          opacity: .28; border-radius: 1rem; 
         }
 
         /* Icon container 3D feel */
