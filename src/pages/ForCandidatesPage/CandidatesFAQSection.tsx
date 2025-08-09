@@ -24,7 +24,6 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
     { question: 'Hur hanterar ni mina personuppgifter?', answer: 'Vi följer GDPR och behandlar allt konfidentiellt. Läs mer i vår integritetspolicy.' }
   ];
 
-  // Säkert inbäddad SVG-noise som data-URL (för att undvika TSX-escape-problem)
   const noiseSvg = `<?xml version="1.0" encoding="UTF-8"?>
   <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
     <filter id="n">
@@ -41,9 +40,8 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
       className="relative py-24 px-8"
       style={{ backgroundColor: '#08132B' }}
     >
-      {/* Dekorativ, proffsig bakgrund – diskret men levande */}
+      {/* Dekorativ bakgrund */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        {/* Aurora-mesh toningar */}
         <div
           className="absolute inset-0"
           style={{
@@ -56,12 +54,9 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
             mixBlendMode: 'screen',
           }}
         />
-
-        {/* Diagonal “sheen” för premium-känsla */}
         <div
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0 opacity-20 rotate-[-8deg]"
           style={{
-            transform: 'rotate(-8deg)',
             backgroundImage:
               'linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0) 70%)',
             maskImage:
@@ -70,8 +65,6 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
               'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
           }}
         />
-
-        {/* Subtila koncentriska bågar för djup */}
         <div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1100px] h-[1100px] opacity-15"
           style={{
@@ -83,8 +76,6 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
               'radial-gradient(circle at center, transparent 0, black 28%, black 55%, transparent 70%)',
           }}
         />
-
-        {/* Lätta “konstellations”-prickar (inte brusig) */}
         <div
           className="absolute inset-0"
           style={{
@@ -97,14 +88,10 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
             opacity: 0.25,
           }}
         />
-
-        {/* Diskret noise för textur */}
         <div
           className="absolute inset-0 opacity-[0.08]"
           style={{ backgroundImage: `url(${noiseDataUrl})` }}
         />
-
-        {/* Vignette som drar fokus mot mitten */}
         <div
           className="absolute inset-0"
           style={{
@@ -114,10 +101,12 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
         />
       </div>
 
-      {/* ---- OBS: Allt nedanför är EXAKT som din originalsektion ---- */}
       <div className="max-w-6xl mx-auto relative">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-medium text-white mb-6">
+          <h2
+            className="text-3xl md:text-4xl font-medium text-white mb-6"
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+          >
             Vanliga Frågor & Svar
           </h2>
         </div>
@@ -154,13 +143,16 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
         </div>
 
         <div className="text-center">
-          <p className="text-white/80 text-lg">
+          <p
+            className="text-white/80 text-lg"
+            style={{ fontFamily: 'Inter, sans-serif' }}
+          >
             Hittar du inte svaret?{' '}
             <button
               onClick={() => navigate('/contact')}
-              className="font-bold text-blue-400 hover:text-blue-300 transition-colors"
+              className="font-bold text-blue-400 hover:text-blue-300 hover:underline transition-colors"
             >
-              Kontakta oss här.
+              Kontakta oss här
             </button>
           </p>
         </div>
