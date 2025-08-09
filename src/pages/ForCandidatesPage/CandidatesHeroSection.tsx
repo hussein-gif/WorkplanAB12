@@ -24,21 +24,23 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
       <div className="relative z-10 max-w-4xl px-8 md:px-16 text-left">
         <h1
           className={`
-            text-6xl md:text-7xl font-extralight text-white mb-6 tracking-tight leading-[0.9]
+            text-6xl md:text-7xl text-white mb-6 tracking-tight leading-[0.9]
             transition-all duration-1000 transform
             ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'}
           `}
+          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 200 }}
         >
-          <span className="block font-light">Hitta Jobbet</span>
+          <span className="block">Hitta Jobbet</span>
           <span className="block font-normal">Som Passar Dig</span>
         </h1>
 
         <p
           className={`
-            text-2xl text-white/80 mb-12 font-light leading-relaxed max-w-2xl
+            text-xl text-white/80 mb-12 leading-relaxed max-w-2xl
             transition-all duration-1000 delay-200 transform
             ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-6 opacity-0'}
           `}
+          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
         >
           Vi matchar dig med rätt jobb – snabbt och utan krångel.
         </p>
@@ -48,7 +50,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
           className={`
             px-8 py-4 
             bg-blue-600 text-white rounded-xl
-            font-semibold text-lg tracking-wide
+            tracking-wide
             hover:bg-blue-700 hover:scale-105
             transition-all duration-300
             shadow-lg hover:shadow-xl
@@ -56,6 +58,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
             transition-all duration-1000 delay-400 transform
             ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'}
           `}
+          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
         >
           Visa lediga jobb
         </button>
