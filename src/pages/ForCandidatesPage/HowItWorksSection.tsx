@@ -14,17 +14,16 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
 
   return (
     <section
-      className="relative py-28 px-6 overflow-hidden text-black bg-cover bg-center"
+      className="relative py-28 px-6 overflow-hidden text-black"
       aria-label="Så går det till"
       style={{
-        backgroundImage: `url('https://i.ibb.co/dHrPQ5q/image.png')`,
+        backgroundImage: "url('https://i.ibb.co/7NgpwsQy/image.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}
     >
-      {/* Overlay för bättre läsbarhet */}
-      <div className="absolute inset-0 bg-white/60 backdrop-blur-sm -z-0" />
-
-      {/* CONNECTOR-LINJE mellan kort (diskret) */}
-      <svg className="pointer-events-none absolute left-1/2 top-[290px] z-0 h-[220px] w-[1400px] -translate-x-1/2 opacity-70" viewBox="0 0 1400 220" preserveAspectRatio="none" aria-hidden>
+      {/* =================== CONNECTOR-LINJE mellan kort (diskret) =================== */}
+      <svg className="pointer-events-none absolute left-1/2 top-[290px] -z-10 h-[220px] w-[1400px] -translate-x-1/2 opacity-70" viewBox="0 0 1400 220" preserveAspectRatio="none" aria-hidden>
         <defs>
           <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="rgba(14,165,233,0.45)" />
@@ -35,8 +34,8 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
         <path d="M 20 120 C 320 20, 1080 200, 1380 120" stroke="url(#pathGradient)" strokeWidth="4" fill="none" strokeDasharray="10 14" style={{ animation: isVisible ? 'dashFlow 22s linear infinite' : 'none' }} />
       </svg>
 
-      {/* INNEHÅLL */}
-      <div className="relative z-10 max-w-6xl mx-auto">
+      {/* =================== INNEHÅLL =================== */}
+      <div className="relative max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-medium tracking-tight">Så Går Det Till</h2>
           <p className="mt-3 text-black/60 max-w-2xl mx-auto">En tydlig process från ansökan till anställning – enkelt och professionellt.</p>
@@ -47,8 +46,12 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
             const Icon = step.icon;
             return (
               <div key={index} className="group relative" style={{ perspective: '1000px' }}>
+                {/* Gradient-ram */}
                 <div className="absolute -inset-[1px] rounded-3xl bg-gradient-to-br from-sky-400/60 via-indigo-500/60 to-emerald-400/60 opacity-80 blur-md transition-all duration-500 group-hover:opacity-100" />
-                <div className="relative rounded-3xl bg-white/80 backdrop-blur-xl ring-1 ring-black/5 shadow-xl px-6 pt-8 pb-7 transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-2xl">
+
+                {/* Kort */}
+                <div className="relative rounded-3xl bg-white/75 backdrop-blur-xl ring-1 ring-black/5 shadow-xl px-6 pt-8 pb-7 transition-all duration-500 group-hover:-translate-y-1 group-hover:shadow-2xl">
+                  {/* Ikon */}
                   <div className="relative mx-auto -mt-14 mb-4 w-20 h-20">
                     <div className={`absolute inset-0 rounded-full bg-gradient-to-br from-sky-500 via-indigo-600 to-fuchsia-600 opacity-80 ${isVisible ? 'animate-pulseSoft' : ''}`} />
                     <div className="absolute -inset-2 rounded-full bg-white/40 blur-2xl" />
@@ -56,7 +59,9 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
                       <Icon size={28} />
                     </div>
                   </div>
+
                   <div className="mx-auto mb-2 w-fit rounded-full border border-black/10 bg-white/70 px-3 py-1 text-xs font-medium text-black/70">{step.number}</div>
+
                   <h3 className="text-lg font-semibold text-black text-center mb-2">{step.title}</h3>
                   <p className="text-black/80 text-sm leading-relaxed text-center max-w-xs mx-auto">{step.description}</p>
                 </div>
@@ -83,6 +88,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
         </div>
       </div>
 
+      {/* Keyframes */}
       <style>{`
         @keyframes dashFlow { to { stroke-dashoffset: -1000; } }
         @keyframes sheen { from { transform: translateX(-120%) skewX(-20deg);} to { transform: translateX(220%) skewX(-20deg);} }
