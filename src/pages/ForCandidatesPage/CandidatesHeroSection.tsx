@@ -22,6 +22,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
       </div>
 
       <div className="relative z-10 max-w-4xl px-8 md:px-16 text-left">
+        {/* Rubrik */}
         <h1
           className={`
             text-6xl md:text-7xl text-white mb-6 tracking-tight leading-[0.9]
@@ -34,6 +35,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
           <span className="block font-normal">Som Passar Dig</span>
         </h1>
 
+        {/* Underrubrik */}
         <p
           className={`
             text-xl text-white/80 mb-12 leading-relaxed max-w-2xl
@@ -45,24 +47,38 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
           Vi matchar dig med rätt jobb – snabbt och utan krångel.
         </p>
 
+        {/* Knapp med grön stil */}
         <button
           onClick={handleBrowseRoles}
           className={`
-            px-8 py-4 
-            bg-blue-600 text-white rounded-xl
-            tracking-wide
-            hover:bg-blue-700 hover:scale-105
-            transition-all duration-300
-            shadow-lg hover:shadow-xl
-            min-w-[250px]
-            transition-all duration-1000 delay-400 transform
+            group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-white text-lg font-medium tracking-wide transition-all duration-200 min-w-[250px]
             ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'}
           `}
           style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
         >
-          Visa lediga jobb
+          <span className="btn-hero-bg absolute inset-0 rounded-xl" />
+          <span className="relative z-10">Visa lediga jobb</span>
         </button>
       </div>
+
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@200;400&family=Inter:wght@300;500&display=swap');
+
+        /* Grön variant av hero-knappen */
+        .btn-hero-bg {
+          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #189A4C;
+          box-shadow: 0 10px 24px rgba(24,154,76,0.32);
+          border: 1px solid rgba(255,255,255,0.18);
+          transition: all .2s ease;
+        }
+        button:hover > .btn-hero-bg { 
+          background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #1BB857; 
+          box-shadow: 0 14px 32px rgba(27,184,87,0.38); 
+        }
+        button:active > .btn-hero-bg { 
+          box-shadow: inset 0 2px 8px rgba(0,0,0,0.24), 0 8px 22px rgba(24,154,76,0.26); 
+        }
+      `}</style>
     </section>
   );
 };
