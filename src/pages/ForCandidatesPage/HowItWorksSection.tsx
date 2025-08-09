@@ -25,7 +25,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
       }}
     >
       {/* =================== BAKGRUND =================== */}
-      <div aria-hidden className="absolute inset-0 -z-20 pointer-events-none">
+      <div aria-hidden className="absolute inset-0 z-0 pointer-events-none">
         {/* Gradient-mesh bas */}
         <div
           className="absolute inset-0"
@@ -39,32 +39,32 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
         />
 
         {/* ABSTRACT SMOKE EFFECT (#08132B) */}
-        <svg className="absolute inset-0" viewBox="0 0 1440 900" preserveAspectRatio="none">
+        <svg className="absolute inset-0 mix-blend-multiply" viewBox="0 0 1440 900" preserveAspectRatio="none">
           <defs>
             {/* Fractal brus för displacement */}
             <filter id="smokeDistort" x="-20%" y="-20%" width="140%" height="140%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.006" numOctaves="3" seed="8" result="noise" />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="80" xChannelSelector="R" yChannelSelector="G" />
-              <feGaussianBlur stdDeviation="8" />
+              <feTurbulence type="fractalNoise" baseFrequency="0.004" numOctaves="4" seed="8" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="110" xChannelSelector="R" yChannelSelector="G" />
+              <feGaussianBlur stdDeviation="5" />
             </filter>
             {/* Färg */}
             <linearGradient id="smokeStroke" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#08132B" stopOpacity="0.25" />
-              <stop offset="50%" stopColor="#08132B" stopOpacity="0.45" />
-              <stop offset="100%" stopColor="#08132B" stopOpacity="0.25" />
+              <stop offset="0%" stopColor="#08132B" stopOpacity="0.35" />
+              <stop offset="50%" stopColor="#08132B" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#08132B" stopOpacity="0.35" />
             </linearGradient>
           </defs>
 
           {/* Vågband höger */}
-          <g filter="url(#smokeDistort)" opacity="0.9">
-            <path d="M 900 50 C 1050 120, 1180 260, 1320 320 C 1460 380, 1500 520, 1380 600 C 1260 680, 1060 720, 940 800" stroke="url(#smokeStroke)" strokeWidth="90" fill="none" />
-            <path d="M 1040 0 C 1160 80, 1260 180, 1380 260 C 1500 340, 1460 460, 1340 520 C 1220 580, 1100 620, 980 700" stroke="url(#smokeStroke)" strokeWidth="60" fill="none" />
+          <g filter="url(#smokeDistort)" opacity="0.85">
+            <path d="M 900 50 C 1050 120, 1180 260, 1320 320 C 1460 380, 1500 520, 1380 600 C 1260 680, 1060 720, 940 800" stroke="url(#smokeStroke)" strokeWidth="120" fill="none" />
+            <path d="M 1040 0 C 1160 80, 1260 180, 1380 260 C 1500 340, 1460 460, 1340 520 C 1220 580, 1100 620, 980 700" stroke="url(#smokeStroke)" strokeWidth="80" fill="none" />
           </g>
 
           {/* Vågband vänster */}
-          <g filter="url(#smokeDistort)" opacity="0.65">
-            <path d="M -40 640 C 120 560, 260 500, 420 480 C 580 460, 720 520, 820 600 C 920 680, 860 780, 720 820 C 580 860, 380 840, 220 780" stroke="url(#smokeStroke)" strokeWidth="80" fill="none" />
-            <path d="M -60 520 C 100 460, 240 420, 360 420 C 520 420, 640 460, 760 560 C 840 620, 780 700, 660 740" stroke="url(#smokeStroke)" strokeWidth="48" fill="none" />
+          <g filter="url(#smokeDistort)" opacity="0.7">
+            <path d="M -40 640 C 120 560, 260 500, 420 480 C 580 460, 720 520, 820 600 C 920 680, 860 780, 720 820 C 580 860, 380 840, 220 780" stroke="url(#smokeStroke)" strokeWidth="100" fill="none" />
+            <path d="M -60 520 C 100 460, 240 420, 360 420 C 520 420, 640 460, 760 560 C 840 620, 780 700, 660 740" stroke="url(#smokeStroke)" strokeWidth="64" fill="none" />
           </g>
 
           {/* Långsam rörelse när sektionen är synlig */}
@@ -93,7 +93,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
       </div>
 
       {/* =================== CONNECTOR-LINJE mellan kort (diskret) =================== */}
-      <svg className="pointer-events-none absolute left-1/2 top-[290px] -z-10 h-[220px] w-[1400px] -translate-x-1/2 opacity-70" viewBox="0 0 1400 220" preserveAspectRatio="none" aria-hidden>
+      <svg className="pointer-events-none absolute left-1/2 top-[290px] z-0 h-[220px] w-[1400px] -translate-x-1/2 opacity-70" viewBox="0 0 1400 220" preserveAspectRatio="none" aria-hidden>
         <defs>
           <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="rgba(14,165,233,0.45)" />
@@ -105,7 +105,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
       </svg>
 
       {/* =================== INNEHÅLL =================== */}
-      <div className="relative max-w-6xl mx-auto">
+      <div className="relative z-10 max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-medium tracking-tight">Så Går Det Till</h2>
           <p className="mt-3 text-black/60 max-w-2xl mx-auto">En tydlig process från ansökan till anställning – enkelt och professionellt.</p>
