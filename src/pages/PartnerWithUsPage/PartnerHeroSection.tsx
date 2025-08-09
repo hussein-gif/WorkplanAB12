@@ -21,9 +21,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           alt="Professionals collaborating"
           className="w-full h-full object-cover"
         />
-        {/* Dark vignette + gradient tint for depth */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/55 to-black/85" />
-        {/* Soft color orbs */}
         <div
           className="pointer-events-none absolute -top-24 -left-24 w-[40rem] h-[40rem] rounded-full opacity-25 blur-3xl"
           style={{
@@ -38,7 +36,6 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
               'radial-gradient(ellipse at center, rgba(59,130,246,0.45), rgba(59,130,246,0) 60%)',
           }}
         />
-        {/* Subtle noise overlay */}
         <div
           className="absolute inset-0 opacity-[0.12] mix-blend-overlay"
           style={{
@@ -48,34 +45,35 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         />
       </div>
 
-      {/* Content */}
+      {/* Content (vänster) */}
       <div className="relative z-10 max-w-5xl w-full px-6 md:px-8 ml-6 md:ml-16 lg:ml-24 xl:ml-32 text-left">
-        {/* Main Heading */}
+        {/* Rubrik – Zen Kaku, medium 500 */}
         <h1
-          className={`text-5xl md:text-6xl lg:text-7xl text-white mb-5 tracking-tight leading-[0.95] transition-all duration-1000 transform ${
-            isVisible ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'
-          }`}
+          className={`text-white mb-5 tracking-tight leading-[0.95] transition-all duration-1000 transform
+            text-5xl md:text-6xl lg:text-7xl
+            ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'}
+          `}
           style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
         >
-          <span className="block">Bygg Teamet</span>
-          <span className="block">Som Klarar Morgondagen</span>
+          <span style={{ fontWeight: 500 }} className="block">Bygg Teamet</span>
+          <span style={{ fontWeight: 500 }} className="block">Som Klarar Morgondagen</span>
         </h1>
 
-        {/* Subheading */}
+        {/* Underrubrik – Inter light, oförändrad i övrigt */}
         <p
-          className={`text-base md:text-xl text-gray-300 mb-10 md:mb-12 font-light leading-relaxed max-w-3xl transition-all duration-1000 delay-150 transform ${
-            isVisible ? 'translate-x-0 opacity-100' : '-translate-x-6 opacity-0'
-          }`}
+          className={`text-base md:text-xl text-gray-300 mb-10 md:mb-12 leading-relaxed max-w-3xl transition-all duration-1000 delay-150 transform
+            ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-6 opacity-0'}
+          `}
           style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
         >
           Vi levererar rätt människor till varje steg i ert flöde – från orderplock till skiftledning. Snabbt, kvalitetssäkrat och flexibelt.
         </p>
 
-        {/* CTA Buttons */}
+        {/* Knappar – vänsterställda */}
         <div
-          className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-start items-start transition-all duration-1000 delay-300 transform ${
-            isVisible ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'
-          }`}
+          className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-start items-start transition-all duration-1000 delay-300 transform
+            ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'}
+          `}
         >
           <button
             onClick={scrollToContact}
@@ -97,7 +95,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         </div>
       </div>
 
-      {/* BETRODD AV pinned bottom */}
+      {/* BETRODD AV */}
       <div
         className={`trusted absolute left-1/2 -translate-x-1/2 bottom-0 z-10 text-center transition-all duration-700 ${
           isVisible ? 'opacity-100' : 'opacity-0'
@@ -105,11 +103,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       >
         <div
           className="text-xs md:text-sm tracking-wide uppercase relative -translate-y-[4px]"
-          style={{
-            fontFamily: 'Inter, sans-serif',
-            color: '#D1D5DB',
-            fontWeight: 500,
-          }}
+          style={{ fontFamily: 'Inter, sans-serif', color: '#D1D5DB', fontWeight: 500 }}
         >
           BETRODD AV
         </div>
@@ -123,7 +117,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@500&family=Inter:wght@300;400;500;600&display=swap');
 
-        /* Primary hero button styled to match site blue (navy) theme */
+        /* Mörkblå primary-knapp (som tidigare) */
         .btn-hero-bg {
           background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #0B274D;
           box-shadow: 0 10px 24px rgba(11,39,77,0.32);
