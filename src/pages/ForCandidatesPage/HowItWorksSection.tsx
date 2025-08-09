@@ -16,62 +16,12 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
     <section
       className="relative py-28 px-6 overflow-hidden text-black"
       aria-label="Så går det till"
+      style={{
+        backgroundImage: "url('https://i.ibb.co/7NgpwsQy/image.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
     >
-      {/* ===== NY LEVANDE BAKGRUND ===== */}
-      <div className="absolute inset-0 -z-10">
-        <svg
-          width="100%"
-          height="100%"
-          preserveAspectRatio="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {/* Gradient bakgrund */}
-          <defs>
-            <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#f9fbff" />
-              <stop offset="100%" stopColor="#f0faff" />
-            </linearGradient>
-            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="rgba(56,189,248,0.25)" />
-              <stop offset="50%" stopColor="rgba(99,102,241,0.25)" />
-              <stop offset="100%" stopColor="rgba(16,185,129,0.25)" />
-            </linearGradient>
-          </defs>
-
-          {/* Bas-gradient */}
-          <rect width="100%" height="100%" fill="url(#bgGradient)" />
-
-          {/* Abstrakt wave/smoke shape */}
-          <path
-            d="M0,200 C300,100 600,300 900,200 C1200,100 1500,300 1800,200 L1800,600 L0,600 Z"
-            fill="url(#waveGradient)"
-            opacity="0.4"
-          >
-            <animateTransform
-              attributeName="transform"
-              attributeType="XML"
-              type="translate"
-              from="-200 0"
-              to="200 0"
-              dur="12s"
-              repeatCount="indefinite"
-            />
-          </path>
-        </svg>
-      </div>
-
-      {/* =================== CONNECTOR-LINJE mellan kort (diskret) =================== */}
-      <svg className="pointer-events-none absolute left-1/2 top-[290px] -z-0 h-[220px] w-[1400px] -translate-x-1/2 opacity-70" viewBox="0 0 1400 220" preserveAspectRatio="none" aria-hidden>
-        <defs>
-          <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="rgba(14,165,233,0.45)" />
-            <stop offset="50%" stopColor="rgba(99,102,241,0.55)" />
-            <stop offset="100%" stopColor="rgba(16,185,129,0.45)" />
-          </linearGradient>
-        </defs>
-        <path d="M 20 120 C 320 20, 1080 200, 1380 120" stroke="url(#pathGradient)" strokeWidth="4" fill="none" strokeDasharray="10 14" style={{ animation: isVisible ? 'dashFlow 22s linear infinite' : 'none' }} />
-      </svg>
-
       {/* =================== INNEHÅLL =================== */}
       <div className="relative max-w-6xl mx-auto">
         <div className="text-center mb-16">
@@ -100,10 +50,14 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
                     </div>
                   </div>
 
-                  <div className="mx-auto mb-2 w-fit rounded-full border border-black/10 bg-white/70 px-3 py-1 text-xs font-medium text-black/70">{step.number}</div>
+                  <div className="mx-auto mb-2 w-fit rounded-full border border-black/10 bg-white/70 px-3 py-1 text-xs font-medium text-black/70">
+                    {step.number}
+                  </div>
 
                   <h3 className="text-lg font-semibold text-black text-center mb-2">{step.title}</h3>
-                  <p className="text-black/80 text-sm leading-relaxed text-center max-w-xs mx-auto">{step.description}</p>
+                  <p className="text-black/80 text-sm leading-relaxed text-center max-w-xs mx-auto">
+                    {step.description}
+                  </p>
                 </div>
               </div>
             );
@@ -130,9 +84,14 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
 
       {/* Keyframes */}
       <style>{`
-        @keyframes dashFlow { to { stroke-dashoffset: -1000; } }
-        @keyframes sheen { from { transform: translateX(-120%) skewX(-20deg);} to { transform: translateX(220%) skewX(-20deg);} }
-        @keyframes pulseSoft { 0%, 100% { transform: scale(1); filter: blur(0px); opacity: .9;} 50% { transform: scale(1.06); filter: blur(2px); opacity: 1; } }
+        @keyframes sheen {
+          from { transform: translateX(-120%) skewX(-20deg);}
+          to { transform: translateX(220%) skewX(-20deg);}
+        }
+        @keyframes pulseSoft {
+          0%, 100% { transform: scale(1); filter: blur(0px); opacity: .9;}
+          50% { transform: scale(1.06); filter: blur(2px); opacity: 1; }
+        }
       `}</style>
     </section>
   );
