@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowDown, ShieldCheck, Clock3, Repeat, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface PartnerHeroSectionProps {
   isVisible: boolean;
@@ -14,7 +14,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
 }) => {
   return (
     <section className="relative min-h-screen flex items-center justify-start overflow-hidden">
-      {/* Background Image (unchanged) */}
+      {/* Background Image */}
       <div className="absolute inset-0">
         <img
           src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg"
@@ -23,7 +23,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         />
         {/* Dark vignette + gradient tint for depth */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/55 to-black/85" />
-        {/* Soft color orbs to add life without stealing focus */}
+        {/* Soft color orbs */}
         <div
           className="pointer-events-none absolute -top-24 -left-24 w-[40rem] h-[40rem] rounded-full opacity-25 blur-3xl"
           style={{
@@ -43,17 +43,17 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           className="absolute inset-0 opacity-[0.12] mix-blend-overlay"
           style={{
             backgroundImage:
-              "url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'><filter id=\'n\'><feTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'2\' stitchTiles=\'stitch\'/></filter><rect width=\'100%\' height=\'100%\' filter=\'url(%23n)\' opacity=\'0.6\'/></svg>')",
+              "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><filter id=\"n\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"0.9\" numOctaves=\"2\" stitchTiles=\"stitch\"/></filter><rect width=\"100%\" height=\"100%\" filter=\"url(%23n)\" opacity=\"0.6\"/></svg>')",
           }}
         />
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-5xl w-full px-6 md:px-8 text-left ml-6 md:ml-16 lg:ml-24 xl:ml-32 mr-auto">
-        {/* Main Heading updated to two lines, all white */}
+      <div className="relative z-10 max-w-5xl w-full px-6 md:px-8 ml-6 md:ml-16 lg:ml-24 xl:ml-32 text-left">
+        {/* Main Heading */}
         <h1
           className={`text-5xl md:text-6xl lg:text-7xl text-white mb-5 tracking-tight leading-[0.95] transition-all duration-1000 transform ${
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+            isVisible ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'
           }`}
           style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
         >
@@ -63,8 +63,8 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
 
         {/* Subheading */}
         <p
-          className={`text-base md:text-xl text-gray-300 mb-10 md:mb-12 font-light leading-relaxed max-w-3xl md:mx-0 transition-all duration-1000 delay-150 transform ${
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+          className={`text-base md:text-xl text-gray-300 mb-10 md:mb-12 font-light leading-relaxed max-w-3xl transition-all duration-1000 delay-150 transform ${
+            isVisible ? 'translate-x-0 opacity-100' : '-translate-x-6 opacity-0'
           }`}
           style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
         >
@@ -74,7 +74,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         {/* CTA Buttons */}
         <div
           className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-start items-start transition-all duration-1000 delay-300 transform ${
-            isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            isVisible ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'
           }`}
         >
           <button
@@ -95,12 +95,24 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
             Så jobbar vi
           </button>
         </div>
-
-        </div>
+      </div>
 
       {/* BETRODD AV pinned bottom */}
-      <div className={`trusted absolute left-1/2 -translate-x-1/2 bottom-0 z-10 text-center transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
-        <div className="text-xs md:text-sm tracking-wide uppercase relative -translate-y-[4px]" style={{ fontFamily: 'Inter, sans-serif', color: '#D1D5DB', fontWeight: 500 }}>BETRODD AV</div>
+      <div
+        className={`trusted absolute left-1/2 -translate-x-1/2 bottom-0 z-10 text-center transition-all duration-700 ${
+          isVisible ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
+        <div
+          className="text-xs md:text-sm tracking-wide uppercase relative -translate-y-[4px]"
+          style={{
+            fontFamily: 'Inter, sans-serif',
+            color: '#D1D5DB',
+            fontWeight: 500,
+          }}
+        >
+          BETRODD AV
+        </div>
         <img
           src="https://i.ibb.co/W4J67ydJ/Namnl-s-design-1-removebg-preview.png"
           alt="Betrodd av logotyp"
@@ -109,7 +121,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       </div>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@500&family=Inter:wght@300;400;500;600&display=swap');
 
         /* Primary hero button styled to match site blue (navy) theme */
         .btn-hero-bg {
@@ -118,8 +130,13 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           border: 1px solid rgba(255,255,255,0.18);
           transition: all .2s ease;
         }
-        button:hover > .btn-hero-bg { background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #123B7A; box-shadow: 0 14px 32px rgba(18,59,122,0.38); }
-        button:active > .btn-hero-bg { box-shadow: inset 0 2px 8px rgba(0,0,0,0.24), 0 8px 22px rgba(11,39,77,0.26); }
+        button:hover > .btn-hero-bg {
+          background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #123B7A;
+          box-shadow: 0 14px 32px rgba(18,59,122,0.38);
+        }
+        button:active > .btn-hero-bg {
+          box-shadow: inset 0 2px 8px rgba(0,0,0,0.24), 0 8px 22px rgba(11,39,77,0.26);
+        }
       `}</style>
     </section>
   );
