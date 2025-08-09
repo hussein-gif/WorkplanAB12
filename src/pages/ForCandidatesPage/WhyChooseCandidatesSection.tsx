@@ -40,7 +40,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
 
   return (
     <section className="relative py-24 px-8 bg-white overflow-hidden">
-      {/* Background design layers (safe for JSX) */}
+      {/* Background design layers */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
@@ -48,7 +48,6 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
           backgroundImage:
             'linear-gradient(rgba(8,19,43,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(8,19,43,0.04) 1px, transparent 1px)',
           backgroundSize: '22px 22px, 22px 22px',
-          backgroundPosition: '0 0, 0 0',
         }}
       />
       <div
@@ -57,7 +56,8 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
           isVisible ? 'opacity-50' : 'opacity-30'
         }`}
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(11,39,77,0.10), rgba(11,39,77,0) 60%)',
+          background:
+            'radial-gradient(ellipse at center, rgba(11,39,77,0.10), rgba(11,39,77,0) 60%)',
         }}
       />
       <div
@@ -66,7 +66,8 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
           isVisible ? 'opacity-50' : 'opacity-30'
         }`}
         style={{
-          background: 'radial-gradient(ellipse at center, rgba(2,132,199,0.08), rgba(2,132,199,0) 60%)',
+          background:
+            'radial-gradient(ellipse at center, rgba(2,132,199,0.08), rgba(2,132,199,0) 60%)',
         }}
       />
       <div
@@ -82,7 +83,10 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
         <div className="text-center mb-16">
           <h2
             className="text-3xl md:text-4xl font-semibold text-black"
-            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+            style={{
+              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+              fontWeight: 600,
+            }}
           >
             Därför Väljer Kandidater Oss
           </h2>
@@ -134,7 +138,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
       </div>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@600&family=Inter:wght@400;500;600&display=swap');
 
         /* Premium card base */
         .wc-card { 
