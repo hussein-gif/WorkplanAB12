@@ -92,32 +92,42 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
             return (
-              <div key={index} className={`wc-card is-${benefit.variant} group relative rounded-2xl p-8 bg-white`}>
+              <div
+                key={index}
+                className={`wc-card is-${benefit.variant} group relative rounded-2xl p-8 bg-white`}
+              >
                 <div className="card-pattern absolute inset-0 pointer-events-none rounded-2xl" />
                 <span className="card-accent" />
                 <span className="card-sheen" />
 
-                <div className={`icon-3d relative w-16 h-16 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center mb-6 mx-auto`}>
+                <div
+                  className={`icon-3d relative w-16 h-16 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center mb-6 mx-auto`}
+                >
                   <Icon size={28} className="text-white" />
                   <span className="icon-ring" />
                 </div>
 
-                <h3 className="text-xl font-semibold text-gray-900 mb-3 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <h3
+                  className="text-xl font-semibold text-gray-900 mb-3 text-center"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
                   {benefit.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed mb-5 text-center" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <p
+                  className="text-gray-600 leading-relaxed mb-5 text-center"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
                   {benefit.description}
                 </p>
-                <div className="card-chip text-[11px] font-medium uppercase tracking-wider text-gray-800 text-center inline-block px-3 py-1 rounded-full bg-gray-100">
+                <div
+                  className="text-[11px] font-medium uppercase tracking-wider text-gray-800 text-center inline-block px-3 py-1 rounded-full bg-gray-100"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
                   {benefit.highlight}
                 </div>
 
                 <span className="card-bottom-bar" />
               </div>
-            );
-          })}
-        </div>
-      </div>
             );
           })}
         </div>
