@@ -120,9 +120,22 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
         /* Card: gradient border wrapper per variant */
-        .card-pro.is-blue { background: linear-gradient(135deg, rgba(59,130,246,0.45), rgba(8,19,43,0.12)); }
-        .card-pro.is-emerald { background: linear-gradient(135deg, rgba(16,185,129,0.45), rgba(8,19,43,0.12)); }
-        .card-pro.is-purple { background: linear-gradient(135deg, rgba(168,85,247,0.45), rgba(8,19,43,0.12)); }
+        .card-pro { position: relative; border-radius: 1rem; overflow: visible; }
+        .card-pro.is-blue { --accent: rgba(59,130,246,0.35); background: linear-gradient(135deg, rgba(59,130,246,0.45), rgba(8,19,43,0.12)); }
+        .card-pro.is-emerald { --accent: rgba(16,185,129,0.35); background: linear-gradient(135deg, rgba(16,185,129,0.45), rgba(8,19,43,0.12)); }
+        .card-pro.is-purple { --accent: rgba(168,85,247,0.35); background: linear-gradient(135deg, rgba(168,85,247,0.45), rgba(8,19,43,0.12)); }
+
+        /* Uniform variant underglow below every card */
+        .card-pro::after {
+          content: '';
+          position: absolute;
+          left: 24px; right: 24px; bottom: -14px;
+          height: 24px; border-radius: 9999px;
+          background: var(--accent, rgba(8,19,43,0.12));
+          filter: blur(10px);
+          opacity: .55; transition: opacity .2s ease, transform .2s ease;
+        }
+        .card-pro:hover::after { opacity: .7; transform: translateY(-2px); }
 
         .card-inner:hover { transform: translateY(-2px); }
 
