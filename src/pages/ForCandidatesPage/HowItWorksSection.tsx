@@ -26,69 +26,84 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
     >
       {/* =================== BAKGRUND =================== */}
       <div aria-hidden className="absolute inset-0 z-0 pointer-events-none">
-        {/* Gradient-mesh bas */}
+        {/* Subtil bas (svagt kallt ljus) */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              `radial-gradient(1200px 600px at -10% -20%, rgba(56,189,248,0.18) 0%, rgba(56,189,248,0.00) 60%),
-               radial-gradient(900px 700px at 115% 0%, rgba(16,185,129,0.16) 0%, rgba(16,185,129,0.00) 55%),
-               radial-gradient(1000px 700px at 50% 120%, rgba(99,102,241,0.14) 0%, rgba(99,102,241,0.00) 65%),
-               linear-gradient(180deg, #f1f7ff 0%, #eefaff 45%, #f0fff8 100%)`,
+              'radial-gradient(90rem 60rem at 50% 10%, rgba(255,255,255,0.9), rgba(241,247,255,0.75) 40%, rgba(241,247,255,0.6) 60%, transparent 85%)',
           }}
         />
 
-        {/* ABSTRACT SMOKE EFFECT (#08132B) */}
-        <svg className="absolute inset-0 mix-blend-multiply" viewBox="0 0 1440 900" preserveAspectRatio="none">
+        {/* ABSTRACT SMOKE RIBBON (#08132B) */}
+        <svg className="absolute inset-0" viewBox="0 0 1440 900" preserveAspectRatio="none">
           <defs>
-            {/* Fractal brus för displacement */}
-            <filter id="smokeDistort" x="-20%" y="-20%" width="140%" height="140%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.004" numOctaves="4" seed="8" result="noise" />
-              <feDisplacementMap in="SourceGraphic" in2="noise" scale="110" xChannelSelector="R" yChannelSelector="G" />
-              <feGaussianBlur stdDeviation="5" />
-            </filter>
-            {/* Färg */}
-            <linearGradient id="smokeStroke" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#08132B" stopOpacity="0.35" />
-              <stop offset="50%" stopColor="#08132B" stopOpacity="0.7" />
-              <stop offset="100%" stopColor="#08132B" stopOpacity="0.35" />
+            {/* Fadar ut kanter och ändar */}
+            <linearGradient id="fadeX" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="white" stopOpacity="0" />
+              <stop offset="12%" stopColor="white" stopOpacity="1" />
+              <stop offset="88%" stopColor="white" stopOpacity="1" />
+              <stop offset="100%" stopColor="white" stopOpacity="0" />
             </linearGradient>
+            <mask id="ribbonMask">
+              <rect x="0" y="0" width="1440" height="900" fill="url(#fadeX)" />
+            </mask>
+
+            {/* Brus + displacement för organisk rök-känsla */}
+            <filter id="ribbonNoise" x="-30%" y="-30%" width="160%" height="160%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.0025" numOctaves="3" seed="7" result="noise" />
+              <feDisplacementMap in="SourceGraphic" in2="noise" scale="60" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+            <filter id="softGlow">
+              <feGaussianBlur stdDeviation="16" />
+            </filter>
           </defs>
 
-          {/* Vågband höger */}
-          <g filter="url(#smokeDistort)" opacity="0.85">
-            <path d="M 900 50 C 1050 120, 1180 260, 1320 320 C 1460 380, 1500 520, 1380 600 C 1260 680, 1060 720, 940 800" stroke="url(#smokeStroke)" strokeWidth="120" fill="none" />
-            <path d="M 1040 0 C 1160 80, 1260 180, 1380 260 C 1500 340, 1460 460, 1340 520 C 1220 580, 1100 620, 980 700" stroke="url(#smokeStroke)" strokeWidth="80" fill="none" />
+          {/* Yttre dimma (glow) */}
+          <g mask="url(#ribbonMask)" style={{ mixBlendMode: 'multiply' }}>
+            <path
+              d="M -120 620 C 200 520, 520 520, 820 600 C 1060 660, 1260 720, 1560 620"
+              fill="none"
+              stroke="#08132B"
+              strokeOpacity="0.20"
+              strokeWidth="180"
+              strokeLinecap="round"
+              filter="url(#softGlow)"
+            />
+
+            {/* Huvudband */}
+            <g filter="url(#ribbonNoise)">
+              <path
+                d="M -100 620 C 220 520, 540 520, 840 600 C 1080 660, 1280 720, 1580 620"
+                fill="none"
+                stroke="#08132B"
+                strokeOpacity="0.45"
+                strokeWidth="90"
+                strokeLinecap="round"
+              />
+              {/* Inre highlight för bandkänsla */}
+              <path
+                d="M -100 620 C 220 520, 540 520, 840 600 C 1080 660, 1280 720, 1580 620"
+                fill="none"
+                stroke="#08132B"
+                strokeOpacity="0.85"
+                strokeWidth="26"
+                strokeLinecap="round"
+                filter="url(#softGlow)"
+              />
+            </g>
+
+            {/* Andra bandet (offset för djup) */}
+            <g filter="url(#ribbonNoise)" opacity="0.4">
+              <path
+                d="M -200 730 C 140 640, 460 620, 760 700 C 1000 760, 1200 820, 1500 720"
+                fill="none"
+                stroke="#08132B"
+                strokeWidth="110"
+                strokeLinecap="round"
+              />
+            </g>
           </g>
-
-          {/* Vågband vänster */}
-          <g filter="url(#smokeDistort)" opacity="0.7">
-            <path d="M -40 640 C 120 560, 260 500, 420 480 C 580 460, 720 520, 820 600 C 920 680, 860 780, 720 820 C 580 860, 380 840, 220 780" stroke="url(#smokeStroke)" strokeWidth="100" fill="none" />
-            <path d="M -60 520 C 100 460, 240 420, 360 420 C 520 420, 640 460, 760 560 C 840 620, 780 700, 660 740" stroke="url(#smokeStroke)" strokeWidth="64" fill="none" />
-          </g>
-
-          {/* Långsam rörelse när sektionen är synlig */}
-          <animateTransform attributeName="transform" attributeType="XML" type="translate" from="0 0" to="10 -6" dur="18s" repeatCount="indefinite" begin="0s" />
-        </svg>
-
-        {/* Diskret rutnät (maskat) */}
-        <div
-          className="absolute inset-0 opacity-25"
-          style={{
-            backgroundImage:
-              'linear-gradient(to right, rgba(15,23,42,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.06) 1px, transparent 1px)',
-            backgroundSize: '28px 28px',
-            maskImage: 'radial-gradient(90rem 70rem at 50% 45%, black, transparent 80%)',
-            WebkitMaskImage: 'radial-gradient(90rem 70rem at 50% 45%, black, transparent 80%)',
-          }}
-        />
-
-        {/* Grain/struktur */}
-        <svg className="absolute inset-0 mix-blend-multiply opacity-[0.05]" aria-hidden>
-          <filter id="grain">
-            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/>
-          </filter>
-          <rect width="100%" height="100%" filter="url(#grain)" />
         </svg>
       </div>
 
