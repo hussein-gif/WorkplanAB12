@@ -11,6 +11,20 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({
 }) => {
   const navigate = useNavigate();
 
+  // Build a safe inline SVG noise texture without breaking TSX strings
+  const noiseSvg = `<?xml version="1.0" encoding="UTF-8"?>
+  <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+    <filter id="n">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch" />
+      <feColorMatrix type="saturate" values="0" />
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 1" />
+      </feComponentTransfer>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#n)" opacity="0.3" />
+  </svg>`;
+  const noiseDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(noiseSvg)}`;
+
   const featuredJobs = [
     { id: '1', title: 'Senior Software Engineer', company: 'TechFlow', location: 'Stockholm', type: 'Heltid', companyLogo: 'T' },
     { id: '2', title: 'Marketing Manager', company: 'GrowthCo', location: 'Göteborg', type: 'Heltid', companyLogo: 'G' },
@@ -28,24 +42,70 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({
     >
       {/* Artistic background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-        {/* Abstract flowing shapes */}
-        <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style={{ stopColor: 'rgba(49,104,255,0.25)', stopOpacity: 1 }} />
-              <stop offset="100%" style={{ stopColor: 'rgba(0,196,204,0.25)', stopOpacity: 0.8 }} />
-            </linearGradient>
-          </defs>
-          <path d="M0,300 Q300,150 600,300 T1200,300 V800 H0 Z" fill="url(#grad1)" opacity="0.4" />
-          <path d="M0,500 Q400,350 800,500 T1600,500 V800 H0 Z" fill="rgba(255,255,255,0.05)" />
-        </svg>
+        {/* Aurora mesh background */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: [
+              'radial-gradient(800px 500px at 10% 15%, rgba(49,104,255,0.28), rgba(49,104,255,0) 60%)',
+              'radial-gradient(700px 420px at 85% 30%, rgba(0,196,204,0.22), rgba(0,196,204,0) 62%)',
+              'radial-gradient(600px 360px at 30% 90%, rgba(120,119,198,0.18), rgba(120,119,198,0) 64%)',
+              'radial-gradient(900px 540px at 75% 80%, rgba(0,122,255,0.16), rgba(0,122,255,0) 65%)'
+            ].join(','),
+            mixBlendMode: 'screen',
+          }}
+        />
 
-        {/* Soft spotlight gradients */}
-        <div className="absolute -top-24 -left-24 w-[520px] h-[520px] rounded-full opacity-40 blur-3xl" style={{ background: 'radial-gradient(circle at center, rgba(49,104,255,0.35), rgba(49,104,255,0) 60%)' }} />
-        <div className="absolute bottom-0 right-[-120px] w-[640px] h-[640px] rounded-full opacity-30 blur-3xl" style={{ background: 'radial-gradient(circle at center, rgba(0,196,204,0.28), rgba(0,196,204,0) 60%)' }} />
+        {/* Elegant diagonal sheen */}
+        <div
+          className="absolute inset-0 opacity-20 rotate-[-8deg]"
+          style={{
+            backgroundImage:
+              'linear-gradient( to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 40%, rgba(255,255,255,0) 70% )',
+            maskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+          }}
+        />
 
-        {/* Fine noise texture */}
-        <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'url("data:image/svg+xml;utf8,<?xml version=\\'1.0\\' encoding=\\'UTF-8\\'?><svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'120\\' height=\\'120\\' viewBox=\\'0 0 120 120\\'><filter id=\\'n\\'><feTurbulence type=\\'fractalNoise\\' baseFrequency=\\'0.8\\' numOctaves=\\'2\\' stitchTiles=\\'stitch\\'/><feColorMatrix type=\\'saturate\\' values=\\'0\\'/><feComponentTransfer><feFuncA type=\\'table\\' tableValues=\\'0 1\\'/></feComponentTransfer></filter><rect width=\\'100%\\' height=\\'100%\\' filter=\\'url(#n)\\' opacity=\\'0.3\\'/></svg>")' }} />
+        {/* Subtle arcs */}
+        <div
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1100px] h-[1100px] opacity-15"
+          style={{
+            background:
+              'conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0.12) 0deg, rgba(255,255,255,0) 60deg, rgba(255,255,255,0.12) 120deg, rgba(255,255,255,0) 180deg, rgba(255,255,255,0.12) 240deg, rgba(255,255,255,0) 300deg, rgba(255,255,255,0.12) 360deg)',
+            WebkitMaskImage: 'radial-gradient(circle at center, transparent 0, black 28%, black 55%, transparent 70%)',
+            maskImage: 'radial-gradient(circle at center, transparent 0, black 28%, black 55%, transparent 70%)',
+          }}
+        />
+
+        {/* Constellation speckles */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: [
+              'radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,0.35) 50%, transparent 51%)',
+              'radial-gradient(1px 1px at 60% 10%, rgba(255,255,255,0.25) 50%, transparent 51%)',
+              'radial-gradient(1px 1px at 80% 70%, rgba(255,255,255,0.25) 50%, transparent 51%)',
+              'radial-gradient(1px 1px at 35% 80%, rgba(255,255,255,0.2) 50%, transparent 51%)'
+            ].join(', '),
+            opacity: 0.25,
+          }}
+        />
+
+        {/* Fine noise texture (encoded to avoid TSX string issues) */}
+        <div
+          className="absolute inset-0 opacity-[0.08]"
+          style={{ backgroundImage: `url(${noiseDataUrl})` }}
+        />
+
+        {/* Vignette */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(1200px 700px at 50% 20%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.25) 100%)',
+          }}
+        />
       </div>
 
       <div className="relative max-w-7xl mx-auto">
