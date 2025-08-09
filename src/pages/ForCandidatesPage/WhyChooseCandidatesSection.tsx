@@ -98,7 +98,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
             return (
               <div
                 key={index}
-                className={`wc-card is-${benefit.variant} group relative rounded-2xl p-8 bg-white`}
+                className={`wc-card is-${benefit.variant} group relative rounded-2xl p-8 bg-white pb-16`}
               >
                 <div className="card-pattern absolute inset-0 pointer-events-none rounded-2xl" />
                 <span className="card-accent" />
@@ -111,21 +111,35 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
                   <span className="icon-ring" />
                 </div>
 
+                {/* Rubrik */}
                 <h3
-                  className="text-xl font-semibold text-gray-900 mb-3 text-center"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
+                  className="text-xl text-gray-900 mb-3 text-center"
+                  style={{
+                    fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                    fontWeight: 500,
+                  }}
                 >
                   {benefit.title}
                 </h3>
+
+                {/* Brödtext */}
                 <p
                   className="text-gray-600 leading-relaxed mb-5 text-center"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
+                  style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: 300,
+                  }}
                 >
                   {benefit.description}
                 </p>
+
+                {/* Highlight längst ner */}
                 <div
-                  className="text-[11px] font-medium uppercase tracking-wider text-gray-800 text-center inline-block px-3 py-1 rounded-full bg-gray-100"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
+                  className="absolute bottom-5 left-1/2 -translate-x-1/2 text-[11px] uppercase tracking-wider text-gray-800 text-center inline-block px-3 py-1 rounded-full bg-gray-100"
+                  style={{
+                    fontFamily: 'Inter, sans-serif',
+                    fontWeight: 500,
+                  }}
                 >
                   {benefit.highlight}
                 </div>
@@ -138,7 +152,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
       </div>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@600&family=Inter:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@500;600&family=Inter:wght@300;500;600&display=swap');
 
         /* Premium card base */
         .wc-card { 
