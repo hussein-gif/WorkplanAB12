@@ -43,21 +43,6 @@ const OurStorySection: React.FC = () => {
             bottom: '-100px',
           }}
         />
-        <div
-          className="absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(59,130,246,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(59,130,246,0.1) 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse at center, rgba(59,130,246,0.04) 0%, transparent 70%)',
-          }}
-        />
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
@@ -71,7 +56,7 @@ const OurStorySection: React.FC = () => {
           </p>
         </div>
 
-        {/* Linje & prickar */}
+        {/* Linje & punkter */}
         <div className="relative mt-10">
           <div className="relative w-screen left-1/2 -translate-x-1/2 h-40">
             {/* Linje */}
@@ -86,8 +71,8 @@ const OurStorySection: React.FC = () => {
                   className="absolute"
                   style={{ left: m.pos, transform: 'translateX(-50%)' }}
                 >
-                  {/* Punkt (på linjen) */}
-                  <div className="relative z-10 top-1/2 flex justify-center">
+                  {/* Punkt (EXAKT på linjen) */}
+                  <div className="absolute top-1/2 -translate-y-1/2 flex justify-center z-20">
                     <span
                       className="absolute -inset-3 rounded-full bg-blue-500/20 blur-md"
                       aria-hidden
@@ -95,9 +80,9 @@ const OurStorySection: React.FC = () => {
                     <span className="block w-4 h-4 rounded-full bg-blue-600 border-2 border-white shadow-[0_0_12px_rgba(37,99,235,0.55)]" />
                   </div>
 
-                  {/* Mindre kort */}
+                  {/* Kort (separerat från punkten) */}
                   <div
-                    className={`absolute ${isTop ? '-top-24' : 'top-8'} left-1/2 -translate-x-1/2 w-[200px]`}
+                    className={`absolute ${isTop ? '-top-24' : 'top-10'} left-1/2 -translate-x-1/2 w-[200px]`}
                   >
                     <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 shadow-lg text-center">
                       <div className="text-blue-600 font-bold text-sm mb-1">{m.quarter}</div>
