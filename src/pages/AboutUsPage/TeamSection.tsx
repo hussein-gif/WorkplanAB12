@@ -248,44 +248,5 @@ const TeamSection: React.FC = () => {
     </section>
   );
 };
-  return (
-    <section className="py-24 px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-light text-white mb-6">Vårt Dedikerade Team</h2>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            Erfarna rekryterare som levererar kvalitet, snabbt och transparent
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <div className="text-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8">
-            <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-2xl">
-              JA
-            </div>
-            <h3 className="text-xl font-semibold text-white mb-2 break-words max-w-full">
-              Jawad Abbas
-            </h3>
-            <p className="text-blue-400 font-medium break-words max-w-full">
-              Medgrundare & Affärsansvarig
-            </p>
-          </div>
-          
-          <div className="text-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-8">
-            <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-2xl">
-              AM
-            </div>
-            <h3 className="text-xl font-semibold text-white mb-2 break-words max-w-full">
-              Arvin Mahmoudi
-            </h3>
-            <p className="text-blue-400 font-medium break-words max-w-full">
-              Medgrundare & Leveranschef
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
 
 export default TeamSection;
