@@ -325,7 +325,7 @@ const TeamTrustSection: React.FC = () => {
                   className="text-white/80 text-lg leading-relaxed"
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
-                  <span className="font-medium">Dedikerad kontaktperson</span>{' '}
+                  <span className="font-medium text-white">Dedikerad kontaktperson</span>{' '}
                   <span className="font-light">från första dagen.</span>
                 </span>
               </div>
@@ -338,7 +338,7 @@ const TeamTrustSection: React.FC = () => {
                   className="text-white/80 text-lg leading-relaxed"
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
-                  <span className="font-medium">Transparent prissättning</span>{' '}
+                  <span className="font-medium text-white">Transparent prissättning</span>{' '}
                   <span className="font-light">– inga dolda kostnader.</span>
                 </span>
               </div>
@@ -351,7 +351,7 @@ const TeamTrustSection: React.FC = () => {
                   className="text-white/80 text-lg leading-relaxed"
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
-                  <span className="font-medium">Noggrann matchning</span>{' '}
+                  <span className="font-medium text-white">Noggrann matchning</span>{' '}
                   <span className="font-light">av kandidater för bästa resultat.</span>
                 </span>
               </div>
@@ -364,7 +364,7 @@ const TeamTrustSection: React.FC = () => {
                   className="text-white/80 text-lg leading-relaxed"
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
-                  <span className="font-medium">Snabba leveranser</span>{' '}
+                  <span className="font-medium text-white">Snabba leveranser</span>{' '}
                   <span className="font-light">utan att tumma på kvaliteten.</span>
                 </span>
               </div>
