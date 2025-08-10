@@ -232,7 +232,7 @@ const TeamTrustSection: React.FC = () => {
           className="absolute inset-0 opacity-[0.015]"
           style={{
             backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E\")",
+              "url('data:image/svg+xml,%3Csvg width=\'300\' height=\'300\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.95\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.5\'/%3E%3C/svg%3E')",
           }}
         />
       </div>
@@ -242,13 +242,13 @@ const TeamTrustSection: React.FC = () => {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <h2
-              className="text-4xl md:text-5xl font-light text-white mb-6"
-              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+              className="text-4xl md:text-5xl font-medium text-white mb-6"
+              style={{ fontFamily: '"Zen Kaku Gothic Antique", sans-serif' }}
             >
               Vårt Dedikerade Team
             </h2>
             <p
-              className="text-xl text-white/70 max-w-2xl mx-auto"
+              className="text-base md:text-lg text-white/70 max-w-2xl mx-auto"
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
             >
               Erfarna rekryterare som levererar kvalitet, snabbt och transparent
@@ -266,7 +266,7 @@ const TeamTrustSection: React.FC = () => {
               </div>
               <h3
                 className="text-xl font-medium text-white mb-2"
-                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
+                style={{ fontFamily: '"Zen Kaku Gothic Antique", sans-serif', fontWeight: 500 }}
               >
                 Jawad Abbas
               </h3>
@@ -285,7 +285,7 @@ const TeamTrustSection: React.FC = () => {
               </div>
               <h3
                 className="text-xl font-medium text-white mb-2"
-                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
+                style={{ fontFamily: '"Zen Kaku Gothic Antique", sans-serif', fontWeight: 500 }}
               >
                 Arvin Mahmoudi
               </h3>
@@ -302,13 +302,13 @@ const TeamTrustSection: React.FC = () => {
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <h2
-              className="text-4xl md:text-5xl font-light text-white mb-6"
-              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+              className="text-4xl md:text-5xl font-medium text-white mb-6"
+              style={{ fontFamily: '"Zen Kaku Gothic Antique", sans-serif' }}
             >
               Vårt löfte till dig
             </h2>
             <p
-              className="text-xl text-white/70 max-w-2xl mx-auto"
+              className="text-base md:text-lg text-white/70 max-w-2xl mx-auto"
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
             >
               Därför väljer företag oss som bemanningspartner.
@@ -321,8 +321,12 @@ const TeamTrustSection: React.FC = () => {
                 <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center mt-1 flex-shrink-0">
                   <CheckCircle size={20} className="text-green-400" />
                 </div>
-                <span className="text-white/80 text-lg font-medium leading-relaxed">
-                  Dedikerad kontaktperson från första dagen.
+                <span
+                  className="text-white/80 text-lg leading-relaxed"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span className="font-medium">Dedikerad kontaktperson</span>{' '}
+                  <span className="font-light">från första dagen.</span>
                 </span>
               </div>
 
@@ -330,8 +334,12 @@ const TeamTrustSection: React.FC = () => {
                 <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center mt-1 flex-shrink-0">
                   <CheckCircle size={20} className="text-green-400" />
                 </div>
-                <span className="text-white/80 text-lg font-medium leading-relaxed">
-                  Transparent prissättning – inga dolda kostnader.
+                <span
+                  className="text-white/80 text-lg leading-relaxed"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span className="font-medium">Transparent prissättning</span>{' '}
+                  <span className="font-light">– inga dolda kostnader.</span>
                 </span>
               </div>
 
@@ -339,8 +347,12 @@ const TeamTrustSection: React.FC = () => {
                 <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center mt-1 flex-shrink-0">
                   <CheckCircle size={20} className="text-green-400" />
                 </div>
-                <span className="text-white/80 text-lg font-medium leading-relaxed">
-                  Noggrann matchning av kandidater för bästa resultat.
+                <span
+                  className="text-white/80 text-lg leading-relaxed"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span className="font-medium">Noggrann matchning</span>{' '}
+                  <span className="font-light">av kandidater för bästa resultat.</span>
                 </span>
               </div>
 
@@ -348,14 +360,23 @@ const TeamTrustSection: React.FC = () => {
                 <div className="w-8 h-8 bg-green-500/20 rounded-full flex items-center justify-center mt-1 flex-shrink-0">
                   <CheckCircle size={20} className="text-green-400" />
                 </div>
-                <span className="text-white/80 text-lg font-medium leading-relaxed">
-                  Snabba leveranser utan att tumma på kvaliteten.
+                <span
+                  className="text-white/80 text-lg leading-relaxed"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span className="font-medium">Snabba leveranser</span>{' '}
+                  <span className="font-light">utan att tumma på kvaliteten.</span>
                 </span>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Fonts */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500&family=Zen+Kaku+Gothic+Antique:wght@500&display=swap');
+      `}</style>
     </div>
   );
 };
