@@ -3,100 +3,75 @@ import React from 'react';
 const OurStorySection: React.FC = () => {
   return (
     <section id="our-story" className="relative py-24 px-8 overflow-hidden bg-white">
-      {/* Ny bakgrundsdesign */}
+      {/* Bakgrundseffekter */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Ljus radial gradient */}
-        <div className="absolute top-[-200px] left-[-200px] w-[500px] h-[500px] bg-blue-100/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-[-200px] right-[-200px] w-[500px] h-[500px] bg-indigo-100/20 rounded-full blur-3xl" />
-        
-        {/* Extra radial glow i mitten */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-white via-blue-50/30 to-white rounded-full blur-2xl opacity-60" />
+        {/* Radial gradients */}
+        <div className="absolute top-[-150px] left-[-150px] w-[400px] h-[400px] bg-blue-100/40 rounded-full blur-3xl" />
+        <div className="absolute bottom-[-150px] right-[-150px] w-[400px] h-[400px] bg-indigo-100/40 rounded-full blur-3xl" />
 
-        {/* Diskreta prickar */}
-        {Array.from({ length: 20 }).map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-[4px] h-[4px] rounded-full bg-blue-200/40"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-            }}
-          />
-        ))}
+        {/* Subtilt prickmönster */}
+        <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="dotPattern" width="30" height="30" patternUnits="userSpaceOnUse">
+              <circle cx="1" cy="1" r="1" fill="#dbeafe" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#dotPattern)" />
+        </svg>
 
-        {/* Vågform längst ner */}
+        {/* Wave längst ner */}
         <svg
           className="absolute bottom-0 left-0 w-full h-32 text-blue-50"
           preserveAspectRatio="none"
           viewBox="0 0 1440 320"
           fill="currentColor"
         >
-          <path d="M0,96L48,80C96,64,192,32,288,42.7C384,53,480,107,576,128C672,149,768,139,864,144C960,149,1056,171,1152,192C1248,213,1344,235,1392,245.3L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z" />
+          <path d="M0,256L80,240C160,224,320,192,480,186.7C640,181,800,203,960,197.3C1120,192,1280,160,1360,144L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z" />
         </svg>
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto">
-        {/* Rubrik */}
-        <div className="text-center mb-12">
+      <div className="max-w-6xl mx-auto relative z-10">
+        <div className="text-center mb-16">
           <h2
             className="text-4xl md:text-5xl font-medium text-black mb-4"
-            style={{ fontFamily: "'Zen Kaku Gothic Antique', sans-serif" }}
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
             Vår resa hittills
           </h2>
           <p
             className="text-lg text-gray-600 max-w-2xl mx-auto font-light"
-            style={{ fontFamily: "'Inter', sans-serif" }}
+            style={{ fontFamily: 'Inter, sans-serif' }}
           >
-            På några månader har vi byggt upp en smart, transparent bemanningspartner för lager &amp; logistik.
+            På några månader har vi byggt upp en smart, transparent bemanningspartner för lager & logistik.
           </p>
         </div>
 
-        {/* Roadmap */}
-        <div className="relative">
-          <div className="relative w-screen left-1/2 -translate-x-1/2 h-56">
-            {/* Linje */}
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] bg-blue-600" />
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] bg-blue-500/40 blur-[2px]" />
-
-            {/* Punkt Q2 */}
-            <div className="absolute top-1/2 -translate-y-1/2" style={{ left: '25%' }}>
-              <div className="relative z-10 flex items-center justify-center">
-                <span className="absolute w-6 h-6 rounded-full bg-blue-500/20 blur-sm" />
-                <span className="absolute w-4 h-4 rounded-full border-2 border-white" />
-                <span className="relative w-3 h-3 rounded-full bg-blue-600 shadow-[0_0_12px_rgba(37,99,235,0.55)]" />
-              </div>
-              <div className="absolute -top-36 left-1/2 -translate-x-1/2">
-                <div className="relative w-[220px] rounded-xl border border-gray-200 bg-white shadow-lg p-4 text-center">
-                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-white border-b border-r border-gray-200" />
-                  <div className="text-blue-600 font-semibold text-sm mb-1">2025 Q2</div>
-                  <div className="text-gray-900 font-semibold">Starten</div>
-                  <p className="mt-1 text-xs leading-snug text-gray-600">
-                    Workplan grundas med fokus på att förenkla bemanning inom lager &amp; logistik.
-                  </p>
-                </div>
-              </div>
+        {/* Roadmap line */}
+        <div className="relative flex items-center justify-between w-full h-1 bg-blue-500 mb-16">
+          {/* Punkt Q2 */}
+          <div className="absolute left-1/4 -translate-x-1/2">
+            <div className="w-6 h-6 bg-blue-500 rounded-full border-4 border-white shadow-lg" />
+            <div className="mt-6 max-w-xs bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 shadow-md relative">
+              <div className="text-blue-600 font-bold text-sm mb-1">2025 Q2</div>
+              <h3 className="text-lg font-semibold text-black mb-2">Starten</h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                Workplan grundas med fokus på att förenkla bemanning inom lager & logistik. Vi sätter våra processer,
+                transparent prissättning och börjar bygga ett kvalitativt kandidatnätverk.
+              </p>
             </div>
+          </div>
 
-            {/* Punkt Q3 */}
-            <div className="absolute top-1/2 -translate-y-1/2" style={{ left: '75%' }}>
-              <div className="relative z-10 flex items-center justify-center">
-                <span className="absolute w-6 h-6 rounded-full bg-blue-500/20 blur-sm" />
-                <span className="absolute w-4 h-4 rounded-full border-2 border-white" />
-                <span className="relative w-3 h-3 rounded-full bg-blue-600 shadow-[0_0_12px_rgba(37,99,235,0.55)]" />
-              </div>
-              <div className="absolute top-12 left-1/2 -translate-x-1/2">
-                <div className="relative w-[240px] rounded-xl border border-gray-200 bg-white shadow-lg p-4 text-center">
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-white border-t border-l border-gray-200" />
-                  <div className="text-blue-600 font-semibold text-sm mb-1">2025 Q3</div>
-                  <div className="text-gray-900 font-semibold">Första uppdrag &amp; partnerskap</div>
-                  <p className="mt-1 text-xs leading-snug text-gray-600">
-                    De första bemanningarna levereras och långsiktiga kundrelationer etableras.
-                  </p>
-                </div>
-              </div>
+          {/* Punkt Q3 */}
+          <div className="absolute left-3/4 -translate-x-1/2">
+            <div className="w-6 h-6 bg-blue-500 rounded-full border-4 border-white shadow-lg" />
+            <div className="mt-6 max-w-xs bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 shadow-md relative">
+              <div className="text-blue-600 font-bold text-sm mb-1">2025 Q3</div>
+              <h3 className="text-lg font-semibold text-black mb-2">Första uppdrag & partnerskap</h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                De första bemanningarna levereras och långsiktiga kundrelationer etableras. Vi finjusterar
+                matchningsmodellen och växer vårt nätverk av tillgängliga specialister.
+              </p>
             </div>
-
           </div>
         </div>
       </div>
