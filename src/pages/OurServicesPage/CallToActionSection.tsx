@@ -11,8 +11,9 @@ const CallToActionSection: React.FC = () => {
       "
       style={{ backgroundColor: '#08132B' }}
     >
-      {/* Bakgrundsdesign */}
+      {/* Kreativ bakgrund – aurora, grid, konstellationer, glow & vignette */}
       <div className="absolute inset-0 pointer-events-none">
+        {/* Aurora-mesh toningar */}
         <div
           className="absolute inset-0"
           style={{
@@ -25,6 +26,8 @@ const CallToActionSection: React.FC = () => {
             mixBlendMode: 'screen',
           }}
         />
+
+        {/* Diagonal “sheen” för premium-känsla */}
         <div
           className="absolute inset-0 opacity-20"
           style={{
@@ -37,6 +40,8 @@ const CallToActionSection: React.FC = () => {
               'linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)',
           }}
         />
+
+        {/* Subtilt gridmönster */}
         <div
           className="absolute inset-0"
           style={{
@@ -48,6 +53,8 @@ const CallToActionSection: React.FC = () => {
             opacity: 0.7,
           }}
         />
+
+        {/* Koncentriska bågar (conic glints) */}
         <div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1100px] h-[1100px] opacity-15"
           style={{
@@ -59,6 +66,8 @@ const CallToActionSection: React.FC = () => {
               'radial-gradient(circle at center, transparent 0, black 28%, black 55%, transparent 70%)',
           }}
         />
+
+        {/* Diskreta “stjärnor”/prickar */}
         <div
           className="absolute inset-0"
           style={{
@@ -71,6 +80,8 @@ const CallToActionSection: React.FC = () => {
             opacity: 0.25,
           }}
         />
+
+        {/* Ultra-fin noise för textur */}
         <div
           className="absolute inset-0 opacity-[0.06] mix-blend-overlay"
           style={{
@@ -78,6 +89,8 @@ const CallToActionSection: React.FC = () => {
               "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><filter id=\"n\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"0.9\" numOctaves=\"2\" stitchTiles=\"stitch\"/></filter><rect width=\"100%\" height=\"100%\" filter=\"url(%23n)\" opacity=\"0.55\"/></svg>')",
           }}
         />
+
+        {/* Vignette som drar fokus inåt */}
         <div
           className="absolute inset-0"
           style={{
@@ -104,34 +117,33 @@ const CallToActionSection: React.FC = () => {
               navigate('/contact');
             }
           }}
-          className="group inline-flex items-center justify-center gap-2 px-10 py-4 rounded-xl text-white text-lg tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105 overflow-hidden min-w-[200px] btn-min"
+          className="
+            group relative px-10 py-4 
+            rounded-xl
+            text-white text-lg tracking-wide
+            transition-all duration-300
+            shadow-lg hover:shadow-xl
+            hover:scale-105
+            overflow-hidden
+            min-w-[200px]
+            border border-white/15
+            bg-white/5 hover:bg-white/10
+          "
           style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
         >
-          Kontakta oss
+          {/* Inre gradientglow */}
+          <span
+            className="pointer-events-none absolute inset-0 rounded-xl"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12))',
+            }}
+          />
+          {/* Shimmer */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600" />
+          <span className="relative z-10">Kontakta oss</span>
         </button>
       </div>
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&family=Zen+Kaku+Gothic+Antique:wght@500&display=swap');
-        
-        .btn-min {
-          border: 1px solid rgba(255, 255, 255, 0.22);
-          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #189A4C;
-          border-radius: 0.75rem;
-          box-shadow: 0 8px 20px rgba(24, 154, 76, 0.28);
-        }
-        .btn-min:hover {
-          background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #1FB259;
-          box-shadow: 0 10px 28px rgba(24, 154, 76, 0.35);
-        }
-        .btn-min:active {
-          box-shadow: inset 0 2px 8px rgba(0,0,0,0.25), 0 6px 18px rgba(24, 154, 76, 0.24);
-        }
-        .btn-min:focus-visible {
-          outline: none;
-          box-shadow: 0 0 0 3px rgba(52, 211, 153, .35), 0 0 0 1px rgba(255,255,255,.2) inset;
-        }
-      `}</style>
     </section>
   );
 };
