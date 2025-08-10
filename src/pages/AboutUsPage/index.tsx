@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AboutHeroSection from './AboutHeroSection';
 import MissionValuesSection from './MissionValuesSection';
 import OurStorySection from './OurStorySection';
-import TeamSection from './TeamSection';
-import TrustPromiseSection from './TrustPromiseSection';
+import TeamTrustSection from './TeamTrustSection';
 
 const AboutUsPage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -79,9 +78,7 @@ const AboutUsPage = () => {
         
         <OurStorySection />
         
-        <TeamSection />
-        
-        <TrustPromiseSection />
+        <TeamTrustSection />
       </div>
     </div>
   );
