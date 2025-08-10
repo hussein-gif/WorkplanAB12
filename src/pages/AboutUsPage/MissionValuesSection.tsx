@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Shield, Star, Handshake } from 'lucide-react';
 
 const MissionValuesSection: React.FC = () => {
+  // Generera partiklar en gång och återanvänd samma array
+  const particles = useMemo(() => {
+    return Array.from({ length: 20 }).map((_, i) => ({
+      id: i,
+      size: Math.random() * 4 + 2,
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      color: Math.random() > 0.5
+        ? `rgba(59,130,246,${Math.random() * 0.3 + 0.1})`
+        : Math.random() > 0.5
+        ? `rgba(16,185,129,${Math.random() * 0.3 + 0.1})`
+        : `rgba(168,85,247,${Math.random() * 0.3 + 0.1})`
+    }));
+  }, []);
+
   return (
     <section className="relative py-24 px-8 overflow-hidden" style={{ backgroundColor: '#08132B' }}>
       {/* Creative Abstract Background (STATIC) */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Gradient Orbs (no animation) */}
+        {/* Gradient Orbs */}
         <div
           className="absolute w-[1000px] h-[1000px] rounded-full opacity-[0.15] blur-3xl"
           style={{
@@ -32,7 +47,7 @@ const MissionValuesSection: React.FC = () => {
           }}
         />
 
-        {/* Flowing Wave Patterns (static svg fills) */}
+        {/* Flowing Wave Patterns */}
         <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="waveGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -70,7 +85,7 @@ const MissionValuesSection: React.FC = () => {
           }}
         />
 
-        {/* Conic Gradient Spirals (static) */}
+        {/* Conic Gradient Spirals */}
         <div
           className="absolute left-1/4 top-1/3 w-[600px] h-[600px] opacity-[0.06]"
           style={{
@@ -100,22 +115,22 @@ const MissionValuesSection: React.FC = () => {
           }}
         />
 
-        {/* Floating Particles (static positions) */}
-        {Array.from({ length: 20 }).map((_, i) => (
+        {/* Floating Particles (STATIC positions from useMemo) */}
+        {particles.map((p) => (
           <div
-            key={i}
+            key={p.id}
             className="absolute rounded-full"
             style={{
-              width: `${Math.random() * 4 + 2}px`,
-              height: `${Math.random() * 4 + 2}px`,
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              backgroundColor: `rgba(${Math.random() > 0.5 ? '59,130,246' : Math.random() > 0.5 ? '16,185,129' : '168,85,247'},${Math.random() * 0.3 + 0.1})`,
+              width: `${p.size}px`,
+              height: `${p.size}px`,
+              top: `${p.top}%`,
+              left: `${p.left}%`,
+              backgroundColor: p.color,
             }}
           />
         ))}
 
-        {/* Mesh Gradient Overlay (no animation) */}
+        {/* Mesh Gradient Overlay */}
         <div
           className="absolute inset-0 opacity-[0.02]"
           style={{
@@ -136,6 +151,7 @@ const MissionValuesSection: React.FC = () => {
         />
       </div>
 
+      {/* Content */}
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Mission */}
