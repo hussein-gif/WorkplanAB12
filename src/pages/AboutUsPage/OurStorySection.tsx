@@ -71,16 +71,12 @@ const OurStorySection: React.FC = () => {
                   className="absolute"
                   style={{ left: m.pos, transform: 'translateX(-50%)' }}
                 >
-                  {/* Punkt (EXAKT på linjen) */}
+                  {/* Ny punkt på linjen */}
                   <div className="absolute top-1/2 -translate-y-1/2 flex justify-center z-20">
-                    <span
-                      className="absolute -inset-3 rounded-full bg-blue-500/20 blur-md"
-                      aria-hidden
-                    />
                     <span className="block w-4 h-4 rounded-full bg-blue-600 border-2 border-white shadow-[0_0_12px_rgba(37,99,235,0.55)]" />
                   </div>
 
-                  {/* Kort (separerat från punkten) */}
+                  {/* Kort */}
                   <div
                     className={`absolute ${isTop ? '-top-24' : 'top-10'} left-1/2 -translate-x-1/2 w-[200px]`}
                   >
