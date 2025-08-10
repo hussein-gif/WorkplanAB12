@@ -94,59 +94,54 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description, index = 0
       {/* Bakgrundskonst */}
       {variant === 'aurora' ? (
         <div className="absolute inset-0 -z-0">
-          {/* Basglow – djupt blå/cyan våg (inspiration kort 1) */}
-          <div
-            className="absolute inset-0 opacity-100"
-            style={{
-              background:
-                `radial-gradient(700px 500px at 20% 25%, rgba(37,99,235,0.55), transparent 60%),
-                 radial-gradient(600px 420px at 80% 80%, rgba(56,189,248,0.45), transparent 55%),
-                 radial-gradient(900px 700px at 60% 20%, rgba(12,18,28,0.7), transparent 55%)`,
-            }}
-          />
-          {/* Mjuk böljande form */}
-          <div
-            className="absolute -left-24 bottom-6 w-[420px] h-[280px] blur-3xl opacity-70"
-            style={{
-              background:
-                'radial-gradient(closest-side, rgba(56,189,248,0.7), rgba(37,99,235,0.45), transparent 70%)',
-              maskImage:
-                'radial-gradient(230px 180px at 45% 55%, black 35%, transparent 70%)',
-              WebkitMaskImage:
-                'radial-gradient(230px 180px at 45% 55%, black 35%, transparent 70%)',
-              animation: 'softMove 12s ease-in-out infinite',
-            }}
-          />
-          {/* Svag vignett för kontrast */
-          <div className="absolute inset-0" style={{
-            background:
-              'radial-gradient(120% 120% at 50% 50%, transparent 55%, rgba(0,0,0,0.45) 100%)',
-          }} />
-        </div>
-      ) : (
-        <div className="absolute inset-0 -z-0">
-          {/* Kraftig blå glöd från vänster (inspiration kort 4) */}
+          {/* Basglow – djup blå/cyan våg */}
           <div
             className="absolute inset-0"
             style={{
-              background:
-                `radial-gradient(900px 700px at -5% 50%, rgba(59,130,246,0.75), transparent 60%),
-                 radial-gradient(700px 500px at 15% 20%, rgba(147,197,253,0.35), transparent 55%)`,
+              backgroundImage:
+                'radial-gradient(700px 500px at 20% 25%, rgba(37,99,235,0.55), transparent 60%),\
+                 radial-gradient(600px 420px at 80% 80%, rgba(56,189,248,0.45), transparent 55%),\
+                 radial-gradient(900px 700px at 60% 20%, rgba(12,18,28,0.7), transparent 55%)',
             }}
           />
-          {/* Mjuk svart panelform som rundar av glöden */}
+          {/* Böljande blob utan mask (kompatibel TSX) */}
           <div
-            className="absolute inset-3 rounded-[26px]"
+            className="absolute -left-24 bottom-6 w-[420px] h-[280px] rounded-[160px] opacity-70 blur-3xl"
             style={{
-              background:
-                'linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.75))',
+              backgroundImage:
+                'radial-gradient(closest-side, rgba(56,189,248,0.7), rgba(37,99,235,0.45), transparent 70%)',
             }}
           />
+          {/* Svag vignett för kontrast */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                'radial-gradient(120% 120% at 50% 50%, transparent 55%, rgba(0,0,0,0.45) 100%)',
+            }}
+          />
+        </div>
+      ) : (
+        <div className="absolute inset-0 -z-0">
+          {/* Kraftig blå glöd från vänster */}
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                'radial-gradient(900px 700px at -5% 50%, rgba(59,130,246,0.75), transparent 60%),\
+                 radial-gradient(700px 500px at 15% 20%, rgba(147,197,253,0.35), transparent 55%)',
+            }}
+          />
+          {/* Mjuk svart panel som rundar av glöden */}
+          <div className="absolute inset-3 rounded-[26px] bg-gradient-to-b from-black/60 to-black/80" />
           {/* Lätt yttervignett */}
-          <div className="absolute inset-0" style={{
-            background:
-              'radial-gradient(120% 120% at 50% 50%, transparent 50%, rgba(0,0,0,0.35) 100%)',
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                'radial-gradient(120% 120% at 50% 50%, transparent 55%, rgba(0,0,0,0.45) 100%)',
+            }}
+          />
         </div>
       )}
 
