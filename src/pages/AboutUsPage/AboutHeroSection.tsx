@@ -36,7 +36,7 @@ const AboutHeroSection: React.FC<AboutHeroSectionProps> = ({
               'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
           }}
           className={`
-          text-lg md:text-xl text-white/80 mb-8 font-medium leading-relaxed max-w-4xl mx-auto
+          text-sm md:text-base text-white/80 mb-8 font-light leading-relaxed max-w-4xl mx-auto
           transition-all duration-1000 delay-200 transform
           ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
         `}
