@@ -3,11 +3,36 @@ import React from 'react';
 const OurStorySection: React.FC = () => {
   return (
     <section id="our-story" className="relative py-24 px-8 overflow-hidden bg-white">
-      {/* Bakgrund */}
+      {/* Ny bakgrundsdesign */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-blue-50" />
-        <div className="absolute -top-40 -left-40 w-[700px] h-[700px] rounded-full bg-blue-200/20 blur-3xl" />
-        <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] rounded-full bg-indigo-200/20 blur-3xl" />
+        {/* Ljus radial gradient */}
+        <div className="absolute top-[-200px] left-[-200px] w-[500px] h-[500px] bg-blue-100/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-[-200px] right-[-200px] w-[500px] h-[500px] bg-indigo-100/20 rounded-full blur-3xl" />
+        
+        {/* Extra radial glow i mitten */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-b from-white via-blue-50/30 to-white rounded-full blur-2xl opacity-60" />
+
+        {/* Diskreta prickar */}
+        {Array.from({ length: 20 }).map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-[4px] h-[4px] rounded-full bg-blue-200/40"
+            style={{
+              top: `${Math.random() * 100}%`,
+              left: `${Math.random() * 100}%`,
+            }}
+          />
+        ))}
+
+        {/* Vågform längst ner */}
+        <svg
+          className="absolute bottom-0 left-0 w-full h-32 text-blue-50"
+          preserveAspectRatio="none"
+          viewBox="0 0 1440 320"
+          fill="currentColor"
+        >
+          <path d="M0,96L48,80C96,64,192,32,288,42.7C384,53,480,107,576,128C672,149,768,139,864,144C960,149,1056,171,1152,192C1248,213,1344,235,1392,245.3L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z" />
+        </svg>
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto">
