@@ -194,7 +194,7 @@ const MissionValuesSection: React.FC = () => {
                     className="text-white/70 font-light"
                     style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
                   >
-                    öppna processer, tydlig prissättning och ärlig kommunikation.
+                    Öppna processer, tydlig prissättning och ärlig kommunikation.
                   </p>
                 </div>
               </div>
@@ -214,7 +214,7 @@ const MissionValuesSection: React.FC = () => {
                     className="text-white/70 font-light"
                     style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
                   >
-                    strukturerad screening, referenskontroll och noggranna leveranser.
+                    Strukturerad screening, referenskontroll och noggranna leveranser.
                   </p>
                 </div>
               </div>
@@ -234,7 +234,7 @@ const MissionValuesSection: React.FC = () => {
                     className="text-white/70 font-light"
                     style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
                   >
-                    en dedikerad kontaktperson och uppföljning hela vägen.
+                    En dedikerad kontaktperson och uppföljning hela vägen.
                   </p>
                 </div>
               </div>
