@@ -21,32 +21,26 @@ const OurStorySection: React.FC = () => {
 
         {/* Roadmap */}
         <div className="relative">
-          {/* Fullbredd-linje (helt från kant till kant på viewporten) */}
-          <div className="relative w-screen left-1/2 -translate-x-1/2 h-48">
+          {/* Fullbredd-linje (från kant till kant på viewporten) */}
+          <div className="relative w-screen left-1/2 -translate-x-1/2 h-56">
             {/* Solid linje */}
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] bg-blue-600" />
-            {/* Diskret glow ovanpå linjen för premium-känsla */}
+            {/* Subtil glow */}
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] bg-blue-500/40 blur-[2px]" />
 
-            {/* --- Punkt Q2 --- */}
-            <div
-              className="absolute top-1/2 -translate-y-1/2"
-              style={{ left: '25%' }}
-            >
+            {/* === Punkt Q2 (vänster) === */}
+            <div className="absolute top-1/2 -translate-y-1/2" style={{ left: '25%' }}>
               {/* Punkt på linjen */}
               <div className="relative z-10 flex items-center justify-center">
-                {/* yttre ring */}
                 <span className="absolute w-6 h-6 rounded-full bg-blue-500/20 blur-sm" />
-                {/* kant */}
                 <span className="absolute w-4 h-4 rounded-full border-2 border-white" />
-                {/* kärna */}
                 <span className="relative w-3 h-3 rounded-full bg-blue-600 shadow-[0_0_12px_rgba(37,99,235,0.55)]" />
               </div>
 
-              {/* Kortet */}
-              <div className="absolute -top-28 left-1/2 -translate-x-1/2">
+              {/* Kortet – FLYTTAT UPP */}
+              <div className="absolute -top-36 left-1/2 -translate-x-1/2">
                 <div className="relative w-[220px] rounded-xl border border-gray-200 bg-white shadow-lg p-4 text-center">
-                  {/* liten “pil” mot punkten */}
+                  {/* liten pil mot punkten */}
                   <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-white border-b border-r border-gray-200" />
                   <div className="text-blue-600 font-semibold text-sm mb-1">2025 Q2</div>
                   <div className="text-gray-900 font-semibold">Starten</div>
@@ -57,11 +51,8 @@ const OurStorySection: React.FC = () => {
               </div>
             </div>
 
-            {/* --- Punkt Q3 --- */}
-            <div
-              className="absolute top-1/2 -translate-y-1/2"
-              style={{ left: '75%' }}
-            >
+            {/* === Punkt Q3 (höger) === */}
+            <div className="absolute top-1/2 -translate-y-1/2" style={{ left: '75%' }}>
               {/* Punkt på linjen */}
               <div className="relative z-10 flex items-center justify-center">
                 <span className="absolute w-6 h-6 rounded-full bg-blue-500/20 blur-sm" />
@@ -69,14 +60,13 @@ const OurStorySection: React.FC = () => {
                 <span className="relative w-3 h-3 rounded-full bg-blue-600 shadow-[0_0_12px_rgba(37,99,235,0.55)]" />
               </div>
 
-              {/* Kortet */}
-              <div className="absolute -top-28 left-1/2 -translate-x-1/2">
+              {/* Kortet – FLYTTAT NER */}
+              <div className="absolute top-12 left-1/2 -translate-x-1/2">
                 <div className="relative w-[240px] rounded-xl border border-gray-200 bg-white shadow-lg p-4 text-center">
-                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-white border-b border-r border-gray-200" />
+                  {/* liten pil mot punkten (uppåtpil) */}
+                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3 h-3 rotate-45 bg-white border-t border-l border-gray-200" />
                   <div className="text-blue-600 font-semibold text-sm mb-1">2025 Q3</div>
-                  <div className="text-gray-900 font-semibold">
-                    Första uppdrag &amp; partnerskap
-                  </div>
+                  <div className="text-gray-900 font-semibold">Första uppdrag &amp; partnerskap</div>
                   <p className="mt-1 text-xs leading-snug text-gray-600">
                     De första bemanningarna levereras och långsiktiga kundrelationer etableras.
                   </p>
