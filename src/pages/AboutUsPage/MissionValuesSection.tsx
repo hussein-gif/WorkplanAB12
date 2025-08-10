@@ -156,23 +156,46 @@ const MissionValuesSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Mission */}
           <div>
-            <h2 className="text-4xl font-light text-white mb-6">Vårt Uppdrag</h2>
-            <p className="text-xl text-white/80 leading-relaxed font-light">
+            <h2
+              className="text-4xl font-semibold text-white mb-6"
+              style={{ fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+            >
+              Vårt Uppdrag
+            </h2>
+            <p
+              className="text-xl text-white/80 leading-relaxed font-light"
+              style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+            >
               Vi gör bemanning enkelt för både företag och människor. Vi säkrar rätt kompetens snabbt för lager & logistik – samtidigt som vi hjälper kandidater att hitta trygga, utvecklande jobb utan onödigt krångel. Med tydliga processer, personlig service och fokus på kvalitet skapar vi långsiktigt värde för alla inblandade.
             </p>
           </div>
 
           {/* Values */}
           <div>
-            <h2 className="text-4xl font-light text-white mb-6">Våra Värderingar</h2>
+            <h2
+              className="text-4xl font-semibold text-white mb-6"
+              style={{ fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+            >
+              Våra Värderingar
+            </h2>
             <div className="space-y-6">
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0">
                   <Shield size={20} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">Transparens</h3>
-                  <p className="text-white/70">öppna processer, tydlig prissättning och ärlig kommunikation.</p>
+                  <h3
+                    className="text-xl font-semibold text-white mb-2"
+                    style={{ fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+                  >
+                    Transparens
+                  </h3>
+                  <p
+                    className="text-white/70 font-light"
+                    style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+                  >
+                    öppna processer, tydlig prissättning och ärlig kommunikation.
+                  </p>
                 </div>
               </div>
 
@@ -181,8 +204,18 @@ const MissionValuesSection: React.FC = () => {
                   <Star size={20} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">Kvalitet i varje matchning</h3>
-                  <p className="text-white/70">strukturerad screening, referenskontroll och noggranna leveranser.</p>
+                  <h3
+                    className="text-xl font-semibold text-white mb-2"
+                    style={{ fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+                  >
+                    Kvalitet i varje matchning
+                  </h3>
+                  <p
+                    className="text-white/70 font-light"
+                    style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+                  >
+                    strukturerad screening, referenskontroll och noggranna leveranser.
+                  </p>
                 </div>
               </div>
 
@@ -191,15 +224,30 @@ const MissionValuesSection: React.FC = () => {
                   <Handshake size={20} className="text-white" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-white mb-2">Partnerskap på riktigt</h3>
-                  <p className="text-white/70">en dedikerad kontaktperson och uppföljning hela vägen.</p>
+                  <h3
+                    className="text-xl font-semibold text-white mb-2"
+                    style={{ fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+                  >
+                    Partnerskap på riktigt
+                  </h3>
+                  <p
+                    className="text-white/70 font-light"
+                    style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
+                  >
+                    en dedikerad kontaktperson och uppföljning hela vägen.
+                  </p>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
       </div>
 
+      {/* Fonts */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Zen+Kaku+Gothic+Antique:wght@600&display=swap');
+      `}</style>
     </section>
   );
 };
