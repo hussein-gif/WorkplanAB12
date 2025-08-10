@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 interface ServicesHeroSectionProps {
   isVisible: boolean;
@@ -14,7 +14,7 @@ const ServicesHeroSection: React.FC<ServicesHeroSectionProps> = ({
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg"
+          src="https://i.ibb.co/W41Lp1F4/image.png"
           alt="Warehouse operations"
           className="w-full h-full object-cover"
         />
