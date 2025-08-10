@@ -37,7 +37,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
 
   return (
     <section className="relative py-28 px-6 overflow-hidden" aria-label="Så går det till">
-      {/* ====== DIN ORIG. BAKGRUND (oförändrad) ====== */}
+      {/* =================== BAKGRUND (EXAKT SOM DIN) =================== */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-white" />
         <div
@@ -137,7 +137,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
         />
       </div>
 
-      {/* ====== Ditt andra bakgrundslager (identiskt) ====== */}
+      {/* Ditt andra bakgrundslager */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute inset-0"
@@ -236,7 +236,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
         />
       </div>
 
-      {/* ====== INNEHÅLL ====== */}
+      {/* =================== INNEHÅLL =================== */}
       <div className="relative max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-black">Så Går Det Till</h2>
@@ -248,81 +248,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
         {/* EN RAD – horisontell scroll på mobil */}
         <div className="relative flex flex-nowrap items-stretch gap-8 overflow-x-auto md:overflow-visible pb-4">
           {steps.map((step, idx) => (
-            <div key={idx} className="relative shrink-0 w-[300px] md:w-[340px]">
-              {/* Glow-ram */}
-              <div className="absolute -inset-[1px] rounded-3xl bg-gradient-to-br from-white/35 via-white/20 to-transparent blur-[6px] opacity-70 pointer-events-none" />
-
-              {/* KORT */}
-              <div
-                className={[
-                  'relative h-[300px] md:h-[340px] rounded-3xl ring-1 ring-black/10 z-10',
-                  'bg-white/18 backdrop-blur-2xl',
-                  'shadow-[0_20px_60px_rgba(31,41,55,0.14),inset_0_1px_0_rgba(255,255,255,0.45)]',
-                  'px-7 py-8 text-black',
-                  'transition-transform duration-500 hover:-translate-y-1',
-                ].join(' ')}
-              >
-                {/* ======= PUSSEL-FORMER ======= */}
-                {/* Spets åt höger – ligger över kort 2 för att synas */}
-                {(step.kind === 'arrow-right' || step.kind === 'both') && (
-                  <div className="absolute top-1/2 -right-5 -translate-y-1/2 w-9 h-9 z-30">
-                    <div
-                      className="absolute inset-0 ring-1 ring-black/10"
-                      style={{
-                        background:
-                          'linear-gradient(180deg, rgba(255,255,255,0.32), rgba(255,255,255,0.1))',
-                        backdropFilter: 'blur(16px)',
-                        WebkitBackdropFilter: 'blur(16px)',
-                        borderRadius: 10,
-                        clipPath:
-                          'polygon(0% 0%, 58% 0%, 100% 50%, 58% 100%, 0% 100%, 38% 50%)',
-                        boxShadow: '0 8px 22px rgba(0,0,0,0.18)',
-                      }}
-                    />
-                  </div>
-                )}
-
-                {/* Urtag på vänster – “stansar ut” visuellt genom att lägga en ljus form ovanpå kortkanten */}
-                {(step.kind === 'socket-left' || step.kind === 'both') && (
-                  <div className="absolute top-1/2 -left-5 -translate-y-1/2 w-9 h-9 z-40 pointer-events-none">
-                    {/* Basform som täcker kortkanten (ser ut som ett urtag) */}
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        background: 'rgba(255,255,255,0.9)', // matchar ljus bakgrund
-                        borderRadius: 10,
-                        clipPath:
-                          'polygon(100% 0%, 62% 0%, 0% 50%, 62% 100%, 100% 100%, 40% 50%)',
-                        boxShadow:
-                          '0 2px 8px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(0,0,0,0.08)',
-                      }}
-                    />
-                  </div>
-                )}
-
-                {/* INNEHÅLL – svart text */}
-                <div className="flex h-full flex-col">
-                  <div className="text-4xl md:text-5xl font-extrabold tracking-tight">{step.number}</div>
-                  <h3 className="mt-5 text-xl md:text-2xl font-semibold leading-snug">{step.title}</h3>
-                  <p className="mt-3 text-sm md:text-base leading-relaxed text-black/80">
-                    {step.description}
-                  </p>
-
-                  {/* Dotted line */}
-                  <div className="mt-auto pt-6">
-                    <div
-                      className="h-[2px] w-24"
-                      style={{
-                        backgroundImage:
-                          'repeating-linear-gradient(90deg, rgba(0,0,0,0.7) 0 8px, transparent 8px 14px)',
-                      }}
-                    />
-                  </div>
-                </div>
-
-                <div className="pointer-events-none absolute inset-0 rounded-3xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.45)]" />
-              </div>
-            </div>
+            <Card key={idx} {...step} />
           ))}
         </div>
 
@@ -403,6 +329,98 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
         }
       `}</style>
     </section>
+  );
+};
+
+/* ====== CARD ====== */
+type CardProps = {
+  number: string;
+  title: string;
+  description: string;
+  kind: PieceKind;
+};
+
+const Card: React.FC<CardProps> = ({ number, title, description, kind }) => {
+  return (
+    <div className="relative shrink-0 w-[300px] md:w-[340px]">
+      {/* svag glow */}
+      <div className="absolute -inset-[1px] rounded-3xl bg-gradient-to-br from-white/35 via-white/20 to-transparent blur-[6px] opacity-70 pointer-events-none" />
+
+      {/* KORT – frosted */}
+      <div
+        className={[
+          'relative h-[300px] md:h-[340px] rounded-3xl ring-1 ring-black/10 z-10',
+          'bg-white/18 backdrop-blur-2xl',
+          'shadow-[0_20px_60px_rgba(31,41,55,0.14),inset_0_1px_0_rgba(255,255,255,0.45)]',
+          'px-7 py-8 text-black',
+          'transition-transform duration-500 hover:-translate-y-1',
+        ].join(' ')}
+      >
+        {/* ======= PUSSEL-FORMER – EXAKT LOOK ======= */}
+        {/* Spets åt höger (chevron) */}
+        {(kind === 'arrow-right' || kind === 'both') && (
+          <div className="absolute top-1/2 -right-6 -translate-y-1/2 w-12 h-12 z-30">
+            <div
+              className="absolute inset-0 ring-1 ring-black/10"
+              style={{
+                background:
+                  'linear-gradient(180deg, rgba(255,255,255,0.34), rgba(255,255,255,0.1))',
+                backdropFilter: 'blur(18px)',
+                WebkitBackdropFilter: 'blur(18px)',
+                clipPath:
+                  // spets med liten “midja” som i bilden
+                  'polygon(0% 0%, 62% 0%, 100% 50%, 62% 100%, 0% 100%, 40% 50%)',
+                borderRadius: 12,
+                boxShadow: '0 10px 24px rgba(0,0,0,0.18)',
+              }}
+            />
+          </div>
+        )}
+
+        {/* Urtag på vänster (inåtgående chevron) */}
+        {(kind === 'socket-left' || kind === 'both') && (
+          <div className="absolute top-1/2 -left-6 -translate-y-1/2 w-12 h-12 z-40 pointer-events-none">
+            {/* underplatta som “skär ut” kanten visuellt och ger highlight runt urtaget */}
+            <div
+              className="absolute inset-0"
+              style={{
+                // form som vänder chevronen inåt – ger exakt pussel-urtag
+                clipPath:
+                  'polygon(100% 0%, 38% 0%, 0% 50%, 38% 100%, 100% 100%, 62% 50%)',
+                background:
+                  'linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.65))',
+                borderRadius: 12,
+                boxShadow:
+                  '0 2px 10px rgba(0,0,0,0.10), inset 0 0 0 1px rgba(0,0,0,0.08)',
+              }}
+            />
+          </div>
+        )}
+
+        {/* INNEHÅLL */}
+        <div className="flex h-full flex-col">
+          <div className="text-4xl md:text-5xl font-extrabold tracking-tight">{number}</div>
+          <h3 className="mt-5 text-xl md:text-2xl font-semibold leading-snug">{title}</h3>
+          <p className="mt-3 text-sm md:text-base leading-relaxed text-black/80">
+            {description}
+          </p>
+
+          {/* Dotted line i botten */}
+          <div className="mt-auto pt-6">
+            <div
+              className="h-[2px] w-24"
+              style={{
+                backgroundImage:
+                  'repeating-linear-gradient(90deg, rgba(0,0,0,0.7) 0 8px, transparent 8px 14px)',
+              }}
+            />
+          </div>
+        </div>
+
+        {/* inre highlight runt kortet */}
+        <div className="pointer-events-none absolute inset-0 rounded-3xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.45)]" />
+      </div>
+    </div>
   );
 };
 
