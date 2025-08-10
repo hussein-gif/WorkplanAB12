@@ -1,11 +1,11 @@
-import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import React from "react";
+import { ArrowRight, Search, Handshake, Briefcase } from "lucide-react";
 
 interface HowItWorksSectionProps {
   isVisible: boolean;
 }
 
-type PieceKind = 'arrow-right' | 'socket-left' | 'both';
+type PieceKind = "arrow-right" | "socket-left" | "both";
 
 const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
   const steps: Array<{
@@ -13,382 +13,209 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
     title: string;
     description: string;
     kind: PieceKind;
+    icon: React.ReactNode;
   }> = [
     {
-      number: '01',
-      title: 'Steg 1 – Sök & Välj',
-      description: 'Utforska roller som matchar dina mål och intressen.',
-      kind: 'arrow-right',
+      number: "01",
+      title: "Steg 1 – Sök & Välj",
+      description: "Utforska roller som matchar dina mål och intressen.",
+      kind: "arrow-right",
+      icon: <Search size={22} />,
     },
     {
-      number: '02',
-      title: 'Steg 2 – Matchning & Intervjuer',
+      number: "02",
+      title: "Steg 2 – Matchning & Intervjuer",
       description:
-        'Vi matchar din profil, genomför intervjuer och presenterar dig sedan för arbetsgivaren.',
-      kind: 'both',
+        "Vi matchar din profil, genomför intervjuer och presenterar dig för arbetsgivaren.",
+      kind: "both",
+      icon: <Handshake size={22} />,
     },
     {
-      number: '03',
-      title: 'Steg 3 – Starta Ditt Nya Jobb',
-      description: 'Acceptera erbjudandet och kickstarta nästa kapitel.',
-      kind: 'socket-left',
+      number: "03",
+      title: "Steg 3 – Starta Ditt Nya Jobb",
+      description: "Acceptera erbjudandet och kickstarta nästa kapitel.",
+      kind: "socket-left",
+      icon: <Briefcase size={22} />,
     },
   ];
 
   return (
     <section className="relative py-28 px-6 overflow-hidden" aria-label="Så går det till">
-      {/* =================== DIN BAKGRUND (EXAKT SOM DU SKICKADE) =================== */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute inset-0 bg-white" />
+      {/* Bakgrund – renare men premium */}
+      <div className="absolute inset-0 -z-10">
+        {/* mjuk färgdimma */}
         <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(ellipse 1200px 800px at 15% 20%, rgba(59,130,246,0.08) 0%, transparent 45%),
-              radial-gradient(ellipse 1000px 600px at 85% 10%, rgba(139,92,246,0.06) 0%, transparent 50%),
-              radial-gradient(ellipse 800px 1200px at 70% 80%, rgba(236,72,153,0.05) 0%, transparent 40%),
-              radial-gradient(ellipse 600px 400px at 30% 70%, rgba(16,185,129,0.07) 0%, transparent 55%),
-              radial-gradient(ellipse 900px 500px at 90% 60%, rgba(245,158,11,0.04) 0%, transparent 45%)
-            `,
-            animation: 'smokeFlow 25s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              conic-gradient(from 45deg at 20% 30%, transparent 0deg, rgba(59,130,246,0.03) 60deg, transparent 120deg, rgba(139,92,246,0.04) 180deg, transparent 240deg, rgba(236,72,153,0.03) 300deg, transparent 360deg),
-              conic-gradient(from 180deg at 80% 70%, transparent 0deg, rgba(16,185,129,0.04) 90deg, transparent 180deg, rgba(245,158,11,0.03) 270deg, transparent 360deg)
-            `,
-            animation: 'smokeRotate 35s linear infinite',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M0,300 Q250,200 500,300 T1000,300 L1000,400 Q750,500 500,400 T0,400 Z' fill='rgba(59,130,246,0.02)'/%3E%3Cpath d='M0,600 Q250,500 500,600 T1000,600 L1000,700 Q750,800 500,700 T0,700 Z' fill='rgba(139,92,246,0.015)'/%3E%3C/svg%3E")
-            `,
-            backgroundSize: '100% 100%',
-            animation: 'waveFlow 20s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              radial-gradient(2px 2px at 20% 30%, rgba(59,130,246,0.4), transparent),
-              radial-gradient(2px 2px at 40% 70%, rgba(139,92,246,0.3), transparent),
-              radial-gradient(1px 1px at 90% 40%, rgba(236,72,153,0.4), transparent),
-              radial-gradient(1px 1px at 60% 20%, rgba(16,185,129,0.3), transparent),
-              radial-gradient(2px 2px at 80% 80%, rgba(245,158,11,0.3), transparent),
-              radial-gradient(1px 1px at 10% 60%, rgba(59,130,246,0.2), transparent)
-            `,
-            backgroundSize:
-              '300px 300px, 400px 400px, 200px 200px, 350px 350px, 250px 250px, 180px 180px',
-            animation: 'particleFloat 30s linear infinite',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              linear-gradient(90deg, rgba(59,130,246,0.01) 1px, transparent 1px),
-              linear-gradient(rgba(139,92,246,0.01) 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px',
-            animation: 'meshShift 40s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute top-10 left-10 w-32 h-32 rounded-full opacity-20 blur-2xl"
-          style={{
-            background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%)',
-            animation: 'blobFloat1 18s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute top-1/3 right-20 w-24 h-40 rounded-full opacity-15 blur-xl"
-          style={{
-            background: 'radial-gradient(ellipse, rgba(139,92,246,0.4) 0%, transparent 60%)',
-            animation: 'blobFloat2 22s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute bottom-20 left-1/4 w-28 h-28 rounded-full opacity-25 blur-2xl"
-          style={{
-            background: 'radial-gradient(circle, rgba(236,72,153,0.3) 0%, transparent 80%)',
-            animation: 'blobFloat3 16s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute bottom-1/3 right-1/3 w-20 h-36 rounded-full opacity-20 blur-xl"
-          style={{
-            background: 'radial-gradient(ellipse, rgba(16,185,129,0.35) 0%, transparent 65%)',
-            animation: 'blobFloat4 20s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute inset-0"
+          className="absolute inset-0 opacity-100"
           style={{
             background:
-              'radial-gradient(ellipse at center, transparent 40%, rgba(255,255,255,0.1) 100%)',
+              "radial-gradient(1200px 600px at 15% 25%, rgba(59,130,246,0.10), transparent 60%),\n               radial-gradient(1000px 700px at 80% 20%, rgba(139,92,246,0.10), transparent 55%),\n               radial-gradient(900px 900px at 70% 80%, rgba(236,72,153,0.08), transparent 50%)",
+          }}
+        />
+        {/* diskret rutnät */}
+        <div
+          className="absolute inset-0 opacity-[0.15]"
+          style={{
+            backgroundImage:
+              "linear-gradient(90deg, rgba(0,0,0,0.08) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.08) 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
           }}
         />
       </div>
 
-      {/* Andra bakgrundslagret (samma) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(ellipse 1200px 800px at 15% 20%, rgba(59,130,246,0.08) 0%, transparent 45%),
-              radial-gradient(ellipse 1000px 600px at 85% 10%, rgba(139,92,246,0.06) 0%, transparent 50%),
-              radial-gradient(ellipse 800px 1200px at 70% 80%, rgba(236,72,153,0.05) 0%, transparent 40%),
-              radial-gradient(ellipse 600px 400px at 30% 70%, rgba(16,185,129,0.07) 0%, transparent 55%),
-              radial-gradient(ellipse 900px 500px at 90% 60%, rgba(245,158,11,0.04) 0%, transparent 45%)
-            `,
-            animation: 'smokeFlow 25s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `
-              conic-gradient(from 45deg at 20% 30%, transparent 0deg, rgba(59,130,246,0.03) 60deg, transparent 120deg, rgba(139,92,246,0.04) 180deg, transparent 240deg, rgba(236,72,153,0.03) 300deg, transparent 360deg),
-              conic-gradient(from 180deg at 80% 70%, transparent 0deg, rgba(16,185,129,0.04) 90deg, transparent 180deg, rgba(245,158,11,0.03) 270deg, transparent 360deg)
-            `,
-            animation: 'smokeRotate 35s linear infinite',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M0,300 Q250,200 500,300 T1000,300 L1000,400 Q750,500 500,400 T0,400 Z' fill='rgba(59,130,246,0.02)'/%3E%3Cpath d='M0,600 Q250,500 500,600 T1000,600 L1000,700 Q750,800 500,700 T0,700 Z' fill='rgba(139,92,246,0.015)'/%3E%3C/svg%3E")
-            `,
-            backgroundSize: '100% 100%',
-            animation: 'waveFlow 20s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              radial-gradient(2px 2px at 20% 30%, rgba(59,130,246,0.4), transparent),
-              radial-gradient(2px 2px at 40% 70%, rgba(139,92,246,0.3), transparent),
-              radial-gradient(1px 1px at 90% 40%, rgba(236,72,153,0.4), transparent),
-              radial-gradient(1px 1px at 60% 20%, rgba(16,185,129,0.3), transparent),
-              radial-gradient(2px 2px at 80% 80%, rgba(245,158,11,0.3), transparent),
-              radial-gradient(1px 1px at 10% 60%, rgba(59,130,246,0.2), transparent)
-            `,
-            backgroundSize:
-              '300px 300px, 400px 400px, 200px 200px, 350px 350px, 250px 250px, 180px 180px',
-            animation: 'particleFloat 30s linear infinite',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `
-              linear-gradient(90deg, rgba(59,130,246,0.01) 1px, transparent 1px),
-              linear-gradient(rgba(139,92,246,0.01) 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px',
-            animation: 'meshShift 40s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute top-10 left-10 w-32 h-32 rounded-full opacity-20 blur-2xl"
-          style={{
-            background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%)',
-            animation: 'blobFloat1 18s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute top-1/3 right-20 w-24 h-40 rounded-full opacity-15 blur-xl"
-          style={{
-            background: 'radial-gradient(ellipse, rgba(139,92,246,0.4) 0%, transparent 60%)',
-            animation: 'blobFloat2 22s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute bottom-20 left-1/4 w-28 h-28 rounded-full opacity-25 blur-2xl"
-          style={{
-            background: 'radial-gradient(circle, rgba(236,72,153,0.3) 0%, transparent 80%)',
-            animation: 'blobFloat3 16s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute bottom-1/3 right-1/3 w-20 h-36 rounded-full opacity-20 blur-xl"
-          style={{
-            background: 'radial-gradient(ellipse, rgba(16,185,129,0.35) 0%, transparent 65%)',
-            animation: 'blobFloat4 20s ease-in-out infinite',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(ellipse at center, transparent 40%, rgba(255,255,255,0.1) 100%)',
-          }}
-        />
-      </div>
-
-      {/* =================== INNEHÅLL =================== */}
+      {/* Innehåll */}
       <div className="relative max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-black">Så Går Det Till</h2>
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-black">Så Går Det Till</h2>
           <p className="mt-3 text-black/60 max-w-2xl mx-auto">
             En tydlig process från ansökan till anställning – enkelt och professionellt.
           </p>
         </div>
 
-        {/* EN RAD – horisontell scroll på mobil */}
-        <div className="relative flex flex-nowrap items-stretch gap-14 overflow-x-auto md:overflow-visible pb-4">
+        {/* Cards – en rad, elegant och responsivt */}
+        <div className="relative flex flex-nowrap items-stretch gap-8 md:gap-10 overflow-x-auto md:overflow-visible pb-4">
           {steps.map((s, i) => (
-            <PuzzleCard key={i} {...s} />
+            <FancyCard key={i} {...s} index={i} />
           ))}
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-10">
+        <div className="text-center mt-12">
           <button
             onClick={() => {
-              const el = document.getElementById('featured-jobs');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
+              const el = document.getElementById("featured-jobs");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
             }}
             className="relative inline-flex items-center gap-2 px-6 py-3 rounded-2xl font-semibold text-white bg-gradient-to-r from-sky-600 via-indigo-600 to-fuchsia-600 shadow-lg shadow-indigo-200/40 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-indigo-300"
           >
             Bläddra bland jobben ovan
             <ArrowRight size={18} />
             <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
-              <span className="absolute left-[-50%] top-0 h-full w-1/3 bg-white/30 skew-x-[-20deg] animate-sheen" />
+              <span className="absolute left-[-50%] top-0 h-full w-1/3 bg-white/30 skew-x-[-20deg] animate-[sheen_1.2s_ease-in-out]"></span>
             </span>
           </button>
         </div>
       </div>
 
-      {/* Keyframes – oförändrade */}
+      {/* Keyframes */}
       <style>{`
         @keyframes sheen { from { transform: translateX(-120%) skewX(-20deg);} to { transform: translateX(220%) skewX(-20deg);} }
-        @keyframes smokeFlow { 0%, 100% { transform: translateX(0) translateY(0) scale(1); } 25% { transform: translateX(20px) translateY(-15px) scale(1.05); } 50% { transform: translateX(-10px) translateY(10px) scale(0.95); } 75% { transform: translateX(15px) translateY(-5px) scale(1.02); } }
-        @keyframes smokeRotate { 0% { transform: rotate(0deg) scale(1); } 25% { transform: rotate(90deg) scale(1.1); } 50% { transform: rotate(180deg) scale(0.9); } 75% { transform: rotate(270deg) scale(1.05); } 100% { transform: rotate(360deg) scale(1); } }
-        @keyframes waveFlow { 0%, 100% { transform: translateX(0) scaleY(1); } 33% { transform: translateX(-30px) scaleY(1.1); } 66% { transform: translateX(20px) scaleY(0.9); } }
-        @keyframes particleFloat { 0%, 100% { transform: translateY(0) translateX(0); } 25% { transform: translateY(-20px) translateX(10px); } 50% { transform: translateY(15px) translateX(-15px); } 75% { transform: translateY(-10px) translateX(5px); } }
-        @keyframes meshShift { 0%, 100% { transform: translateX(0) translateY(0); } 50% { transform: translateX(30px) translateY(-20px); } }
-        @keyframes blobFloat1 { 0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); } 25% { transform: translate(30px, -20px) scale(1.2) rotate(90deg); } 50% { transform: translate(-20px, 40px) scale(0.8) rotate(180deg); } 75% { transform: translate(25px, -10px) scale(1.1) rotate(270deg); } }
-        @keyframes blobFloat2 { 0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); } 33% { transform: translate(-25px, 30px) scale(1.3) rotate(120deg); } 66% { transform: translate(40px, -25px) scale(0.7) rotate(240deg); } }
-        @keyframes blobFloat3 { 0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); } 20% { transform: translate(20px, -30px) scale(1.4) rotate(72deg); } 40% { transform: translate(-30px, 20px) scale(0.6) rotate(144deg); } 60% { transform: translate(35px, 10px) scale(1.2) rotate(216deg); } 80% { transform: translate(-15px, -25px) scale(0.9) rotate(288deg); } }
-        @keyframes blobFloat4 { 0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); } 30% { transform: translate(-40px, -20px) scale(1.1) rotate(108deg); } 60% { transform: translate(20px, 35px) scale(0.8) rotate(216deg); } }
+        @keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+        @keyframes borderGlow { 0%,100%{opacity:0.45} 50%{opacity:1} }
       `}</style>
     </section>
   );
 };
 
-/* ====== KORT med direkt clip-path (spets/urtag ingår i samma glaslager) ====== */
+/* ====== Ny, proffsig kortkomponent ====== */
+
 type CardProps = {
   number: string;
   title: string;
   description: string;
   kind: PieceKind;
+  icon: React.ReactNode;
+  index?: number;
 };
 
-const PuzzleCard: React.FC<CardProps> = ({ number, title, description, kind }) => {
-  // Tunables för form (procent av bredd/höjd)
-  const R = 6;   // corner radius i %
-  const S = 12;  // socket half-height (hur hög “urtaget” är) i %
-  const T = 8;   // spetsdjup i %
-
-  // clip-path polygon som formar hela kortet (inkl. rundade hörn + spets/urtag)
-  const clip = (() => {
-    // kanter i procent
-    const left = `${R}%`;
-    const rightInset = `${100 - R}%`;
-    const top = `${R}%`;
-    const bottom = `${100 - R}%`;
-
-    // mitt på höjden
-    const midTop = `${50 - S}%`;
-    const midBot = `${50 + S}%`;
-
-    // chevrondjup (positiv åt höger, negativ åt vänster)
-    const tipR = `${100}%`;
-    const tipR_inset = `${100 - T}%`;
-    const tipL = `0%`;
-    const tipL_inset = `${T}%`;
-
-    // Bygg olika varianter
-    if (kind === 'arrow-right') {
-      // rund rektangel + höger spets
-      return `
-        polygon(
-          ${left} 0%, ${rightInset} 0%,
-          ${rightInset} ${midTop}, ${tipR} 50%, ${rightInset} ${midBot},
-          ${rightInset} 100%, ${left} 100%,
-          0% ${bottom}, 0% ${top}
-        )
-      `;
-    }
-    if (kind === 'socket-left') {
-      // rund rektangel + vänster urtag (inåt)
-      return `
-        polygon(
-          ${left} 0%, ${rightInset} 0%,
-          100% ${top}, 100% ${bottom},
-          ${rightInset} 100%, ${left} 100%,
-          ${left} ${midBot}, ${tipL} 50%, ${left} ${midTop},
-          ${left} 0%
-        )
-      `;
-    }
-    // both: vänster urtag + höger spets
-    return `
-      polygon(
-        ${left} 0%, ${rightInset} 0%,
-        ${rightInset} ${midTop}, ${tipR} 50%, ${rightInset} ${midBot},
-        ${rightInset} 100%, ${left} 100%,
-        ${left} ${midBot}, ${tipL} 50%, ${left} ${midTop},
-        ${left} 0%
-      )
-    `;
-  })();
+const FancyCard: React.FC<CardProps> = ({ number, title, description, kind, icon, index = 0 }) => {
+  // kantaccent baserat på "kind" (högerpil / vänsterurtag)
+  const edgeAccent = {
+    right: kind === "arrow-right" || kind === "both",
+    left: kind === "socket-left" || kind === "both",
+  };
 
   return (
-    <div className="relative shrink-0 w-[320px] md:w-[360px]">
+    <div className="relative shrink-0 w-[300px] md:w-[340px]">
+      {/* Glödande bakgrundsaura */}
       <div
-        className="relative h-[300px] md:h-[340px] px-7 py-8 text-black"
+        className="absolute -inset-2 rounded-[28px] blur-xl -z-10"
         style={{
-          clipPath: clip,
-          WebkitClipPath: clip,
-          background: 'rgba(255,255,255,0.18)',
-          backdropFilter: 'blur(18px)',
-          WebkitBackdropFilter: 'blur(18px)',
-          borderRadius: '24px',
-          boxShadow:
-            '0 20px 60px rgba(31,41,55,0.14), inset 0 1px 0 rgba(255,255,255,0.45)',
-          // ring runt formen
-          outline: '1px solid rgba(0,0,0,0.10)',
-          outlineOffset: '-1px',
+          background:
+            "radial-gradient(120px 90px at 15% 20%, rgba(59,130,246,0.25), transparent 60%),\n             radial-gradient(140px 110px at 85% 80%, rgba(236,72,153,0.18), transparent 65%)",
         }}
-      >
-        {/* Innehåll */}
-        <div className="flex h-full flex-col">
-          <div className="text-4xl md:text-5xl font-extrabold tracking-tight">{number}</div>
-          <h3 className="mt-5 text-xl md:text-2xl font-semibold leading-snug">{title}</h3>
-          <p className="mt-3 text-sm md:text-base leading-relaxed text-black/80">
-            {description}
-          </p>
-          <div className="mt-auto pt-6">
+      />
+
+      {/* Ytterram med gradient-border */}
+      <div className="p-[1.25px] rounded-[24px] bg-gradient-to-br from-sky-500/50 via-indigo-500/50 to-fuchsia-500/50">
+        {/* Inner card */}
+        <div
+          className="relative h-[280px] md:h-[320px] rounded-[22px] bg-white/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(2,6,23,0.08)] ring-1 ring-black/5 overflow-hidden group"
+        >
+          {/* Discret noise + grid for premium texture */}
+          <div
+            className="absolute inset-0 opacity-[0.06]"
+            style={{
+              backgroundImage:
+                "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"140\" height=\"140\" viewBox=\"0 0 140 140\"><g fill=\"none\" stroke=\"%23000\" stroke-opacity=\"0.35\" stroke-width=\"0.6\"><path d=\"M0 70h140M70 0v140\"/></g></svg>')",
+              backgroundSize: "28px 28px",
+            }}
+          />
+
+          {/* Gradient corner highlights */}
+          <div className="absolute -top-6 -left-6 w-28 h-28 rounded-full blur-2xl opacity-30 bg-sky-500/40" />
+          <div className="absolute -bottom-8 -right-8 w-36 h-36 rounded-full blur-2xl opacity-30 bg-fuchsia-500/40" />
+
+          {/* Edge accents */}
+          {edgeAccent.left && (
             <div
-              className="h-[2px] w-24"
+              className="absolute left-0 top-0 h-full w-[9px]"
               style={{
-                backgroundImage:
-                  'repeating-linear-gradient(90deg, rgba(0,0,0,0.7) 0 8px, transparent 8px 14px)',
+                background:
+                  "linear-gradient(to bottom, rgba(139,92,246,0.0), rgba(139,92,246,0.45), rgba(139,92,246,0.0))",
+                boxShadow: "inset -1px 0 0 rgba(0,0,0,0.06)",
               }}
             />
+          )}
+          {edgeAccent.right && (
+            <div
+              className="absolute right-0 top-0 h-full w-[14px]"
+              style={{
+                background:
+                  "linear-gradient(to bottom, rgba(59,130,246,0.0), rgba(59,130,246,0.55), rgba(236,72,153,0.5), rgba(59,130,246,0.0))",
+                clipPath: "polygon(0% 0%, 100% 50%, 0% 100%, 0% 0%)",
+                boxShadow: "inset 1px 0 0 rgba(0,0,0,0.05)",
+              }}
+            />
+          )}
+
+          {/* Header rad */}
+          <div className="relative flex items-center gap-3 px-6 pt-6">
+            <div className="relative">
+              <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-sky-500/40 to-fuchsia-500/40 animate-[borderGlow_2.8s_ease-in-out_infinite]" />
+              <div className="relative w-11 h-11 rounded-full bg-white/90 ring-1 ring-black/5 grid place-items-center shadow-sm">
+                <span className="text-[11px] font-bold tracking-wider text-black/70">{number}</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 text-black/70">
+              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-500/15 via-indigo-500/15 to-fuchsia-500/15 ring-1 ring-black/5 grid place-items-center">
+                {icon}
+              </div>
+              <h3 className="text-lg md:text-xl font-semibold leading-snug text-black">
+                {title}
+              </h3>
+            </div>
           </div>
+
+          {/* Brödtext */}
+          <p className="px-6 mt-4 text-[15px] md:text-base leading-relaxed text-black/70">
+            {description}
+          </p>
+
+          {/* Footer: progress strip + microdots */}
+          <div className="absolute left-6 right-6 bottom-6">
+            <div className="h-[3px] rounded-full bg-gradient-to-r from-sky-600/70 via-indigo-600/70 to-fuchsia-600/70" />
+            <div className="mt-3 flex items-center gap-2">
+              {[...Array(6)].map((_, i) => (
+                <span
+                  key={i}
+                  className={`h-1.5 w-1.5 rounded-full bg-black/15 ${i === (index % 6) ? "scale-110 bg-black/30" : ""}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Hover lift */}
+          <div className="absolute inset-0 rounded-[22px] pointer-events-none transition-transform duration-300 group-hover:-translate-y-0.5" />
         </div>
       </div>
     </div>
