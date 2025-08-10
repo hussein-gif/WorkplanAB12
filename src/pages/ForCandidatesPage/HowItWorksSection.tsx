@@ -14,25 +14,9 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
     description: string; // underrubrik
     kind: PieceKind;
   }> = [
-    {
-      number: '01',
-      title: 'Sök & Välj',
-      description: 'Utforska roller som matchar dina mål och intressen.',
-      kind: 'arrow-right',
-    },
-    {
-      number: '02',
-      title: 'Matchning & Intervjuer',
-      description:
-        'Vi matchar din profil, genomför intervjuer och presenterar dig sedan för arbetsgivaren.',
-      kind: 'both',
-    },
-    {
-      number: '03',
-      title: 'Starta Ditt Nya Jobb',
-      description: 'Acceptera erbjudandet och kickstarta nästa kapitel.',
-      kind: 'socket-left',
-    },
+    { number: '01', title: 'Sök & Välj', description: 'Utforska roller som matchar dina mål och intressen.', kind: 'arrow-right' },
+    { number: '02', title: 'Matchning & Intervjuer', description: 'Vi matchar din profil, genomför intervjuer och presenterar dig sedan för arbetsgivaren.', kind: 'both' },
+    { number: '03', title: 'Starta Ditt Nya Jobb', description: 'Acceptera erbjudandet och kickstarta nästa kapitel.', kind: 'socket-left' },
   ];
 
   return (
@@ -41,20 +25,14 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
         {/* Rubrik */}
         <div className="text-center mb-12">
           <h2
-            className=\"text-3xl md:text-4xl font-semibold tracking-tight text-gray-900\"
-            style={{
-              fontFamily:
-                '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-            }}
+            className="text-3xl md:text-4xl font-semibold tracking-tight text-gray-900"
+            style={{ fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
           >
             Så Går Det Till
           </h2>
           <p
             className="mt-3 text-gray-600 max-w-2xl mx-auto font-medium"
-            style={{
-              fontFamily:
-                'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-            }}
+            style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
           >
             En tydlig process från ansökan till anställning – enkelt och professionellt.
           </p>
@@ -67,14 +45,14 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
           ))}
         </div>
 
-        {/* CTA (oförändrad) */}
+        {/* CTA */}
         <div className="text-center mt-12">
           <button
             onClick={() => {
               const el = document.getElementById('featured-jobs');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="relative inline-flex items-center gap-2 px-6 py-3 rounded-2xl font-medium text-white bg-gradient-to-br from-sky-700 via-indigo-700 to-slate-900 shadow-[0_10px_30px_rgba(2,6,23,0.15)] ring-1 ring-white/10 hover:brightness-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-2xl font-medium text-white bg-gradient-to-br from-sky-700 via-indigo-700 to-slate-900 shadow-[0_10px_30px_rgba(2,6,23,0.15)] ring-1 ring-white/10 hover:brightness-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-sky-300"
             style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
           >
             Bläddra bland jobben ovan
@@ -84,8 +62,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               <span
                 className="absolute inset-0 rounded-2xl"
                 style={{
-                  backgroundImage:
-                    'radial-gradient(220px 160px at 20% 30%, rgba(56,189,248,0.28), transparent 60%),radial-gradient(260px 200px at 80% 70%, rgba(37,99,235,0.22), transparent 60%)',
+                  backgroundImage: `radial-gradient(220px 160px at 20% 30%, rgba(56,189,248,0.28), transparent 60%), radial-gradient(260px 200px at 80% 70%, rgba(37,99,235,0.22), transparent 60%)`,
                 }}
               />
               <span className="absolute left-[-40%] top-0 h-full w-1/3 bg-white/20 skew-x-[-20deg] translate-x-[-120%] group-hover:translate-x-[220%] transition-transform duration-700 ease-in-out" />
@@ -96,8 +73,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
 
       {/* Fonts + keyframes */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Zen+Kaku+Gothic+Antique:wght@500;700;800&display=swap');
-        @keyframes softMove { 0%,100%{ transform: translate3d(0,0,0) } 50%{ transform: translate3d(4px,-6px,0) } }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Zen+Kaku+Gothic+Antique:wght@500;600;700;800&display=swap');
       `}</style>
     </section>
   );
@@ -121,47 +97,35 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage:
-              'radial-gradient(700px 500px at 20% 25%, rgba(37,99,235,0.55), transparent 60%),\
-               radial-gradient(600px 420px at 80% 80%, rgba(56,189,248,0.45), transparent 55%),\
-               radial-gradient(900px 700px at 60% 20%, rgba(12,18,28,0.7), transparent 55%)',
+            backgroundImage: `radial-gradient(700px 500px at 20% 25%, rgba(37,99,235,0.55), transparent 60%), radial-gradient(600px 420px at 80% 80%, rgba(56,189,248,0.45), transparent 55%), radial-gradient(900px 700px at 60% 20%, rgba(12,18,28,0.7), transparent 55%)`,
           }}
         />
         <div
           className="absolute -left-24 bottom-6 w-[420px] h-[280px] rounded-[160px] opacity-70 blur-3xl"
           style={{
-            backgroundImage:
-              'radial-gradient(closest-side, rgba(56,189,248,0.7), rgba(37,99,235,0.45), transparent 70%)',
+            backgroundImage: `radial-gradient(closest-side, rgba(56,189,248,0.7), rgba(37,99,235,0.45), transparent 70%)`,
           }}
         />
         <div
           className="absolute inset-0"
           style={{
-            backgroundImage:
-              'radial-gradient(120% 120% at 50% 50%, transparent 55%, rgba(0,0,0,0.45) 100%)',
+            backgroundImage: `radial-gradient(120% 120% at 50% 50%, transparent 55%, rgba(0,0,0,0.45) 100%)`,
           }}
         />
       </div>
 
       {/* Innehåll */}
       <div className="relative z-[1] h-full flex flex-col">
-        {/* Titel + underrubrik */}
         <div className="px-7 pt-7">
           <h3
             className="text-2xl md:text-3xl font-bold tracking-tight text-white leading-[1.15]"
-            style={{
-              fontFamily:
-                '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-            }}
+            style={{ fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
           >
             {title}
           </h3>
           <p
             className="mt-3 text-xs md:text-sm text-white/80 max-w-[88%] font-medium"
-            style={{
-              fontFamily:
-                'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-            }}
+            style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
           >
             {description}
           </p>
@@ -173,10 +137,7 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
           <span
             aria-hidden
             className="pointer-events-none select-none absolute bottom-[-10px] left-6 text-white/95 leading-none font-extrabold tracking-tight text-[140px] md:text-[200px]"
-            style={{
-              fontFamily:
-                '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-            }}
+            style={{ fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
           >
             {number.replace(/^0/, '')}
           </span>
