@@ -87,7 +87,7 @@ type CardProps = {
 };
 
 const PosterCard: React.FC<CardProps> = ({ number, title, description, index = 0 }) => {
-  const variant = index % 2 === 0 ? 'aurora' : 'vignette';
+  const variant: 'aurora' = 'aurora';
 
   return (
     <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/60 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.18)] h-[360px] md:h-[420px]">
