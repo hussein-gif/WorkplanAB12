@@ -44,11 +44,12 @@ const OurStorySection: React.FC = () => {
         />
         
         {/* Simple Decorative Dots */}
-        <div
-        {/* Simple Decorative Elements */}
+        <div>
+          {/* Simple Decorative Elements */}
         <div className="absolute top-20 right-20 w-2 h-2 bg-blue-400/20 rounded-full" />
         <div className="absolute bottom-32 left-20 w-1.5 h-1.5 bg-emerald-400/25 rounded-full" />
         <div className="absolute top-1/3 left-1/4 w-1 h-1 bg-purple-400/20 rounded-full" />
+        </div>
       </div>
       
       <div className="max-w-6xl mx-auto">
