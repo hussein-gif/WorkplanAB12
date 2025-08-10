@@ -58,9 +58,6 @@ const OurStorySection: React.FC = () => {
               'radial-gradient(ellipse at center, rgba(59,130,246,0.04) 0%, transparent 70%)',
           }}
         />
-        <div className="absolute top-20 right-20 w-2 h-2 bg-blue-400/20 rounded-full" />
-        <div className="absolute bottom-32 left-20 w-1.5 h-1.5 bg-emerald-400/25 rounded-full" />
-        <div className="absolute top-1/3 left-1/4 w-1 h-1 bg-purple-400/20 rounded-full" />
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
@@ -76,9 +73,9 @@ const OurStorySection: React.FC = () => {
 
         {/* Linje & prickar */}
         <div className="relative mt-10">
-          <div className="relative w-screen left-1/2 -translate-x-1/2 h-28 sm:h-32">
+          <div className="relative w-screen left-1/2 -translate-x-1/2 h-40">
             {/* Linje */}
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] bg-blue-600/90 shadow-[0_0_18px_rgba(37,99,235,0.35)]" />
+            <div className="absolute inset-x-0 top-1/2 h-[2px] bg-blue-600/90 shadow-[0_0_18px_rgba(37,99,235,0.35)]" />
 
             {/* Punkter & kort */}
             {milestones.map((m) => {
@@ -90,7 +87,7 @@ const OurStorySection: React.FC = () => {
                   style={{ left: m.pos, transform: 'translateX(-50%)' }}
                 >
                   {/* Punkt (på linjen) */}
-                  <div className="relative z-10 top-1/2 -translate-y-1/2 flex justify-center">
+                  <div className="relative z-10 top-1/2 flex justify-center">
                     <span
                       className="absolute -inset-3 rounded-full bg-blue-500/20 blur-md"
                       aria-hidden
@@ -100,7 +97,7 @@ const OurStorySection: React.FC = () => {
 
                   {/* Mindre kort */}
                   <div
-                    className={`absolute ${isTop ? 'bottom-8' : 'top-8'} left-1/2 -translate-x-1/2 w-[200px]`}
+                    className={`absolute ${isTop ? '-top-24' : 'top-8'} left-1/2 -translate-x-1/2 w-[200px]`}
                   >
                     <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 shadow-lg text-center">
                       <div className="text-blue-600 font-bold text-sm mb-1">{m.quarter}</div>
