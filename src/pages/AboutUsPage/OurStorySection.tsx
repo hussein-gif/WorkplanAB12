@@ -4,12 +4,12 @@ const OurStorySection: React.FC = () => {
   const milestones = [
     {
       id: 'q2',
-      pos: '25%', // position längs linjen
+      pos: '25%',
       quarter: '2025 Q2',
       title: 'Starten',
       text:
-        'Workplan grundas med fokus på att förenkla bemanning inom lager & logistik. Vi sätter våra processer, transparent prissättning och börjar bygga ett kvalitativt kandidatnätverk.',
-      side: 'top' as const, // kortet över linjen
+        'Workplan grundas med fokus på att förenkla bemanning inom lager & logistik.',
+      side: 'top' as const,
     },
     {
       id: 'q3',
@@ -17,14 +17,14 @@ const OurStorySection: React.FC = () => {
       quarter: '2025 Q3',
       title: 'Första uppdrag & partnerskap',
       text:
-        'De första bemanningarna levereras och långsiktiga kundrelationer etableras. Vi finjusterar matchningsmodellen och växer vårt nätverk av tillgängliga specialister.',
-      side: 'bottom' as const, // kortet under linjen
+        'De första bemanningarna levereras och kundrelationer etableras.',
+      side: 'bottom' as const,
     },
   ];
 
   return (
     <section id="our-story" className="relative py-24 px-8 overflow-hidden">
-      {/* Bakgrund (oförändrad) */}
+      {/* Bakgrund */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-white" />
         <div
@@ -64,7 +64,7 @@ const OurStorySection: React.FC = () => {
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
-        {/* Titel & intro (kvar) */}
+        {/* Titel */}
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-light text-black mb-4 tracking-wide">
             Vår resa hittills
@@ -74,14 +74,13 @@ const OurStorySection: React.FC = () => {
           </p>
         </div>
 
-        {/* Fullbredds-tidslinje */}
+        {/* Linje & prickar */}
         <div className="relative mt-10">
-          {/* Linje som går kant-till-kant: w-screen, centrerad relativt sektionen */}
-          <div className="relative w-screen left-1/2 -translate-x-1/2 h-36 sm:h-40">
-            {/* Baslinje (blå) */}
+          <div className="relative w-screen left-1/2 -translate-x-1/2 h-28 sm:h-32">
+            {/* Linje */}
             <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] bg-blue-600/90 shadow-[0_0_18px_rgba(37,99,235,0.35)]" />
 
-            {/* Prickar + kort */}
+            {/* Punkter & kort */}
             {milestones.map((m) => {
               const isTop = m.side === 'top';
               return (
@@ -90,23 +89,23 @@ const OurStorySection: React.FC = () => {
                   className="absolute"
                   style={{ left: m.pos, transform: 'translateX(-50%)' }}
                 >
-                  {/* Punkt */}
-                  <div className="relative z-10">
+                  {/* Punkt (på linjen) */}
+                  <div className="relative z-10 top-1/2 -translate-y-1/2 flex justify-center">
                     <span
-                      className="absolute -inset-4 rounded-full bg-blue-500/20 blur-md"
+                      className="absolute -inset-3 rounded-full bg-blue-500/20 blur-md"
                       aria-hidden
                     />
                     <span className="block w-4 h-4 rounded-full bg-blue-600 border-2 border-white shadow-[0_0_12px_rgba(37,99,235,0.55)]" />
                   </div>
 
-                  {/* Kort – exakt dina gamla rutor, stylade */}
+                  {/* Mindre kort */}
                   <div
-                    className={`absolute ${isTop ? 'bottom-10' : 'top-10'} left-1/2 -translate-x-1/2 w-[min(90vw,520px)]`}
+                    className={`absolute ${isTop ? 'bottom-8' : 'top-8'} left-1/2 -translate-x-1/2 w-[200px]`}
                   >
-                    <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 shadow-lg">
-                      <div className="text-blue-600 font-bold text-lg mb-2">{m.quarter}</div>
-                      <h3 className="text-xl font-semibold text-black mb-3">{m.title}</h3>
-                      <p className="text-gray-700 text-sm leading-relaxed">{m.text}</p>
+                    <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-xl p-4 shadow-lg text-center">
+                      <div className="text-blue-600 font-bold text-sm mb-1">{m.quarter}</div>
+                      <h3 className="text-base font-semibold text-black mb-2">{m.title}</h3>
+                      <p className="text-gray-700 text-xs leading-snug">{m.text}</p>
                     </div>
                   </div>
                 </div>
