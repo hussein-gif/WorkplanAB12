@@ -4,7 +4,7 @@ import { Plus, Minus } from 'lucide-react';
 
 interface CandidatesFAQSectionProps {
   isVisible: boolean;
-  openFAQ: number;
+  openFAQ: number | null; // ändrat till number | null
   toggleFAQ: (index: number) => void;
 }
 
@@ -42,6 +42,7 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
     >
       {/* Dekorativ bakgrund */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        {/* Bakgrundslager */}
         <div
           className="absolute inset-0"
           style={{
@@ -151,12 +152,13 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
         <div className="text-center">
           <p
             className="text-white/80 text-lg"
-            style={{ fontFamily: 'Inter, sans-serif' }}
+            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
           >
             Hittar du inte svaret?{' '}
             <button
               onClick={() => navigate('/contact')}
               className="font-bold text-blue-400 hover:text-blue-300 hover:underline transition-colors"
+              style={{ fontFamily: 'Inter, sans-serif' }}
             >
               Kontakta oss här
             </button>
@@ -169,9 +171,9 @@ const CandidatesFAQSection: React.FC<CandidatesFAQSectionProps> = ({
           overflow: hidden;
           max-height: 0;
           transition:
-            max-height 300ms cubic-bezier(0.22, 1, 0.36, 1),
-            opacity 300ms ease,
-            transform 300ms ease;
+            max-height 250ms cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 250ms ease,
+            transform 250ms ease;
           opacity: 0;
           transform: translateY(-4px);
         }
