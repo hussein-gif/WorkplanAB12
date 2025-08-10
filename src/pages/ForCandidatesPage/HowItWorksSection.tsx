@@ -41,7 +41,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
         {/* Rubrik */}
         <div className="text-center mb-12">
           <h2
-            className="text-3xl md:text-4xl font-medium tracking-tight text-gray-900"
+            className=\"text-3xl md:text-4xl font-semibold tracking-tight text-gray-900\"
             style={{
               fontFamily:
                 '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
@@ -74,10 +74,22 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               const el = document.getElementById('featured-jobs');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-medium text-white bg-gray-900 hover:bg-black transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300"
+            className="relative inline-flex items-center gap-2 px-6 py-3 rounded-2xl font-medium text-white bg-gradient-to-br from-sky-700 via-indigo-700 to-slate-900 shadow-[0_10px_30px_rgba(2,6,23,0.15)] ring-1 ring-white/10 hover:brightness-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial' }}
           >
             Bläddra bland jobben ovan
             <ArrowRight size={18} />
+            {/* Aurora-overlay som matchar korten */}
+            <span className="pointer-events-none absolute inset-0 rounded-2xl opacity-60">
+              <span
+                className="absolute inset-0 rounded-2xl"
+                style={{
+                  backgroundImage:
+                    'radial-gradient(220px 160px at 20% 30%, rgba(56,189,248,0.28), transparent 60%),radial-gradient(260px 200px at 80% 70%, rgba(37,99,235,0.22), transparent 60%)',
+                }}
+              />
+              <span className="absolute left-[-40%] top-0 h-full w-1/3 bg-white/20 skew-x-[-20deg] translate-x-[-120%] group-hover:translate-x-[220%] transition-transform duration-700 ease-in-out" />
+            </span>
           </button>
         </div>
       </div>
