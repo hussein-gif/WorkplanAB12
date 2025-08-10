@@ -36,16 +36,10 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
   ];
 
   return (
-    <section
-      className="relative py-28 px-6 overflow-hidden"
-      aria-label="Så går det till"
-    >
-      {/* =================== CREATIVE ABSTRACT SMOKE BACKGROUND (EXAKT SOM DIN) =================== */}
+    <section className="relative py-28 px-6 overflow-hidden" aria-label="Så går det till">
+      {/* ====== DIN ORIG. BAKGRUND (oförändrad) ====== */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Base white background */}
         <div className="absolute inset-0 bg-white" />
-
-        {/* Flowing smoke gradients with organic shapes */}
         <div
           className="absolute inset-0"
           style={{
@@ -56,11 +50,9 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               radial-gradient(ellipse 600px 400px at 30% 70%, rgba(16,185,129,0.07) 0%, transparent 55%),
               radial-gradient(ellipse 900px 500px at 90% 60%, rgba(245,158,11,0.04) 0%, transparent 45%)
             `,
-            animation: 'smokeFlow 25s ease-in-out infinite'
+            animation: 'smokeFlow 25s ease-in-out infinite',
           }}
         />
-
-        {/* Layered organic shapes */}
         <div
           className="absolute inset-0"
           style={{
@@ -68,11 +60,9 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               conic-gradient(from 45deg at 20% 30%, transparent 0deg, rgba(59,130,246,0.03) 60deg, transparent 120deg, rgba(139,92,246,0.04) 180deg, transparent 240deg, rgba(236,72,153,0.03) 300deg, transparent 360deg),
               conic-gradient(from 180deg at 80% 70%, transparent 0deg, rgba(16,185,129,0.04) 90deg, transparent 180deg, rgba(245,158,11,0.03) 270deg, transparent 360deg)
             `,
-            animation: 'smokeRotate 35s linear infinite'
+            animation: 'smokeRotate 35s linear infinite',
           }}
         />
-
-        {/* Flowing wave patterns */}
         <div
           className="absolute inset-0"
           style={{
@@ -80,11 +70,9 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M0,300 Q250,200 500,300 T1000,300 L1000,400 Q750,500 500,400 T0,400 Z' fill='rgba(59,130,246,0.02)'/%3E%3Cpath d='M0,600 Q250,500 500,600 T1000,600 L1000,700 Q750,800 500,700 T0,700 Z' fill='rgba(139,92,246,0.015)'/%3E%3C/svg%3E")
             `,
             backgroundSize: '100% 100%',
-            animation: 'waveFlow 20s ease-in-out infinite'
+            animation: 'waveFlow 20s ease-in-out infinite',
           }}
         />
-
-        {/* Floating particles */}
         <div
           className="absolute inset-0"
           style={{
@@ -96,12 +84,11 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               radial-gradient(2px 2px at 80% 80%, rgba(245,158,11,0.3), transparent),
               radial-gradient(1px 1px at 10% 60%, rgba(59,130,246,0.2), transparent)
             `,
-            backgroundSize: '300px 300px, 400px 400px, 200px 200px, 350px 350px, 250px 250px, 180px 180px',
-            animation: 'particleFloat 30s linear infinite'
+            backgroundSize:
+              '300px 300px, 400px 400px, 200px 200px, 350px 350px, 250px 250px, 180px 180px',
+            animation: 'particleFloat 30s linear infinite',
           }}
         />
-
-        {/* Subtle mesh overlay */}
         <div
           className="absolute inset-0"
           style={{
@@ -110,50 +97,47 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               linear-gradient(rgba(139,92,246,0.01) 1px, transparent 1px)
             `,
             backgroundSize: '60px 60px',
-            animation: 'meshShift 40s ease-in-out infinite'
+            animation: 'meshShift 40s ease-in-out infinite',
           }}
         />
-
-        {/* Organic blob shapes */}
         <div
           className="absolute top-10 left-10 w-32 h-32 rounded-full opacity-20 blur-2xl"
           style={{
             background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%)',
-            animation: 'blobFloat1 18s ease-in-out infinite'
+            animation: 'blobFloat1 18s ease-in-out infinite',
           }}
         />
         <div
           className="absolute top-1/3 right-20 w-24 h-40 rounded-full opacity-15 blur-xl"
           style={{
             background: 'radial-gradient(ellipse, rgba(139,92,246,0.4) 0%, transparent 60%)',
-            animation: 'blobFloat2 22s ease-in-out infinite'
+            animation: 'blobFloat2 22s ease-in-out infinite',
           }}
         />
         <div
           className="absolute bottom-20 left-1/4 w-28 h-28 rounded-full opacity-25 blur-2xl"
           style={{
             background: 'radial-gradient(circle, rgba(236,72,153,0.3) 0%, transparent 80%)',
-            animation: 'blobFloat3 16s ease-in-out infinite'
+            animation: 'blobFloat3 16s ease-in-out infinite',
           }}
         />
         <div
           className="absolute bottom-1/3 right-1/3 w-20 h-36 rounded-full opacity-20 blur-xl"
           style={{
             background: 'radial-gradient(ellipse, rgba(16,185,129,0.35) 0%, transparent 65%)',
-            animation: 'blobFloat4 20s ease-in-out infinite'
+            animation: 'blobFloat4 20s ease-in-out infinite',
           }}
         />
-
-        {/* Vignette effect */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse at center, transparent 40%, rgba(255,255,255,0.1) 100%)'
+            background:
+              'radial-gradient(ellipse at center, transparent 40%, rgba(255,255,255,0.1) 100%)',
           }}
         />
       </div>
 
-      {/* Andra bakgrundslagret (exakt som din kod) */}
+      {/* ====== Ditt andra bakgrundslager (identiskt) ====== */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute inset-0"
@@ -165,7 +149,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               radial-gradient(ellipse 600px 400px at 30% 70%, rgba(16,185,129,0.07) 0%, transparent 55%),
               radial-gradient(ellipse 900px 500px at 90% 60%, rgba(245,158,11,0.04) 0%, transparent 45%)
             `,
-            animation: 'smokeFlow 25s ease-in-out infinite'
+            animation: 'smokeFlow 25s ease-in-out infinite',
           }}
         />
         <div
@@ -175,7 +159,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               conic-gradient(from 45deg at 20% 30%, transparent 0deg, rgba(59,130,246,0.03) 60deg, transparent 120deg, rgba(139,92,246,0.04) 180deg, transparent 240deg, rgba(236,72,153,0.03) 300deg, transparent 360deg),
               conic-gradient(from 180deg at 80% 70%, transparent 0deg, rgba(16,185,129,0.04) 90deg, transparent 180deg, rgba(245,158,11,0.03) 270deg, transparent 360deg)
             `,
-            animation: 'smokeRotate 35s linear infinite'
+            animation: 'smokeRotate 35s linear infinite',
           }}
         />
         <div
@@ -185,7 +169,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M0,300 Q250,200 500,300 T1000,300 L1000,400 Q750,500 500,400 T0,400 Z' fill='rgba(59,130,246,0.02)'/%3E%3Cpath d='M0,600 Q250,500 500,600 T1000,600 L1000,700 Q750,800 500,700 T0,700 Z' fill='rgba(139,92,246,0.015)'/%3E%3C/svg%3E")
             `,
             backgroundSize: '100% 100%',
-            animation: 'waveFlow 20s ease-in-out infinite'
+            animation: 'waveFlow 20s ease-in-out infinite',
           }}
         />
         <div
@@ -199,8 +183,9 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               radial-gradient(2px 2px at 80% 80%, rgba(245,158,11,0.3), transparent),
               radial-gradient(1px 1px at 10% 60%, rgba(59,130,246,0.2), transparent)
             `,
-            backgroundSize: '300px 300px, 400px 400px, 200px 200px, 350px 350px, 250px 250px, 180px 180px',
-            animation: 'particleFloat 30s linear infinite'
+            backgroundSize:
+              '300px 300px, 400px 400px, 200px 200px, 350px 350px, 250px 250px, 180px 180px',
+            animation: 'particleFloat 30s linear infinite',
           }}
         />
         <div
@@ -211,46 +196,47 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               linear-gradient(rgba(139,92,246,0.01) 1px, transparent 1px)
             `,
             backgroundSize: '60px 60px',
-            animation: 'meshShift 40s ease-in-out infinite'
+            animation: 'meshShift 40s ease-in-out infinite',
           }}
         />
         <div
           className="absolute top-10 left-10 w-32 h-32 rounded-full opacity-20 blur-2xl"
           style={{
             background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%)',
-            animation: 'blobFloat1 18s ease-in-out infinite'
+            animation: 'blobFloat1 18s ease-in-out infinite',
           }}
         />
         <div
           className="absolute top-1/3 right-20 w-24 h-40 rounded-full opacity-15 blur-xl"
           style={{
             background: 'radial-gradient(ellipse, rgba(139,92,246,0.4) 0%, transparent 60%)',
-            animation: 'blobFloat2 22s ease-in-out infinite'
+            animation: 'blobFloat2 22s ease-in-out infinite',
           }}
         />
         <div
           className="absolute bottom-20 left-1/4 w-28 h-28 rounded-full opacity-25 blur-2xl"
           style={{
             background: 'radial-gradient(circle, rgba(236,72,153,0.3) 0%, transparent 80%)',
-            animation: 'blobFloat3 16s ease-in-out infinite'
+            animation: 'blobFloat3 16s ease-in-out infinite',
           }}
         />
         <div
           className="absolute bottom-1/3 right-1/3 w-20 h-36 rounded-full opacity-20 blur-xl"
           style={{
             background: 'radial-gradient(ellipse, rgba(16,185,129,0.35) 0%, transparent 65%)',
-            animation: 'blobFloat4 20s ease-in-out infinite'
+            animation: 'blobFloat4 20s ease-in-out infinite',
           }}
         />
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(ellipse at center, transparent 40%, rgba(255,255,255,0.1) 100%)'
+            background:
+              'radial-gradient(ellipse at center, transparent 40%, rgba(255,255,255,0.1) 100%)',
           }}
         />
       </div>
 
-      {/* =================== INNEHÅLL =================== */}
+      {/* ====== INNEHÅLL ====== */}
       <div className="relative max-w-6xl mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-black">Så Går Det Till</h2>
@@ -263,13 +249,13 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
         <div className="relative flex flex-nowrap items-stretch gap-8 overflow-x-auto md:overflow-visible pb-4">
           {steps.map((step, idx) => (
             <div key={idx} className="relative shrink-0 w-[300px] md:w-[340px]">
-              {/* Lätt glow-ram */}
+              {/* Glow-ram */}
               <div className="absolute -inset-[1px] rounded-3xl bg-gradient-to-br from-white/35 via-white/20 to-transparent blur-[6px] opacity-70 pointer-events-none" />
 
-              {/* KORT – frosted + rundade hörn */}
+              {/* KORT */}
               <div
                 className={[
-                  'relative h-[300px] md:h-[340px] rounded-3xl ring-1 ring-black/10',
+                  'relative h-[300px] md:h-[340px] rounded-3xl ring-1 ring-black/10 z-10',
                   'bg-white/18 backdrop-blur-2xl',
                   'shadow-[0_20px_60px_rgba(31,41,55,0.14),inset_0_1px_0_rgba(255,255,255,0.45)]',
                   'px-7 py-8 text-black',
@@ -277,9 +263,9 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
                 ].join(' ')}
               >
                 {/* ======= PUSSEL-FORMER ======= */}
-                {/* Spets åt höger */}
+                {/* Spets åt höger – ligger över kort 2 för att synas */}
                 {(step.kind === 'arrow-right' || step.kind === 'both') && (
-                  <div className="absolute top-1/2 -right-5 -translate-y-1/2 w-9 h-9">
+                  <div className="absolute top-1/2 -right-5 -translate-y-1/2 w-9 h-9 z-30">
                     <div
                       className="absolute inset-0 ring-1 ring-black/10"
                       style={{
@@ -296,34 +282,25 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
                   </div>
                 )}
 
-                {/* Urtag på vänster */}
+                {/* Urtag på vänster – “stansar ut” visuellt genom att lägga en ljus form ovanpå kortkanten */}
                 {(step.kind === 'socket-left' || step.kind === 'both') && (
-                  <div className="absolute top-1/2 -left-5 -translate-y-1/2 w-9 h-9 pointer-events-none">
+                  <div className="absolute top-1/2 -left-5 -translate-y-1/2 w-9 h-9 z-40 pointer-events-none">
+                    {/* Basform som täcker kortkanten (ser ut som ett urtag) */}
                     <div
                       className="absolute inset-0"
                       style={{
-                        WebkitMaskImage:
-                          'radial-gradient(16px 16px at 62% 50%, transparent 60%, black 61%)',
-                        maskImage:
-                          'radial-gradient(16px 16px at 62% 50%, transparent 60%, black 61%)',
-                        background: 'transparent',
-                      }}
-                    />
-                    <div
-                      className="absolute inset-0"
-                      style={{
+                        background: 'rgba(255,255,255,0.9)', // matchar ljus bakgrund
+                        borderRadius: 10,
                         clipPath:
-                          'polygon(38% 0%, 100% 0%, 100% 100%, 38% 100%, 0% 50%)',
-                        background:
-                          'linear-gradient(180deg, rgba(255,255,255,0.25), rgba(255,255,255,0.08))',
-                        opacity: 0.65,
-                        filter: 'blur(0.4px)',
+                          'polygon(100% 0%, 62% 0%, 0% 50%, 62% 100%, 100% 100%, 40% 50%)',
+                        boxShadow:
+                          '0 2px 8px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(0,0,0,0.08)',
                       }}
                     />
                   </div>
                 )}
 
-                {/* INNEHÅLL — SVART TEXT */}
+                {/* INNEHÅLL – svart text */}
                 <div className="flex h-full flex-col">
                   <div className="text-4xl md:text-5xl font-extrabold tracking-tight">{step.number}</div>
                   <h3 className="mt-5 text-xl md:text-2xl font-semibold leading-snug">{step.title}</h3>
@@ -331,7 +308,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
                     {step.description}
                   </p>
 
-                  {/* Dotted line i botten */}
+                  {/* Dotted line */}
                   <div className="mt-auto pt-6">
                     <div
                       className="h-[2px] w-24"
@@ -343,7 +320,6 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
                   </div>
                 </div>
 
-                {/* Inre highlight-kant */}
                 <div className="pointer-events-none absolute inset-0 rounded-3xl shadow-[inset_0_0_0_1px_rgba(255,255,255,0.45)]" />
               </div>
             </div>
@@ -368,7 +344,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
         </div>
       </div>
 
-      {/* Keyframes – samma som tidigare */}
+      {/* Keyframes (från din kod) */}
       <style>{`
         @keyframes sheen {
           from { transform: translateX(-120%) skewX(-20deg);}
