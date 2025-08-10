@@ -280,7 +280,7 @@ const OurStorySection: React.FC = () => {
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E")`,
+            backgroundImage: \`url("data:image/svg+xml,%3Csvg width='400' height='400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E")`,
           }}
         />
         
@@ -299,25 +299,25 @@ const OurStorySection: React.FC = () => {
         <div
           className="absolute top-0 left-0 w-32 h-32"
           style={{
-            background: `conic-gradient(from 0deg at 0% 0%, rgba(59,130,246,0.15) 0deg, transparent 90deg, transparent 360deg)`,
+            background: \`conic-gradient(from 0deg at 0% 0%, rgba(59,130,246,0.15) 0deg, transparent 90deg, transparent 360deg)`,
           }}
         />
         <div
           className="absolute top-0 right-0 w-32 h-32"
           style={{
-            background: `conic-gradient(from 90deg at 100% 0%, rgba(16,185,129,0.12) 0deg, transparent 90deg, transparent 360deg)`,
+            background: \`conic-gradient(from 90deg at 100% 0%, rgba(16,185,129,0.12) 0deg, transparent 90deg, transparent 360deg)`,
           }}
         />
         <div
           className="absolute bottom-0 left-0 w-32 h-32"
           style={{
-            background: `conic-gradient(from 270deg at 0% 100%, rgba(168,85,247,0.10) 0deg, transparent 90deg, transparent 360deg)`,
+            background: \`conic-gradient(from 270deg at 0% 100%, rgba(168,85,247,0.10) 0deg, transparent 90deg, transparent 360deg)`,
           }}
         />
         <div
           className="absolute bottom-0 right-0 w-32 h-32"
           style={{
-            background: `conic-gradient(from 180deg at 100% 100%, rgba(239,68,68,0.08) 0deg, transparent 90deg, transparent 360deg)`,
+            background: \`conic-gradient(from 180deg at 100% 100%, rgba(239,68,68,0.08) 0deg, transparent 90deg, transparent 360deg)`,
           }}
         />
       </div>
@@ -357,3 +357,7 @@ const OurStorySection: React.FC = () => {
 };
 
 export default OurStorySection;
+          }
+          }
+  )
+}
