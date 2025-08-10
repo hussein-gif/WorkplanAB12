@@ -11,7 +11,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
   const steps: Array<{
     number: string;
     title: string;
-    description: string; // används som underrubrik
+    description: string; // underrubrik
     kind: PieceKind;
   }> = [
     {
@@ -46,10 +46,10 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        {/* Korten – exakt layout enligt referensen (titel, underrubrik, stor siffra) */}
+        {/* Korten – posterkänsla med kreativ bakgrund */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {steps.map((s, i) => (
-            <PosterCard key={i} {...s} />
+            <PosterCard key={i} {...s} index={i} />
           ))}
         </div>
 
@@ -67,40 +67,107 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
           </button>
         </div>
       </div>
+
+      {/* Små keyframes för subtil rörelse (väldigt mild) */}
+      <style>{`
+        @keyframes softMove { 0%,100%{ transform: translate3d(0,0,0) } 50%{ transform: translate3d(4px,-6px,0) } }
+      `}</style>
     </section>
   );
 };
 
-/* ====== PosterCard – svart frostad glas, stor siffra i botten ====== */
+/* ====== PosterCard – frostat glas + kreativ bakgrund (inspirerat av 1 & 4) ====== */
 
 type CardProps = {
   number: string;
-  title: string; // rubrik
-  description: string; // underrubrik
-  kind: PieceKind; // behålls för kompatibilitet
+  title: string;
+  description: string;
+  kind: PieceKind; // kvar för kompatibilitet
+  index?: number;
 };
 
-const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
+const PosterCard: React.FC<CardProps> = ({ number, title, description, index = 0 }) => {
+  const variant = index % 2 === 0 ? 'aurora' : 'vignette';
+
   return (
     <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/60 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.18)] h-[360px] md:h-[420px]">
-      {/* Inre innehåll */}
-      <div className="h-full flex flex-col">
-        {/* Top: rubrik + underrubrik */}
+      {/* Bakgrundskonst */}
+      {variant === 'aurora' ? (
+        <div className="absolute inset-0 -z-0">
+          {/* Basglow – djupt blå/cyan våg (inspiration kort 1) */}
+          <div
+            className="absolute inset-0 opacity-100"
+            style={{
+              background:
+                `radial-gradient(700px 500px at 20% 25%, rgba(37,99,235,0.55), transparent 60%),
+                 radial-gradient(600px 420px at 80% 80%, rgba(56,189,248,0.45), transparent 55%),
+                 radial-gradient(900px 700px at 60% 20%, rgba(12,18,28,0.7), transparent 55%)`,
+            }}
+          />
+          {/* Mjuk böljande form */}
+          <div
+            className="absolute -left-24 bottom-6 w-[420px] h-[280px] blur-3xl opacity-70"
+            style={{
+              background:
+                'radial-gradient(closest-side, rgba(56,189,248,0.7), rgba(37,99,235,0.45), transparent 70%)',
+              maskImage:
+                'radial-gradient(230px 180px at 45% 55%, black 35%, transparent 70%)',
+              WebkitMaskImage:
+                'radial-gradient(230px 180px at 45% 55%, black 35%, transparent 70%)',
+              animation: 'softMove 12s ease-in-out infinite',
+            }}
+          />
+          {/* Svag vignett för kontrast */
+          <div className="absolute inset-0" style={{
+            background:
+              'radial-gradient(120% 120% at 50% 50%, transparent 55%, rgba(0,0,0,0.45) 100%)',
+          }} />
+        </div>
+      ) : (
+        <div className="absolute inset-0 -z-0">
+          {/* Kraftig blå glöd från vänster (inspiration kort 4) */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                `radial-gradient(900px 700px at -5% 50%, rgba(59,130,246,0.75), transparent 60%),
+                 radial-gradient(700px 500px at 15% 20%, rgba(147,197,253,0.35), transparent 55%)`,
+            }}
+          />
+          {/* Mjuk svart panelform som rundar av glöden */}
+          <div
+            className="absolute inset-3 rounded-[26px]"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(0,0,0,0.55), rgba(0,0,0,0.75))',
+            }}
+          />
+          {/* Lätt yttervignett */}
+          <div className="absolute inset-0" style={{
+            background:
+              'radial-gradient(120% 120% at 50% 50%, transparent 50%, rgba(0,0,0,0.35) 100%)',
+          }} />
+        </div>
+      )}
+
+      {/* Innehåll */}
+      <div className="relative z-[1] h-full flex flex-col">
+        {/* Titel + underrubrik */}
         <div className="px-7 pt-7">
           <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-white leading-[1.15]">
             {title}
           </h3>
-          <p className="mt-3 text-xs md:text-sm text-white/70 max-w-[90%]">
+          <p className="mt-3 text-xs md:text-sm text-white/80 max-w-[88%]">
             {description}
           </p>
-          <div className="mt-5 border-t border-white/10" />
+          <div className="mt-5 border-t border-white/15" />
         </div>
 
-        {/* Bottom: stor siffra */}
+        {/* Stor siffra i botten */}
         <div className="relative flex-1">
           <span
             aria-hidden
-            className="pointer-events-none select-none absolute bottom-[-12px] left-6 text-white/95 leading-none font-extrabold tracking-tight text-[160px] md:text-[220px]"
+            className="pointer-events-none select-none absolute bottom-[-10px] left-6 text-white/95 leading-none font-extrabold tracking-tight text-[160px] md:text-[220px]"
           >
             {number.replace(/^0/, '')}
           </span>
