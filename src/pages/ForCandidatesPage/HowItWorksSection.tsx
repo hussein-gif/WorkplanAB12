@@ -16,20 +16,20 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
   }> = [
     {
       number: '01',
-      title: 'Steg 1 – Sök & Välj',
+      title: 'Sök & Välj',
       description: 'Utforska roller som matchar dina mål och intressen.',
       kind: 'arrow-right',
     },
     {
       number: '02',
-      title: 'Steg 2 – Matchning & Intervjuer',
+      title: 'Matchning & Intervjuer',
       description:
         'Vi matchar din profil, genomför intervjuer och presenterar dig sedan för arbetsgivaren.',
       kind: 'both',
     },
     {
       number: '03',
-      title: 'Steg 3 – Starta Ditt Nya Jobb',
+      title: 'Starta Ditt Nya Jobb',
       description: 'Acceptera erbjudandet och kickstarta nästa kapitel.',
       kind: 'socket-left',
     },
@@ -40,8 +40,8 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
       <div className="max-w-6xl mx-auto">
         {/* Rubrik */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight text-gray-900">Så Går Det Till</h2>
-          <p className="mt-3 text-gray-600 max-w-2xl mx-auto">
+          <h2 className=\"text-3xl md:text-4xl font-medium tracking-tight text-gray-900\" style={{ fontFamily: '\"Zen Kaku Gothic Antique\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial' }}>Så Går Det Till</h2>
+          <p className=\"mt-3 text-gray-600 max-w-2xl mx-auto font-medium\" style={{ fontFamily: '\"Inter\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial' }}>
             En tydlig process från ansökan till anställning – enkelt och professionellt.
           </p>
         </div>
@@ -70,7 +70,8 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
 
       {/* Små keyframes för subtil rörelse (väldigt mild) */}
       <style>{`
-        @keyframes softMove { 0%,100%{ transform: translate3d(0,0,0) } 50%{ transform: translate3d(4px,-6px,0) } }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Zen+Kaku+Gothic+Antique:wght@500;700;800&display=swap');
+        @keyframes softMove { 0%,100%{ transform: translate3d(0,0,0) } 50%{ transform: translate3d(4px,-6px,0) } } 50%{ transform: translate3d(4px,-6px,0) } }
       `}</style>
     </section>
   );
@@ -149,10 +150,10 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description, index = 0
       <div className="relative z-[1] h-full flex flex-col">
         {/* Titel + underrubrik */}
         <div className="px-7 pt-7">
-          <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-white leading-[1.15]">
+          <h3 className=\"text-2xl md:text-3xl font-bold tracking-tight text-white leading-[1.15]\" style={{ fontFamily: '\"Zen Kaku Gothic Antique\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial' }}>
             {title}
           </h3>
-          <p className="mt-3 text-xs md:text-sm text-white/80 max-w-[88%]">
+          <p className=\"mt-3 text-xs md:text-sm text-white/80 max-w-[88%] font-medium\" style={{ fontFamily: '\"Inter\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial' }}>
             {description}
           </p>
           <div className="mt-5 border-t border-white/15" />
@@ -162,7 +163,7 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description, index = 0
         <div className="relative flex-1">
           <span
             aria-hidden
-            className="pointer-events-none select-none absolute bottom-[-10px] left-6 text-white/95 leading-none font-extrabold tracking-tight text-[160px] md:text-[220px]"
+            className=\"pointer-events-none select-none absolute bottom-[-10px] left-6 text-white/95 leading-none font-extrabold tracking-tight text-[140px] md:text-[200px]\" style={{ fontFamily: '\"Zen Kaku Gothic Antique\", ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial' }}
           >
             {number.replace(/^0/, '')}
           </span>
