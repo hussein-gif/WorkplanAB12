@@ -11,7 +11,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
   const steps: Array<{
     number: string;
     title: string;
-    description: string;
+    description: string; // används som underrubrik
     kind: PieceKind;
   }> = [
     {
@@ -46,14 +46,14 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        {/* Korten – enkel, vit, sobert */}
+        {/* Korten – exakt layout enligt referensen (titel, underrubrik, stor siffra) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {steps.map((s, i) => (
-            <SimpleCard key={i} {...s} />
+            <PosterCard key={i} {...s} />
           ))}
         </div>
 
-        {/* CTA */}
+        {/* CTA (oförändrad) */}
         <div className="text-center mt-12">
           <button
             onClick={() => {
@@ -71,25 +71,41 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
   );
 };
 
-/* ====== Enkel kortkomponent ====== */
+/* ====== PosterCard – svart frostad glas, stor siffra i botten ====== */
 
 type CardProps = {
   number: string;
-  title: string;
-  description: string;
-  kind: PieceKind;
+  title: string; // rubrik
+  description: string; // underrubrik
+  kind: PieceKind; // behålls för kompatibilitet
 };
 
-const SimpleCard: React.FC<CardProps> = ({ number, title, description }) => {
+const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 md:p-7 shadow-sm hover:shadow transition-shadow">
-      <div className="flex items-center gap-3">
-        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-[11px] font-semibold text-gray-700">
-          {number}
-        </span>
-        <h3 className="text-lg md:text-xl font-semibold text-gray-900">{title}</h3>
+    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-black/60 backdrop-blur-xl shadow-[0_10px_30px_rgba(0,0,0,0.18)] h-[360px] md:h-[420px]">
+      {/* Inre innehåll */}
+      <div className="h-full flex flex-col">
+        {/* Top: rubrik + underrubrik */}
+        <div className="px-7 pt-7">
+          <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-white leading-[1.15]">
+            {title}
+          </h3>
+          <p className="mt-3 text-xs md:text-sm text-white/70 max-w-[90%]">
+            {description}
+          </p>
+          <div className="mt-5 border-t border-white/10" />
+        </div>
+
+        {/* Bottom: stor siffra */}
+        <div className="relative flex-1">
+          <span
+            aria-hidden
+            className="pointer-events-none select-none absolute bottom-[-12px] left-6 text-white/95 leading-none font-extrabold tracking-tight text-[160px] md:text-[220px]"
+          >
+            {number.replace(/^0/, '')}
+          </span>
+        </div>
       </div>
-      <p className="mt-3 text-[15px] md:text-base leading-relaxed text-gray-600">{description}</p>
     </div>
   );
 };
