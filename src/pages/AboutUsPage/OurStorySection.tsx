@@ -83,7 +83,6 @@ const OurStorySection: React.FC = () => {
       </div>
         </div>
     </section>
-  )
   );
 };
 
