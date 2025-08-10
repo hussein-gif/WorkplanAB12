@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Minus } from 'lucide-react';
 
 const FAQSection: React.FC = () => {
   const navigate = useNavigate();
@@ -13,36 +13,43 @@ const FAQSection: React.FC = () => {
   const faqs = [
     {
       question: 'Hur snabbt kan ni starta processen?',
-      answer: 'Vi sätter igång direkt när vi fått ert behov beskrivet och avtalet på plats. Tidslinjen beror på rollens krav och kandidat­tillgång – vi återkopplar med en realistisk plan.'
+      answer:
+        'Vi sätter igång direkt när vi fått ert behov beskrivet och avtalet på plats. Tidslinjen beror på rollens krav och kandidat­tillgång – vi återkopplar med en realistisk plan.',
     },
     {
       question: 'Hur ser er urvals- och kvalitetssäkringsprocess ut?',
-      answer: 'Vi gör riktad search, kompetens- och bakgrundskontroller samt referenser innan vi presenterar kandidater. Ni får bara profiler som matchar kraven.'
+      answer:
+        'Vi gör riktad search, kompetens- och bakgrundskontroller samt referenser innan vi presenterar kandidater. Ni får bara profiler som matchar kraven.',
     },
     {
       question: 'Vad kostar det och hur fakturerar ni?',
-      answer: 'Transparent prissättning utan dolda avgifter. Vi går igenom allt innan start, och ni betalar endast för överenskommen leverans.'
+      answer:
+        'Transparent prissättning utan dolda avgifter. Vi går igenom allt innan start, och ni betalar endast för överenskommen leverans.',
     },
     {
       question: 'Har ni bindningstider eller minimiåtaganden?',
-      answer: 'Nej, vi arbetar flexibelt. Ni kan skala upp eller ner efter behov.'
+      answer: 'Nej, vi arbetar flexibelt. Ni kan skala upp eller ner efter behov.',
     },
     {
       question: 'Vad händer om kandidaten inte passar?',
-      answer: 'Hör av er – vi tar fram en ersättare eller justerar uppdraget enligt vår överenskomna garanti.'
+      answer:
+        'Hör av er – vi tar fram en ersättare eller justerar uppdraget enligt vår överenskomna garanti.',
     },
     {
       question: 'Vilka typer av roller bemannar ni?',
-      answer: 'Vi fokuserar på lager- och logistikroller: operatörer, truckförare, teamledare med flera.'
+      answer:
+        'Vi fokuserar på lager- och logistikroller: operatörer, truckförare, teamledare med flera.',
     },
     {
       question: 'Hur hanterar ni personuppgifter och GDPR?',
-      answer: 'All data behandlas säkert och endast för att matcha kandidater med uppdrag. Inget delas utan samtycke.'
+      answer:
+        'All data behandlas säkert och endast för att matcha kandidater med uppdrag. Inget delas utan samtycke.',
     },
     {
       question: 'Hur kommer vi igång?',
-      answer: 'Fyll i formuläret eller kontakta oss – vi bokar ett kort behovssamtal och tar det därifrån.'
-    }
+      answer:
+        'Fyll i formuläret eller kontakta oss – vi bokar ett kort behovssamtal och tar det därifrån.',
+    },
   ];
 
   return (
@@ -54,6 +61,7 @@ const FAQSection: React.FC = () => {
           </h2>
         </div>
 
+        {/* Cards: matcher effekter/design från CandidatesFAQSection men behåller ljust färgschema */}
         <div className="space-y-4 mb-12">
           {faqs.map((faq, index) => (
             <div
@@ -66,26 +74,24 @@ const FAQSection: React.FC = () => {
                 aria-expanded={openFAQ === index}
                 aria-controls={`faq-answer-${index}`}
               >
-                <h3 className="text-lg font-semibold text-gray-900 pr-4">
-                  {faq.question}
-                </h3>
+                <h3 className="text-lg font-semibold text-gray-900 pr-4">{faq.question}</h3>
                 {openFAQ === index ? (
-                  <ChevronUp size={20} className="text-gray-500 flex-shrink-0" />
+                  <Minus size={20} className="text-gray-500 flex-shrink-0" />
                 ) : (
-                  <ChevronDown size={20} className="text-gray-500 flex-shrink-0" />
+                  <Plus size={20} className="text-gray-500 flex-shrink-0" />
                 )}
               </button>
-              
-              {openFAQ === index && (
-                <div
-                  id={`faq-answer-${index}`}
-                  className="px-8 pb-6"
-                >
-                  <p className="text-gray-600 leading-relaxed">
-                    {faq.answer}
-                  </p>
+
+              {/* Collapsible answer med samma transition-mönster som CandidatesFAQSection */}
+              <div
+                id={`faq-answer-${index}`}
+                className={`faq-collapse ${openFAQ === index ? 'open' : ''}`}
+                style={{ maxHeight: openFAQ === index ? '500px' : '0' }}
+              >
+                <div className="px-8 pb-6">
+                  <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>
@@ -96,7 +102,9 @@ const FAQSection: React.FC = () => {
             Fortsatt fundering?{' '}
             <button
               onClick={() => {
-                const element = document.getElementById('kontakt-form') || document.getElementById('contact-form');
+                const element =
+                  document.getElementById('kontakt-form') ||
+                  document.getElementById('contact-form');
                 if (element) {
                   element.scrollIntoView({ behavior: 'smooth' });
                 } else {
@@ -106,8 +114,8 @@ const FAQSection: React.FC = () => {
               className="font-bold text-blue-600 hover:text-blue-700 underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded transition-colors"
             >
               Kontakta oss
-            </button>
-            {' '}så guidar vi dig.
+            </button>{' '}
+            så guidar vi dig.
           </p>
         </div>
       </div>
@@ -117,19 +125,37 @@ const FAQSection: React.FC = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            "mainEntity": faqs.map(faq => ({
-              "@type": "Question",
-              "name": faq.question,
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": faq.answer
-              }
-            }))
-          })
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: faqs.map((faq) => ({
+              '@type': 'Question',
+              name: faq.question,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.answer,
+              },
+            })),
+          }),
         }}
       />
+
+      {/* Transitions identiska med CandidatesFAQSection */}
+      <style>{`
+        .faq-collapse {
+          overflow: hidden;
+          max-height: 0;
+          transition:
+            max-height 300ms cubic-bezier(0.22, 1, 0.36, 1),
+            opacity 300ms ease,
+            transform 300ms ease;
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+        .faq-collapse.open {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      `}</style>
     </section>
   );
 };
