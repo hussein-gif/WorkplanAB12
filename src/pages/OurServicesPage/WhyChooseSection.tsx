@@ -8,7 +8,7 @@ interface WhyChooseSectionProps {
 const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
   return (
     <section className="relative py-24 px-8 overflow-hidden bg-white">
-      {/* SVG-bakgrund – identisk stil som i ProcessSection */}
+      {/* SVG-bakgrund */}
       <div className="absolute inset-0 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -28,10 +28,16 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-light text-gray-900 mb-6">
+          <h2
+            className="text-4xl text-gray-900 mb-4 font-medium"
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+          >
             Varför välja TalentBridge?
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p
+            className="text-lg text-gray-600 max-w-2xl mx-auto"
+            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
+          >
             Tre anledningar till att företag inom lager & logistik vänder sig till oss.
           </p>
         </div>
@@ -43,21 +49,18 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
               title: 'Flexibilitet & Snabb igångsättning',
               description:
                 'Bemanning när behovet uppstår – skift, toppar eller vikariat. Inga bindningstider.',
-              highlight: 'Snabb igångsättning',
             },
             {
               icon: Truck,
               title: 'Djup branschkännedom',
               description:
                 'Vi kan lager & logistik – vi förstår rollerna, tempot och kompetenskraven.',
-              highlight: 'Specialister inom ert område',
             },
             {
               icon: Award,
               title: 'Trygg & transparent process',
               description:
                 'Strukturerad screening, tydliga villkor och en personlig kontakt genom hela uppdraget.',
-              highlight: 'Personlig service',
             },
           ].map((item, index) => (
             <div
@@ -68,18 +71,49 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
               `}
               style={{ transitionDelay: `${1200 + index * 150}ms` }}
             >
-              <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+              {/* Emerald ruta som knappen */}
+              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center btn-min">
                 <item.icon size={24} className="text-white" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">{item.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{item.description}</p>
-              <div className="text-xs font-medium text-gray-500 uppercase tracking-wider mt-4">
-                {item.highlight}
-              </div>
+
+              <h3
+                className="text-xl text-gray-900 mb-3"
+                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
+              >
+                {item.title}
+              </h3>
+              <p
+                className="text-gray-600 leading-relaxed"
+                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
+              >
+                {item.description}
+              </p>
             </div>
           ))}
         </div>
       </div>
+
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Zen+Kaku+Gothic+Antique:wght@500&display=swap');
+
+        .btn-min {
+          border: 1px solid rgba(255, 255, 255, 0.22);
+          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #189A4C;
+          border-radius: 0.75rem;
+          box-shadow: 0 8px 20px rgba(24, 154, 76, 0.28);
+        }
+        .btn-min:hover {
+          background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #1FB259;
+          box-shadow: 0 10px 28px rgba(24, 154, 76, 0.35);
+        }
+        .btn-min:active {
+          box-shadow: inset 0 2px 8px rgba(0,0,0,0.25), 0 6px 18px rgba(24, 154, 76, 0.24);
+        }
+        .btn-min:focus-visible {
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(52, 211, 153, .35), 0 0 0 1px rgba(255,255,255,.2) inset;
+        }
+      `}</style>
     </section>
   );
 };
