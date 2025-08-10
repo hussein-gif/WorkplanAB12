@@ -184,8 +184,6 @@ const MissionValuesSection: React.FC = () => {
         </div>
       </div>
 
-      {/* (Inga animationer definierade – bakgrunden är helt stilla) */}
-      <style>{``}</style>
     </section>
   );
 };
