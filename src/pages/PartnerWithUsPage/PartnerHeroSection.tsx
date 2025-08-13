@@ -45,21 +45,28 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         />
       </div>
 
-      {/* Content (vänster) */}
-      <div className="relative z-10 max-w-5xl w-full px-6 md:px-8 ml-6 md:ml-16 lg:ml-24 xl:ml-32 text-left">
-        {/* Rubrik – Zen Kaku, medium 500 */}
+      {/* Content – flyttad till vänsterkanten */}
+      <div
+        className="
+          relative z-10 w-full max-w-none
+          pl-4 sm:pl-6 md:pl-10 lg:pl-14 xl:pl-16
+          pr-4 sm:pr-6 md:pr-10
+          text-left
+        "
+      >
+        {/* Rubrik – rad 1 weight 500, rad 2 weight 700 */}
         <h1
           className={`text-white mb-5 tracking-tight leading-[0.95] transition-all duration-1000 transform
             text-5xl md:text-6xl lg:text-7xl
             ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'}
           `}
-          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
+          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
         >
           <span style={{ fontWeight: 500 }} className="block">Bygg Teamet</span>
-          <span style={{ fontWeight: 500 }} className="block">Som Klarar Morgondagen</span>
+          <span style={{ fontWeight: 700 }} className="block">Som Klarar Morgondagen</span>
         </h1>
 
-        {/* Underrubrik – Inter light, oförändrad i övrigt */}
+        {/* Underrubrik – ligger kvar, men följer vänster padding */}
         <p
           className={`text-base md:text-xl text-gray-300 mb-10 md:mb-12 leading-relaxed max-w-3xl transition-all duration-1000 delay-150 transform
             ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-6 opacity-0'}
@@ -69,7 +76,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           Vi levererar rätt människor till varje steg i ert flöde – från orderplock till skiftledning. Snabbt, kvalitetssäkrat och flexibelt.
         </p>
 
-        {/* Knappar – vänsterställda */}
+        {/* Knappar – vänsterställda och följer vänster padding */}
         <div
           className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-start items-start transition-all duration-1000 delay-300 transform
             ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'}
@@ -115,9 +122,9 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       </div>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@500&family=Inter:wght@300;400;500;600&display=swap');
+        /* Ladda även 700 så vi kan göra rad 2 fet */
+        @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@500;700&family=Inter:wght@300;400;500;600&display=swap');
 
-        /* Mörkblå primary-knapp (som tidigare) */
         .btn-hero-bg {
           background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #0B274D;
           box-shadow: 0 10px 24px rgba(11,39,77,0.32);
