@@ -73,7 +73,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           `}
           style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
         >
-          Vi levererar rätt människor till varje steg i ert flöde – från orderplock till skiftledning.
+          Vi levererar rätt människor till varje steg i ert flöde.
         </p>
 
         {/* Knappar */}
