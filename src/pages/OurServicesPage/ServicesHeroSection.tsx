@@ -14,7 +14,7 @@ const ServicesHeroSection: React.FC<ServicesHeroSectionProps> = ({
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="https://i.ibb.co/W41Lp1F4/image.png"
+          src="https://i.ibb.co/GmGLTKd/77947250096.png"
           alt="Warehouse operations"
           className="w-full h-full object-cover"
         />
