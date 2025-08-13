@@ -12,8 +12,19 @@ const AboutHeroSection: React.FC<AboutHeroSectionProps> = ({
 }) => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <img
+          src="https://i.ibb.co/DPq2LRqB/image-Photo-Grid.png"
+          alt="About Workplan background"
+          className="w-full h-full object-cover"
+        />
+        {/* Mörk overlay för läsbarhet */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80" />
+      </div>
+
       {/* Centralt innehåll */}
-      <div className="max-w-4xl mx-auto px-8 text-center">
+      <div className="max-w-4xl mx-auto px-8 text-center relative z-10">
         {/* Main Heading */}
         <h1
           style={{
@@ -69,8 +80,8 @@ const AboutHeroSection: React.FC<AboutHeroSectionProps> = ({
         </button>
       </div>
 
-      {/* Trust Chips – längst ner, Inter-font */}
-      <div className="absolute inset-x-0 bottom-6 px-6">
+      {/* Trust Chips */}
+      <div className="absolute inset-x-0 bottom-6 px-6 z-10">
         <div
           style={{
             fontFamily:
