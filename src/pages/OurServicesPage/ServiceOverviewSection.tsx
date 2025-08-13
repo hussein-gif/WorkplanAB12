@@ -10,24 +10,71 @@ const ServiceOverviewSection: React.FC<ServiceOverviewSectionProps> = ({
 }) => {
   return (
     <section className="relative py-24 px-8 bg-[#08132B] overflow-hidden">
-      {/* Bakgrundsdesign */}
+      {/* --- NY BAKGRUNDSDESIGN (ingen prickmönster) --- */}
       <div className="absolute inset-0 pointer-events-none">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="bgBlob-service" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="rgba(24,154,76,0.12)" />
-              <stop offset="100%" stopColor="transparent" />
-            </radialGradient>
-            <pattern id="pattern-service" patternUnits="userSpaceOnUse" width="20" height="20" patternTransform="rotate(45)">
-              <rect width="4" height="4" fill="rgba(255,255,255,0.05)" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#pattern-service)" />
-          <circle cx="20%" cy="30%" r="300" fill="url(#bgBlob-service)" />
-          <circle cx="80%" cy="70%" r="300" fill="url(#bgBlob-service)" />
-        </svg>
+        {/* Hörn-glows */}
+        <div
+          className="absolute -top-24 -left-20 w-[42rem] h-[42rem] rounded-full blur-3xl opacity-30"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, rgba(24,154,76,0.35), rgba(24,154,76,0) 60%)',
+          }}
+        />
+        <div
+          className="absolute -bottom-28 -right-20 w-[36rem] h-[36rem] rounded-full blur-3xl opacity-25"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, rgba(59,130,246,0.28), rgba(59,130,246,0) 60%)',
+          }}
+        />
+
+        {/* Subtilt rutnät */}
+        <div
+          className="absolute inset-0 opacity-[0.08]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.14) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.14) 1px, transparent 1px)
+            `,
+            backgroundSize: '80px 80px, 80px 80px',
+            backgroundPosition: '0 0, 0 0',
+            maskImage:
+              'radial-gradient(circle at center, black 40%, transparent 90%)',
+            WebkitMaskImage:
+              'radial-gradient(circle at center, black 40%, transparent 90%)',
+          }}
+        />
+
+        {/* Diagonal ljusstrimma */}
+        <div
+          className="absolute -inset-x-20 top-1/4 h-72 rotate-[-12deg] opacity-20"
+          style={{
+            background:
+              'linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.18), rgba(255,255,255,0))',
+            filter: 'blur(18px)',
+          }}
+        />
+
+        {/* Vignette */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(ellipse at center, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%)',
+          }}
+        />
+
+        {/* Noise/texture overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.07] mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><filter id=\"n\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"0.9\" numOctaves=\"2\" stitchTiles=\"stitch\"/></filter><rect width=\"100%\" height=\"100%\" filter=\"url(%23n)\" opacity=\"0.7\"/></svg>')",
+          }}
+        />
       </div>
 
+      {/* INNEHÅLL */}
       <div className="max-w-4xl mx-auto relative z-10">
         <div
           className={`
@@ -41,7 +88,7 @@ const ServiceOverviewSection: React.FC<ServiceOverviewSectionProps> = ({
           <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
           <div className="relative z-10">
-            {/* Ikonruta - Emerald stil */}
+            {/* Ikonruta */}
             <div className="w-16 h-16 mx-auto mb-8 rounded-2xl flex items-center justify-center btn-min group-hover:scale-105 transition-transform duration-500">
               <Users size={24} className="text-white" />
             </div>
