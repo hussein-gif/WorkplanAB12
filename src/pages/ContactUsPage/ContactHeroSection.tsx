@@ -238,7 +238,7 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
             <div
               className="absolute top-20 left-20 w-40 h-40 border border-blue-200/25 rounded-full"
               style={{ 
-                transform: \`rotate(${mousePosition.x * 0.1}deg)`,
+                transform: `rotate(${mousePosition.x * 0.1}deg)`,
                 background: 'radial-gradient(circle at center, transparent 60%, rgba(59,130,246,0.02) 100%)'
               }}
             />
