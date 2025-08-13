@@ -1,0 +1,149 @@
+import React from 'react';
+import { Send } from 'lucide-react';
+
+interface CandidateFormSectionProps {
+  userType: 'candidate' | 'company' | null;
+  candidateForm: {
+    name: string;
+    email: string;
+    phone: string;
+    message: string;
+    gdprConsent: boolean;
+  };
+  handleCandidateSubmit: (e: React.FormEvent) => void;
+  handleCandidateChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+}
+
+const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
+  userType,
+  candidateForm,
+  handleCandidateSubmit,
+  handleCandidateChange,
+}) => {
+  if (userType !== 'candidate') return null;
+
+  return (
+    <section className="px-8 pb-16">
+      <div className="max-w-4xl mx-auto">
+        <div className={`
+          bg-white border border-gray-200 rounded-3xl p-8 shadow-lg
+          transition-all duration-500 transform
+          ${userType === 'candidate' ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+        `}>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-light text-gray-900 mb-2">
+              Har du en fråga? Hör av dig!
+            </h2>
+            <p className="text-gray-600">
+              Fyll i formuläret så återkommer vi så snart vi kan.
+            </p>
+          </div>
+
+          <form onSubmit={handleCandidateSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-gray-700 text-sm font-medium mb-2">
+                  Namn *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={candidateForm.name}
+                  onChange={handleCandidateChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
+                  placeholder="Ditt namn"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 text-sm font-medium mb-2">
+                  E-post *
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={candidateForm.email}
+                  onChange={handleCandidateChange}
+                  required
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
+                  placeholder="din@email.com"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-2">
+                Telefon
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={candidateForm.phone}
+                onChange={handleCandidateChange}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
+                placeholder="+46 XX XXX XX XX"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 text-sm font-medium mb-2">
+                Meddelande *
+              </label>
+              <textarea
+                name="message"
+                value={candidateForm.message}
+                onChange={handleCandidateChange}
+                required
+                rows={4}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200 resize-none"
+                placeholder="Beskriv gärna din fråga eller ditt behov …"
+              />
+            </div>
+
+            <div className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                name="gdprConsent"
+                checked={candidateForm.gdprConsent}
+                onChange={handleCandidateChange}
+                required
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label className="text-gray-700 text-sm">
+                Jag godkänner att Workplan lagrar mina uppgifter enligt{' '}
+                <a 
+                  href="/privacy" 
+                  className="text-blue-600 hover:text-blue-700 underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GDPR
+                </a>
+                .
+              </label>
+            </div>
+
+            <button
+              type="submit"
+              className="
+                w-full py-4 px-6
+                bg-blue-600 text-white rounded-xl
+                font-semibold text-lg tracking-wide
+                hover:bg-blue-700
+                transition-all duration-300
+                shadow-lg hover:shadow-xl
+                hover:scale-[1.02]
+                flex items-center justify-center space-x-2
+              "
+            >
+              <Send size={20} />
+              <span>Skicka meddelande</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default CandidateFormSection;
