@@ -81,6 +81,32 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
             <button
               onClick={() => setUserType('candidate')}
               className={`
+                flex items-center gap-3 px-8 py-4 rounded-xl border-2 transition-all duration-300
+                ${userType === 'candidate' 
+                  ? 'border-blue-500 bg-blue-50 text-blue-700' 
+                  : 'border-gray-200 bg-white text-gray-700 hover:border-blue-300 hover:bg-blue-25'
+                }
+              `}
+            >
+              <User size={20} />
+              <span className="font-medium">Jag är kandidat</span>
+            </button>
+            
+            <button
+              onClick={() => setUserType('company')}
+              className={`
+                flex items-center gap-3 px-8 py-4 rounded-xl border-2 transition-all duration-300
+                ${userType === 'company' 
+                  ? 'border-emerald-500 bg-emerald-50 text-emerald-700' 
+                  : 'border-gray-200 bg-white text-gray-700 hover:border-emerald-300 hover:bg-emerald-25'
+                }
+              `}
+            >
+              <Building size={20} />
+              <span className="font-medium">Jag representerar ett företag</span>
+            </button>
+          </div>
+
           <div className="absolute inset-0 overflow-hidden">
             {/* Spectacular Multi-Layer Gradient System */}
             <div
@@ -212,7 +238,7 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
             <div
               className="absolute top-20 left-20 w-40 h-40 border border-blue-200/25 rounded-full"
               style={{ 
-                transform: `rotate(${mousePosition.x * 0.1}deg)`,
+                transform: \`rotate(${mousePosition.x * 0.1}deg)`,
                 background: 'radial-gradient(circle at center, transparent 60%, rgba(59,130,246,0.02) 100%)'
               }}
             />
@@ -330,7 +356,6 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
 
           {/* Reassurance Line */}
           <p className={`
-              }
             text-sm text-gray-500 mb-12
             transition-all duration-1000 delay-600 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
@@ -344,6 +369,3 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
 };
 
 export default ContactHeroSection;
-
-  )
-}
