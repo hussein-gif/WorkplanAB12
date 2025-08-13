@@ -52,7 +52,7 @@ const AboutHeroSection: React.FC<AboutHeroSectionProps> = ({
           ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
         `}
         >
-          Specialiserad bemanning inom lager & logistik – snabb leverans, personlig service och full transparens.
+          Specialiserad bemanning inom lager & logistik.
         </p>
 
         {/* Primary CTA */}
