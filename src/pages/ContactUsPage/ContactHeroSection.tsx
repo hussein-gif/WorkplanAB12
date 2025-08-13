@@ -16,46 +16,66 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
 }) => {
   return (
     <>
-      {/* Elegant Light Background */}
+      {/* Subtle Background */}
       <div className="absolute inset-0 bg-white">
-        {/* Soft corner blobs */}
+        {/* Dynamic Gradient Orbs (original) */}
+        <div 
+          className="absolute w-[600px] h-[600px] rounded-full opacity-[0.02] blur-3xl transition-all duration-1000"
+          style={{
+            background: `radial-gradient(circle, #3B82F6 0%, transparent 70%)`,
+            left: `${mousePosition.x * 0.3}%`,
+            top: `${mousePosition.y * 0.2}%`,
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
+        <div 
+          className="absolute w-[500px] h-[500px] rounded-full opacity-[0.015] blur-3xl transition-all duration-1000 delay-500"
+          style={{
+            background: `radial-gradient(circle, #10B981 0%, transparent 70%)`,
+            right: `${mousePosition.x * 0.2}%`,
+            bottom: `${mousePosition.y * 0.3}%`,
+            transform: 'translate(50%, 50%)',
+          }}
+        />
+
+        {/* Extra subtle corner blobs */}
         <div
-          className="absolute -top-32 -left-32 w-[500px] h-[500px] rounded-full blur-3xl opacity-20"
+          className="absolute -top-40 -left-40 w-[400px] h-[400px] rounded-full blur-3xl opacity-10"
           style={{
             background:
               'radial-gradient(circle, rgba(59,130,246,0.25), rgba(59,130,246,0) 70%)',
           }}
         />
         <div
-          className="absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full blur-3xl opacity-20"
+          className="absolute -bottom-40 -right-40 w-[400px] h-[400px] rounded-full blur-3xl opacity-10"
           style={{
             background:
               'radial-gradient(circle, rgba(16,185,129,0.25), rgba(16,185,129,0) 70%)',
           }}
         />
 
-        {/* Subtle diagonal gradient */}
+        {/* Diagonal light beam */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              'linear-gradient(135deg, rgba(59,130,246,0.04) 0%, rgba(255,255,255,0) 40%, rgba(16,185,129,0.04) 100%)',
+              'linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(255,255,255,0) 40%, rgba(16,185,129,0.05) 100%)',
           }}
         />
 
-        {/* Faint grid pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.03]"
+        {/* Grid Pattern (original) */}
+        <div 
+          className="absolute inset-0 opacity-[0.02]"
           style={{
             backgroundImage: `
               linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
               linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px)
             `,
-            backgroundSize: '80px 80px',
+            backgroundSize: '60px 60px',
           }}
         />
 
-        {/* Noise/texture overlay */}
+        {/* Noise overlay */}
         <div
           className="absolute inset-0 opacity-[0.04] mix-blend-overlay"
           style={{
@@ -69,35 +89,29 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
       <section className="pt-32 pb-16 px-8 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           {/* Main Title */}
-          <h1
-            className={`
-              text-5xl md:text-6xl font-light text-gray-900 mb-6 tracking-tight
-              transition-all duration-1000 transform
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
-            `}
-          >
+          <h1 className={`
+            text-5xl md:text-6xl font-light text-gray-900 mb-6 tracking-tight
+            transition-all duration-1000 transform
+            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
+          `}>
             Hur kan vi hjälpa dig?
           </h1>
 
           {/* Support Line */}
-          <p
-            className={`
-              text-lg text-gray-600 max-w-2xl mx-auto font-light leading-relaxed mb-8
-              transition-all duration-1000 delay-200 transform
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-            `}
-          >
+          <p className={`
+            text-lg text-gray-600 max-w-2xl mx-auto font-light leading-relaxed mb-8
+            transition-all duration-1000 delay-200 transform
+            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+          `}>
             Välj om du är kandidat eller företag så visar vi rätt formulär.
           </p>
 
           {/* User Type Toggle */}
-          <div
-            className={`
-              flex flex-col sm:flex-row gap-4 justify-center items-center mb-6
-              transition-all duration-1000 delay-400 transform
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-            `}
-          >
+          <div className={`
+            flex flex-col sm:flex-row gap-4 justify-center items-center mb-6
+            transition-all duration-1000 delay-400 transform
+            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+          `}>
             <button
               onClick={() => setUserType('candidate')}
               className={`
@@ -136,13 +150,11 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
           </div>
 
           {/* Reassurance Line */}
-          <p
-            className={`
-              text-sm text-gray-500 mb-12
-              transition-all duration-1000 delay-600 transform
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-            `}
-          >
+          <p className={`
+            text-sm text-gray-500 mb-12
+            transition-all duration-1000 delay-600 transform
+            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+          `}>
             Vi hanterar dina uppgifter konfidentiellt.
           </p>
         </div>
