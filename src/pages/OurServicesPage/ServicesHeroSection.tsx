@@ -45,7 +45,7 @@ const ServicesHeroSection: React.FC<ServicesHeroSectionProps> = ({
           `}
           style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
         >
-          Snabb tillgång till kvalificerad personal, matchad efter skift, volym och krav – utan bindningstider.
+          Kvalificerad personal – snabbt matchad för skift, volym, krav. Ingen bindningstid.
         </p>
 
         {/* Primary CTA - samma stil som tidigare hero-knappar */}
