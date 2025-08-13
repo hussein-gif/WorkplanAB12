@@ -45,7 +45,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         />
       </div>
 
-      {/* Content – flyttad till vänsterkanten */}
+      {/* Content – vänsterkanten */}
       <div
         className="
           relative z-10 w-full max-w-none
@@ -54,19 +54,19 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           text-left
         "
       >
-        {/* Rubrik – rad 1 weight 500, rad 2 weight 700 */}
+        {/* Rubrik – rad 1 vikt 200, rad 2 vikt 400 */}
         <h1
           className={`text-white mb-5 tracking-tight leading-[0.95] transition-all duration-1000 transform
             text-5xl md:text-6xl lg:text-7xl
             ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'}
           `}
-          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 200 }}
         >
-          <span style={{ fontWeight: 500 }} className="block">Bygg Teamet</span>
-          <span style={{ fontWeight: 700 }} className="block">Som Klarar Morgondagen</span>
+          <span style={{ fontWeight: 200 }} className="block">Bygg Teamet</span>
+          <span style={{ fontWeight: 400 }} className="block">Som Klarar Morgondagen</span>
         </h1>
 
-        {/* Underrubrik – ligger kvar, men följer vänster padding */}
+        {/* Underrubrik */}
         <p
           className={`text-base md:text-xl text-gray-300 mb-10 md:mb-12 leading-relaxed max-w-3xl transition-all duration-1000 delay-150 transform
             ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-6 opacity-0'}
@@ -76,7 +76,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           Vi levererar rätt människor till varje steg i ert flöde – från orderplock till skiftledning. Snabbt, kvalitetssäkrat och flexibelt.
         </p>
 
-        {/* Knappar – vänsterställda och följer vänster padding */}
+        {/* Knappar */}
         <div
           className={`flex flex-col sm:flex-row gap-4 sm:gap-6 justify-start items-start transition-all duration-1000 delay-300 transform
             ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'}
@@ -122,8 +122,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       </div>
 
       <style>{`
-        /* Ladda även 700 så vi kan göra rad 2 fet */
-        @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@500;700&family=Inter:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@200;400&family=Inter:wght@300;400;500;600&display=swap');
 
         .btn-hero-bg {
           background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #0B274D;
