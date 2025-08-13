@@ -17,8 +17,8 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
   return (
     <>
       {/* Subtle Background */}
-      <div className="absolute inset-0 bg-white">
-        {/* Dynamic Gradient Orbs (original) */}
+      <div className="absolute inset-0">
+        {/* Dynamic Gradient Orbs */}
         <div 
           className="absolute w-[600px] h-[600px] rounded-full opacity-[0.02] blur-3xl transition-all duration-1000"
           style={{
@@ -38,34 +38,9 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
           }}
         />
 
-        {/* Extra subtle corner blobs */}
-        <div
-          className="absolute -top-40 -left-40 w-[400px] h-[400px] rounded-full blur-3xl opacity-10"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(59,130,246,0.25), rgba(59,130,246,0) 70%)',
-          }}
-        />
-        <div
-          className="absolute -bottom-40 -right-40 w-[400px] h-[400px] rounded-full blur-3xl opacity-10"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(16,185,129,0.25), rgba(16,185,129,0) 70%)',
-          }}
-        />
-
-        {/* Diagonal light beam */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              'linear-gradient(135deg, rgba(59,130,246,0.05) 0%, rgba(255,255,255,0) 40%, rgba(16,185,129,0.05) 100%)',
-          }}
-        />
-
-        {/* Grid Pattern (original) */}
+        {/* Grid Pattern */}
         <div 
-          className="absolute inset-0 opacity-[0.02]"
+          className="absolute inset-0 opacity-[0.01]"
           style={{
             backgroundImage: `
               linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
@@ -74,19 +49,10 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
             backgroundSize: '60px 60px',
           }}
         />
-
-        {/* Noise overlay */}
-        <div
-          className="absolute inset-0 opacity-[0.04] mix-blend-overlay"
-          style={{
-            backgroundImage:
-              "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><filter id=\"n\"><feTurbulence type=\"fractalNoise\" baseFrequency=\"1\" numOctaves=\"3\" stitchTiles=\"stitch\"/></filter><rect width=\"100%\" height=\"100%\" filter=\"url(%23n)\" opacity=\"0.7\"/></svg>')",
-          }}
-        />
       </div>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 px-8 relative z-10">
+      <section className="pt-32 pb-16 px-8">
         <div className="max-w-4xl mx-auto text-center">
           {/* Main Title */}
           <h1 className={`
