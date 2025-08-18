@@ -125,7 +125,7 @@ const ConversionBanner = () => {
               onClick={() => navigate('/contact')}
               className="
                 group relative px-8 py-4 
-                bg-white/95 text-gray-900 rounded-3xl
+                bg-white/95 text-gray-900 rounded-2xl
                 font-semibold text-lg tracking-wide
                 hover:bg-white hover:scale-105
                 transition-all duration-300
@@ -150,7 +150,7 @@ const ConversionBanner = () => {
               onClick={() => navigate('/services')}
               className="
                 group relative px-8 py-4
-                bg-transparent text-white border-2 border-white/30 rounded-3xl
+                bg-transparent text-white border-2 border-white/30 rounded-2xl
                 font-semibold text-lg tracking-wide
                 hover:border-white/60 hover:bg-white/10 hover:scale-105
                 transition-all duration-300
