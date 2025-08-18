@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Sparkles, Users, Building2 } from 'lucide-react';
+import { ArrowRight, Users, Building2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const ConversionBanner = () => {
@@ -114,7 +114,7 @@ const ConversionBanner = () => {
             </p>
           </div>
 
-          {/* Enhanced Button Container (mer mellanrum från underrubrik) */}
+          {/* Enhanced Button Container */}
           <div className={`
             flex flex-col sm:flex-row gap-6 justify-center items-center mt-10
             transition-all duration-1000 delay-600 transform
@@ -125,7 +125,7 @@ const ConversionBanner = () => {
               onClick={() => navigate('/contact')}
               className="
                 group relative px-8 py-4 
-                bg-white/95 text-gray-900 rounded-2xl
+                bg-white/95 text-gray-900 rounded-3xl
                 font-semibold text-lg tracking-wide
                 hover:bg-white hover:scale-105
                 transition-all duration-300
@@ -136,7 +136,6 @@ const ConversionBanner = () => {
               "
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}
             >
-              {/* Shimmer Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
               
               <div className="relative flex items-center justify-center space-x-3">
@@ -151,7 +150,7 @@ const ConversionBanner = () => {
               onClick={() => navigate('/services')}
               className="
                 group relative px-8 py-4
-                bg-transparent text-white border-2 border-white/30 rounded-2xl
+                bg-transparent text-white border-2 border-white/30 rounded-3xl
                 font-semibold text-lg tracking-wide
                 hover:border-white/60 hover:bg-white/10 hover:scale-105
                 transition-all duration-300
@@ -162,7 +161,6 @@ const ConversionBanner = () => {
               "
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}
             >
-              {/* Shimmer Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
               
               <div className="relative flex items-center justify-center space-x-3">
