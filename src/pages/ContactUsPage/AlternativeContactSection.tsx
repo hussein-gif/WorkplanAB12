@@ -31,7 +31,7 @@ const AlternativeContactSection: React.FC = () => {
             className="text-3xl text-gray-900 mb-3"
             style={{ fontFamily: '"Zen Kaku Gothic Antique", sans-serif', fontWeight: 500 }}
           >
-            Kontakta oss direkt
+            Kontakta Oss Direkt
           </h2>
           <p
             className="text-gray-600"
