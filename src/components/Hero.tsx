@@ -24,7 +24,6 @@ const Hero = () => {
     <section className="relative min-h-screen flex flex-col overflow-hidden">
       {/* Dynamic Background with Parallax */}
       <div className="absolute inset-0 z-0">
-        {/* Main Background Image */}
         <div
           className="absolute inset-0 transition-transform duration-1000 ease-out"
           style={{
@@ -38,13 +37,11 @@ const Hero = () => {
           />
         </div>
 
-        {/* Sophisticated Overlay System */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
 
         {/* Animated Geometric Elements */}
         <div className="absolute inset-0 overflow-hidden">
-          {/* Floating Orbs */}
           <div
             className="absolute w-96 h-96 rounded-full bg-white/5 blur-3xl animate-pulse"
             style={{
@@ -65,7 +62,6 @@ const Hero = () => {
             }}
           />
 
-          {/* Subtle Grid Pattern */}
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
@@ -80,13 +76,10 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Content Container - centrerat vertikalt mer */}
       <div className="relative z-10 flex-1 flex items-center py-16">
         <div className="max-w-7xl mx-auto px-8 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Main Content - Left Side */}
             <div className="lg:col-span-7 space-y-6">
-              {/* Headline */}
               <div className="space-y-3">
                 <h1
                   className={`
@@ -119,7 +112,6 @@ const Hero = () => {
                     </div>
                   </span>
                 </h1>
-                {/* Accent Line */}
                 <div
                   className={`
                     w-24 h-px bg-gradient-to-r from-white/60 to-transparent
@@ -129,7 +121,6 @@ const Hero = () => {
                 />
               </div>
 
-              {/* Subtitle (light italic) */}
               <p
                 className={`
                   text-base md:text-lg text-white/80 italic leading-relaxed max-w-2xl
@@ -155,7 +146,7 @@ const Hero = () => {
                 <button
                   onClick={() => navigate('/jobs')}
                   className="
-                    group relative px-6 py-4 min-w-[180px]
+                    group relative px-6 py-3 min-w-[180px]
                     bg-white text-gray-900 rounded-2xl
                     font-semibold text-lg tracking-wide
                     hover:bg-white/95 
@@ -172,7 +163,7 @@ const Hero = () => {
                 <button
                   onClick={() => navigate('/partner')}
                   className="
-                    group relative px-6 py-4 min-w-[180px]
+                    group relative px-6 py-3 min-w-[180px]
                     bg-transparent text-white border-2 border-white/30 rounded-2xl
                     font-semibold text-lg tracking-wide
                     hover:border-white/60 hover:bg-white/10
@@ -189,13 +180,11 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Spacer for balance */}
             <div className="lg:col-span-5" />
           </div>
         </div>
       </div>
 
-      {/* Bottom Feature List */}
       <div
         className={`
           absolute bottom-8 inset-x-0 z-10
