@@ -51,8 +51,8 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
       aria-modal="true"
       onClick={onClose}
     >
-      {/* Overlay: mörk + mild blur */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-0" />
+      {/* Overlay: mörk + väldigt mild blur */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] z-0" />
 
       {/* Själva rutan */}
       <section
