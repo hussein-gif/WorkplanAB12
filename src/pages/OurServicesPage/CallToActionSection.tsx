@@ -119,7 +119,7 @@ const CallToActionSection: React.FC = () => {
           }}
           className="
             group relative px-10 py-4 
-            rounded-xl
+            rounded-2xl
             text-white text-lg tracking-wide
             transition-all duration-300
             shadow-lg hover:shadow-xl
@@ -133,7 +133,7 @@ const CallToActionSection: React.FC = () => {
         >
           {/* Inre gradientglow */}
           <span
-            className="pointer-events-none absolute inset-0 rounded-xl"
+            className="pointer-events-none absolute inset-0 rounded-2xl"
             style={{
               background:
                 'linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12))',
