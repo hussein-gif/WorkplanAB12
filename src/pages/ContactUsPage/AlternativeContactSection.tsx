@@ -8,16 +8,12 @@ const AlternativeContactSection: React.FC = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Zen+Kaku+Gothic+Antique:wght@400;500&display=swap');
 
-        /* Hero-knappens färger och effekter */
+        /* Mörkblå hero-knapp (alltid samma färg) */
         .btn-hero-bg {
-          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #0B274D;
+          background: #0B274D;
           box-shadow: 0 10px 24px rgba(11,39,77,0.32);
           border: 1px solid rgba(255,255,255,0.18);
           transition: all .2s ease;
-        }
-        .btn-hero:hover > .btn-hero-bg { 
-          background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #123B7A; 
-          box-shadow: 0 14px 32px rgba(18,59,122,0.38); 
         }
         .btn-hero:active > .btn-hero-bg { 
           box-shadow: inset 0 2px 8px rgba(0,0,0,0.24), 0 8px 22px rgba(11,39,77,0.26); 
@@ -46,7 +42,7 @@ const AlternativeContactSection: React.FC = () => {
           <div className="p-6 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-[#08132B0D]">
-                <Mail size={22} className="text-[#08132B]" />
+                <Mail size={22} className="text-[#0B274D]" />
               </div>
               <h3
                 className="text-lg text-gray-900"
@@ -63,7 +59,6 @@ const AlternativeContactSection: React.FC = () => {
               <li>Vi svarar inom 24 timmar.</li>
             </ul>
 
-            {/* Knapp med samma stil som hero-knappen */}
             <a
               href="mailto:info@work-plan.se"
               className="btn-hero relative inline-flex items-center justify-center w-full px-4 py-3 rounded-xl text-white font-medium focus:outline-none focus:ring-4 focus:ring-[#08132B]/20 transition-all"
@@ -78,7 +73,7 @@ const AlternativeContactSection: React.FC = () => {
           <div className="p-6 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-[#08132B0D]">
-                <Phone size={22} className="text-[#08132B]" />
+                <Phone size={22} className="text-[#0B274D]" />
               </div>
               <h3
                 className="text-lg text-gray-900"
