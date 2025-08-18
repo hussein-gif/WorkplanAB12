@@ -156,7 +156,7 @@ const Hero = () => {
                   onClick={() => navigate('/jobs')}
                   className="
                     group relative px-8 py-4 
-                    bg-white text-gray-900 rounded-full
+                    bg-white text-gray-900 rounded-2xl
                     font-semibold text-lg tracking-wide
                     hover:bg-white/95 
                     transition-all duration-300
@@ -173,7 +173,7 @@ const Hero = () => {
                   onClick={() => navigate('/partner')}
                   className="
                     group relative px-8 py-4
-                    bg-transparent text-white border-2 border-white/30 rounded-full
+                    bg-transparent text-white border-2 border-white/30 rounded-2xl
                     font-semibold text-lg tracking-wide
                     hover:border-white/60 hover:bg-white/10
                     transition-all duration-300
