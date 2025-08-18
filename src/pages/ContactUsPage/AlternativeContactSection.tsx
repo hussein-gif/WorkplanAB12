@@ -8,15 +8,19 @@ const AlternativeContactSection: React.FC = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Zen+Kaku+Gothic+Antique:wght@400;500&display=swap');
 
-        /* Mörkblå hero-knapp (alltid samma färg) */
+        /* Ljusare blå hero-knapp */
         .btn-hero-bg {
-          background: #0B274D;
-          box-shadow: 0 10px 24px rgba(11,39,77,0.32);
+          background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(0,0,0,0.08)), linear-gradient(135deg, #123B7A 0%, #1E4F9A 100%);
+          box-shadow: 0 10px 24px rgba(18,59,122,0.3);
           border: 1px solid rgba(255,255,255,0.18);
           transition: all .2s ease;
         }
+        .btn-hero:hover > .btn-hero-bg { 
+          background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(0,0,0,0.1)), linear-gradient(135deg, #15468C 0%, #225BB0 100%); 
+          box-shadow: 0 14px 32px rgba(18,59,122,0.35); 
+        }
         .btn-hero:active > .btn-hero-bg { 
-          box-shadow: inset 0 2px 8px rgba(0,0,0,0.24), 0 8px 22px rgba(11,39,77,0.26); 
+          box-shadow: inset 0 2px 8px rgba(0,0,0,0.24), 0 8px 22px rgba(18,59,122,0.28); 
         }
       `}</style>
 
@@ -41,8 +45,8 @@ const AlternativeContactSection: React.FC = () => {
           {/* E-post */}
           <div className="p-6 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-[#08132B0D]">
-                <Mail size={22} className="text-[#0B274D]" />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-[#123B7A0D]">
+                <Mail size={22} className="text-[#123B7A]" />
               </div>
               <h3
                 className="text-lg text-gray-900"
@@ -61,7 +65,7 @@ const AlternativeContactSection: React.FC = () => {
 
             <a
               href="mailto:info@work-plan.se"
-              className="btn-hero relative inline-flex items-center justify-center w-full px-4 py-3 rounded-xl text-white font-medium focus:outline-none focus:ring-4 focus:ring-[#08132B]/20 transition-all"
+              className="btn-hero relative inline-flex items-center justify-center w-full px-4 py-3 rounded-xl text-white font-medium focus:outline-none focus:ring-4 focus:ring-[#123B7A]/20 transition-all"
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
             >
               <span className="btn-hero-bg absolute inset-0 rounded-xl" />
@@ -72,8 +76,8 @@ const AlternativeContactSection: React.FC = () => {
           {/* Telefon */}
           <div className="p-6 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-[#08132B0D]">
-                <Phone size={22} className="text-[#0B274D]" />
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-[#123B7A0D]">
+                <Phone size={22} className="text-[#123B7A]" />
               </div>
               <h3
                 className="text-lg text-gray-900"
@@ -92,7 +96,7 @@ const AlternativeContactSection: React.FC = () => {
 
             <a
               href="tel:+46812345678"
-              className="btn-hero relative inline-flex items-center justify-center w-full px-4 py-3 rounded-xl text-white font-medium focus:outline-none focus:ring-4 focus:ring-[#08132B]/20 transition-all"
+              className="btn-hero relative inline-flex items-center justify-center w-full px-4 py-3 rounded-xl text-white font-medium focus:outline-none focus:ring-4 focus:ring-[#123B7A]/20 transition-all"
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
             >
               <span className="btn-hero-bg absolute inset-0 rounded-xl" />
