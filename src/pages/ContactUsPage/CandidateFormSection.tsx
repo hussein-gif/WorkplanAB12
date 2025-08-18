@@ -51,8 +51,8 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
       aria-modal="true"
       onClick={onClose}
     >
-      {/* Overlay: mörk + kraftig blur (täcker allt inklusive navbar) */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-md md:backdrop-blur-lg z-0" />
+      {/* Overlay: mörk + mild blur */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-0" />
 
       {/* Själva rutan */}
       <section
@@ -100,7 +100,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
                 value={candidateForm.name}
                 onChange={handleCandidateChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
                 placeholder="Ditt namn"
               />
             </div>
@@ -114,7 +114,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
                 value={candidateForm.email}
                 onChange={handleCandidateChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
                 placeholder="din@email.com"
               />
             </div>
@@ -129,7 +129,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
               name="phone"
               value={candidateForm.phone}
               onChange={handleCandidateChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
+              className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
               placeholder="+46 XX XXX XX XX"
             />
           </div>
@@ -144,7 +144,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
               onChange={handleCandidateChange}
               required
               rows={4}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200 resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200 resize-none"
               placeholder="Beskriv gärna din fråga eller ditt behov …"
             />
           </div>
