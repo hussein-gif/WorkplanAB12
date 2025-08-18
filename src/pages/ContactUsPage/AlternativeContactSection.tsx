@@ -65,10 +65,10 @@ const AlternativeContactSection: React.FC = () => {
 
             <a
               href="mailto:info@work-plan.se"
-              className="btn-hero relative inline-flex items-center justify-center w-full px-4 py-3 rounded-xl text-white font-medium focus:outline-none focus:ring-4 focus:ring-[#123B7A]/20 transition-all"
+              className="btn-hero relative inline-flex items-center justify-center w-full px-4 py-3 rounded-2xl text-white font-medium focus:outline-none focus:ring-4 focus:ring-[#123B7A]/20 transition-all"
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
             >
-              <span className="btn-hero-bg absolute inset-0 rounded-xl" />
+              <span className="btn-hero-bg absolute inset-0 rounded-2xl" />
               <span className="relative z-10">info@work-plan.se</span>
             </a>
           </div>
@@ -96,10 +96,10 @@ const AlternativeContactSection: React.FC = () => {
 
             <a
               href="tel:+46812345678"
-              className="btn-hero relative inline-flex items-center justify-center w-full px-4 py-3 rounded-xl text-white font-medium focus:outline-none focus:ring-4 focus:ring-[#123B7A]/20 transition-all"
+              className="btn-hero relative inline-flex items-center justify-center w-full px-4 py-3 rounded-2xl text-white font-medium focus:outline-none focus:ring-4 focus:ring-[#123B7A]/20 transition-all"
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
             >
-              <span className="btn-hero-bg absolute inset-0 rounded-xl" />
+              <span className="btn-hero-bg absolute inset-0 rounded-2xl" />
               <span className="relative z-10">+46 8 123 456 78</span>
             </a>
           </div>
