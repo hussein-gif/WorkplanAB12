@@ -28,10 +28,12 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
   onClose,
 }) => {
   return (
+    // ⬇️ Stäng när man klickar utanför
     <div
-      className="
-        fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50
-      "
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
     >
       <div
         className="
@@ -39,8 +41,9 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
           bg-white border border-gray-200 rounded-3xl p-8 shadow-2xl
           animate-fadeIn
         "
+        onClick={(e) => e.stopPropagation()} // ⬅️ Hindra att klick i rutan bubblar upp
       >
-        {/* Stäng-knapp */}
+        {/* X-knapp (samma som tidigare modal) */}
         <button
           type="button"
           onClick={onClose}
@@ -55,11 +58,11 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
         </button>
 
         <div className="text-center mb-8">
-          {/* Rubrik i Zen Kaku Gothic Antique */}
+          {/* Rubrik: Zen Kaku Gothic Antique, behåll font-weight */}
           <h2 className="text-3xl font-medium text-gray-900 mb-2 font-['Zen_Kaku_Gothic_Antique']">
             Har ni en fråga? Hör av er!
           </h2>
-          {/* Underrubrik i Inter */}
+          {/* Underrubrik: Inter */}
           <p className="text-gray-600 font-['Inter']">
             Fyll i formuläret så återkommer vi så snart vi kan.
           </p>
@@ -68,7 +71,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
         <form onSubmit={handleCompanySubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              {/* Label i Zen Kaku Gothic Antique */}
+              {/* Labels: Zen Kaku Gothic Antique, behåll font-medium */}
               <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
                 Företagsnamn *
               </label>
@@ -141,9 +144,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
             >
               <option value="">Välj ämne</option>
               <option value="pris-villkor">Pris & villkor</option>
-              <option value="tillgangliga-konsulter">
-                Tillgängliga konsulter
-              </option>
+              <option value="tillgangliga-konsulter">Tillgängliga konsulter</option>
               <option value="processen">Hur processen fungerar</option>
               <option value="avtal-juridik">Avtal & juridik</option>
               <option value="annat">Annat</option>
@@ -166,11 +167,23 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
           </div>
 
           <div className="flex items-center space-x-3">
+            {/* ⬇️ Gör checkboxen avbockningsbar via boolean-adapter */}
             <input
               type="checkbox"
               name="gdprAccept"
-              checked={companyForm.gdprAccept || false}
-              onChange={handleCompanyChange}
+              checked={!!companyForm.gdprAccept}
+              onChange={(e) => {
+                const checked = (e.target as HTMLInputElement).checked;
+                // Adapterar eventet så parent kan sätta boolean direkt
+                handleCompanyChange({
+                  ...e,
+                  target: {
+                    ...(e.target as HTMLInputElement),
+                    name: "gdprAccept",
+                    value: checked as unknown as string, // många handlers gör set({[name]: value})
+                  },
+                } as React.ChangeEvent<HTMLInputElement>);
+              }}
               required
               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
