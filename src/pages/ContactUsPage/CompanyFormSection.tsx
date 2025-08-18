@@ -27,11 +27,6 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
   handleCompanyChange,
   onClose,
 }) => {
-  return (
-    // Bakgrunds-overlay
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      {/* Själva rutan */}
-      <div
         className="
           relative w-full max-w-3xl 
           bg-white border border-gray-200 rounded-3xl p-8 shadow-2xl

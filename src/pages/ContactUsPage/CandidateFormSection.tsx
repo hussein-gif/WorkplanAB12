@@ -22,11 +22,6 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
   handleCandidateChange,
   onClose,
 }) => {
-  // Säker portal i Next/SSR
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
-  if (!mounted) return null;
-
   // ESC för att stänga
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
