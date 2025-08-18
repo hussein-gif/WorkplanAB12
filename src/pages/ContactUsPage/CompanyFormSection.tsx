@@ -36,7 +36,6 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
   handleCompanyChange,
   onClose,
 }) => {
-  // --- Scroll lock när modalen är uppe ---
   useEffect(() => {
     const prev = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
@@ -45,11 +44,9 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
     };
   }, []);
 
-  // --- Dropdown state ---
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-  // Stäng dropdown vid klick utanför (men INTE modalen)
   useEffect(() => {
     const onDocClick = (e: MouseEvent) => {
       if (!dropdownRef.current) return;
@@ -59,7 +56,6 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
     return () => document.removeEventListener("mousedown", onDocClick);
   }, []);
 
-  // Keyboard-stöd i dropdown
   const onDropdownKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
@@ -71,7 +67,6 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
 
   const selectSubject = (value: string) => {
     setOpen(false);
-    // Skicka vidare i samma format som övriga fält
     const synthetic = {
       target: { name: "subject", value },
     } as unknown as React.ChangeEvent<HTMLSelectElement>;
@@ -83,9 +78,9 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
     "Välj ämne";
 
   return (
-    // Stäng när man klickar utanför rutan
+    // ⬇️ Blur + svart overlay tillbaka här
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -98,7 +93,6 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
         "
         onClick={(e) => e.stopPropagation()}
       >
-        {/* X-knapp (samma stil som tidigare) */}
         <button
           type="button"
           onClick={onClose}
@@ -183,7 +177,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
             </div>
           </div>
 
-          {/* --- Custom dropdown: Ämne --- */}
+          {/* Dropdown */}
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
               Ämne *
@@ -203,13 +197,21 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
                   bg-white
                 "
               >
-                <span className={companyForm.subject ? "text-gray-900" : "text-gray-400"}>
+                <span
+                  className={
+                    companyForm.subject ? "text-gray-900" : "text-gray-400"
+                  }
+                >
                   {currentLabel}
                 </span>
-                <ChevronDown className={`transition-transform ${open ? "rotate-180" : ""}`} size={18} />
+                <ChevronDown
+                  className={`transition-transform ${
+                    open ? "rotate-180" : ""
+                  }`}
+                  size={18}
+                />
               </button>
 
-              {/* Options */}
               {open && (
                 <ul
                   role="listbox"
@@ -230,7 +232,11 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
                       className={`
                         px-4 py-2.5 cursor-pointer transition
                         hover:bg-gray-50
-                        ${companyForm.subject === opt.value ? "bg-gray-50" : ""}
+                        ${
+                          companyForm.subject === opt.value
+                            ? "bg-gray-50"
+                            : ""
+                        }
                       `}
                     >
                       {opt.label}
