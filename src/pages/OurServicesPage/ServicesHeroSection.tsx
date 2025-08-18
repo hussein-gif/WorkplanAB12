@@ -48,7 +48,7 @@ const ServicesHeroSection: React.FC<ServicesHeroSectionProps> = ({
           Kvalificerad personal – snabbt matchad för skift, volym, krav. Ingen bindningstid.
         </p>
 
-        {/* Primary CTA - samma stil som tidigare hero-knappar */}
+        {/* Primary CTA - konsekvent med övriga hero-knappar */}
         <button
           onClick={() => {
             const element = document.getElementById('how-it-works');
@@ -57,12 +57,12 @@ const ServicesHeroSection: React.FC<ServicesHeroSectionProps> = ({
             }
           }}
           className={`
-            group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-white text-lg tracking-wide transition-all duration-200 min-w-[240px]
+            group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-white text-lg tracking-wide transition-all duration-200 min-w-[240px]
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}
           style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
         >
-          <span className="btn-hero-bg absolute inset-0 rounded-xl" />
+          <span className="btn-hero-bg absolute inset-0 rounded-2xl" />
           <span className="relative z-10">Så jobbar vi</span>
         </button>
       </div>
