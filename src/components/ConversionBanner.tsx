@@ -97,7 +97,7 @@ const ConversionBanner = () => {
               className="text-5xl md:text-6xl font-normal text-white tracking-tight leading-[0.9]"
               style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400, textTransform: 'capitalize' }}
             >
-              Vill Du Veta Mer?
+              Vill du veta mer?
             </h2>
 
             <div className="flex items-center justify-center space-x-4">
