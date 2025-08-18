@@ -313,14 +313,14 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
 
       {/* ===== Innehåll (alltid överst) ===== */}
       <div className="relative z-10 max-w-4xl mx-auto text-center">
-        {/* Rubrik – Zen Kaku, behåll font-light */}
+        {/* Rubrik – Zen Kaku, medium */}
         <h1
           style={{
             fontFamily:
               '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
           }}
           className={`
-            text-5xl md:text-6xl font-light text-gray-900 mb-6 tracking-tight
+            text-5xl md:text-6xl font-medium text-gray-900 mb-6 tracking-tight
             transition-all duration-1000 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
           `}
@@ -328,87 +328,71 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
           Hur kan vi hjälpa dig?
         </h1>
 
-        {/* Underrubrik – Inter, light */}
+        {/* Underrubrik – Inter, normal vikt */}
         <p
-          style={{
-            fontFamily:
-              'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-          }}
+          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
           className={`
-            text-lg text-gray-600 max-w-2xl mx-auto font-light leading-relaxed mb-8
+            text-xl text-gray-600 mb-12 max-w-2xl mx-auto
             transition-all duration-1000 delay-200 transform
-            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
           `}
         >
-          Välj om du är kandidat eller företag så visar vi rätt formulär.
+          Vi är här för att svara på dina frågor och guida dig rätt – oavsett om du söker jobb eller vill anlita personal.
         </p>
 
-        {/* Knappar – Inter, medium */}
+        {/* Knappar */}
         <div
           className={`
-            flex flex-col sm:flex-row gap-4 justify-center items-center mb-6
-            transition-all duration-1000 delay-400 transform
-            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+            flex flex-wrap justify-center gap-6
+            transition-all duration-1000 delay-300 transform
+            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
           `}
         >
+          {/* Kandidat */}
           <button
             onClick={() => setUserType('candidate')}
-            style={{
-              fontFamily:
-                'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-            }}
             className={`
-              flex items-center gap-3 px-8 py-4 rounded-xl border-2 font-medium text-lg
-              transition-all duration-300
-              ${userType === 'candidate'
-                ? 'border-blue-500 bg-blue-50 text-blue-700'
-                : 'border-gray-200 bg-white text-gray-700 hover:border-blue-300 hover:bg-blue-25'
-              }
+              group relative flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-white text-lg font-medium tracking-wide transition-all duration-200 min-w-[220px]
             `}
+            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
           >
-            <User size={20} />
-            <span>Jag är kandidat</span>
+            <span className="btn-hero-bg absolute inset-0 rounded-xl" />
+            <User size={22} className="relative z-10" />
+            <span className="relative z-10">Jag söker jobb</span>
           </button>
 
+          {/* Företag */}
           <button
             onClick={() => setUserType('company')}
-            style={{
-              fontFamily:
-                'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-            }}
             className={`
-              flex items-center gap-3 px-8 py-4 rounded-xl border-2 font-medium text-lg
-              transition-all duration-300
-              ${userType === 'company'
-                ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-                : 'border-gray-200 bg-white text-gray-700 hover:border-emerald-300 hover:bg-emerald-25'
-              }
+              group relative flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-white text-lg font-medium tracking-wide transition-all duration-200 min-w-[220px]
             `}
+            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
           >
-            <Building size={20} />
-            <span>Jag representerar ett företag</span>
+            <span className="btn-hero-bg absolute inset-0 rounded-xl" />
+            <Building size={22} className="relative z-10" />
+            <span className="relative z-10">Jag representerar företag</span>
           </button>
         </div>
-
-        {/* Text under knapparna – Inter, behåll samma vikt */}
-        <p
-          style={{
-            fontFamily:
-              'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-          }}
-          className={`
-            text-sm text-gray-500 mb-12
-            transition-all duration-1000 delay-600 transform
-            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-          `}
-        >
-          Vi hanterar dina uppgifter konfidentiellt.
-        </p>
       </div>
 
-      {/* Fonts */}
+      {/* Hero-knapp-stil */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Zen+Kaku+Gothic+Antique:wght@200;300;400&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@400;500&family=Inter:wght@400;500&display=swap');
+
+        .btn-hero-bg {
+          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.10)), #0B274D;
+          box-shadow: 0 10px 24px rgba(11,39,77,0.32);
+          border: 1px solid rgba(255,255,255,0.15);
+          transition: all .2s ease;
+        }
+        button:hover > .btn-hero-bg { 
+          background: linear-gradient(180deg, rgba(255,255,255,0.07), rgba(0,0,0,0.12)), #123B7A; 
+          box-shadow: 0 14px 32px rgba(18,59,122,0.38); 
+        }
+        button:active > .btn-hero-bg { 
+          box-shadow: inset 0 2px 8px rgba(0,0,0,0.24), 0 8px 22px rgba(11,39,77,0.26); 
+        }
       `}</style>
     </section>
   );
