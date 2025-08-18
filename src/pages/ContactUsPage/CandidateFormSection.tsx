@@ -17,14 +17,11 @@ interface CandidateFormSectionProps {
 }
 
 const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
-  userType,
   candidateForm,
   handleCandidateSubmit,
   handleCandidateChange,
   onClose,
 }) => {
-  if (userType !== 'candidate') return null;
-
   // Säker portal i Next/SSR
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);

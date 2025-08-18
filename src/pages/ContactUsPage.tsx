@@ -77,19 +77,23 @@ const ContactUsPage = () => {
           setUserType={setUserType}
         />
 
-        <CandidateFormSection 
-          userType={userType}
-          candidateForm={candidateForm}
-          handleCandidateSubmit={handleCandidateSubmit}
-          handleCandidateChange={handleCandidateChange}
-        />
+        {userType === 'candidate' && (
+          <CandidateFormSection 
+            candidateForm={candidateForm}
+            handleCandidateSubmit={handleCandidateSubmit}
+            handleCandidateChange={handleCandidateChange}
+            onClose={() => setUserType(null)}
+          />
+        )}
 
-        <CompanyFormSection 
-          userType={userType}
-          companyForm={companyForm}
-          handleCompanySubmit={handleCompanySubmit}
-          handleCompanyChange={handleCompanyChange}
-        />
+        {userType === 'company' && (
+          <CompanyFormSection 
+            companyForm={companyForm}
+            handleCompanySubmit={handleCompanySubmit}
+            handleCompanyChange={handleCompanyChange}
+            onClose={() => setUserType(null)}
+          />
+        )}
 
         <AlternativeContactSection />
       </div>

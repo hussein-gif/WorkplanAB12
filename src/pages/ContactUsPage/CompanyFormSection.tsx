@@ -2,7 +2,6 @@ import React from "react";
 import { Send, X } from "lucide-react";
 
 interface CompanyFormSectionProps {
-  userType: "candidate" | "company" | null;
   companyForm: {
     companyName: string;
     nameTitle: string;
@@ -23,14 +22,11 @@ interface CompanyFormSectionProps {
 }
 
 const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
-  userType,
   companyForm,
   handleCompanySubmit,
   handleCompanyChange,
   onClose,
 }) => {
-  if (userType !== "company") return null;
-
   return (
     // Bakgrunds-overlay
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
