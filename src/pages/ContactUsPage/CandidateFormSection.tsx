@@ -13,7 +13,7 @@ interface CandidateFormSectionProps {
   };
   handleCandidateSubmit: (e: React.FormEvent) => void;
   handleCandidateChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onClose: () => void; // VIKTIGT: denna måste i parent sätta userType till null
+  onClose: () => void;
 }
 
 const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
@@ -22,7 +22,6 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
   handleCandidateChange,
   onClose,
 }) => {
-  // ESC för att stänga
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -31,13 +30,11 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
     return () => document.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  // Fokusera första fältet
   const firstFieldRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     firstFieldRef.current?.focus();
   }, []);
 
-  // Lås scroll när modalen är öppen (frivilligt men nice)
   useEffect(() => {
     const prev = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
@@ -49,12 +46,10 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
       className="fixed inset-0 z-[9999] flex items-center justify-center"
       role="dialog"
       aria-modal="true"
-      onClick={onClose} // klick utanför => stäng
+      onClick={onClose}
     >
-      {/* Overlay bakom rutan */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-0" />
 
-      {/* Själva rutan */}
       <section
         className="
           relative z-10 w-full max-w-2xl mx-4
@@ -62,9 +57,8 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
           p-6 md:p-8
           transition-all duration-200
         "
-        onClick={(e) => e.stopPropagation()} // hindra bubbla så X/klick i rutan funkar
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* X-knapp */}
         <button
           type="button"
           onClick={onClose}
@@ -79,7 +73,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
         </button>
 
         <div className="text-center mb-6 md:mb-8">
-          <h2 className="text-2xl md:text-3xl font-light text-gray-900 mb-2">
+          <h2 className="text-2xl md:text-3xl font-medium text-gray-900 mb-2">
             Har du en fråga? Hör av dig!
           </h2>
           <p className="text-gray-600">
@@ -90,7 +84,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
         <form onSubmit={handleCandidateSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2">
+              <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
                 Namn *
               </label>
               <input
@@ -105,7 +99,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2">
+              <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
                 E-post *
               </label>
               <input
@@ -121,7 +115,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2">
+            <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
               Telefon
             </label>
             <input
@@ -135,7 +129,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2">
+            <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
               Meddelande *
             </label>
             <textarea
@@ -158,7 +152,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
               required
               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            <label className="text-gray-700 text-sm">
+            <label className="text-gray-700 text-sm font-sans">
               Jag godkänner att Workplan lagrar mina uppgifter enligt{' '}
               <a
                 href="/privacy"
