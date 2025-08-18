@@ -51,12 +51,12 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
         <button
           onClick={handleBrowseRoles}
           className={`
-            group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-white text-lg font-medium tracking-wide transition-all duration-200 min-w-[250px]
+            group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-white text-lg font-medium tracking-wide transition-all duration-200 min-w-[250px]
             ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'}
           `}
           style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
         >
-          <span className="btn-hero-bg absolute inset-0 rounded-xl" />
+          <span className="btn-hero-bg absolute inset-0 rounded-2xl" />
           <span className="relative z-10">Visa lediga jobb</span>
         </button>
       </div>
