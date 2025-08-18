@@ -112,7 +112,7 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
               '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
           }}
           className={`
-            text-5xl md:text-6xl font-light text-gray-900 mb-10 tracking-tight
+            text-5xl md:text-6xl font-light text-gray-900 mb-16 tracking-tight
             transition-all duration-1000 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
           `}
@@ -120,14 +120,14 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
           Hur kan vi hjälpa dig?
         </h1>
 
-        {/* Underrubrik (flyttad närmare knapparna) */}
+        {/* Underrubrik (lite längre ner) */}
         <p
           style={{
             fontFamily:
               'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
           }}
           className={`
-            text-lg text-gray-600 max-w-2xl mx-auto font-light leading-relaxed mb-4
+            text-lg text-gray-600 max-w-2xl mx-auto font-light leading-relaxed mb-6
             transition-all duration-1000 delay-200 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}
@@ -138,7 +138,7 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
         {/* Knappar */}
         <div
           className={`
-            flex flex-col sm:flex-row gap-4 justify-center items-center mb-6
+            flex flex-col sm:flex-row gap-4 justify-center items-center mb-20
             transition-all duration-1000 delay-400 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}
@@ -173,18 +173,6 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
             <span>Företag</span>
           </button>
         </div>
-
-        {/* Text under knapparna */}
-        <p
-          style={{ fontFamily: 'Inter, sans-serif' }}
-          className={`
-            text-sm text-gray-500 mb-12
-            transition-all duration-1000 delay-600 transform
-            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-          `}
-        >
-          Vi hanterar dina uppgifter konfidentiellt.
-        </p>
       </div>
 
       {/* Fonts */}
