@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Send, X } from 'lucide-react';
 import { createPortal } from 'react-dom';
 
@@ -35,6 +35,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
     firstFieldRef.current?.focus();
   }, []);
 
+  // scroll-lock (behålls)
   useEffect(() => {
     const prev = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
@@ -42,17 +43,16 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
   }, []);
 
   const modal = (
+    // ⬇️ Samma overlay som i förra koden
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center"
       role="dialog"
       aria-modal="true"
       onClick={onClose}
     >
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-0" />
-
       <section
         className="
-          relative z-10 w-full max-w-2xl mx-4
+          relative w-full max-w-2xl mx-4
           bg-white border border-gray-200 rounded-3xl shadow-2xl
           p-6 md:p-8
           transition-all duration-200
@@ -73,10 +73,12 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
         </button>
 
         <div className="text-center mb-6 md:mb-8">
-          <h2 className="text-2xl md:text-3xl font-medium text-gray-900 mb-2">
+          {/* Rubrik: Zen Kaku + font-medium */}
+          <h2 className="text-2xl md:text-3xl font-medium text-gray-900 mb-2 font-['Zen_Kaku_Gothic_Antique']">
             Har du en fråga? Hör av dig!
           </h2>
-          <p className="text-gray-600">
+          {/* Underrubrik: Inter */}
+          <p className="text-gray-600 font-['Inter']">
             Fyll i formuläret så återkommer vi så snart vi kan.
           </p>
         </div>
@@ -84,7 +86,8 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
         <form onSubmit={handleCandidateSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
+              {/* Labels: Zen Kaku + font-medium */}
+              <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
                 Namn *
               </label>
               <input
@@ -99,7 +102,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
+              <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
                 E-post *
               </label>
               <input
@@ -115,7 +118,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
+            <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
               Telefon
             </label>
             <input
@@ -129,7 +132,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
+            <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
               Meddelande *
             </label>
             <textarea
@@ -152,7 +155,8 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
               required
               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            <label className="text-gray-700 text-sm font-sans">
+            {/* GDPR-text: Inter */}
+            <label className="text-gray-700 text-sm font-['Inter']">
               Jag godkänner att Workplan lagrar mina uppgifter enligt{' '}
               <a
                 href="/privacy"
@@ -166,6 +170,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
             </label>
           </div>
 
+          {/* Knapptext: Inter */}
           <button
             type="submit"
             className="
@@ -177,6 +182,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
               shadow-lg hover:shadow-xl
               hover:scale-[1.02]
               flex items-center justify-center space-x-2
+              font-['Inter']
             "
           >
             <Send size={20} />
