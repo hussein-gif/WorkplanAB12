@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Send, X } from 'lucide-react';
+import { createPortal } from 'react-dom';
 
 interface CandidateFormSectionProps {
   userType: 'candidate' | 'company' | null;
@@ -12,7 +13,7 @@ interface CandidateFormSectionProps {
   };
   handleCandidateSubmit: (e: React.FormEvent) => void;
   handleCandidateChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onClose: () => void; // <-- lägg till i din parent och skicka in hit
+  onClose: () => void; // VIKTIGT: denna måste i parent sätta userType till null
 }
 
 const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
@@ -22,10 +23,14 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
   handleCandidateChange,
   onClose,
 }) => {
-  // Visa inte något om inte kandidat-läget är aktivt
   if (userType !== 'candidate') return null;
 
-  // Stäng med ESC
+  // Säker portal i Next/SSR
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+
+  // ESC för att stänga
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -34,36 +39,40 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
     return () => document.removeEventListener('keydown', onKey);
   }, [onClose]);
 
-  // Fokusera första fältet när modalen öppnas
+  // Fokusera första fältet
   const firstFieldRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     firstFieldRef.current?.focus();
   }, []);
 
-  return (
-    // Overlay
+  // Lås scroll när modalen är öppen (frivilligt men nice)
+  useEffect(() => {
+    const prev = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = 'hidden';
+    return () => { document.documentElement.style.overflow = prev; };
+  }, []);
+
+  const modal = (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center"
+      className="fixed inset-0 z-[9999] flex items-center justify-center"
       role="dialog"
       aria-modal="true"
+      onClick={onClose} // klick utanför => stäng
     >
-      {/* Bakgrund som går att klicka på för att stänga */}
-      <button
-        aria-label="Stäng"
-        onClick={onClose}
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-      />
+      {/* Overlay bakom rutan */}
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-0" />
 
-      {/* Själva modalrutan */}
+      {/* Själva rutan */}
       <section
         className="
-          relative w-full max-w-2xl mx-4
+          relative z-10 w-full max-w-2xl mx-4
           bg-white border border-gray-200 rounded-3xl shadow-2xl
           p-6 md:p-8
-          animate-in fade-in zoom-in-95
+          transition-all duration-200
         "
+        onClick={(e) => e.stopPropagation()} // hindra bubbla så X/klick i rutan funkar
       >
-        {/* Stäng-knapp (X) */}
+        {/* X-knapp */}
         <button
           type="button"
           onClick={onClose}
@@ -191,6 +200,8 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
       </section>
     </div>
   );
+
+  return createPortal(modal, document.body);
 };
 
 export default CandidateFormSection;
