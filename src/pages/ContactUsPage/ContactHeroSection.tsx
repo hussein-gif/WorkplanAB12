@@ -120,7 +120,7 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
           Hur kan vi hjälpa dig?
         </h1>
 
-        {/* Underrubrik (lite längre ner) */}
+        {/* Underrubrik */}
         <p
           style={{
             fontFamily:
@@ -147,7 +147,7 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
             onClick={() => setUserType('candidate')}
             style={{ fontFamily: 'Inter, sans-serif' }}
             className={`
-              flex items-center gap-3 px-8 py-4 rounded-xl border-2 font-medium text-lg
+              flex items-center gap-3 px-8 py-4 rounded-2xl border-2 font-medium text-lg
               transition-all duration-300
               ${userType === 'candidate'
                 ? 'border-blue-500 bg-blue-50 text-blue-700'
@@ -162,7 +162,7 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
             onClick={() => setUserType('company')}
             style={{ fontFamily: 'Inter, sans-serif' }}
             className={`
-              flex items-center gap-3 px-8 py-4 rounded-xl border-2 font-medium text-lg
+              flex items-center gap-3 px-8 py-4 rounded-2xl border-2 font-medium text-lg
               transition-all duration-300
               ${userType === 'company'
                 ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
