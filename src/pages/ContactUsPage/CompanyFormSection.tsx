@@ -40,16 +40,22 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
           animate-fadeIn
         "
       >
-        {/* Stäng-knapp (X) */}
+        {/* Stäng-knapp (X) – samma som i förra koden */}
         <button
+          type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          className="
+            absolute top-3 right-3 p-2 rounded-full
+            hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500
+            transition
+          "
+          aria-label="Stäng formuläret"
         >
-          <X size={24} />
+          <X size={20} />
         </button>
 
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-light text-gray-900 mb-2">
+          <h2 className="text-3xl font-medium text-gray-900 mb-2">
             Har ni en fråga? Hör av er!
           </h2>
           <p className="text-gray-600">
@@ -60,7 +66,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
         <form onSubmit={handleCompanySubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2">
+              <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
                 Företagsnamn *
               </label>
               <input
@@ -74,7 +80,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2">
+              <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
                 Ditt namn & titel *
               </label>
               <input
@@ -91,7 +97,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2">
+              <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
                 E-post *
               </label>
               <input
@@ -105,7 +111,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2">
+              <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
                 Telefon
               </label>
               <input
@@ -120,7 +126,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2">
+            <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
               Ämne *
             </label>
             <select
@@ -142,7 +148,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2">
+            <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
               Meddelande *
             </label>
             <textarea
@@ -163,9 +169,9 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
               checked={companyForm.gdprAccept || false}
               onChange={handleCompanyChange}
               required
-              className="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
+              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            <label className="text-gray-700 text-sm">
+            <label className="text-gray-700 text-sm font-sans">
               Jag godkänner att Workplan lagrar mina uppgifter enligt{" "}
               <a
                 href="/privacy"
