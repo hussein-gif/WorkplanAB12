@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Send, X, ChevronDown } from "lucide-react";
+import { createPortal } from "react-dom";
 
 interface CompanyFormSectionProps {
   companyForm: {
@@ -36,7 +37,16 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
   handleCompanyChange,
   onClose,
 }) => {
-  // Scroll lock
+  // ESC för att stänga, som i Candidate
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  // Scroll lock, som i Candidate
   useEffect(() => {
     const prev = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
@@ -78,17 +88,20 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
     SUBJECT_OPTIONS.find((o) => o.value === (companyForm.subject || ""))?.label ||
     "Välj ämne";
 
-  return (
-    // Overlay täcker ALLT (inkl. navbar) tack vare z-[9999]
+  const modal = (
     <div
-      className="fixed inset-0 bg-black/60 backdrop-blur-[1px] flex items-center justify-center z-[9999]"
+      className="fixed inset-0 z-[9999] flex items-center justify-center"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
     >
+      {/* Overlay: täcker ALLT (inkl. navbar) + mild blur */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] z-0" />
+
+      {/* Modal-rutan */}
       <div
         className="
-          relative w-full max-w-3xl 
+          relative z-10 w-full max-w-3xl 
           bg-white border border-gray-200 rounded-3xl p-8 shadow-2xl
         "
         onClick={(e) => e.stopPropagation()}
@@ -314,6 +327,8 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 };
 
 export default CompanyFormSection;
