@@ -155,7 +155,7 @@ const Hero = () => {
                 <button
                   onClick={() => navigate('/jobs')}
                   className="
-                    group relative px-8 py-4 
+                    group relative px-6 py-4 min-w-[180px]
                     bg-white text-gray-900 rounded-2xl
                     font-semibold text-lg tracking-wide
                     hover:bg-white/95 
@@ -172,7 +172,7 @@ const Hero = () => {
                 <button
                   onClick={() => navigate('/partner')}
                   className="
-                    group relative px-8 py-4
+                    group relative px-6 py-4 min-w-[180px]
                     bg-transparent text-white border-2 border-white/30 rounded-2xl
                     font-semibold text-lg tracking-wide
                     hover:border-white/60 hover:bg-white/10
