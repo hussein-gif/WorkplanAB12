@@ -54,7 +54,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           text-left
         "
       >
-        {/* Rubrik – rad 1 vikt 200, rad 2 vikt 400 */}
+        {/* Rubrik */}
         <h1
           className={`text-white mb-5 tracking-tight leading-[0.95] transition-all duration-1000 transform
             text-5xl md:text-6xl lg:text-7xl
@@ -84,17 +84,17 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         >
           <button
             onClick={scrollToContact}
-            className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-white text-lg font-medium tracking-wide transition-all duration-200 min-w-[240px]"
+            className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-white text-lg font-medium tracking-wide transition-all duration-200 min-w-[240px]"
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
-            <span className="btn-hero-bg absolute inset-0 rounded-xl" />
+            <span className="btn-hero-bg absolute inset-0 rounded-2xl" />
             <span className="relative z-10">Kontakta oss</span>
             <ArrowRight size={18} className="relative z-10 transition-transform duration-200 group-hover:translate-x-0.5" />
           </button>
 
           <button
             onClick={scrollToProcess}
-            className="relative inline-flex items-center justify-center px-8 py-4 rounded-xl text-white text-lg font-medium tracking-wide border border-white/25 bg-white/5 hover:bg-white/10 hover:border-white/40 transition-all duration-200 min-w-[200px]"
+            className="relative inline-flex items-center justify-center px-8 py-4 rounded-2xl text-white text-lg font-medium tracking-wide border border-white/25 bg-white/5 hover:bg-white/10 hover:border-white/40 transition-all duration-200 min-w-[240px]"
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
             Så jobbar vi
