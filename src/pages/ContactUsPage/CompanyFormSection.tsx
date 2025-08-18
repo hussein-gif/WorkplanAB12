@@ -36,7 +36,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
   handleCompanyChange,
   onClose,
 }) => {
-  // scroll lock (som i Candidate)
+  // Scroll lock
   useEffect(() => {
     const prev = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
@@ -79,7 +79,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
     "Välj ämne";
 
   return (
-    // Overlay: mörk + väldigt mild blur, hög z-index, klick utanför stänger
+    // Overlay täcker ALLT (inkl. navbar) tack vare z-[9999]
     <div
       className="fixed inset-0 bg-black/60 backdrop-blur-[1px] flex items-center justify-center z-[9999]"
       onClick={onClose}
