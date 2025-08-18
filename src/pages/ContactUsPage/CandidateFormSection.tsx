@@ -46,13 +46,13 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
 
   const modal = (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center"
+      className="fixed inset-0 z-[9999] flex items-center justify-center"
       role="dialog"
       aria-modal="true"
       onClick={onClose}
     >
-      {/* Overlay: blur + mörk bakgrund */}
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-0" />
+      {/* Overlay: mörk + kraftig blur (täcker allt inklusive navbar) */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-md md:backdrop-blur-lg z-0" />
 
       {/* Själva rutan */}
       <section
@@ -176,7 +176,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
             type="submit"
             className="
               w-full py-4 px-6
-              bg-blue-600 text-white rounded-xl
+              bg-blue-600 text-white rounded-2xl
               font-semibold text-lg tracking-wide
               hover:bg-blue-700
               transition-all duration-300
