@@ -36,6 +36,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
   handleCompanyChange,
   onClose,
 }) => {
+  // scroll lock (som i Candidate)
   useEffect(() => {
     const prev = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
@@ -78,9 +79,9 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
     "Välj ämne";
 
   return (
-    // ⬇️ Blur + svart overlay tillbaka här
+    // Overlay: mörk + väldigt mild blur, hög z-index, klick utanför stänger
     <div
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/60 backdrop-blur-[1px] flex items-center justify-center z-[9999]"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -89,16 +90,16 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
         className="
           relative w-full max-w-3xl 
           bg-white border border-gray-200 rounded-3xl p-8 shadow-2xl
-          animate-fadeIn
         "
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Stäng-knapp */}
         <button
           type="button"
           onClick={onClose}
           className="
             absolute top-3 right-3 p-2 rounded-full
-            hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500
+            hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500
             transition
           "
           aria-label="Stäng formuläret"
@@ -127,7 +128,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
                 value={companyForm.companyName}
                 onChange={handleCompanyChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200"
                 placeholder="Ert företagsnamn"
               />
             </div>
@@ -141,7 +142,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
                 value={companyForm.nameTitle}
                 onChange={handleCompanyChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200"
                 placeholder="Anna Andersson, HR-chef"
               />
             </div>
@@ -158,7 +159,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
                 value={companyForm.email}
                 onChange={handleCompanyChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200"
                 placeholder="din@email.com"
               />
             </div>
@@ -171,7 +172,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
                 name="phone"
                 value={companyForm.phone}
                 onChange={handleCompanyChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200"
                 placeholder="+46 XX XXX XX XX"
               />
             </div>
@@ -190,7 +191,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
                 onClick={() => setOpen((v) => !v)}
                 onKeyDown={onDropdownKeyDown}
                 className="
-                  w-full px-4 py-3 border border-gray-300 rounded-xl
+                  w-full px-4 py-3 border border-gray-300 rounded-2xl
                   focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10
                   transition-all duration-200 text-left
                   flex items-center justify-between
@@ -205,9 +206,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
                   {currentLabel}
                 </span>
                 <ChevronDown
-                  className={`transition-transform ${
-                    open ? "rotate-180" : ""
-                  }`}
+                  className={`transition-transform ${open ? "rotate-180" : ""}`}
                   size={18}
                 />
               </button>
@@ -218,30 +217,29 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
                   tabIndex={-1}
                   className="
                     absolute z-50 mt-2 w-full max-h-60 overflow-auto
-                    bg-white border border-gray-200 rounded-xl shadow-lg
+                    bg-white border border-gray-200 rounded-2xl shadow-lg
                     focus:outline-none
-                    animate-in fade-in-0 zoom-in-95
                   "
                 >
-                  {SUBJECT_OPTIONS.map((opt) => (
-                    <li
-                      role="option"
-                      aria-selected={companyForm.subject === opt.value}
-                      key={opt.value}
-                      onClick={() => selectSubject(opt.value)}
-                      className={`
-                        px-4 py-2.5 cursor-pointer transition
-                        hover:bg-gray-50
-                        ${
-                          companyForm.subject === opt.value
-                            ? "bg-gray-50"
-                            : ""
-                        }
-                      `}
-                    >
-                      {opt.label}
-                    </li>
-                  ))}
+                  {SUBJECT_OPTIONS.filter((opt) => opt.value !== "").map(
+                    (opt) => (
+                      <li
+                        role="option"
+                        aria-selected={companyForm.subject === opt.value}
+                        key={opt.value}
+                        onClick={() => selectSubject(opt.value)}
+                        className={`
+                          px-4 py-2.5 cursor-pointer transition
+                          hover:bg-gray-50
+                          ${
+                            companyForm.subject === opt.value ? "bg-gray-50" : ""
+                          }
+                        `}
+                      >
+                        {opt.label}
+                      </li>
+                    )
+                  )}
                 </ul>
               )}
             </div>
@@ -257,7 +255,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
               onChange={handleCompanyChange}
               required
               rows={4}
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 resize-none"
               placeholder="Ställ din fråga eller beskriv kort vad du vill veta …"
             />
           </div>
@@ -279,7 +277,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
                 } as React.ChangeEvent<HTMLInputElement>);
               }}
               required
-              className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              className="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"
             />
             <label className="text-gray-700 text-sm font-['Inter']">
               Jag godkänner att Workplan lagrar mina uppgifter enligt{" "}
@@ -299,7 +297,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
             type="submit"
             className="
               w-full py-4 px-6
-              bg-emerald-600 text-white rounded-xl
+              bg-emerald-600 text-white rounded-2xl
               font-semibold text-lg tracking-wide
               hover:bg-emerald-700
               transition-all duration-300
