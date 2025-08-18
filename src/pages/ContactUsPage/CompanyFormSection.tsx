@@ -27,6 +27,13 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
   handleCompanyChange,
   onClose,
 }) => {
+  return (
+    <div
+      className="
+        fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50
+      "
+    >
+      <div
         className="
           relative w-full max-w-3xl 
           bg-white border border-gray-200 rounded-3xl p-8 shadow-2xl
