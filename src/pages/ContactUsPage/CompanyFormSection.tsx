@@ -18,7 +18,7 @@ interface CompanyFormSectionProps {
       | React.ChangeEvent<HTMLTextAreaElement>
       | React.ChangeEvent<HTMLSelectElement>
   ) => void;
-  onClose: () => void; // 👈 nytt för att stänga modalen
+  onClose: () => void;
 }
 
 const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
@@ -40,7 +40,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
           animate-fadeIn
         "
       >
-        {/* Stäng-knapp (X) – samma som i förra koden */}
+        {/* Stäng-knapp */}
         <button
           type="button"
           onClick={onClose}
@@ -55,10 +55,12 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
         </button>
 
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-medium text-gray-900 mb-2">
+          {/* Rubrik i Zen Kaku Gothic Antique */}
+          <h2 className="text-3xl font-medium text-gray-900 mb-2 font-['Zen_Kaku_Gothic_Antique']">
             Har ni en fråga? Hör av er!
           </h2>
-          <p className="text-gray-600">
+          {/* Underrubrik i Inter */}
+          <p className="text-gray-600 font-['Inter']">
             Fyll i formuläret så återkommer vi så snart vi kan.
           </p>
         </div>
@@ -66,7 +68,8 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
         <form onSubmit={handleCompanySubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
+              {/* Label i Zen Kaku Gothic Antique */}
+              <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
                 Företagsnamn *
               </label>
               <input
@@ -80,7 +83,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
+              <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
                 Ditt namn & titel *
               </label>
               <input
@@ -97,7 +100,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
+              <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
                 E-post *
               </label>
               <input
@@ -111,7 +114,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
               />
             </div>
             <div>
-              <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
+              <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
                 Telefon
               </label>
               <input
@@ -126,7 +129,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
+            <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
               Ämne *
             </label>
             <select
@@ -148,7 +151,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-2 font-sans">
+            <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
               Meddelande *
             </label>
             <textarea
@@ -171,7 +174,8 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
               required
               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            <label className="text-gray-700 text-sm font-sans">
+            {/* Text bredvid rutan i Inter */}
+            <label className="text-gray-700 text-sm font-['Inter']">
               Jag godkänner att Workplan lagrar mina uppgifter enligt{" "}
               <a
                 href="/privacy"
@@ -196,6 +200,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
               shadow-lg hover:shadow-xl
               hover:scale-[1.02]
               flex items-center justify-center space-x-2
+              font-['Inter']
             "
           >
             <Send size={20} />
