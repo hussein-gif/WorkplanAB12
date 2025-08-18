@@ -1,5 +1,5 @@
-import React from "react";
-import { Send, X } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { Send, X, ChevronDown } from "lucide-react";
 
 interface CompanyFormSectionProps {
   companyForm: {
@@ -21,14 +21,69 @@ interface CompanyFormSectionProps {
   onClose: () => void;
 }
 
+const SUBJECT_OPTIONS = [
+  { value: "", label: "Välj ämne" },
+  { value: "pris-villkor", label: "Pris & villkor" },
+  { value: "tillgangliga-konsulter", label: "Tillgängliga konsulter" },
+  { value: "processen", label: "Hur processen fungerar" },
+  { value: "avtal-juridik", label: "Avtal & juridik" },
+  { value: "annat", label: "Annat" },
+];
+
 const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
   companyForm,
   handleCompanySubmit,
   handleCompanyChange,
   onClose,
 }) => {
+  // --- Scroll lock när modalen är uppe ---
+  useEffect(() => {
+    const prev = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      document.documentElement.style.overflow = prev;
+    };
+  }, []);
+
+  // --- Dropdown state ---
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+
+  // Stäng dropdown vid klick utanför (men INTE modalen)
+  useEffect(() => {
+    const onDocClick = (e: MouseEvent) => {
+      if (!dropdownRef.current) return;
+      if (!dropdownRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
+  }, []);
+
+  // Keyboard-stöd i dropdown
+  const onDropdownKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setOpen((v) => !v);
+    } else if (e.key === "Escape") {
+      setOpen(false);
+    }
+  };
+
+  const selectSubject = (value: string) => {
+    setOpen(false);
+    // Skicka vidare i samma format som övriga fält
+    const synthetic = {
+      target: { name: "subject", value },
+    } as unknown as React.ChangeEvent<HTMLSelectElement>;
+    handleCompanyChange(synthetic);
+  };
+
+  const currentLabel =
+    SUBJECT_OPTIONS.find((o) => o.value === (companyForm.subject || ""))?.label ||
+    "Välj ämne";
+
   return (
-    // ⬇️ Stäng när man klickar utanför
+    // Stäng när man klickar utanför rutan
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
       onClick={onClose}
@@ -41,9 +96,9 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
           bg-white border border-gray-200 rounded-3xl p-8 shadow-2xl
           animate-fadeIn
         "
-        onClick={(e) => e.stopPropagation()} // ⬅️ Hindra att klick i rutan bubblar upp
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* X-knapp (samma som tidigare modal) */}
+        {/* X-knapp (samma stil som tidigare) */}
         <button
           type="button"
           onClick={onClose}
@@ -58,11 +113,9 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
         </button>
 
         <div className="text-center mb-8">
-          {/* Rubrik: Zen Kaku Gothic Antique, behåll font-weight */}
           <h2 className="text-3xl font-medium text-gray-900 mb-2 font-['Zen_Kaku_Gothic_Antique']">
             Har ni en fråga? Hör av er!
           </h2>
-          {/* Underrubrik: Inter */}
           <p className="text-gray-600 font-['Inter']">
             Fyll i formuläret så återkommer vi så snart vi kan.
           </p>
@@ -71,7 +124,6 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
         <form onSubmit={handleCompanySubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              {/* Labels: Zen Kaku Gothic Antique, behåll font-medium */}
               <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
                 Företagsnamn *
               </label>
@@ -131,24 +183,62 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
             </div>
           </div>
 
+          {/* --- Custom dropdown: Ämne --- */}
           <div>
             <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
               Ämne *
             </label>
-            <select
-              name="subject"
-              value={companyForm.subject || ""}
-              onChange={handleCompanyChange}
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200 appearance-none cursor-pointer"
-            >
-              <option value="">Välj ämne</option>
-              <option value="pris-villkor">Pris & villkor</option>
-              <option value="tillgangliga-konsulter">Tillgängliga konsulter</option>
-              <option value="processen">Hur processen fungerar</option>
-              <option value="avtal-juridik">Avtal & juridik</option>
-              <option value="annat">Annat</option>
-            </select>
+            <div ref={dropdownRef} className="relative">
+              <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={open}
+                onClick={() => setOpen((v) => !v)}
+                onKeyDown={onDropdownKeyDown}
+                className="
+                  w-full px-4 py-3 border border-gray-300 rounded-xl
+                  focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10
+                  transition-all duration-200 text-left
+                  flex items-center justify-between
+                  bg-white
+                "
+              >
+                <span className={companyForm.subject ? "text-gray-900" : "text-gray-400"}>
+                  {currentLabel}
+                </span>
+                <ChevronDown className={`transition-transform ${open ? "rotate-180" : ""}`} size={18} />
+              </button>
+
+              {/* Options */}
+              {open && (
+                <ul
+                  role="listbox"
+                  tabIndex={-1}
+                  className="
+                    absolute z-50 mt-2 w-full max-h-60 overflow-auto
+                    bg-white border border-gray-200 rounded-xl shadow-lg
+                    focus:outline-none
+                    animate-in fade-in-0 zoom-in-95
+                  "
+                >
+                  {SUBJECT_OPTIONS.map((opt) => (
+                    <li
+                      role="option"
+                      aria-selected={companyForm.subject === opt.value}
+                      key={opt.value}
+                      onClick={() => selectSubject(opt.value)}
+                      className={`
+                        px-4 py-2.5 cursor-pointer transition
+                        hover:bg-gray-50
+                        ${companyForm.subject === opt.value ? "bg-gray-50" : ""}
+                      `}
+                    >
+                      {opt.label}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
 
           <div>
@@ -167,27 +257,24 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
           </div>
 
           <div className="flex items-center space-x-3">
-            {/* ⬇️ Gör checkboxen avbockningsbar via boolean-adapter */}
             <input
               type="checkbox"
               name="gdprAccept"
               checked={!!companyForm.gdprAccept}
               onChange={(e) => {
                 const checked = (e.target as HTMLInputElement).checked;
-                // Adapterar eventet så parent kan sätta boolean direkt
                 handleCompanyChange({
                   ...e,
                   target: {
                     ...(e.target as HTMLInputElement),
                     name: "gdprAccept",
-                    value: checked as unknown as string, // många handlers gör set({[name]: value})
+                    value: checked as unknown as string,
                   },
                 } as React.ChangeEvent<HTMLInputElement>);
               }}
               required
               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            {/* Text bredvid rutan i Inter */}
             <label className="text-gray-700 text-sm font-['Inter']">
               Jag godkänner att Workplan lagrar mina uppgifter enligt{" "}
               <a
