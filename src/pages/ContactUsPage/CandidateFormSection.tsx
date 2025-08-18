@@ -35,30 +35,36 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
     firstFieldRef.current?.focus();
   }, []);
 
-  // scroll-lock (behålls)
+  // scroll lock
   useEffect(() => {
     const prev = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
-    return () => { document.documentElement.style.overflow = prev; };
+    return () => {
+      document.documentElement.style.overflow = prev;
+    };
   }, []);
 
   const modal = (
-    // ⬇️ Samma overlay som i förra koden
     <div
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center"
+      className="fixed inset-0 z-[60] flex items-center justify-center"
       role="dialog"
       aria-modal="true"
       onClick={onClose}
     >
+      {/* Overlay: blur + mörk bakgrund */}
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm z-0" />
+
+      {/* Själva rutan */}
       <section
         className="
-          relative w-full max-w-2xl mx-4
+          relative z-10 w-full max-w-2xl mx-4
           bg-white border border-gray-200 rounded-3xl shadow-2xl
           p-6 md:p-8
           transition-all duration-200
         "
         onClick={(e) => e.stopPropagation()}
       >
+        {/* X-knapp */}
         <button
           type="button"
           onClick={onClose}
@@ -73,11 +79,9 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
         </button>
 
         <div className="text-center mb-6 md:mb-8">
-          {/* Rubrik: Zen Kaku + font-medium */}
           <h2 className="text-2xl md:text-3xl font-medium text-gray-900 mb-2 font-['Zen_Kaku_Gothic_Antique']">
             Har du en fråga? Hör av dig!
           </h2>
-          {/* Underrubrik: Inter */}
           <p className="text-gray-600 font-['Inter']">
             Fyll i formuläret så återkommer vi så snart vi kan.
           </p>
@@ -86,7 +90,6 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
         <form onSubmit={handleCandidateSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              {/* Labels: Zen Kaku + font-medium */}
               <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
                 Namn *
               </label>
@@ -155,7 +158,6 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
               required
               className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
-            {/* GDPR-text: Inter */}
             <label className="text-gray-700 text-sm font-['Inter']">
               Jag godkänner att Workplan lagrar mina uppgifter enligt{' '}
               <a
@@ -170,7 +172,6 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
             </label>
           </div>
 
-          {/* Knapptext: Inter */}
           <button
             type="submit"
             className="
