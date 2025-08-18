@@ -132,7 +132,7 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}
         >
-          Jag är
+          Jag är:
         </p>
 
         {/* Knappar */}
