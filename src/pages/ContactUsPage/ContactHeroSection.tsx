@@ -100,8 +100,6 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
               fill="url(#waveGrad3)"
             />
           </svg>
-
-          {/* ...resten av bakgrunden (spirals, particles, etc.) */}
         </div>
       </div>
 
@@ -114,7 +112,7 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
               '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
           }}
           className={`
-            text-5xl md:text-6xl font-light text-gray-900 mb-6 tracking-tight
+            text-5xl md:text-6xl font-light text-gray-900 mb-10 tracking-tight
             transition-all duration-1000 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
           `}
@@ -122,19 +120,19 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
           Hur kan vi hjälpa dig?
         </h1>
 
-        {/* Underrubrik */}
+        {/* Underrubrik (flyttad närmare knapparna) */}
         <p
           style={{
             fontFamily:
               'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
           }}
           className={`
-            text-lg text-gray-600 max-w-2xl mx-auto font-light leading-relaxed mb-8
+            text-lg text-gray-600 max-w-2xl mx-auto font-light leading-relaxed mb-4
             transition-all duration-1000 delay-200 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}
         >
-          Välj om du är kandidat eller företag så visar vi rätt formulär.
+          Jag är:
         </p>
 
         {/* Knappar */}
@@ -157,7 +155,7 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
             `}
           >
             <User size={20} />
-            <span>Jag är kandidat</span>
+            <span>Kandidat</span>
           </button>
 
           <button
@@ -172,7 +170,7 @@ const ContactHeroSection: React.FC<ContactHeroSectionProps> = ({
             `}
           >
             <Building size={20} />
-            <span>Jag representerar ett företag</span>
+            <span>Företag</span>
           </button>
         </div>
 
