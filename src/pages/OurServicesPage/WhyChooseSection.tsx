@@ -32,7 +32,7 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
             className="text-4xl text-gray-900 mb-4 font-medium"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
-            Varför välja TalentBridge?
+            Varför välja Workplan?
           </h2>
           <p
             className="text-lg text-gray-600 max-w-2xl mx-auto"
