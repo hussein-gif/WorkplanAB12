@@ -95,7 +95,7 @@ const ConversionBanner = () => {
           >
             <h2
               className="text-5xl md:text-6xl font-normal text-white tracking-tight leading-[0.9]"
-              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400, textTransform: 'capitalize' }}
+              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
             >
               Vill du veta mer? 
             </h2>
