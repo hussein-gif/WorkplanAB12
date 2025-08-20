@@ -1,344 +1,367 @@
-import React, { useState, useEffect } from 'react';
-import { Calendar, FileText, Shield } from 'lucide-react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Calendar, FileText, Shield, CheckCircle2 } from 'lucide-react';
 
-const TermsOfServicePage = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+/**
+ * TermsOfServicePage
+ * - Bakgrundsfärg #F7FAFF (hela sidan)
+ * - Vänster sidomeny (TOC) som följer med vid scroll och markerar aktiv rubrik
+ * - Höger kolumn med fullständiga villkor för bemanningsföretag inom lager/logistik
+ * - Behåller nuvarande typsnitt/stil (Zen Kaku Gothic Antique + Inter)
+ * - Tar bort innehåll som inte bör vara där (t.ex. grafiska orbs och onödig bakgrundsanimation)
+ * - Inkluderar ALLA sektioner vi diskuterade + några extra praktiska juridiska avsnitt
+ */
 
-  useEffect(() => {
-    setIsVisible(true);
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
-      });
-    };
+const sections = [
+  { id: 'allmant', label: '1. Allmänt' },
+  { id: 'foretagsinfo', label: '2. Företagsinformation' },
+  { id: 'definitioner', label: '3. Definitioner' },
+  { id: 'anvandakonto', label: '4. Användarkonto' },
+  { id: 'tjanster', label: '5. Våra tjänster' },
+  { id: 'kundens-ansvar', label: '6. Kundens ansvar' },
+  { id: 'kandidaters-ansvar', label: '7. Kandidaters ansvar' },
+  { id: 'betalningsvillkor', label: '8. Betalningsvillkor' },
+  { id: 'personuppgifter', label: '9. Personuppgifter & integritet' },
+  { id: 'cookies', label: '10. Cookies' },
+  { id: 'immaterialratt', label: '11. Immateriella rättigheter' },
+  { id: 'otillaten-anvandning', label: '12. Otillåten användning' },
+  { id: 'sakerhet', label: '13. IT- & informationssäkerhet' },
+  { id: 'sekretess', label: '14. Sekretess (NDA) & konfidentialitet' },
+  { id: 'bakgrundskontroller', label: '15. Bakgrundskontroller' },
+  { id: 'arbetsmiljo', label: '16. Arbetsmiljö & skyddsregler' },
+  { id: 'ansvarsbegransning', label: '17. Begränsning av ansvar' },
+  { id: 'force-majeure', label: '18. Force majeure' },
+  { id: 'tredjepartslankar', label: '19. Tredjepartslänkar & verktyg' },
+  { id: 'teknisk-kompat', label: '20. Teknisk kompatibilitet' },
+  { id: 'tillganglighet', label: '21. Tillgänglighet (WCAG)' },
+  { id: 'signering', label: '22. Elektronisk signering & meddelanden' },
+  { id: 'overlatelse', label: '23. Överlåtelse' },
+  { id: 'tolkning', label: '24. Tolkning & ogiltighet' },
+  { id: 'andringar', label: '25. Ändringar av villkor' },
+  { id: 'uppsagning', label: '26. Uppsägning & upphörande' },
+  { id: 'lag-tvist', label: '27. Tillämplig lag & tvistlösning' },
+  { id: 'ikrafttradande', label: '28. Ikraftträdande & versioner' },
+  { id: 'kontakt', label: '29. Kontakt' },
+];
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+const TermsOfServicePage: React.FC = () => {
+  const [activeId, setActiveId] = useState<string>(sections[0].id);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const observer = useMemo(() => {
+    if (typeof window === 'undefined') return null;
+    return new IntersectionObserver(
+      (entries) => {
+        // Välj den sektion som är mest i fokus
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]?.target?.id) {
+          setActiveId(visible[0].target.id);
+        }
+      },
+      { root: null, rootMargin: '0px 0px -70% 0px', threshold: [0.25, 0.5, 0.75, 1] }
+    );
   }, []);
 
+  useEffect(() => {
+    if (!observer) return;
+    const el = containerRef.current;
+    if (!el) return;
+    const targets = Array.from(el.querySelectorAll('section[data-tos-section]'));
+    targets.forEach((t) => observer.observe(t));
+    return () => targets.forEach((t) => observer.unobserve(t));
+  }, [observer]);
+
+  const handleClick = (id: string) => {
+    const node = document.getElementById(id);
+    if (node) {
+      node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Manuellt sätt aktiv när man klickar
+      setActiveId(id);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Sophisticated Background */}
-      <div className="absolute inset-0">
-        {/* Dynamic Gradient Orbs */}
-        <div 
-          className="absolute w-[800px] h-[800px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000"
-          style={{
-            background: `radial-gradient(circle, #08132B 0%, transparent 70%)`,
-            left: `${mousePosition.x * 0.3}%`,
-            top: `${mousePosition.y * 0.2}%`,
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
-        <div 
-          className="absolute w-[600px] h-[600px] rounded-full opacity-[0.03] blur-3xl transition-all duration-1000 delay-500"
-          style={{
-            background: `radial-gradient(circle, #0B274D 0%, transparent 70%)`,
-            right: `${mousePosition.x * 0.2}%`,
-            bottom: `${mousePosition.y * 0.3}%`,
-            transform: 'translate(50%, 50%)',
-          }}
-        />
-
-        {/* Grid Pattern */}
-        <div 
-          className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(8,19,43,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(8,19,43,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px',
-          }}
-        />
-      </div>
-
-      <div className="relative z-10">
-        {/* Hero Section */}
-        <section className="pt-32 pb-16 px-8">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="flex items-center justify-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-[#08132B] to-[#0B274D] rounded-2xl flex items-center justify-center shadow-lg">
-                <FileText size={28} className="text-white" />
-              </div>
+    <div className="min-h-screen" style={{ backgroundColor: '#F7FAFF' }}>
+      {/* Hero */}
+      <header className="pt-20 pb-10 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 bg-gradient-to-br from-[#08132B] to-[#0B274D] rounded-2xl flex items-center justify-center shadow-lg">
+              <FileText size={26} className="text-white" />
             </div>
-            
-            <h1
-              className={`
-                text-5xl md:text-6xl font-medium text-[#08132B] mb-6 tracking-tight
-                transition-all duration-1000 transform
-                ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
-              `}
-              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-            >
-              Användarvillkor
-            </h1>
-            
-            <p
-              className={`
-                text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed
-                transition-all duration-1000 delay-200 transform
-                ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-              `}
-              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
-            >
-              Villkor för användning av Workplan AB:s tjänster och webbplats
-            </p>
-
-            <div
-              className={`
-                flex items-center justify-center space-x-6 mt-8 text-sm text-gray-500
-                transition-all duration-1000 delay-400 transform
-                ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-              `}
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              <div className="flex items-center space-x-2">
-                <Calendar size={16} />
-                <span>Senast uppdaterad: 1 januari 2025</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Shield size={16} />
-                <span>Version 1.0</span>
+            <div>
+              <h1
+                className="text-4xl md:text-5xl font-medium text-[#08132B] tracking-tight"
+                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+              >
+                Användarvillkor
+              </h1>
+              <p className="text-gray-600 mt-2" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}>
+                Villkor för användning av {`Workplan AB`}:s tjänster och webbplats
+              </p>
+              <div className="flex items-center gap-6 text-sm text-gray-500 mt-3" style={{ fontFamily: 'Inter, sans-serif' }}>
+                <span className="flex items-center gap-2"><Calendar size={16} /> Senast uppdaterad: 1 januari 2025</span>
+                <span className="flex items-center gap-2"><Shield size={16} /> Version 1.0</span>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </header>
 
-        {/* Content */}
-        <section className="pb-24 px-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white border border-gray-200 rounded-3xl shadow-lg overflow-hidden">
-              <div className="p-8 md:p-12 space-y-12">
-                
-                {/* 1. Allmänt */}
-                <div>
-                  <h2
-                    className="text-3xl font-medium text-[#08132B] mb-6"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    1. Allmänt
-                  </h2>
-                  <div className="space-y-4 text-gray-700 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    <p>
-                      Dessa användarvillkor ("Villkoren") reglerar din användning av Workplan AB:s ("Workplan", "vi", "oss", "vår") webbplats och tjänster. Genom att använda vår webbplats eller våra tjänster accepterar du dessa villkor i sin helhet.
-                    </p>
-                    <p>
-                      Workplan AB är ett bemanningsföretag som specialiserar sig på lager- och logistikbemanning. Vi förmedlar kontakt mellan arbetsgivare och arbetssökande inom dessa områden.
-                    </p>
-                  </div>
+      {/* Innehåll med sidomeny */}
+      <main className="px-6 pb-24">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Vänster TOC */}
+          <aside className="lg:col-span-4 xl:col-span-3">
+            <nav className="sticky top-24 bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6 max-h-[80vh] overflow-auto" aria-label="Innehåll">
+              <ul className="space-y-1" style={{ fontFamily: 'Inter, sans-serif' }}>
+                {sections.map((s) => (
+                  <li key={s.id}>
+                    <button
+                      onClick={() => handleClick(s.id)}
+                      className={`w-full text-left px-3 py-2 rounded-lg transition ${
+                        activeId === s.id
+                          ? 'bg-blue-50 text-[#0B274D] font-medium ring-1 ring-blue-200'
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      {s.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </aside>
+
+          {/* Höger innehåll */}
+          <div className="lg:col-span-8 xl:col-span-9">
+            <div ref={containerRef} className="bg-white border border-gray-200 rounded-3xl shadow-sm p-6 md:p-10 space-y-12">
+              {/* Helper components */}
+              <Section id="allmant" title="1. Allmänt">
+                <p>
+                  Dessa användarvillkor ("Villkoren") reglerar din användning av Workplan AB:s ("Workplan", "vi", "oss", "vår") webbplats, konton och
+                  bemanningstjänster inom lager och logistik. Genom att besöka webbplatsen, skapa konto, registrera dig som kandidat eller beställa tjänster som kund
+                  accepterar du Villkoren. Om du inte accepterar dem ska du avstå från att använda webbplatsen eller tjänsterna.
+                </p>
+              </Section>
+
+              <Section id="foretagsinfo" title="2. Företagsinformation">
+                <DefinitionList
+                  items={[
+                    ['Företagsnamn', 'Workplan AB'],
+                    ['Organisationsnummer', '[Ditt organisationsnummer]'],
+                    ['Adress', '[Din företagsadress]'],
+                    ['Telefon', '+46 [ditt nummer]'],
+                    ['E-post', 'info@work-plan.se'],
+                    ['Webbplats', 'work-plan.se'],
+                  ]}
+                />
+                <InfoBox>
+                  Ange korrekta uppgifter ovan innan publicering. Dessa används även i avtal, fakturor och integritetspolicy.
+                </InfoBox>
+              </Section>
+
+              <Section id="definitioner" title="3. Definitioner">
+                <ul className="list-disc pl-6 space-y-2">
+                  <li><strong>Kund:</strong> Företag som hyr in personal via oss.</li>
+                  <li><strong>Kandidat/Arbetstagare:</strong> Person som registrerar sig för bemanningsuppdrag eller anställning.</li>
+                  <li><strong>Tjänster:</strong> Bemanning, rekrytering och relaterade tjänster vi tillhandahåller.</li>
+                  <li><strong>Webbplats:</strong> Vår webbplats och digitala plattformar.</li>
+                </ul>
+              </Section>
+
+              <Section id="anvandakonto" title="4. Användarkonto">
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Vissa funktioner kräver konto. Du ansvarar för riktiga, uppdaterade uppgifter.</li>
+                  <li>Håll inloggningsuppgifter hemliga. Du ansvarar för all aktivitet via ditt konto.</li>
+                  <li>Vi kan begränsa eller stänga konton vid missbruk eller brott mot Villkoren.</li>
+                </ul>
+              </Section>
+
+              <Section id="tjanster" title="5. Våra tjänster">
+                <p>Workplan erbjuder bemanning inom lager/logistik, bl.a.:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Timanställning, vikariat, säsong, prov- och tillsvidareanställning.</li>
+                  <li>Konsultuppdrag och rekrytering.</li>
+                </ul>
+                <p>Omfattning, SLA, pris och övriga villkor framgår av separata kundavtal.</p>
+              </Section>
+
+              <Section id="kundens-ansvar" title="6. Kundens ansvar">
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Lämna korrekta uppgifter vid beställning. Tillhandahåll nödvändig introduktion och instruktioner.</li>
+                  <li>Ansvara för arbetsmiljö, säkerhet, skyddsutrustning och tillbudshantering på arbetsplatsen.</li>
+                  <li>Följa gällande lagar (arbetsrätt, arbetsmiljö, diskrimineringslagstiftning, arbetstidsregler).</li>
+                  <li>Inte använda tjänsterna för olagliga, oetiska eller diskriminerande syften.</li>
+                </ul>
+              </Section>
+
+              <Section id="kandidaters-ansvar" title="7. Kandidaters ansvar">
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Lämna sanningsenliga uppgifter; meddela ändringar prompt.</li>
+                  <li>Följa instruktioner, interna regler, säkerhetsrutiner samt bära föreskriven skyddsutrustning.</li>
+                  <li>Inte vara påverkad av alkohol/droger; följa nolltolerans för trakasserier och diskriminering.</li>
+                  <li>Acceptera att vi kan kontakta dig via e-post, sms eller telefon gällande uppdrag.</li>
+                </ul>
+              </Section>
+
+              <Section id="betalningsvillkor" title="8. Betalningsvillkor (kunder)">
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Priser och timtaxor framgår av kundavtal/offerter.</li>
+                  <li>Fakturering normalt 30 dagar netto. Dröjsmålsränta enligt räntelagen samt påminnelseavgift.</li>
+                  <li>Vid utebliven betalning kan tjänster pausas tills full betalning sker.</li>
+                </ul>
+              </Section>
+
+              <Section id="personuppgifter" title="9. Personuppgifter & integritet (GDPR)">
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Personuppgifter behandlas enligt GDPR och vår Integritetspolicy.</li>
+                  <li>Ändamål: hantera kandidater, matchning, uppdrag, löne- och fakturaunderlag, kundrelationer.</li>
+                  <li>Lagringstid: endast så länge det är nödvändigt för syftet eller enligt lag.</li>
+                  <li>Rättigheter: tillgång, rättelse, radering, invändning, dataportabilitet.</li>
+                </ul>
+                <InfoBox>
+                  Publicera en separat <strong>Integritetspolicy</strong> och länka den här.
+                </InfoBox>
+              </Section>
+
+              <Section id="cookies" title="10. Cookies">
+                <p>Vi använder cookies för nödvändiga funktioner, statistik och förbättrad upplevelse. Du kan hantera inställningar i din webbläsare och i vår cookie-banner. Se vår Cookiepolicy.</p>
+              </Section>
+
+              <Section id="immaterialratt" title="11. Immateriella rättigheter">
+                <p>Allt innehåll (texter, logotyper, grafik, design, kod) ägs av Workplan AB eller licensgivare och skyddas av immaterialrätt. Otillåten kopiering, bearbetning eller spridning är förbjuden.</p>
+              </Section>
+
+              <Section id="otillaten-anvandning" title="12. Otillåten användning">
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Olagliga aktiviteter, intrångsförsök, sabotage, phishing eller spridning av skadlig kod.</li>
+                  <li>Massutskick/spam, scraping utan tillstånd, kringgående av säkerhet eller åtkomstkontroller.</li>
+                </ul>
+              </Section>
+
+              <Section id="sakerhet" title="13. IT- & informationssäkerhet">
+                <p>Vi vidtar rimliga tekniska och organisatoriska säkerhetsåtgärder. Ingen metod är dock helt riskfri; användare bör vidta egna skyddsåtgärder.</p>
+              </Section>
+
+              <Section id="sekretess" title="14. Sekretess (NDA) & konfidentialitet">
+                <p>Parterna ska skydda varandras konfidentiella information. Kundspecifik information, prissättning, kandidatuppgifter och affärshemligheter får inte röjas utan skriftligt medgivande, utom där lag kräver.</p>
+              </Section>
+
+              <Section id="bakgrundskontroller" title="15. Bakgrundskontroller">
+                <p>Bakgrundskontroller kan förekomma för särskilda uppdrag och sker enligt lag och Integritetspolicy. Kund får inte kräva otillåtna kontroller.</p>
+              </Section>
+
+              <Section id="arbetsmiljo" title="16. Arbetsmiljö & skyddsregler">
+                <p>Kunden ansvarar för en säker arbetsmiljö och introduktion enligt arbetsmiljölagen. Kandidater ska följa samtliga säkerhetsföreskrifter.</p>
+              </Section>
+
+              <Section id="ansvarsbegransning" title="17. Begränsning av ansvar">
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Vi eftersträvar tillgänglighet men garanterar inte frihet från avbrott/fel.</li>
+                  <li>Vi ansvarar inte för indirekta skador (t.ex. utebliven vinst, dataförlust, följdskador).</li>
+                  <li>Maximalt ansvar begränsas till belopp som kunden betalat under de senaste 12 månaderna för berörd tjänst, i den mån lag medger.</li>
+                </ul>
+              </Section>
+
+              <Section id="force-majeure" title="18. Force majeure">
+                <p>Vi ansvarar inte för förseningar eller skador orsakade av omständigheter utanför vår kontroll (t.ex. strejk, myndighetsbeslut, pandemier, krig, naturhändelser, omfattande driftstörningar).</p>
+              </Section>
+
+              <Section id="tredjepartslankar" title="19. Tredjepartslänkar & verktyg">
+                <p>Webbplatsen kan innehålla länkar till tredjepartstjänster. Vi ansvarar inte för deras innehåll, policyer eller tillgänglighet.</p>
+              </Section>
+
+              <Section id="teknisk-kompat" title="20. Teknisk kompatibilitet">
+                <p>Vi eftersträvar bred kompatibilitet men kan inte garantera full funktionalitet i alla webbläsare, enheter eller versioner.</p>
+              </Section>
+
+              <Section id="tillganglighet" title="21. Tillgänglighet (WCAG)">
+                <p>Vi arbetar för att förbättra tillgänglighet i linje med relevanta riktlinjer. Kontakta oss för att rapportera hinder.</p>
+              </Section>
+
+              <Section id="signering" title="22. Elektronisk signering & meddelanden">
+                <p>Avtal kan ingås elektroniskt. Meddelanden kan skickas via e-post eller inom plattformen och anses mottagna när de skickats.</p>
+              </Section>
+
+              <Section id="overlatelse" title="23. Överlåtelse">
+                <p>Vi får överlåta rättigheter/skyldigheter enligt dessa Villkor i samband med affärstransaktion (fusion, försäljning m.m.). Du får inte överlåta utan vårt skriftliga medgivande.</p>
+              </Section>
+
+              <Section id="tolkning" title="24. Tolkning & ogiltighet">
+                <p>Om en bestämmelse är ogiltig påverkar det inte övriga. Vid konflikt mellan språkversioner har svensk version företräde.</p>
+              </Section>
+
+              <Section id="andringar" title="25. Ändringar av villkor">
+                <p>Vi kan uppdatera Villkoren. Betydande ändringar meddelas via webbplatsen eller e-post. Uppdaterade villkor gäller från publicering.</p>
+              </Section>
+
+              <Section id="uppsagning" title="26. Uppsägning & upphörande">
+                <p>Vi kan säga upp eller begränsa åtkomst vid brott mot Villkoren eller lag. Kundens uppsägning regleras i kundavtal. Kandidater kan avsluta kontot genom att kontakta oss.</p>
+              </Section>
+
+              <Section id="lag-tvist" title="27. Tillämplig lag & tvistlösning">
+                <p>Svensk lag gäller. Tvister som inte löses genom förhandling avgörs av svensk domstol (valfri: tingsrätten på vår ort som första instans).</p>
+              </Section>
+
+              <Section id="ikrafttradande" title="28. Ikraftträdande & versioner">
+                <p>Dessa Villkor gäller från publiceringsdatum och ersätter tidigare versioner.</p>
+              </Section>
+
+              <Section id="kontakt" title="29. Kontakt">
+                <DefinitionList
+                  items={[
+                    ['Workplan AB', ''],
+                    ['E-post', 'info@work-plan.se'],
+                    ['Telefon', '+46 [ditt nummer]'],
+                    ['Adress', '[Företagsadress], Sverige'],
+                  ]}
+                />
+                <div className="mt-4 flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 rounded-xl p-3">
+                  <CheckCircle2 size={18} />
+                  <span>Observera: Uppdatera kontakt- och bolagsuppgifter innan publicering.</span>
                 </div>
-
-                {/* 2. Tjänster */}
-                <div>
-                  <h2
-                    className="text-3xl font-medium text-[#08132B] mb-6"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    2. Våra Tjänster
-                  </h2>
-                  <div className="space-y-4 text-gray-700 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    <p>
-                      Workplan erbjuder bemanningstjänster inom lager och logistik, inklusive men inte begränsat till:
-                    </p>
-                    <ul className="list-disc pl-6 space-y-2">
-                      <li>Tillsvidareanställningar</li>
-                      <li>Timanställningar och vikariat</li>
-                      <li>Säsongsvikariat</li>
-                      <li>Provanställningar</li>
-                      <li>Konsultuppdrag</li>
-                    </ul>
-                    <p>
-                      Vi förbehåller oss rätten att när som helst ändra, avbryta eller upphöra med våra tjänster utan föregående meddelande.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 3. Användaransvar */}
-                <div>
-                  <h2
-                    className="text-3xl font-medium text-[#08132B] mb-6"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    3. Användaransvar
-                  </h2>
-                  <div className="space-y-4 text-gray-700 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    <p>
-                      Som användare av våra tjänster åtar du dig att:
-                    </p>
-                    <ul className="list-disc pl-6 space-y-2">
-                      <li>Lämna korrekta och aktuella uppgifter</li>
-                      <li>Inte använda tjänsterna för olagliga ändamål</li>
-                      <li>Respektera andra användares integritet</li>
-                      <li>Inte sprida skadlig kod eller virus</li>
-                      <li>Följa alla tillämpliga lagar och förordningar</li>
-                    </ul>
-                    <p>
-                      Du är ansvarig för att hålla dina inloggningsuppgifter säkra och för all aktivitet som sker under ditt konto.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 4. Personuppgifter */}
-                <div>
-                  <h2
-                    className="text-3xl font-medium text-[#08132B] mb-6"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    4. Behandling av Personuppgifter
-                  </h2>
-                  <div className="space-y-4 text-gray-700 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    <p>
-                      Vi behandlar dina personuppgifter i enlighet med gällande dataskyddslagstiftning, inklusive GDPR. Vår integritetspolicy beskriver i detalj hur vi samlar in, använder och skyddar dina personuppgifter.
-                    </p>
-                    <p>
-                      Genom att använda våra tjänster samtycker du till vår behandling av dina personuppgifter enligt vår integritetspolicy.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 5. Immateriella rättigheter */}
-                <div>
-                  <h2
-                    className="text-3xl font-medium text-[#08132B] mb-6"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    5. Immateriella Rättigheter
-                  </h2>
-                  <div className="space-y-4 text-gray-700 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    <p>
-                      Allt innehåll på vår webbplats, inklusive text, grafik, logotyper, ikoner, bilder och programvara, ägs av Workplan AB eller våra licensgivare och skyddas av upphovsrättslagstiftning.
-                    </p>
-                    <p>
-                      Du får inte kopiera, distribuera, överföra, visa, utföra, reproducera, publicera, licensiera, skapa härledda verk från, överföra eller sälja någon information, programvara, produkter eller tjänster som erhållits från webbplatsen.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 6. Ansvarsbegränsning */}
-                <div>
-                  <h2
-                    className="text-3xl font-medium text-[#08132B] mb-6"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    6. Ansvarsbegränsning
-                  </h2>
-                  <div className="space-y-4 text-gray-700 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    <p>
-                      Workplan AB ansvarar inte för direkta eller indirekta skador som kan uppstå genom användning av våra tjänster eller webbplats. Detta inkluderar men är inte begränsat till:
-                    </p>
-                    <ul className="list-disc pl-6 space-y-2">
-                      <li>Förlust av data eller information</li>
-                      <li>Avbrott i tjänster</li>
-                      <li>Tekniska fel eller störningar</li>
-                      <li>Skador orsakade av tredje part</li>
-                    </ul>
-                    <p>
-                      Vårt ansvar är begränsat till det maximala belopp som tillåts enligt svensk lag.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 7. Ändringar av villkor */}
-                <div>
-                  <h2
-                    className="text-3xl font-medium text-[#08132B] mb-6"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    7. Ändringar av Villkor
-                  </h2>
-                  <div className="space-y-4 text-gray-700 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    <p>
-                      Vi förbehåller oss rätten att när som helst ändra dessa villkor. Ändringar träder i kraft omedelbart när de publiceras på vår webbplats. Din fortsatta användning av våra tjänster efter sådana ändringar innebär att du accepterar de nya villkoren.
-                    </p>
-                    <p>
-                      Vi rekommenderar att du regelbundet granskar dessa villkor för att hålla dig informerad om eventuella uppdateringar.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 8. Tillämplig lag */}
-                <div>
-                  <h2
-                    className="text-3xl font-medium text-[#08132B] mb-6"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    8. Tillämplig Lag och Tvister
-                  </h2>
-                  <div className="space-y-4 text-gray-700 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    <p>
-                      Dessa villkor regleras av svensk lag. Eventuella tvister som uppstår i anslutning till dessa villkor eller användningen av våra tjänster ska avgöras av svensk domstol.
-                    </p>
-                    <p>
-                      Vi strävar efter att lösa alla tvister genom dialog och förhandling innan rättsliga åtgärder vidtas.
-                    </p>
-                  </div>
-                </div>
-
-                {/* 9. Kontaktinformation */}
-                <div>
-                  <h2
-                    className="text-3xl font-medium text-[#08132B] mb-6"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                  >
-                    9. Kontaktinformation
-                  </h2>
-                  <div className="space-y-4 text-gray-700 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    <p>
-                      Om du har frågor om dessa användarvillkor, vänligen kontakta oss:
-                    </p>
-                    <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                      <div className="space-y-3">
-                        <div>
-                          <strong className="text-[#08132B]">Workplan AB</strong>
-                        </div>
-                        <div>
-                          <strong>E-post:</strong> info@work-plan.se
-                        </div>
-                        <div>
-                          <strong>Telefon:</strong> +46 8 123 456 78
-                        </div>
-                        <div>
-                          <strong>Adress:</strong> [Företagsadress], Sverige
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Footer info */}
-                <div className="border-t border-gray-200 pt-8">
-                  <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <Shield size={16} className="text-white" />
-                      </div>
-                      <div>
-                        <h3
-                          className="text-lg font-medium text-[#08132B] mb-2"
-                          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                        >
-                          Viktigt att veta
-                        </h3>
-                        <p className="text-gray-700 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Dessa villkor utgör hela avtalet mellan dig och Workplan AB angående användningen av våra tjänster. 
-                          Om någon del av dessa villkor skulle anses ogiltig eller omöjlig att genomföra, påverkar det inte giltigheten av övriga delar.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
+              </Section>
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </main>
     </div>
   );
 };
 
 export default TermsOfServicePage;
+
+/* ======================= Hjälpkomponenter ======================= */
+
+const Section: React.FC<{ id: string; title: string; children: React.ReactNode }> = ({ id, title, children }) => (
+  <section id={id} data-tos-section className="scroll-mt-28">
+    <h2
+      className="text-2xl md:text-3xl font-medium text-[#08132B] mb-4"
+      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+    >
+      {title}
+    </h2>
+    <div className="space-y-4 text-gray-700 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+      {children}
+    </div>
+  </section>
+);
+
+const DefinitionList: React.FC<{ items: [string, string][] }> = ({ items }) => (
+  <dl className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
+    {items.map(([k, v], idx) => (
+      <div key={idx} className="border border-gray-200 rounded-xl p-3 bg-gray-50">
+        <dt className="text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>{k}</dt>
+        <dd className="text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>{v}</dd>
+      </div>
+    ))}
+  </dl>
+);
+
+const InfoBox: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="mt-4 bg-blue-50 border border-blue-200 rounded-xl p-4 text-blue-900" style={{ fontFamily: 'Inter, sans-serif' }}>
+    {children}
+  </div>
+);
