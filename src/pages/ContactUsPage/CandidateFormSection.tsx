@@ -66,19 +66,17 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
         />
       </div>
 
-      {/* Kortet: samma look & feel som tidigare, men inline */}
+      {/* Kortet */}
       <div
         className="
           relative w-[min(95vw,44rem)] mx-auto
           bg-white border border-gray-200 rounded-3xl shadow-2xl
-          max-h-[85vh] overflow-y-auto
           transition-all duration-200
         "
       >
-        {/* Sticky header – utan X-knapp */}
+        {/* Header */}
         <div
           className="
-            sticky top-0 z-10
             bg-white/95 backdrop-blur supports-[backdrop-filter]:backdrop-blur
             border-b border-gray-100
             px-6 md:px-8 pt-5 pb-4
@@ -97,7 +95,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
           </div>
         </div>
 
-        {/* Body – rullar inom kortet vid behov */}
+        {/* Body */}
         <div className="px-6 md:px-8 py-6">
           <form onSubmit={handleCandidateSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -184,7 +182,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
               </label>
             </div>
 
-            {/* Mer levande knapp: mjuk gradient + shimmer på hover */}
+            {/* Knapp med shimmer */}
             <button
               type="submit"
               className="
@@ -197,6 +195,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
                 overflow-hidden
                 font-['Inter']
                 focus:outline-none focus:ring-4 focus:ring-blue-500/25
+                group
               "
               style={{
                 background:
@@ -204,7 +203,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
                 border: '1px solid rgba(255,255,255,0.18)',
               }}
             >
-              {/* Shimmer band på hover */}
+              {/* Shimmer-effekten */}
               <span
                 className="
                   pointer-events-none absolute inset-0
