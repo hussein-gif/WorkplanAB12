@@ -1,57 +1,263 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
-const Header = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
+const Header: React.FC = () => {
+  const navigate = useNavigate();
   const location = useLocation();
 
+  // --- Mobilmeny ---
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // --- Scroll state med hysteres (stabil, glitchfri) ---
+  const [isScrolled, setIsScrolled] = useState(false);
+  const scrolledRef = useRef(isScrolled);
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    scrolledRef.current = isScrolled;
+  }, [isScrolled]);
+
+  useEffect(() => {
+    const ENTER_THRESHOLD = 28; // px
+    const EXIT_THRESHOLD = 12;  // px
+    let ticking = false;
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          const cur = scrolledRef.current;
+          if (!cur && y > ENTER_THRESHOLD) {
+            setIsScrolled(true);
+          } else if (cur && y < EXIT_THRESHOLD) {
+            setIsScrolled(false);
+          }
+          ticking = false;
+        });
+      }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll(); // init
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Kolla om vi är på JobDetailPage
-  const isJobDetailPage = location.pathname.startsWith('/jobdetail');
-  const isForceDark = isJobDetailPage || document.documentElement.classList.contains('force-nav-dark');
+  // --- Force mörka färger via <html class="force-nav-dark"> (sätts på JobDetailPage) ---
+  const [forceDarkColors, setForceDarkColors] = useState(false);
+  useEffect(() => {
+    const el = document.documentElement;
+    const update = () => setForceDarkColors(el.classList.contains("force-nav-dark"));
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(el, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
+  // Färgerna ska vara mörka om vi antingen är scrolled (chip) eller JobDetailPage har force-nav-dark
+  const isDarkTheme = forceDarkColors || isScrolled;
+
+  // --- Mät gap mellan logga och nav i toppläget ---
+  const logoRef = useRef<HTMLDivElement | null>(null);
+  const navRef = useRef<HTMLElement | null>(null);
+  const [measuredGap, setMeasuredGap] = useState<number | null>(null);
+
+  useEffect(() => {
+    const measureGap = () => {
+      if (isScrolled) return; // mät endast i toppläget (layout = ej chip)
+      const l = logoRef.current?.getBoundingClientRect();
+      const n = navRef.current?.getBoundingClientRect();
+      if (l && n) {
+        const gap = Math.max(0, n.left - l.right);
+        setMeasuredGap(gap);
+      }
+    };
+    measureGap();
+    window.addEventListener("resize", measureGap);
+    return () => window.removeEventListener("resize", measureGap);
+  }, [isScrolled]);
+
+  const navigationItems = [
+    { label: "Jobb", href: "/jobs" },
+    { label: "Företag", href: "/partner" },
+    { label: "Om Oss", href: "/about" },
+    { label: "Kontakt", href: "/contact" },
+  ];
+
+  const handleNavigation = (href: string) => {
+    navigate(href);
+    setIsMobileMenuOpen(false);
+  };
 
   return (
-    <nav
-      className={`
-        fixed w-full top-0 left-0 z-50 transition-all duration-500 ease-in-out
-        ${isScrolled 
-            ? 'bg-white/90 backdrop-blur-md shadow-md py-2 rounded-2xl mx-4 mt-2' 
-            : 'bg-transparent shadow-none py-6'}
-      `}
-    >
-      <div className="max-w-7xl mx-auto flex items-center justify-between transition-all duration-500 px-6">
-        {/* Logga */}
-        <img
-          src={isScrolled || isForceDark ? "/logo-dark.png" : "/logo-light.png"}
-          alt="Logo"
-          className="h-10 transition-all duration-500"
-        />
-
-        {/* Länkar */}
-        <div className="flex space-x-10 font-medium">
-          {['Jobb', 'Företag', 'Om Oss', 'Kontakt'].map((link) => (
-            <a
-              key={link}
-              href={`/${link.toLowerCase().replace(' ', '')}`}
-              className={`
-                transition-colors duration-500
-                ${isScrolled || isForceDark ? 'text-[#08132B]' : 'text-white'}
-              `}
+    <>
+      <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
+        {/* Wrapper – ingen width-anim, bara liten top-marg när scrolled */}
+        <div className={`${isScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""}`}>
+          {/* Container – chip endast när scrolled. Färger styrs separat av isDarkTheme. */}
+          <div
+            className={`pointer-events-auto ${
+              isScrolled
+                ? "inline-block rounded-2xl"
+                : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
+            }`}
+            style={{ willChange: "opacity, transform" }}
+          >
+            {/* Bakgrund/ruta – visas endast när scrolled */}
+            <div
+              className={`${
+                isScrolled
+                  ? "bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg"
+                  : "bg-transparent border border-transparent shadow-none"
+              } rounded-2xl transition-[opacity,background-color,backdrop-filter,box-shadow,border-color] duration-200 ease-out`}
+              style={{ willChange: "opacity, filter" }}
             >
-              {link}
-            </a>
-          ))}
+              {/* Inre rad – liten höjdtransition */}
+              <div
+                className={`flex items-center ${
+                  isScrolled ? "h-[72px] px-6" : "h-20"
+                } transition-[height] duration-200 ease-out`}
+                style={{ willChange: "height" }}
+              >
+                {/* Logo */}
+                <div
+                  ref={logoRef}
+                  className="flex items-center cursor-pointer"
+                  onClick={() => handleNavigation("/")}
+                >
+                  <img
+                    src={
+                      isDarkTheme
+                        ? "https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png" // mörk variant
+                        : "https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png" // ljus variant
+                    }
+                    alt="Workplan"
+                    className={`${isScrolled ? "h-14" : "h-16"} px-1 transition-[height] duration-200 ease-out`}
+                    style={{ width: "auto", willChange: "height" }}
+                  />
+                </div>
+
+                {/* SPACER – 90% av topp-gap när scrolled, flex-1 i toppläget */}
+                {isScrolled ? (
+                  <div
+                    style={{
+                      width:
+                        measuredGap !== null
+                          ? `${measuredGap * 0.9}px` // liiite mindre gap vid scroll
+                          : "clamp(12rem, 24vw, 32rem)", // fallback
+                      transition: "width 200ms ease-out",
+                      willChange: "width",
+                    }}
+                  />
+                ) : (
+                  <div className="flex-1" />
+                )}
+
+                {/* Desktop Navigation */}
+                <nav ref={navRef} className="hidden lg:flex items-center space-x-8">
+                  {navigationItems.map((item) => (
+                    <button
+                      key={item.href}
+                      onClick={() => handleNavigation(item.href)}
+                      className={`
+                        relative px-3 py-2 text-sm font-medium transition-transform duration-200
+                        hover:scale-105
+                        ${
+                          location.pathname === item.href
+                            ? isDarkTheme
+                              ? "text-[#08132B]"
+                              : "text-white"
+                            : isDarkTheme
+                            ? "text-[#08132B]/80 hover:text-[#08132B]"
+                            : "text-white/80 hover:text-white"
+                        }
+                      `}
+                      style={{ fontFamily: "Inter, sans-serif" }}
+                    >
+                      {item.label}
+                      {location.pathname === item.href && (
+                        <div
+                          className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full ${
+                            isDarkTheme ? "bg-[#08132B]" : "bg-white"
+                          }`}
+                        />
+                      )}
+                    </button>
+                  ))}
+                </nav>
+
+                {/* Mobile Menu Button */}
+                <button
+                  onClick={() => setIsMobileMenuOpen((v) => !v)}
+                  className={`lg:hidden p-2 rounded-lg ${
+                    isDarkTheme
+                      ? "text-[#08132B] hover:bg-gray-200/50"
+                      : "text-white hover:bg-white/10"
+                  }`}
+                >
+                  {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </nav>
+      </header>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[999] lg:hidden">
+          {/* Dim + blur bakom */}
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          <div className="fixed top-4 left-3 right-3 bg-white/95 backdrop-blur-md border border-gray-200/60 shadow-xl rounded-2xl overflow-hidden">
+            <div className="px-4 py-4 flex items-center justify-between">
+              <div className="flex items-center">
+                <img
+                  src="https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
+                  alt="Workplan"
+                  className="h-14 w-auto px-1"
+                />
+              </div>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 rounded-lg text-[#08132B] hover:bg-gray-200/50 transition-colors"
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+            <nav className="px-4 pb-4 space-y-2">
+              {[
+                { label: "Jobb", href: "/jobs" },
+                { label: "Företag", href: "/partner" },
+                { label: "Om Oss", href: "/about" },
+                { label: "Kontakt", href: "/contact" },
+              ].map((item) => (
+                <button
+                  key={item.href}
+                  onClick={() => {
+                    navigate(item.href);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`
+                    block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-colors duration-200
+                    ${
+                      location.pathname === item.href
+                        ? "text-[#08132B] bg-gray-200/70"
+                        : "text-[#08132B]/90 hover:text-[#08132B] hover:bg-gray-200/50"
+                    }
+                  `}
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
