@@ -26,18 +26,18 @@ const Footer = () => {
     { label: 'Kontakta oss', href: '/contact' }
   ];
 
-  // Sektion: För arbetsgivare
+  // Sektion: För arbetsgivare -> PartnerHeroSection.tsx
   const employerLinks = [
-    { label: 'För företag', href: '/partner-with-us' }, // PartnerWithUsPage
+    { label: 'För företag', href: '/partner' }, // navigerar till PartnerHeroSection
     { label: 'Om oss', href: '/about' },
     { label: 'Kontakta oss', href: '/contact' }
   ];
 
-  // Sektion: Om oss
+  // Sektion: Om oss -> ServicesHeroSection.tsx för "Läs mer"
   const aboutLinks = [
     { label: 'Om oss', href: '/about' },
     { label: 'Kontakta oss', href: '/contact' },
-    { label: 'Läs mer', href: '/our-services' } // OurServicesPage
+    { label: 'Läs mer', href: '/services' } // navigerar till ServicesHeroSection
   ];
 
   // Länkar längst ner bredvid pilen
@@ -233,7 +233,7 @@ const Footer = () => {
                 © 2025 Workplan AB. Alla rättigheter förbehållna.
               </p>
 
-              {/* Legal links */}
+              {/* Juridiska länkar längst ner */}
               <div className="flex flex-wrap items-center gap-6">
                 {legalLinks.map((link, index) => (
                   <a
