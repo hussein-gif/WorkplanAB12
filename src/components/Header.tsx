@@ -9,9 +9,9 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navigationItems = [
@@ -29,35 +29,33 @@ const Header = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
-        {/* Rad som centrerar chipet när vi scrollat */}
+        {/* Centrerar chipet när vi skrollat */}
         <div
           className={`
             transition-all duration-300 ease-out
-            ${isScrolled ? 'mt-3 sm:mt-4 flex justify-center' : ''}
+            ${isScrolled ? 'mt-3 sm:mt-4 flex justify-center' : 'bg-transparent'}
           `}
         >
-          {/* Container:
-              - När scrolled: chip som bara omsluter innehållet (inline-flex, ingen fullbredd)
-              - Innan scrolled: din original fullbredd-container */}
+          {/* Inre container */}
           <div
             className={`
               pointer-events-auto
               ${isScrolled
                 ? [
-                    'inline-flex items-center', // chip-bredd = innehållets bredd
-                    'gap-8',                    // ← behåller avstånd mellan logga & länkar
-                    'px-6 h-16',
+                    // CHIP: omsluter bara innehållet, men med stor lucka mellan logga & länkar
+                    'inline-flex items-center gap-16 lg:gap-24 px-6 h-16',
                     'bg-white/90 backdrop-blur-md border border-gray-200/60',
                     'shadow-lg rounded-2xl'
                   ].join(' ')
                 : [
+                    // Original-läge: fullbredd container
                     'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8',
                     'h-20 w-full flex items-center justify-between'
                   ].join(' ')
               }
             `}
           >
-            {/* Logo (behåller position och storlek) */}
+            {/* Logo (oförändrad) */}
             <div
               className="flex items-center cursor-pointer shrink-0"
               onClick={() => handleNavigation('/')}
@@ -74,7 +72,7 @@ const Header = () => {
               />
             </div>
 
-            {/* Desktop Navigation (behåller spacing) */}
+            {/* Desktop Navigation (oförändrade länkar) */}
             <nav className="hidden lg:flex items-center space-x-8">
               {navigationItems.map((item) => (
                 <button
