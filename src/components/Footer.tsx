@@ -43,7 +43,7 @@ const Footer = () => {
   // Länkar längst ner bredvid pilen
   const legalLinks = [
     { label: 'Integritetspolicy', href: '#privacy' },
-    { label: 'Användarvillkor', href: '#terms' },
+    { label: 'Användarvillkor', href: '/terms' },
     { label: 'Cookie Policy', href: '#cookies' },
     { label: 'GDPR Efterlevnad', href: '#gdpr' }
   ];

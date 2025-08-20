@@ -15,6 +15,7 @@ import ForCandidatesPage from './pages/ForCandidatesPage';
 import AboutUsPage from './pages/AboutUsPage';
 import ContactUsPage from './pages/ContactUsPage';
 import OurServicesPage from './pages/OurServicesPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
 
 function HomePage() {
   return (
@@ -44,6 +45,7 @@ function App() {
             <Route path="/about" element={<AboutUsPage />} />
             <Route path="/contact" element={<ContactUsPage />} />
             <Route path="/services" element={<OurServicesPage />} />
+            <Route path="/terms" element={<TermsOfServicePage />} />
           </Routes>
         </main>
         <Footer />
