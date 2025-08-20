@@ -29,110 +29,84 @@ const Header = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
-        {/* Wrappern styr endast bakgrundens form när man skrollar */}
-        <div
-          className={`
-            transition-all duration-300 ease-out
-            ${isScrolled ? 'mt-3 sm:mt-4 flex justify-center' : ''}
-          `}
-        >
-          {/* 
-            När INTE skrollad: original container (fullbredd). 
-            När skrollad: en chip som wrappar PRECIS kring logga + länkar (ingen luft utanför).
-          */}
+        <div className={`transition-all duration-300 ease-out ${isScrolled ? 'mt-3 sm:mt-4 flex justify-center' : ''}`}>
+          {/* Här: när skrollad, rutan omsluter EXAKT logga + länkar */}
           <div
             className={`
-              pointer-events-auto
+              pointer-events-auto flex items-center justify-between
+              transition-all duration-300
               ${isScrolled
-                ? [
-                    'inline-block', // => bakgrunden blir bara så bred som innehållet
-                    'bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl',
-                  ].join(' ')
-                : [
-                    'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8',
-                    'w-full',
-                  ].join(' ')
+                ? 'bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl px-6 py-3'
+                : 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5'
               }
             `}
+            style={{ width: isScrolled ? 'auto' : '100%' }}
           >
-            {/* Inre rad – behåller positioner, men minskar höjd marginellt vid scroll */}
+            {/* Logo */}
             <div
+              className="flex items-center cursor-pointer"
+              onClick={() => handleNavigation('/')}
+            >
+              <img
+                src={
+                  isScrolled
+                    ? 'https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png'
+                    : 'https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png'
+                }
+                alt="Workplan"
+                className={`transition-all duration-300 px-1 ${isScrolled ? 'h-14' : 'h-16'}`}
+                style={{ width: 'auto' }}
+              />
+            </div>
+
+            {/* Desktop navigation – mellanrummet mellan logga och länkar bibehålls alltid */}
+            <nav className="hidden lg:flex items-center space-x-8 ml-16">
+              {navigationItems.map((item) => (
+                <button
+                  key={item.href}
+                  onClick={() => handleNavigation(item.href)}
+                  className={`
+                    relative px-3 py-2 text-sm font-medium transition-all duration-300
+                    hover:scale-105
+                    ${location.pathname === item.href
+                      ? (isScrolled ? 'text-[#08132B]' : 'text-white')
+                      : (isScrolled ? 'text-[#08132B]/80 hover:text-[#08132B]' : 'text-white/80 hover:text-white')
+                    }
+                  `}
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  {item.label}
+                  {location.pathname === item.href && (
+                    <div
+                      className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full ${
+                        isScrolled ? 'bg-[#08132B]' : 'bg-white'
+                      }`}
+                    />
+                  )}
+                </button>
+              ))}
+            </nav>
+
+            {/* Mobile menu knapp */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`
-                flex items-center justify-between
-                ${isScrolled ? 'h-[72px] px-6' : 'h-20'}
-                transition-all duration-300
+                lg:hidden p-2 rounded-lg transition-colors duration-300
+                ${isScrolled
+                  ? 'text-[#08132B] hover:bg-gray-200/50'
+                  : 'text-white hover:bg-white/10'
+                }
               `}
             >
-              {/* Logo (oförändrad position visuellt; minimal storleksminskning vid scroll) */}
-              <div
-                className="flex items-center cursor-pointer"
-                onClick={() => handleNavigation('/')}
-              >
-                <img
-                  src={
-                    isScrolled
-                      ? 'https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png'
-                      : 'https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png'
-                  }
-                  alt="Workplan"
-                  className={`
-                    transition-all duration-300 px-1
-                    ${isScrolled ? 'h-14' : 'h-16'}
-                  `}
-                  style={{ width: 'auto' }}
-                />
-              </div>
-
-              {/* Desktop Navigation – stort mellanrum mellan logga & länkar bevaras med gap i själva chipet */}
-              <nav className={`hidden lg:flex items-center space-x-8 ${isScrolled ? '' : ''}`}>
-                {navigationItems.map((item) => (
-                  <button
-                    key={item.href}
-                    onClick={() => handleNavigation(item.href)}
-                    className={`
-                      relative px-3 py-2 text-sm font-medium transition-all duration-300
-                      hover:scale-105
-                      ${location.pathname === item.href
-                        ? (isScrolled ? 'text-[#08132B]' : 'text-white')
-                        : (isScrolled ? 'text-[#08132B]/80 hover:text-[#08132B]' : 'text-white/80 hover:text-white')
-                      }
-                    `}
-                    style={{ fontFamily: 'Inter, sans-serif' }}
-                  >
-                    {item.label}
-                    {location.pathname === item.href && (
-                      <div
-                        className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full
-                          ${isScrolled ? 'bg-[#08132B]' : 'bg-white'}
-                        `}
-                      />
-                    )}
-                  </button>
-                ))}
-              </nav>
-
-              {/* Mobile Menu Button (oförändrat) */}
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className={`
-                  lg:hidden p-2 rounded-lg transition-colors duration-300
-                  ${isScrolled
-                    ? 'text-[#08132B] hover:bg-gray-200/50'
-                    : 'text-white hover:bg-white/10'
-                  }
-                `}
-              >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile Menu (oförändrat) */}
+      {/* Mobile menu */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[999] lg:hidden">
-          {/* Dim + blur bakom */}
           <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
