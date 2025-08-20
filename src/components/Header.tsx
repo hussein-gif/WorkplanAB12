@@ -9,23 +9,22 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Refs för mätning
+  // Refs för att mäta "topp-lägets" gap (logga → nav)
   const logoRef = useRef<HTMLDivElement | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
-
-  // Gap-mätning i toppläget + beräknad chip-bredd
   const [measuredGap, setMeasuredGap] = useState<number | null>(null);
-  const [chipWidth, setChipWidth] = useState<number | null>(null);
 
+  // Scroll state (enkel & smooth)
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Mät gapet i toppläget
+  // Mät gapet när vi är i topp-läget (inte scrolled)
   useEffect(() => {
     const measureGap = () => {
+      if (isScrolled) return; // mät endast i topp-läge
       const l = logoRef.current?.getBoundingClientRect();
       const n = navRef.current?.getBoundingClientRect();
       if (l && n) {
@@ -33,27 +32,9 @@ const Header: React.FC = () => {
         setMeasuredGap(gap);
       }
     };
-    if (!isScrolled) measureGap();
+    measureGap();
     window.addEventListener("resize", measureGap);
     return () => window.removeEventListener("resize", measureGap);
-  }, [isScrolled]);
-
-  // Beräkna chip-bredd (logga→sista länk + inre padding när omsluten)
-  useEffect(() => {
-    const calcChipWidth = () => {
-      const l = logoRef.current?.getBoundingClientRect();
-      const n = navRef.current?.getBoundingClientRect();
-      if (l && n) {
-        // Spännvidd mellan loggans vänsterkant och sista länkens högerkant
-        const span = n.right - l.left;
-        const innerPad = 24 * 2; // px-6 på row: 24px per sida => 48px totalt
-        setChipWidth(Math.max(0, Math.round(span + innerPad)));
-      }
-    };
-    // Räkna både vid toppläge och scrolled så vi alltid har ett färskt mått
-    calcChipWidth();
-    window.addEventListener("resize", calcChipWidth);
-    return () => window.removeEventListener("resize", calcChipWidth);
   }, [isScrolled]);
 
   const navigationItems = [
@@ -68,43 +49,31 @@ const Header: React.FC = () => {
     setIsMobileMenuOpen(false);
   };
 
-  // Stil för omslutande container (chip vs fullbredd) – nu animerbar
-  const shellStyle: React.CSSProperties = {
-    // När scrolled → använd exakt chipbredden; annars fyll 100% bredd (max-w-7xl via klass)
-    width: isScrolled && chipWidth ? `${chipWidth}px` : "100%",
-    maxWidth: isScrolled && chipWidth ? `${chipWidth}px` : undefined,
-    marginLeft: isScrolled ? "auto" : undefined,
-    marginRight: isScrolled ? "auto" : undefined,
-    transitionProperty: "all, width, max-width, margin, padding",
-    transitionDuration: "500ms",
-    transitionTimingFunction: "ease-in-out",
-  };
-
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
-        {/* Wrapper som centreras när scrolled – med mjukare transition */}
+        {/* Enkel wrapper som centrerar chipet när skrollad */}
         <div
           className={`transition-all duration-500 ease-in-out ${
             isScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""
           }`}
-          style={{ transitionProperty: "all, max-width, margin, padding" }}
         >
-          {/* Shell: samma element i båda lägen, vi animerar bara bredd/margins och bg */}
+          {/* 
+            Inte skrollad: original fullbredd-container.
+            Skrollad: ett "chip" (inline-block) som wrappar exakt logga + spacer + länkar.
+          */}
           <div
             className={`pointer-events-auto transition-all duration-500 ease-in-out ${
               isScrolled
-                ? "bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl"
-                : "bg-transparent"
-            } ${!isScrolled ? "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" : ""}`}
-            style={shellStyle}
+                ? "inline-block bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl"
+                : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
+            }`}
           >
-            {/* Inre rad – layouten är identisk, bara liten höjdskillnad vid scroll */}
+            {/* Rad: samma layout, lite lägre höjd när skrollad */}
             <div
               className={`flex items-center transition-all duration-500 ease-in-out ${
                 isScrolled ? "h-[72px] px-6" : "h-20"
               }`}
-              style={{ transitionProperty: "all, max-width, margin, padding" }}
             >
               {/* Logo */}
               <div
@@ -122,22 +91,19 @@ const Header: React.FC = () => {
                   className={`transition-all duration-500 ease-in-out px-1 ${
                     isScrolled ? "h-14" : "h-16"
                   }`}
-                  style={{
-                    width: "auto",
-                    transitionProperty: "all, max-width, margin, padding",
-                  }}
+                  style={{ width: "auto" }}
                 />
               </div>
 
-              {/* SPACER –  lite mindre gap vid scroll (90% av topplägets gap) */}
+              {/* SPACER – 90% av topp-gap när skrollad, exakt topp-gap i topp-läget (via flex-1) */}
               {isScrolled ? (
                 <div
                   style={{
                     width:
                       measuredGap !== null
-                        ? `${measuredGap * 0.9}px`
-                        : "clamp(12rem, 24vw, 32rem)", // fallback om laddad mitt på
-                    transition: "width 500ms ease-in-out",
+                        ? `${measuredGap * 0.9}px` // liiiite mindre vid scroll (90%)
+                        : "clamp(12rem, 24vw, 32rem)", // fallback om sidan laddas mitt på
+                    transition: "width 400ms ease-in-out",
                   }}
                 />
               ) : (
@@ -186,7 +152,7 @@ const Header: React.FC = () => {
                     : "text-white hover:bg-white/10"
                 }`}
               >
-                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                {isMobileMenuOpen ? <Menu size={24} /> : <Menu size={24} />}
               </button>
             </div>
           </div>
