@@ -9,7 +9,9 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -26,8 +28,6 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
-  const scrolledTextColor = '#08132B';
-
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
@@ -35,7 +35,7 @@ const Header = () => {
           className={`
             transition-all duration-300 ease-out
             ${isScrolled
-              ? 'mx-3 sm:mx-4 md:mx-6 mt-3 sm:mt-4 bg-blue-100/90 backdrop-blur-md border border-blue-200/60 shadow-lg rounded-2xl'
+              ? 'mx-3 sm:mx-4 md:mx-6 mt-3 sm:mt-4 bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl'
               : 'bg-transparent'
             }
           `}
@@ -48,11 +48,10 @@ const Header = () => {
               pointer-events-auto
             `}
           >
-            {/* Logo – större, tydligare och utan ruta */}
-            <button
+            {/* Logo */}
+            <div
+              className="flex items-center cursor-pointer"
               onClick={() => handleNavigation('/')}
-              className="flex items-center focus:outline-none"
-              aria-label="Gå till startsidan"
             >
               <img
                 src={
@@ -63,44 +62,38 @@ const Header = () => {
                 alt="Workplan"
                 className={`
                   transition-all duration-300 px-1
-                  ${isScrolled ? 'h-12' : 'h-14'}
+                  ${isScrolled ? 'h-14' : 'h-16'}
                 `}
                 style={{ width: 'auto' }}
               />
-            </button>
+            </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
-              {navigationItems.map((item) => {
-                const isActive = location.pathname === item.href;
-                return (
-                  <button
-                    key={item.href}
-                    onClick={() => handleNavigation(item.href)}
-                    className={`
-                      relative px-3 py-2 text-sm font-medium transition-all duration-300
-                      hover:scale-105
-                      ${isScrolled
-                        ? ''
-                        : (isActive ? 'text-white' : 'text-white/80 hover:text-white')}
-                    `}
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      color: isScrolled
-                        ? (isActive ? scrolledTextColor : scrolledTextColor)
-                        : undefined,
-                    }}
-                  >
-                    {item.label}
-                    {isActive && (
-                      <div
-                        className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                        style={{ backgroundColor: isScrolled ? scrolledTextColor : '#ffffff' }}
-                      />
-                    )}
-                  </button>
-                );
-              })}
+              {navigationItems.map((item) => (
+                <button
+                  key={item.href}
+                  onClick={() => handleNavigation(item.href)}
+                  className={`
+                    relative px-3 py-2 text-sm font-medium transition-all duration-300
+                    hover:scale-105
+                    ${location.pathname === item.href
+                      ? (isScrolled ? 'text-[#08132B]' : 'text-white')
+                      : (isScrolled ? 'text-[#08132B]/80 hover:text-[#08132B]' : 'text-white/80 hover:text-white')
+                    }
+                  `}
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  {item.label}
+                  {location.pathname === item.href && (
+                    <div
+                      className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full
+                        ${isScrolled ? 'bg-[#08132B]' : 'bg-white'}
+                      `}
+                    />
+                  )}
+                </button>
+              ))}
             </nav>
 
             {/* Mobile Menu Button */}
@@ -109,11 +102,10 @@ const Header = () => {
               className={`
                 lg:hidden p-2 rounded-lg transition-colors duration-300
                 ${isScrolled
-                  ? 'hover:bg-blue-200/50'
-                  : 'text-white hover:bg-white/10'}
+                  ? 'text-[#08132B] hover:bg-gray-200/50'
+                  : 'text-white hover:bg-white/10'
+                }
               `}
-              style={{ color: isScrolled ? scrolledTextColor : undefined }}
-              aria-label="Öppna meny"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -124,48 +116,45 @@ const Header = () => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[999] lg:hidden">
+          {/* Dim + blur bakom */}
           <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          <div className="fixed top-4 left-3 right-3 bg-blue-100/95 backdrop-blur-md border border-blue-200/60 shadow-xl rounded-2xl overflow-hidden">
+          <div className="fixed top-4 left-3 right-3 bg-white/95 backdrop-blur-md border border-gray-200/60 shadow-xl rounded-2xl overflow-hidden">
             <div className="px-4 py-4 flex items-center justify-between">
-              {/* Mobil logga – blå variant, större */}
-              <img
-                src="https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
-                alt="Workplan"
-                className="h-12 w-auto px-1"
-              />
+              <div className="flex items-center">
+                <img
+                  src="https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
+                  alt="Workplan"
+                  className="h-14 w-auto px-1"
+                />
+              </div>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 rounded-lg transition-colors"
-                style={{ color: scrolledTextColor }}
-                aria-label="Stäng meny"
+                className="p-2 rounded-lg text-[#08132B] hover:bg-gray-200/50 transition-colors"
               >
                 <X size={22} />
               </button>
             </div>
 
             <nav className="px-4 pb-4 space-y-2">
-              {navigationItems.map((item) => {
-                const isActive = location.pathname === item.href;
-                return (
-                  <button
-                    key={item.href}
-                    onClick={() => handleNavigation(item.href)}
-                    className={`
-                      block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-colors duration-300
-                      ${isActive ? 'bg-blue-200/70' : 'hover:bg-blue-200/50'}
-                    `}
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      color: scrolledTextColor,
-                    }}
-                  >
-                    {item.label}
-                  </button>
-                );
-              })}
+              {navigationItems.map((item) => (
+                <button
+                  key={item.href}
+                  onClick={() => handleNavigation(item.href)}
+                  className={`
+                    block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-colors duration-300
+                    ${location.pathname === item.href
+                      ? 'text-[#08132B] bg-gray-200/70'
+                      : 'text-[#08132B]/90 hover:text-[#08132B] hover:bg-gray-200/50'
+                    }
+                  `}
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  {item.label}
+                </button>
+              ))}
             </nav>
           </div>
         </div>
