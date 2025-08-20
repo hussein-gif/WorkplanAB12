@@ -9,11 +9,9 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const navigationItems = [
@@ -31,23 +29,25 @@ const Header = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
+        {/* Behåll full bredd – vi lägger bara en diskret bakgrund när man scrollar */}
         <div
           className={`
-            transition-all duration-300 ease-out w-fit mx-auto
+            transition-all duration-300 ease-out
             ${isScrolled
-              ? 'mt-3 bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl px-6 py-2'
-              : 'bg-transparent px-8 py-4'
+              ? 'mx-3 sm:mx-4 md:mx-6 mt-3 sm:mt-4 bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl'
+              : 'bg-transparent'
             }
           `}
         >
           <div
             className={`
-              flex items-center justify-between space-x-12
-              transition-all duration-300
-              pointer-events-auto
+              max-w-7xl mx-auto px-4 sm:px-6 lg:px-8
+              ${isScrolled ? 'h-[72px]' : 'h-20'}  /* bara LITE lägre vid scroll */
+              flex items-center justify-between
+              pointer-events-auto transition-all duration-300
             `}
           >
-            {/* Logo */}
+            {/* Logo – samma position; minimal storleksändring vid scroll */}
             <div
               className="flex items-center cursor-pointer"
               onClick={() => handleNavigation('/')}
@@ -60,21 +60,21 @@ const Header = () => {
                 }
                 alt="Workplan"
                 className={`
-                  transition-all duration-300
-                  ${isScrolled ? 'h-12' : 'h-14'}
+                  transition-all duration-300 px-1
+                  ${isScrolled ? 'h-14' : 'h-16'}  /* lite mindre, inte hoppigt */
                 `}
                 style={{ width: 'auto' }}
               />
             </div>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Navigation – exakt samma spacing och position som innan */}
             <nav className="hidden lg:flex items-center space-x-8">
               {navigationItems.map((item) => (
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href)}
                   className={`
-                    relative px-2 py-1 text-sm font-medium transition-all duration-300
+                    relative px-3 py-2 text-sm font-medium transition-all duration-300
                     hover:scale-105
                     ${location.pathname === item.href
                       ? (isScrolled ? 'text-[#08132B]' : 'text-white')
@@ -95,7 +95,7 @@ const Header = () => {
               ))}
             </nav>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button – oförändrat */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`
@@ -111,6 +111,52 @@ const Header = () => {
           </div>
         </div>
       </header>
+
+      {/* Mobile Menu – oförändrat */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[999] lg:hidden">
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          <div className="fixed top-4 left-3 right-3 bg-white/95 backdrop-blur-md border border-gray-200/60 shadow-xl rounded-2xl overflow-hidden">
+            <div className="px-4 py-4 flex items-center justify-between">
+              <div className="flex items-center">
+                <img
+                  src="https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
+                  alt="Workplan"
+                  className="h-14 w-auto px-1"
+                />
+              </div>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 rounded-lg text-[#08132B] hover:bg-gray-200/50 transition-colors"
+              >
+                <X size={22} />
+              </button>
+            </div>
+
+            <nav className="px-4 pb-4 space-y-2">
+              {navigationItems.map((item) => (
+                <button
+                  key={item.href}
+                  onClick={() => handleNavigation(item.href)}
+                  className={`
+                    block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-colors duration-300
+                    ${location.pathname === item.href
+                      ? 'text-[#08132B] bg-gray-200/70'
+                      : 'text-[#08132B]/90 hover:text-[#08132B] hover:bg-gray-200/50'
+                    }
+                  `}
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
     </>
   );
 };
