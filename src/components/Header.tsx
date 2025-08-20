@@ -16,9 +16,9 @@ const Header: React.FC = () => {
   }, [isScrolled]);
 
   useEffect(() => {
-    // Smooth hysteresis with reduced thresholds
-    const ENTER_THRESHOLD = 20; // px
-    const EXIT_THRESHOLD = 8;   // px
+    // Hysteres: gå IN i chip > enter, gå UT < exit
+    const ENTER_THRESHOLD = 28; // px
+    const EXIT_THRESHOLD = 12;  // px
     let ticking = false;
 
     const onScroll = () => {
@@ -78,33 +78,32 @@ const Header: React.FC = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
-        {/* Smooth wrapper with minimal top margin */}
-        <div 
-          className={`transition-all duration-300 ease-out ${
-            isScrolled ? "mt-4 flex justify-center" : ""
-          }`}
-        >
-          {/* Full width when not scrolled; centered chip when scrolled */}
+        {/* Minimal wrapper – ingen width-animation; liten top-marg vid scroll */}
+        <div className={`${isScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""}`}>
+          {/* Inte skrollad: fullbredd; Skrollad: chip som wrappar exakt innehållet */}
           <div
-            className={`pointer-events-auto transition-all duration-300 ease-out ${
+            className={`pointer-events-auto ${
               isScrolled
-                ? "inline-block rounded-xl"
+                ? "inline-block rounded-2xl"
                 : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
             }`}
+            style={{ willChange: "opacity, transform" }}
           >
-            {/* Background layer with smooth fade */}
+            {/* Bakgrundslager som bara FADAR in/ut (ingen width-animation) */}
             <div
               className={`${
                 isScrolled
-                  ? "bg-white/95 backdrop-blur-md border border-gray-200/50 shadow-xl"
+                  ? "bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg"
                   : "bg-transparent border border-transparent shadow-none"
-              } rounded-xl transition-all duration-300 ease-out`}
+              } rounded-2xl transition-[opacity,background-color,backdrop-filter,box-shadow,border-color] duration-200 ease-out`}
+              style={{ willChange: "opacity, filter" }}
             >
-              {/* Inner row with smooth height transition */}
+              {/* Inre rad – liten höjdtransition */}
               <div
                 className={`flex items-center ${
-                  isScrolled ? "h-16 px-6" : "h-20"
-                } transition-all duration-300 ease-out`}
+                  isScrolled ? "h-[72px] px-6" : "h-20"
+                } transition-[height] duration-200 ease-out`}
+                style={{ willChange: "height" }}
               >
                 {/* Logo */}
                 <div
@@ -119,22 +118,21 @@ const Header: React.FC = () => {
                         : "https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png"
                     }
                     alt="Workplan"
-                    className={`${
-                      isScrolled ? "h-10" : "h-16"
-                    } px-1 transition-all duration-300 ease-out`}
-                    style={{ width: "auto" }}
+                    className={`${isScrolled ? "h-14" : "h-16"} px-1 transition-[height] duration-200 ease-out`}
+                    style={{ width: "auto", willChange: "height" }}
                   />
                 </div>
 
-                {/* Spacer with smooth transition */}
+                {/* SPACER – 90% av topp-gap när skrollad (subtil width-transition) */}
                 {isScrolled ? (
                   <div
                     style={{
                       width:
                         measuredGap !== null
-                          ? `${measuredGap * 0.8}px`
-                          : "clamp(8rem, 20vw, 24rem)",
-                      transition: "width 300ms ease-out",
+                          ? `${measuredGap * 0.9}px` // lite mindre gap vid scroll
+                          : "clamp(12rem, 24vw, 32rem)", // fallback
+                      transition: "width 200ms ease-out",
+                      willChange: "width",
                     }}
                   />
                 ) : (
@@ -148,8 +146,8 @@ const Header: React.FC = () => {
                       key={item.href}
                       onClick={() => handleNavigation(item.href)}
                       className={`
-                        relative px-3 py-2 text-sm font-medium transition-all duration-200 ease-out
-                        hover:scale-105 active:scale-95
+                        relative px-3 py-2 text-sm font-medium transition-transform duration-200
+                        hover:scale-105
                         ${
                           location.pathname === item.href
                             ? isScrolled
@@ -191,25 +189,25 @@ const Header: React.FC = () => {
         </div>
       </header>
 
-      {/* Mobile Menu with smooth transitions */}
+      {/* Mobile Menu (oförändrat) */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[999] lg:hidden">
           <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-all duration-200 ease-out"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          <div className="fixed top-4 left-3 right-3 bg-white/95 backdrop-blur-md border border-gray-200/60 shadow-xl rounded-xl overflow-hidden transition-all duration-200 ease-out">
-            <div className="px-4 py-4 flex items-center justify-between transition-all duration-200 ease-out">
+          <div className="fixed top-4 left-3 right-3 bg-white/95 backdrop-blur-md border border-gray-200/60 shadow-xl rounded-2xl overflow-hidden">
+            <div className="px-4 py-4 flex items-center justify-between">
               <div className="flex items-center">
                 <img
                   src="https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
                   alt="Workplan"
-                  className="h-10 w-auto px-1 transition-all duration-200 ease-out"
+                  className="h-14 w-auto px-1"
                 />
               </div>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 rounded-lg text-[#08132B] hover:bg-gray-200/50 transition-all duration-200 ease-out"
+                className="p-2 rounded-lg text-[#08132B] hover:bg-gray-200/50 transition-colors"
               >
                 <X size={22} />
               </button>
@@ -229,7 +227,7 @@ const Header: React.FC = () => {
                     setIsMobileMenuOpen(false);
                   }}
                   className={`
-                    block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-all duration-200 ease-out
+                    block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-colors duration-200
                     ${
                       location.pathname === item.href
                         ? "text-[#08132B] bg-gray-200/70"
