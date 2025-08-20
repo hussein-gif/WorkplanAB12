@@ -9,9 +9,7 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -31,26 +29,37 @@ const Header = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
+        {/* Yttre wrapper: centrerar innehållet när man skrollat */}
         <div
           className={`
             transition-all duration-300 ease-out
             ${isScrolled
-              ? 'mx-3 sm:mx-4 md:mx-6 mt-3 sm:mt-4 bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl'
+              ? 'mx-3 sm:mx-4 md:mx-6 mt-3 sm:mt-4 flex justify-center'
               : 'bg-transparent'
             }
           `}
         >
+          {/* Inre container */}
           <div
             className={`
-              max-w-7xl mx-auto px-4 sm:px-6 lg:px-8
-              ${isScrolled ? 'h-16' : 'h-20'}
-              flex items-center justify-between
               pointer-events-auto
+              ${isScrolled
+                ? [
+                    // CHIP som exakt omsluter innehållet (ingen extra luft utanför logga/länkar)
+                    'inline-flex items-center gap-8 px-6 h-16',
+                    'bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl',
+                  ].join(' ')
+                : [
+                    // Ursprungligt, fullbredd med max-w och centrering
+                    'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8',
+                    'h-20 flex items-center justify-between w-full',
+                  ].join(' ')
+              }
             `}
           >
-            {/* Logo */}
+            {/* Logo (samma position) */}
             <div
-              className="flex items-center cursor-pointer"
+              className="flex items-center cursor-pointer shrink-0"
               onClick={() => handleNavigation('/')}
             >
               <img
@@ -60,15 +69,12 @@ const Header = () => {
                     : 'https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png'
                 }
                 alt="Workplan"
-                className={`
-                  transition-all duration-300 px-1
-                  ${isScrolled ? 'h-14' : 'h-16'}
-                `}
+                className={`transition-all duration-300 px-1 ${isScrolled ? 'h-14' : 'h-16'}`}
                 style={{ width: 'auto' }}
               />
             </div>
 
-            {/* Desktop Navigation */}
+            {/* Desktop Navigation (samma position) */}
             <nav className="hidden lg:flex items-center space-x-8">
               {navigationItems.map((item) => (
                 <button
@@ -96,7 +102,7 @@ const Header = () => {
               ))}
             </nav>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button (oförändrat) */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`
@@ -113,7 +119,7 @@ const Header = () => {
         </div>
       </header>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu (oförändrat) */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[999] lg:hidden">
           {/* Dim + blur bakom */}
