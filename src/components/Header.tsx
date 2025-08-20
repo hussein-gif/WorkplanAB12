@@ -9,7 +9,9 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -29,35 +31,25 @@ const Header = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
-        {/* Centrerar chipet när vi skrollat */}
         <div
           className={`
-            transition-all duration-300 ease-out
-            ${isScrolled ? 'mt-3 sm:mt-4 flex justify-center' : 'bg-transparent'}
+            transition-all duration-300 ease-out w-fit mx-auto
+            ${isScrolled
+              ? 'mt-3 bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl px-6 py-2'
+              : 'bg-transparent px-8 py-4'
+            }
           `}
         >
-          {/* Inre container */}
           <div
             className={`
+              flex items-center justify-between space-x-12
+              transition-all duration-300
               pointer-events-auto
-              ${isScrolled
-                ? [
-                    // CHIP: omsluter bara innehållet, men med stor lucka mellan logga & länkar
-                    'inline-flex items-center gap-16 lg:gap-24 px-6 h-16',
-                    'bg-white/90 backdrop-blur-md border border-gray-200/60',
-                    'shadow-lg rounded-2xl'
-                  ].join(' ')
-                : [
-                    // Original-läge: fullbredd container
-                    'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8',
-                    'h-20 w-full flex items-center justify-between'
-                  ].join(' ')
-              }
             `}
           >
-            {/* Logo (oförändrad) */}
+            {/* Logo */}
             <div
-              className="flex items-center cursor-pointer shrink-0"
+              className="flex items-center cursor-pointer"
               onClick={() => handleNavigation('/')}
             >
               <img
@@ -67,19 +59,22 @@ const Header = () => {
                     : 'https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png'
                 }
                 alt="Workplan"
-                className={`transition-all duration-300 px-1 ${isScrolled ? 'h-14' : 'h-16'}`}
+                className={`
+                  transition-all duration-300
+                  ${isScrolled ? 'h-12' : 'h-14'}
+                `}
                 style={{ width: 'auto' }}
               />
             </div>
 
-            {/* Desktop Navigation (oförändrade länkar) */}
+            {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
               {navigationItems.map((item) => (
                 <button
                   key={item.href}
                   onClick={() => handleNavigation(item.href)}
                   className={`
-                    relative px-3 py-2 text-sm font-medium transition-all duration-300
+                    relative px-2 py-1 text-sm font-medium transition-all duration-300
                     hover:scale-105
                     ${location.pathname === item.href
                       ? (isScrolled ? 'text-[#08132B]' : 'text-white')
@@ -100,12 +95,15 @@ const Header = () => {
               ))}
             </nav>
 
-            {/* Mobile Menu Button (oförändrat) */}
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`
                 lg:hidden p-2 rounded-lg transition-colors duration-300
-                ${isScrolled ? 'text-[#08132B] hover:bg-gray-200/50' : 'text-white hover:bg-white/10'}
+                ${isScrolled
+                  ? 'text-[#08132B] hover:bg-gray-200/50'
+                  : 'text-white hover:bg-white/10'
+                }
               `}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -113,53 +111,6 @@ const Header = () => {
           </div>
         </div>
       </header>
-
-      {/* Mobile Menu (oförändrat) */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[999] lg:hidden">
-          {/* Dim + blur bakom */}
-          <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-          <div className="fixed top-4 left-3 right-3 bg-white/95 backdrop-blur-md border border-gray-200/60 shadow-xl rounded-2xl overflow-hidden">
-            <div className="px-4 py-4 flex items-center justify-between">
-              <div className="flex items-center">
-                <img
-                  src="https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
-                  alt="Workplan"
-                  className="h-14 w-auto px-1"
-                />
-              </div>
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 rounded-lg text-[#08132B] hover:bg-gray-200/50 transition-colors"
-              >
-                <X size={22} />
-              </button>
-            </div>
-
-            <nav className="px-4 pb-4 space-y-2">
-              {navigationItems.map((item) => (
-                <button
-                  key={item.href}
-                  onClick={() => handleNavigation(item.href)}
-                  className={`
-                    block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-colors duration-300
-                    ${location.pathname === item.href
-                      ? 'text-[#08132B] bg-gray-200/70'
-                      : 'text-[#08132B]/90 hover:text-[#08132B] hover:bg-gray-200/50'
-                    }
-                  `}
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </nav>
-          </div>
-        </div>
-      )}
     </>
   );
 };
