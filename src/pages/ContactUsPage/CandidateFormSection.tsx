@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { Send, X } from 'lucide-react';
-import { createPortal } from 'react-dom';
 
 interface CandidateFormSectionProps {
   userType: 'candidate' | 'company' | null;
@@ -13,7 +12,7 @@ interface CandidateFormSectionProps {
   };
   handleCandidateSubmit: (e: React.FormEvent) => void;
   handleCandidateChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onClose: () => void;
+  onClose: () => void; // t.ex. göm sektionen
 }
 
 const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
@@ -22,6 +21,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
   handleCandidateChange,
   onClose,
 }) => {
+  // ESC för att stänga (valfritt men nice)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -30,40 +30,29 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
     return () => document.removeEventListener('keydown', onKey);
   }, [onClose]);
 
+  // Focus på första fältet
   const firstFieldRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     firstFieldRef.current?.focus();
   }, []);
 
-  // scroll lock
-  useEffect(() => {
-    const prev = document.documentElement.style.overflow;
-    document.documentElement.style.overflow = 'hidden';
-    return () => {
-      document.documentElement.style.overflow = prev;
-    };
-  }, []);
-
-  const modal = (
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center"
-      role="dialog"
-      aria-modal="true"
-      onClick={onClose}
+  return (
+    <section
+      className="
+        relative py-14 sm:py-16
+        px-4 sm:px-6
+        bg-transparent
+      "
+      aria-labelledby="candidate-form-heading"
     >
-      {/* Overlay: mörk + väldigt mild blur */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] z-0" />
-
-      {/* Modal container – begränsad höjd + intern scroll */}
-      <section
+      {/* Kortet: samma look & feel som modalen, men nu inline */}
+      <div
         className="
-          relative z-10 w-[min(90vw,44rem)]
-          mx-4
+          w-[min(95vw,44rem)] mx-auto
           bg-white border border-gray-200 rounded-3xl shadow-2xl
           max-h-[85vh] overflow-y-auto
           transition-all duration-200
         "
-        onClick={(e) => e.stopPropagation()}
       >
         {/* Sticky header (titel + stäng) */}
         <div
@@ -88,7 +77,10 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
           </button>
 
           <div className="text-center pr-10">
-            <h2 className="text-2xl md:text-3xl font-medium text-gray-900 mb-1 font-['Zen_Kaku_Gothic_Antique']">
+            <h2
+              id="candidate-form-heading"
+              className="text-2xl md:text-3xl font-medium text-gray-900 mb-1 font-['Zen_Kaku_Gothic_Antique']"
+            >
               Har du en fråga? Hör av dig!
             </h2>
             <p className="text-gray-600 font-['Inter']">
@@ -97,7 +89,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
           </div>
         </div>
 
-        {/* Body – rullar inom modalen vid behov */}
+        {/* Body – rullar inom kortet vid behov */}
         <div className="px-6 md:px-8 py-6 relative">
           <form onSubmit={handleCandidateSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -203,14 +195,12 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
             </button>
           </form>
 
-          {/* Fade-out indikator: visar att man kan skrolla nedåt */}
+          {/* Fade-out indikator: visar att man kan skrolla nedåt om innehållet är längre */}
           <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent" />
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   );
-
-  return createPortal(modal, document.body);
 };
 
 export default CandidateFormSection;
