@@ -54,7 +54,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
       {/* Overlay: mörk + väldigt mild blur */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] z-0" />
 
-      {/* Modal container – storlek & scroll hanteras här */}
+      {/* Modal container – begränsad höjd + intern scroll */}
       <section
         className="
           relative z-10 w-[min(90vw,44rem)]
@@ -65,7 +65,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
         "
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Sticky header så stäng-knappen/titeln alltid syns */}
+        {/* Sticky header (titel + stäng) */}
         <div
           className="
             sticky top-0 z-10
@@ -87,7 +87,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
             <X size={20} />
           </button>
 
-          <div className="text-center pr-10"> {/* pr-10 så texten inte krockar med X-knappen */}
+          <div className="text-center pr-10">
             <h2 className="text-2xl md:text-3xl font-medium text-gray-900 mb-1 font-['Zen_Kaku_Gothic_Antique']">
               Har du en fråga? Hör av dig!
             </h2>
@@ -98,7 +98,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
         </div>
 
         {/* Body – rullar inom modalen vid behov */}
-        <div className="px-6 md:px-8 py-6">
+        <div className="px-6 md:px-8 py-6 relative">
           <form onSubmit={handleCandidateSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -202,6 +202,9 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
               <span>Skicka meddelande</span>
             </button>
           </form>
+
+          {/* Fade-out indikator: visar att man kan skrolla nedåt */}
+          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent" />
         </div>
       </section>
     </div>
