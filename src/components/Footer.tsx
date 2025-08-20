@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapPin, Phone, Mail, Linkedin, Facebook, Instagram, ArrowUp } from 'lucide-react';
+import { Linkedin, Facebook, Instagram, ArrowUp } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
@@ -35,6 +35,13 @@ const Footer = () => {
     { label: 'Om oss', href: '/about' },
     { label: 'Kontakta oss', href: '/contact' },
     { label: 'Läs mer', href: '/read-more' }
+  ];
+
+  const legalLinks = [
+    { label: 'Integritetspolicy', href: '#privacy' },
+    { label: 'Användarvillkor', href: '#terms' },
+    { label: 'Cookie Policy', href: '#cookies' },
+    { label: 'GDPR Efterlevnad', href: '#gdpr' }
   ];
 
   const socialLinks = [
@@ -219,6 +226,19 @@ const Footer = () => {
               <p className="text-white/70 font-light">
                 © 2025 Workplan AB. Alla rättigheter förbehållna.
               </p>
+
+              {/* Legal links tillbaka här */}
+              <div className="flex flex-wrap items-center gap-6">
+                {legalLinks.map((link, index) => (
+                  <a
+                    key={index}
+                    href={link.href}
+                    className="text-white/70 hover:text-white text-sm font-light transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
 
               {/* Till toppen-knapp */}
               <button
