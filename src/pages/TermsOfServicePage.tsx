@@ -86,6 +86,9 @@ const TermsOfServicePage: React.FC = () => {
               <p className="text-gray-600 mt-2" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}>
                 Villkor för användning av Workplan AB:s tjänster och webbplats
               </p>
+              <p className="text-sm text-gray-500 mt-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Senast uppdaterad: 20 augusti 2025
+              </p>
             </div>
           </div>
         </div>
