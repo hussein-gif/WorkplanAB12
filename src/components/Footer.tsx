@@ -19,24 +19,28 @@ const Footer = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  // Sektion: Hitta ett jobb
   const jobLinks = [
     { label: 'För jobbsökande', href: '/for-candidates' },
     { label: 'Alla jobb', href: '/jobs' },
     { label: 'Kontakta oss', href: '/contact' }
   ];
 
+  // Sektion: För arbetsgivare
   const employerLinks = [
-    { label: 'För företag', href: '/for-companies' },
+    { label: 'För företag', href: '/partner-with-us' }, // PartnerWithUsPage
     { label: 'Om oss', href: '/about' },
     { label: 'Kontakta oss', href: '/contact' }
   ];
 
+  // Sektion: Om oss
   const aboutLinks = [
     { label: 'Om oss', href: '/about' },
     { label: 'Kontakta oss', href: '/contact' },
-    { label: 'Läs mer', href: '/read-more' }
+    { label: 'Läs mer', href: '/our-services' } // OurServicesPage
   ];
 
+  // Länkar längst ner bredvid pilen
   const legalLinks = [
     { label: 'Integritetspolicy', href: '#privacy' },
     { label: 'Användarvillkor', href: '#terms' },
@@ -44,12 +48,14 @@ const Footer = () => {
     { label: 'GDPR Efterlevnad', href: '#gdpr' }
   ];
 
+  // Sociala medier
   const socialLinks = [
     { icon: Linkedin, href: '#', label: 'LinkedIn', color: 'hover:bg-blue-600' },
     { icon: Facebook, href: '#', label: 'Facebook', color: 'hover:bg-blue-700' },
     { icon: Instagram, href: '#', label: 'Instagram', color: 'hover:bg-pink-600' }
   ];
 
+  // Scroll to top
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -227,7 +233,7 @@ const Footer = () => {
                 © 2025 Workplan AB. Alla rättigheter förbehållna.
               </p>
 
-              {/* Legal links tillbaka här */}
+              {/* Legal links */}
               <div className="flex flex-wrap items-center gap-6">
                 {legalLinks.map((link, index) => (
                   <a
