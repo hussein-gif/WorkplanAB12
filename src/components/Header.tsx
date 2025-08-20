@@ -30,7 +30,6 @@ const Header = () => {
 
   return (
     <>
-      {/* Ytan/baren visas bara vid scroll */}
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
         <div
           className={`
@@ -49,7 +48,7 @@ const Header = () => {
               pointer-events-auto
             `}
           >
-            {/* Logo – ingen ruta, bara bilden. Växlar med scroll */}
+            {/* Logo – större, tydligare och utan ruta */}
             <button
               onClick={() => handleNavigation('/')}
               className="flex items-center focus:outline-none"
@@ -63,8 +62,8 @@ const Header = () => {
                 }
                 alt="Workplan"
                 className={`
-                  transition-all duration-300
-                  ${isScrolled ? 'h-8' : 'h-10'}
+                  transition-all duration-300 px-1
+                  ${isScrolled ? 'h-12' : 'h-14'}
                 `}
                 style={{ width: 'auto' }}
               />
@@ -125,19 +124,17 @@ const Header = () => {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[999] lg:hidden">
-          {/* Dim + blur bakom */}
           <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          {/* Menykortet – rundad ljusblå, 2xl-hörn */}
           <div className="fixed top-4 left-3 right-3 bg-blue-100/95 backdrop-blur-md border border-blue-200/60 shadow-xl rounded-2xl overflow-hidden">
             <div className="px-4 py-4 flex items-center justify-between">
-              {/* Mobil logga – använd blå variant här */}
+              {/* Mobil logga – blå variant, större */}
               <img
                 src="https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
                 alt="Workplan"
-                className="h-8 w-auto"
+                className="h-12 w-auto px-1"
               />
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
