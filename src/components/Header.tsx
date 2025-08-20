@@ -42,9 +42,10 @@ const Header = () => {
         >
           <div
             className={`
+              max-w-7xl mx-auto px-4 sm:px-6 lg:px-8
+              ${isScrolled ? 'h-16' : 'h-20'}
               flex items-center justify-between
-              ${isScrolled ? 'h-16 px-4 sm:px-6 lg:px-8' : 'h-20 px-4 sm:px-6 lg:px-8'}
-              pointer-events-auto w-full
+              pointer-events-auto
             `}
           >
             {/* Logo */}
