@@ -19,18 +19,22 @@ const Footer = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const quickLinks = [
-    { label: 'För Kandidater', href: '/for-candidates' },
-    { label: 'För Kunder', href: '/partner' },
-    { label: 'Jobb', href: '/jobs' },
-    { label: 'Om Oss', href: '/about' }
+  const jobLinks = [
+    { label: 'För jobbsökande', href: '/for-candidates' },
+    { label: 'Alla jobb', href: '/jobs' },
+    { label: 'Kontakta oss', href: '/contact' }
   ];
 
-  const legalLinks = [
-    { label: 'Integritetspolicy', href: '#privacy' },
-    { label: 'Användarvillkor', href: '#terms' },
-    { label: 'Cookie Policy', href: '#cookies' },
-    { label: 'GDPR Efterlevnad', href: '#gdpr' }
+  const employerLinks = [
+    { label: 'För företag', href: '/for-companies' },
+    { label: 'Om oss', href: '/about' },
+    { label: 'Kontakta oss', href: '/contact' }
+  ];
+
+  const aboutLinks = [
+    { label: 'Om oss', href: '/about' },
+    { label: 'Kontakta oss', href: '/contact' },
+    { label: 'Läs mer', href: '/read-more' }
   ];
 
   const socialLinks = [
@@ -89,7 +93,7 @@ const Footer = () => {
                   </h3>
                 </div>
 
-                {/* Social ikoner här istället för text */}
+                {/* Social ikoner */}
                 <div className="flex items-center gap-4">
                   {socialLinks.map((social, index) => (
                     <a
@@ -112,16 +116,16 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Navigation & Contact */}
+            {/* Navigation */}
             <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Quick Links */}
+              {/* Hitta ett jobb */}
               <div className="space-y-6">
                 <h4 className="text-lg font-medium text-white flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
-                  <span>Snabblänkar</span>
+                  <span>Hitta ett jobb</span>
                 </h4>
                 <nav className="space-y-3">
-                  {quickLinks.map((link, index) => (
+                  {jobLinks.map((link, index) => (
                     <a
                       key={index}
                       onClick={(e) => {
@@ -129,14 +133,14 @@ const Footer = () => {
                         navigate(link.href);
                       }}
                       className="block text-white/70 hover:text-white font-light transition-all duration-300 hover:translate-x-2 relative group cursor-pointer"
-                      onMouseEnter={() => setIsHovered(`quick-${index}`)}
+                      onMouseEnter={() => setIsHovered(`job-${index}`)}
                       onMouseLeave={() => setIsHovered(null)}
                     >
                       <div
                         className={`
                           absolute left-0 top-1/2 -translate-y-1/2 w-0 h-4 bg-blue-500 rounded-r-full
                           transition-all duration-300
-                          ${isHovered === `quick-${index}` ? 'w-1' : ''}
+                          ${isHovered === `job-${index}` ? 'w-1' : ''}
                         `}
                       />
                       <span className="relative z-10">{link.label}</span>
@@ -145,43 +149,66 @@ const Footer = () => {
                 </nav>
               </div>
 
-              {/* Juridiskt – tom */}
+              {/* För arbetsgivare */}
               <div className="space-y-6">
                 <h4 className="text-lg font-medium text-white flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
-                  <span>Juridiskt</span>
+                  <span>För arbetsgivare</span>
                 </h4>
+                <nav className="space-y-3">
+                  {employerLinks.map((link, index) => (
+                    <a
+                      key={index}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(link.href);
+                      }}
+                      className="block text-white/70 hover:text-white font-light transition-all duration-300 hover:translate-x-2 relative group cursor-pointer"
+                      onMouseEnter={() => setIsHovered(`employer-${index}`)}
+                      onMouseLeave={() => setIsHovered(null)}
+                    >
+                      <div
+                        className={`
+                          absolute left-0 top-1/2 -translate-y-1/2 w-0 h-4 bg-emerald-500 rounded-r-full
+                          transition-all duration-300
+                          ${isHovered === `employer-${index}` ? 'w-1' : ''}
+                        `}
+                      />
+                      <span className="relative z-10">{link.label}</span>
+                    </a>
+                  ))}
+                </nav>
               </div>
 
-              {/* Contact */}
+              {/* Om oss */}
               <div className="space-y-6">
                 <h4 className="text-lg font-medium text-white flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-purple-400 rounded-full" />
-                  <span>Kontakt</span>
+                  <span>Om oss</span>
                 </h4>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center mt-0.5">
-                      <MapPin size={14} className="text-white/80" />
-                    </div>
-                    <div className="text-white/80 font-light">
-                      <p>123 Business Street</p>
-                      <p>Stockholm, 111 22</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                      <Phone size={14} className="text-white/80" />
-                    </div>
-                    <span className="text-white/80 font-light">+46 8 123 456 78</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                      <Mail size={14} className="text-white/80" />
-                    </div>
-                    <span className="text-white/80 font-light">info@work-plan.se</span>
-                  </div>
-                </div>
+                <nav className="space-y-3">
+                  {aboutLinks.map((link, index) => (
+                    <a
+                      key={index}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigate(link.href);
+                      }}
+                      className="block text-white/70 hover:text-white font-light transition-all duration-300 hover:translate-x-2 relative group cursor-pointer"
+                      onMouseEnter={() => setIsHovered(`about-${index}`)}
+                      onMouseLeave={() => setIsHovered(null)}
+                    >
+                      <div
+                        className={`
+                          absolute left-0 top-1/2 -translate-y-1/2 w-0 h-4 bg-purple-500 rounded-r-full
+                          transition-all duration-300
+                          ${isHovered === `about-${index}` ? 'w-1' : ''}
+                        `}
+                      />
+                      <span className="relative z-10">{link.label}</span>
+                    </a>
+                  ))}
+                </nav>
               </div>
             </div>
           </div>
@@ -192,19 +219,6 @@ const Footer = () => {
               <p className="text-white/70 font-light">
                 © 2025 Workplan AB. Alla rättigheter förbehållna.
               </p>
-
-              {/* Legal Links nu här istället */}
-              <div className="flex items-center gap-6">
-                {legalLinks.map((link, index) => (
-                  <a
-                    key={index}
-                    href={link.href}
-                    className="text-white/70 hover:text-white text-sm font-light transition-colors"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </div>
 
               {/* Till toppen-knapp */}
               <button
