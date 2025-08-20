@@ -42,7 +42,7 @@ const Footer = () => {
 
   // Länkar längst ner bredvid pilen
   const legalLinks = [
-    { label: 'Integritetspolicy', href: '#privacy' },
+    { label: 'Integritetspolicy', href: '/privacy' },
     { label: 'Användarvillkor', href: '/terms' },
     { label: 'Cookie Policy', href: '#cookies' },
     { label: 'GDPR Efterlevnad', href: '#gdpr' }
@@ -238,8 +238,15 @@ const Footer = () => {
                 {legalLinks.map((link, index) => (
                   <a
                     key={index}
-                    href={link.href}
-                    className="text-white/70 hover:text-white text-sm font-light transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (link.href.startsWith('/')) {
+                        navigate(link.href);
+                      } else {
+                        window.location.href = link.href;
+                      }
+                    }}
+                    className="text-white/70 hover:text-white text-sm font-light transition-colors cursor-pointer"
                   >
                     {link.label}
                   </a>

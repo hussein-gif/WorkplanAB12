@@ -16,6 +16,7 @@ import AboutUsPage from './pages/AboutUsPage';
 import ContactUsPage from './pages/ContactUsPage';
 import OurServicesPage from './pages/OurServicesPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 
 function HomePage() {
   return (
@@ -46,6 +47,7 @@ function App() {
             <Route path="/contact" element={<ContactUsPage />} />
             <Route path="/services" element={<OurServicesPage />} />
             <Route path="/terms" element={<TermsOfServicePage />} />
+            <Route path="/privacy" element={<PrivacyPolicyPage />} />
           </Routes>
         </main>
         <Footer />
