@@ -55,25 +55,28 @@ const Header: React.FC = () => {
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
         {/* Centrerar omslutande rutan när vi scrollat */}
         <div
-          className={`transition-all duration-300 ease-out ${
+          className={`transition-all duration-500 ease-in-out ${
             isScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""
           }`}
+          style={{ transitionProperty: "all, max-width, margin, padding" }}
         >
           {/* 
             Inte scrolled: fullbredd (din original)
             Scrolled: inline-block (chip) som wrappar EXAKT logga + spacer + länkar
           */}
           <div
-            className={`pointer-events-auto transition-all duration-300 ${
+            className={`pointer-events-auto transition-all duration-500 ease-in-out ${
               isScrolled
                 ? "inline-block bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl"
                 : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
             }`}
+            style={{ transitionProperty: "all, max-width, margin, padding" }}
           >
             <div
-              className={`flex items-center transition-all duration-300 ${
+              className={`flex items-center transition-all duration-500 ease-in-out ${
                 isScrolled ? "h-[72px] px-6" : "h-20"
               }`}
+              style={{ transitionProperty: "all, max-width, margin, padding" }}
             >
               {/* Logo */}
               <div
@@ -88,10 +91,13 @@ const Header: React.FC = () => {
                       : "https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png"
                   }
                   alt="Workplan"
-                  className={`transition-all duration-300 px-1 ${
+                  className={`transition-all duration-500 ease-in-out px-1 ${
                     isScrolled ? "h-14" : "h-16"
                   }`}
-                  style={{ width: "auto" }}
+                  style={{
+                    width: "auto",
+                    transitionProperty: "all, max-width, margin, padding",
+                  }}
                 />
               </div>
 
@@ -102,7 +108,8 @@ const Header: React.FC = () => {
                     width:
                       measuredGap !== null
                         ? `${measuredGap}px`
-                        : "clamp(12rem, 24vw, 32rem)", // fallback första gången om man laddar mitt på sidan
+                        : "clamp(12rem, 24vw, 32rem)", // fallback om sidan laddas mitt i
+                    transition: "width 500ms ease-in-out",
                   }}
                 />
               ) : (
