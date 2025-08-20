@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 const Footer = () => {
   const navigate = useNavigate();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [email, setEmail] = useState('');
   const [isHovered, setIsHovered] = useState<string | null>(null);
 
   useEffect(() => {
@@ -19,12 +18,6 @@ const Footer = () => {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
-
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Newsletter subscription:', email);
-    setEmail('');
-  };
 
   const quickLinks = [
     { label: 'För Kandidater', href: '/for-candidates' },
@@ -52,9 +45,8 @@ const Footer = () => {
 
   return (
     <footer className="relative overflow-hidden" style={{ backgroundColor: '#08132B' }}>
-      {/* Elegant bakgrund: subtila radialer + mycket svag grid */}
+      {/* Elegant bakgrund */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Subtila radialer (mycket svag) */}
         <div
           className="absolute -top-24 -left-24 w-[40rem] h-[40rem] rounded-full opacity-[0.08] blur-3xl"
           style={{ background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.25), transparent 60%)' }}
@@ -63,8 +55,6 @@ const Footer = () => {
           className="absolute -bottom-32 -right-16 w-[36rem] h-[36rem] rounded-full opacity-[0.06] blur-3xl"
           style={{ background: 'radial-gradient(ellipse at center, rgba(16,185,129,0.22), transparent 60%)' }}
         />
-
-        {/* Mycket svag grid för textur */}
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -79,15 +69,12 @@ const Footer = () => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-8">
-        {/* Main Footer Content */}
         <div className="py-20">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
-            {/* Brand & Intro */}
+            {/* Brand & Social */}
             <div className="lg:col-span-5 space-y-8">
-              {/* Brand */}
               <div className="space-y-6">
                 <div className="flex items-center gap-4">
-                  {/* Endast logga – vit version, professionell storlek */}
                   <img
                     src="https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png"
                     alt="Workplan logotyp"
@@ -102,13 +89,26 @@ const Footer = () => {
                   </h3>
                 </div>
 
-                {/* Mission Statement */}
-                <p
-                  className="text-white/80 font-light leading-relaxed max-w-md"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  Kopplar samman exceptionell talang med visionära företag genom precision, expertis och orubbligt engagemang för excellens.
-                </p>
+                {/* Social ikoner här istället för text */}
+                <div className="flex items-center gap-4">
+                  {socialLinks.map((social, index) => (
+                    <a
+                      key={index}
+                      href={social.href}
+                      aria-label={social.label}
+                      className={`
+                        group relative w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm
+                        flex items-center justify-center
+                        border border-white/20 ${social.color}
+                        transition-all duration-300 hover:scale-110 hover:border-white/40
+                        overflow-hidden
+                      `}
+                    >
+                      <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <social.icon size={16} className="relative z-10 text-white/80 group-hover:text-white transition-colors" />
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -116,10 +116,7 @@ const Footer = () => {
             <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Quick Links */}
               <div className="space-y-6">
-                <h4
-                  className="text-lg font-medium text-white flex items-center gap-2"
-                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
-                >
+                <h4 className="text-lg font-medium text-white flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
                   <span>Snabblänkar</span>
                 </h4>
@@ -131,11 +128,7 @@ const Footer = () => {
                         e.preventDefault();
                         navigate(link.href);
                       }}
-                      className="
-                        block text-white/70 hover:text-white font-light
-                        transition-all duration-300 hover:translate-x-2
-                        relative group cursor-pointer
-                      "
+                      className="block text-white/70 hover:text-white font-light transition-all duration-300 hover:translate-x-2 relative group cursor-pointer"
                       onMouseEnter={() => setIsHovered(`quick-${index}`)}
                       onMouseLeave={() => setIsHovered(null)}
                     >
@@ -152,47 +145,17 @@ const Footer = () => {
                 </nav>
               </div>
 
-              {/* Legal */}
+              {/* Juridiskt – tom */}
               <div className="space-y-6">
-                <h4
-                  className="text-lg font-medium text-white flex items-center gap-2"
-                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
-                >
+                <h4 className="text-lg font-medium text-white flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
                   <span>Juridiskt</span>
                 </h4>
-                <nav className="space-y-3">
-                  {legalLinks.map((link, index) => (
-                    <a
-                      key={index}
-                      href={link.href}
-                      className="
-                        block text-white/70 hover:text-white font-light
-                        transition-all duration-300 hover:translate-x-2
-                        relative group
-                      "
-                      onMouseEnter={() => setIsHovered(`legal-${index}`)}
-                      onMouseLeave={() => setIsHovered(null)}
-                    >
-                      <div
-                        className={`
-                          absolute left-0 top-1/2 -translate-y-1/2 w-0 h-4 bg-emerald-500 rounded-r-full
-                          transition-all duration-300
-                          ${isHovered === `legal-${index}` ? 'w-1' : ''}
-                        `}
-                      />
-                      <span className="relative z-10">{link.label}</span>
-                    </a>
-                  ))}
-                </nav>
               </div>
 
               {/* Contact */}
               <div className="space-y-6">
-                <h4
-                  className="text-lg font-medium text-white flex items-center gap-2"
-                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
-                >
+                <h4 className="text-lg font-medium text-white flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-purple-400 rounded-full" />
                   <span>Kontakt</span>
                 </h4>
@@ -206,14 +169,12 @@ const Footer = () => {
                       <p>Stockholm, 111 22</p>
                     </div>
                   </div>
-
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
                       <Phone size={14} className="text-white/80" />
                     </div>
                     <span className="text-white/80 font-light">+46 8 123 456 78</span>
                   </div>
-
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
                       <Mail size={14} className="text-white/80" />
@@ -228,40 +189,19 @@ const Footer = () => {
           {/* Bottom Section */}
           <div className="border-t border-white/10 py-8 mt-2 relative">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-              {/* Copyright */}
-              <div className="flex items-center gap-4">
-                <p className="text-white/70 font-light">
-                  © 2025 Workplan AB. Alla rättigheter förbehållna.
-                </p>
-                <div className="hidden lg:flex items-center gap-2">
-                  <div className="w-1 h-1 bg-white/30 rounded-full" />
-                  <span className="text-white/50 text-sm font-light">Skapad med precision</span>
-                </div>
-              </div>
+              <p className="text-white/70 font-light">
+                © 2025 Workplan AB. Alla rättigheter förbehållna.
+              </p>
 
-              {/* Social Links */}
-              <div className="flex items-center gap-4">
-                <span
-                  className="text-white/70 text-sm font-light mr-2"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  Följ oss
-                </span>
-                {socialLinks.map((social, index) => (
+              {/* Legal Links nu här istället */}
+              <div className="flex items-center gap-6">
+                {legalLinks.map((link, index) => (
                   <a
                     key={index}
-                    href={social.href}
-                    aria-label={social.label}
-                    className={`
-                      group relative w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm
-                      flex items-center justify-center
-                      border border-white/20 ${social.color}
-                      transition-all duration-300 hover:scale-110 hover:border-white/40
-                      overflow-hidden
-                    `}
+                    href={link.href}
+                    className="text-white/70 hover:text-white text-sm font-light transition-colors"
                   >
-                    <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <social.icon size={16} className="relative z-10 text-white/80 group-hover:text-white transition-colors" />
+                    {link.label}
                   </a>
                 ))}
               </div>
@@ -270,15 +210,7 @@ const Footer = () => {
               <button
                 onClick={scrollToTop}
                 aria-label="Till toppen"
-                className="
-                  group absolute right-0 lg:static
-                  inline-flex items-center justify-center
-                  w-11 h-11 rounded-full
-                  bg-white/10 border border-white/20
-                  hover:bg-white/15 hover:border-white/40
-                  transition-all duration-300
-                  focus:outline-none focus:ring-2 focus:ring-white/30
-                "
+                className="group inline-flex items-center justify-center w-11 h-11 rounded-full bg-white/10 border border-white/20 hover:bg-white/15 hover:border-white/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/30"
               >
                 <ArrowUp size={18} className="text-white group-hover:-translate-y-0.5 transition-transform duration-300" />
               </button>
