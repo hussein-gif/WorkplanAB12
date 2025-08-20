@@ -1,249 +1,148 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import React, { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
 
 const Header: React.FC = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  // --- Smooth scroll state med hysteres ---
   const [isScrolled, setIsScrolled] = useState(false);
-  const scrolledRef = useRef(isScrolled);
-  useEffect(() => {
-    scrolledRef.current = isScrolled;
-  }, [isScrolled]);
+  const [forceDark, setForceDark] = useState(false);
+  const [measuredGap, setMeasuredGap] = useState<number | null>(null);
+  const logoRef = useRef<HTMLImageElement>(null);
+  const linksRef = useRef<HTMLDivElement>(null);
 
+  // scroll state
   useEffect(() => {
-    // Hysteres: gå IN i chip > enter, gå UT < exit
-    const ENTER_THRESHOLD = 28; // px
-    const EXIT_THRESHOLD = 12;  // px
-    let ticking = false;
-
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(() => {
-          const cur = scrolledRef.current;
-          if (!cur && y > ENTER_THRESHOLD) {
-            setIsScrolled(true);
-          } else if (cur && y < EXIT_THRESHOLD) {
-            setIsScrolled(false);
-          }
-          ticking = false;
-        });
-      }
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
     };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll(); // init
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Refs för att mäta “topp-gapet” (logga -> nav)
-  const logoRef = useRef<HTMLDivElement | null>(null);
-  const navRef = useRef<HTMLElement | null>(null);
-  const [measuredGap, setMeasuredGap] = useState<number | null>(null);
-
-  // Mät gap i topp-läget (vi rör inte denna logik)
+  // force-dark state via <html>.classList
   useEffect(() => {
-    const measureGap = () => {
-      if (isScrolled) return; // mät endast i topp-läget
-      const l = logoRef.current?.getBoundingClientRect();
-      const n = navRef.current?.getBoundingClientRect();
-      if (l && n) {
-        const gap = Math.max(0, n.left - l.right);
-        setMeasuredGap(gap);
-      }
-    };
-    measureGap();
-    window.addEventListener("resize", measureGap);
-    return () => window.removeEventListener("resize", measureGap);
-  }, [isScrolled]);
+    const el = document.documentElement;
+    const update = () =>
+      setForceDark(el.classList.contains("force-nav-dark"));
+    update();
+    const observer = new MutationObserver(update);
+    observer.observe(el, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
 
-  const navigationItems = [
-    { label: "Jobb", href: "/jobs" },
-    { label: "Företag", href: "/partner" },
-    { label: "Om Oss", href: "/about" },
-    { label: "Kontakt", href: "/contact" },
-  ];
+  // measure gap between logo and links
+  useEffect(() => {
+    if (logoRef.current && linksRef.current) {
+      const logoRect = logoRef.current.getBoundingClientRect();
+      const linksRect = linksRef.current.getBoundingClientRect();
+      const gap = linksRect.left - logoRect.right;
+      setMeasuredGap(gap);
+    }
+  }, []);
 
-  const handleNavigation = (href: string) => {
-    navigate(href);
-    setIsMobileMenuOpen(false);
-  };
+  const effectiveScrolled = forceDark ? true : isScrolled;
 
   return (
-    <>
-      <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
-        {/* Minimal wrapper – ingen width-animation; liten top-marg vid scroll */}
-        <div className={`${isScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""}`}>
-          {/* Inte skrollad: fullbredd; Skrollad: chip som wrappar exakt innehållet */}
+    <header className="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+      <div
+        className={`${
+          effectiveScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""
+        }`}
+      >
+        <div
+          className={`pointer-events-auto ${
+            effectiveScrolled
+              ? "inline-block rounded-2xl"
+              : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
+          }`}
+        >
           <div
-            className={`pointer-events-auto ${
-              isScrolled
-                ? "inline-block rounded-2xl"
-                : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
-            }`}
-            style={{ willChange: "opacity, transform" }}
+            className={`${
+              effectiveScrolled
+                ? "bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg"
+                : "bg-transparent border border-transparent shadow-none"
+            } rounded-2xl transition-[opacity,background-color,backdrop-filter,box-shadow,border-color] duration-300 ease-in-out`}
           >
-            {/* Bakgrundslager som bara FADAR in/ut (ingen width-animation) */}
             <div
-              className={`${
-                isScrolled
-                  ? "bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg"
-                  : "bg-transparent border border-transparent shadow-none"
-              } rounded-2xl transition-[opacity,background-color,backdrop-filter,box-shadow,border-color] duration-200 ease-out`}
-              style={{ willChange: "opacity, filter" }}
+              className={`flex items-center ${
+                effectiveScrolled ? "h-[72px] px-6" : "h-20"
+              } transition-[height] duration-300 ease-in-out`}
             >
-              {/* Inre rad – liten höjdtransition */}
-              <div
-                className={`flex items-center ${
-                  isScrolled ? "h-[72px] px-6" : "h-20"
-                } transition-[height] duration-200 ease-out`}
-                style={{ willChange: "height" }}
-              >
-                {/* Logo */}
+              <img
+                ref={logoRef}
+                src={
+                  effectiveScrolled
+                    ? "https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
+                    : "https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png"
+                }
+                alt="Logo"
+                className={`${
+                  effectiveScrolled ? "h-14" : "h-16"
+                } px-1 transition-[height] duration-300 ease-in-out`}
+              />
+
+              {effectiveScrolled ? (
                 <div
-                  ref={logoRef}
-                  className="flex items-center cursor-pointer"
-                  onClick={() => handleNavigation("/")}
-                >
-                  <img
-                    src={
-                      isScrolled
-                        ? "https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
-                        : "https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png"
-                    }
-                    alt="Workplan"
-                    className={`${isScrolled ? "h-14" : "h-16"} px-1 transition-[height] duration-200 ease-out`}
-                    style={{ width: "auto", willChange: "height" }}
-                  />
-                </div>
+                  style={{
+                    width:
+                      measuredGap != null
+                        ? `${measuredGap * 0.9}px`
+                        : "clamp(12rem, 24vw, 32rem)",
+                    transition: "width 300ms ease-in-out",
+                  }}
+                />
+              ) : (
+                <div className="flex-1" />
+              )}
 
-                {/* SPACER – 90% av topp-gap när skrollad (subtil width-transition) */}
-                {isScrolled ? (
-                  <div
-                    style={{
-                      width:
-                        measuredGap !== null
-                          ? `${measuredGap * 0.9}px` // lite mindre gap vid scroll
-                          : "clamp(12rem, 24vw, 32rem)", // fallback
-                      transition: "width 200ms ease-out",
-                      willChange: "width",
-                    }}
-                  />
-                ) : (
-                  <div className="flex-1" />
-                )}
-
-                {/* Desktop Navigation */}
-                <nav ref={navRef} className="hidden lg:flex items-center space-x-8">
-                  {navigationItems.map((item) => (
-                    <button
-                      key={item.href}
-                      onClick={() => handleNavigation(item.href)}
-                      className={`
-                        relative px-3 py-2 text-sm font-medium transition-transform duration-200
-                        hover:scale-105
-                        ${
-                          location.pathname === item.href
-                            ? isScrolled
-                              ? "text-[#08132B]"
-                              : "text-white"
-                            : isScrolled
-                            ? "text-[#08132B]/80 hover:text-[#08132B]"
-                            : "text-white/80 hover:text-white"
-                        }
-                      `}
-                      style={{ fontFamily: "Inter, sans-serif" }}
-                    >
-                      {item.label}
-                      {location.pathname === item.href && (
-                        <div
-                          className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full ${
-                            isScrolled ? "bg-[#08132B]" : "bg-white"
-                          }`}
-                        />
-                      )}
-                    </button>
-                  ))}
-                </nav>
-
-                {/* Mobile Menu Button */}
-                <button
-                  onClick={() => setIsMobileMenuOpen((v) => !v)}
-                  className={`lg:hidden p-2 rounded-lg ${
-                    isScrolled
-                      ? "text-[#08132B] hover:bg-gray-200/50"
-                      : "text-white hover:bg-white/10"
+              <div
+                ref={linksRef}
+                className="flex space-x-8 text-[15px] font-medium"
+              >
+                <Link
+                  to="/jobs"
+                  className={`transition-colors duration-300 ${
+                    effectiveScrolled
+                      ? "text-gray-800 hover:text-gray-600"
+                      : "text-white hover:text-gray-200"
                   }`}
                 >
-                  {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Mobile Menu (oförändrat) */}
-      {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-[999] lg:hidden">
-          <div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-            onClick={() => setIsMobileMenuOpen(false)}
-          />
-          <div className="fixed top-4 left-3 right-3 bg-white/95 backdrop-blur-md border border-gray-200/60 shadow-xl rounded-2xl overflow-hidden">
-            <div className="px-4 py-4 flex items-center justify-between">
-              <div className="flex items-center">
-                <img
-                  src="https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
-                  alt="Workplan"
-                  className="h-14 w-auto px-1"
-                />
-              </div>
-              <button
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 rounded-lg text-[#08132B] hover:bg-gray-200/50 transition-colors"
-              >
-                <X size={22} />
-              </button>
-            </div>
-
-            <nav className="px-4 pb-4 space-y-2">
-              {[
-                { label: "Jobb", href: "/jobs" },
-                { label: "Företag", href: "/partner" },
-                { label: "Om Oss", href: "/about" },
-                { label: "Kontakt", href: "/contact" },
-              ].map((item) => (
-                <button
-                  key={item.href}
-                  onClick={() => {
-                    navigate(item.href);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={`
-                    block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-colors duration-200
-                    ${
-                      location.pathname === item.href
-                        ? "text-[#08132B] bg-gray-200/70"
-                        : "text-[#08132B]/90 hover:text-[#08132B] hover:bg-gray-200/50"
-                    }
-                  `}
-                  style={{ fontFamily: "Inter, sans-serif" }}
+                  Jobb
+                </Link>
+                <Link
+                  to="/companies"
+                  className={`transition-colors duration-300 ${
+                    effectiveScrolled
+                      ? "text-gray-800 hover:text-gray-600"
+                      : "text-white hover:text-gray-200"
+                  }`}
                 >
-                  {item.label}
-                </button>
-              ))}
-            </nav>
+                  Företag
+                </Link>
+                <Link
+                  to="/about"
+                  className={`transition-colors duration-300 ${
+                    effectiveScrolled
+                      ? "text-gray-800 hover:text-gray-600"
+                      : "text-white hover:text-gray-200"
+                  }`}
+                >
+                  Om Oss
+                </Link>
+                <Link
+                  to="/contact"
+                  className={`transition-colors duration-300 ${
+                    effectiveScrolled
+                      ? "text-gray-800 hover:text-gray-600"
+                      : "text-white hover:text-gray-200"
+                  }`}
+                >
+                  Kontakt
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
-      )}
-    </>
+      </div>
+    </header>
   );
 };
 
