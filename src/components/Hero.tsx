@@ -77,7 +77,6 @@ const Hero = () => {
 
       {/* Content – alltid vänsterankrad */}
       <div className="relative z-10 flex-1 flex items-center py-16">
-        {/* Behåll en bred container men begränsa textens bredd och förankra vänster */}
         <div className="w-full px-6 sm:px-8">
           <div className="max-w-3xl text-left">
             <div className="space-y-3">
@@ -136,13 +135,14 @@ const Hero = () => {
               </p>
             </div>
 
-            {/* Action Buttons */}
+            {/* Action Buttons – snabbare in-animation */}
             <div
               className={`
                 flex flex-col sm:flex-row gap-4 pt-6
-                transition-all duration-1000 delay-1000 transform
+                transition-all duration-500 delay-200 transform
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
               `}
+              style={{ willChange: 'transform, opacity' }}
             >
               <button
                 onClick={() => navigate('/jobs')}
