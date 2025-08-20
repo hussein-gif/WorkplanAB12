@@ -61,7 +61,6 @@ const Hero = () => {
               transform: `translate(${mousePosition.x * -0.03}px, ${mousePosition.y * -0.03}px)`,
             }}
           />
-
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
@@ -76,54 +75,55 @@ const Hero = () => {
         </div>
       </div>
 
+      {/* Content – alltid vänsterankrad */}
       <div className="relative z-10 flex-1 flex items-center py-16">
-        <div className="max-w-7xl mx-auto px-8 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-6">
-              <div className="space-y-3">
-                <h1
-                  className={`
-                    text-4xl sm:text-5xl lg:text-6xl xl:text-7xl
-                    font-light text-white leading-tight tracking-tight
-                    transition-all duration-1200 delay-200 transform
-                    ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
-                  `}
+        {/* Behåll en bred container men begränsa textens bredd och förankra vänster */}
+        <div className="w-full px-6 sm:px-8">
+          <div className="max-w-3xl text-left">
+            <div className="space-y-3">
+              <h1
+                className={`
+                  text-4xl sm:text-5xl lg:text-6xl xl:text-7xl
+                  font-light text-white leading-tight tracking-tight
+                  transition-all duration-1200 delay-200 transform
+                  ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
+                `}
+              >
+                <span
+                  className="block text-white"
+                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 300 }}
                 >
+                  Bemanna Ditt
+                </span>
+                <span className="block text-white">
                   <span
-                    className="block text-white"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 300 }}
+                    className="font-medium"
+                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
                   >
-                    Bemanna Ditt
+                    Drömteam
                   </span>
-                  <span className="block text-white">
-                    <span
-                      className="font-medium"
-                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
-                    >
-                      Drömteam
-                    </span>
-                    <div className="relative inline-block">
-                      <img
-                        src="https://i.ibb.co/6c1JcWdr/image.png"
-                        alt=""
-                        className="absolute top-0 left-0 w-full h-3 object-contain"
-                        style={{ transform: 'translateY(8px)' }}
-                      />
-                    </div>
-                  </span>
-                </h1>
-                <div
-                  className={`
-                    w-24 h-px bg-gradient-to-r from-white/60 to-transparent
-                    transition-all duration-1000 delay-600 transform
-                    ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
-                  `}
-                />
-              </div>
+                  <div className="relative inline-block">
+                    <img
+                      src="https://i.ibb.co/6c1JcWdr/image.png"
+                      alt=""
+                      className="absolute top-0 left-0 w-full h-3 object-contain"
+                      style={{ transform: 'translateY(8px)' }}
+                    />
+                  </div>
+                </span>
+              </h1>
+
+              <div
+                className={`
+                  w-24 h-px bg-gradient-to-r from-white/60 to-transparent
+                  transition-all duration-1000 delay-600 transform
+                  ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
+                `}
+              />
 
               <p
                 className={`
-                  text-sm md:text-base text-white/80 italic leading-relaxed max-w-2xl
+                  text-sm md:text-base text-white/80 italic leading-relaxed
                   transition-all duration-1000 delay-800 transform
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
                 `}
@@ -134,57 +134,57 @@ const Hero = () => {
                   snabbt, flexibelt och med rätt kompetens.
                 </span>
               </p>
-
-              {/* Action Buttons */}
-              <div
-                className={`
-                  flex flex-col sm:flex-row gap-4 pt-4
-                  transition-all duration-1000 delay-1000 transform
-                  ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-                `}
-              >
-                <button
-                  onClick={() => navigate('/jobs')}
-                  className="
-                    group relative px-5 py-2.5 min-w-[150px]
-                    bg-white text-gray-900 rounded-xl
-                    font-semibold text-base tracking-wide
-                    hover:bg-white/95 
-                    transition-all duration-300
-                    shadow-lg hover:shadow-white/20
-                    hover:scale-105 hover:-translate-y-0.5
-                    overflow-hidden
-                  "
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  <span className="relative z-10">Lediga Tjänster</span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </button>
-                <button
-                  onClick={() => navigate('/partner')}
-                  className="
-                    group relative px-5 py-2.5 min-w-[150px]
-                    bg-transparent text-white border-2 border-white/30 rounded-xl
-                    font-semibold text-base tracking-wide
-                    hover:border-white/60 hover:bg-white/10
-                    transition-all duration-300
-                    backdrop-blur-sm
-                    hover:scale-105 hover:-translate-y-0.5
-                    overflow-hidden
-                  "
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  <span className="relative z-10">Bli Partner</span>
-                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </button>
-              </div>
             </div>
 
-            <div className="lg:col-span-5" />
+            {/* Action Buttons */}
+            <div
+              className={`
+                flex flex-col sm:flex-row gap-4 pt-6
+                transition-all duration-1000 delay-1000 transform
+                ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+              `}
+            >
+              <button
+                onClick={() => navigate('/jobs')}
+                className="
+                  group relative px-5 py-2.5 min-w-[150px]
+                  bg-white text-gray-900 rounded-xl
+                  font-semibold text-base tracking-wide
+                  hover:bg-white/95 
+                  transition-all duration-300
+                  shadow-lg hover:shadow-white/20
+                  hover:scale-105 hover:-translate-y-0.5
+                  overflow-hidden
+                "
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                <span className="relative z-10">Lediga Tjänster</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </button>
+
+              <button
+                onClick={() => navigate('/partner')}
+                className="
+                  group relative px-5 py-2.5 min-w-[150px]
+                  bg-transparent text-white border-2 border-white/30 rounded-xl
+                  font-semibold text-base tracking-wide
+                  hover:border-white/60 hover:bg-white/10
+                  transition-all duration-300
+                  backdrop-blur-sm
+                  hover:scale-105 hover:-translate-y-0.5
+                  overflow-hidden
+                "
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                <span className="relative z-10">Bli Partner</span>
+                <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* Badges längst ner */}
       <div
         className={`
           absolute bottom-8 inset-x-0 z-10
