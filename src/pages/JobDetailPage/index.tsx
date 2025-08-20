@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Clock, MapPin, Building, Mail, Phone } from 'lucide-react';
 import { mockJobData, JobData } from './jobData';
@@ -9,8 +9,8 @@ const JobDetailPage = () => {
   const [job, setJob] = useState<JobData | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  // 🔹 Tvinga mörk navbar på denna sida
-  useEffect(() => {
+  // 🔹 Tvinga mörk navbar på denna sida (innan första paint för att undvika blink)
+  useLayoutEffect(() => {
     document.documentElement.classList.add('force-nav-dark');
     return () => {
       document.documentElement.classList.remove('force-nav-dark');
@@ -205,6 +205,7 @@ const JobDetailPage = () => {
 
         {/* Sektioner */}
         <div className="space-y-16">
+          {/* Om rollen */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <h2
               className="text-3xl md:text-4xl text-[#08132B] mb-6"
@@ -219,6 +220,7 @@ const JobDetailPage = () => {
             </div>
           </section>
 
+          {/* Arbetsuppgifter */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <h2
               className="text-3xl md:text-4xl text-[#08132B] mb-6"
@@ -240,6 +242,7 @@ const JobDetailPage = () => {
             </div>
           </section>
 
+          {/* Vem vi söker */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <h2
               className="text-3xl md:text-4xl text-[#08132B] mb-6"
@@ -261,6 +264,7 @@ const JobDetailPage = () => {
             </div>
           </section>
 
+          {/* Vår rekryteringsprocess */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <h2
               className="text-3xl md:text-4xl text-[#08132B] mb-6"
@@ -275,6 +279,7 @@ const JobDetailPage = () => {
             </div>
           </section>
 
+          {/* Har du frågor? */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <div className="bg-white border border-[#08132B]/10 rounded-xl p-6">
               <h3
