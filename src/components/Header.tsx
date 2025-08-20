@@ -29,16 +29,12 @@ const Header: React.FC = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
-        {/* Centerar “chipet” när vi scrollat */}
         <div
           className={`transition-all duration-300 ease-out ${
             isScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""
           }`}
         >
-          {/* 
-            – INTE scrolled: fullbredd-container (original).
-            – Scrolled: chip som wrappar EXAKT logga + länkar (ingen luft utanför).
-          */}
+          {/* chip som wrappar exakt innehållet när skrollad, annars din original-container */}
           <div
             className={`pointer-events-auto transition-all duration-300 ${
               isScrolled
@@ -51,7 +47,7 @@ const Header: React.FC = () => {
                 isScrolled ? "h-[72px] px-6" : "h-20"
               }`}
             >
-              {/* Logo (position/storlek nästan identisk – pytteliten minskning vid scroll) */}
+              {/* Logo */}
               <div
                 className="flex items-center cursor-pointer"
                 onClick={() => handleNavigation("/")}
@@ -70,21 +66,17 @@ const Header: React.FC = () => {
                 />
               </div>
 
-              {/* 
-                SPACER – håller AVSTÅNDET mellan logga & länkar KONSTANT.
-                – Normal (inte scrolled): flex-1 (pushar länkar till höger över full bredd).
-                – Scrolled: fast bredd => samma visuella gap som innan.
-                Justera värdena nedan (w-*) för att matcha ditt exakta gap.
-              */}
+              {/* SPACER: håller samma (stora) avstånd även när vi skrollar */}
               <div
                 className={
                   isScrolled
-                    ? "w-24 sm:w-32 md:w-40 lg:w-56 xl:w-64" // <- justera vid behov
+                    ? // justera dessa om du vill ha ännu mer/mindre mellanrum
+                      "w-[10rem] sm:w-[14rem] md:w-[18rem] lg:w-[24rem] xl:w-[28rem]"
                     : "flex-1"
                 }
               />
 
-              {/* Länkar (ingen förändring i spacing mellan länkar) */}
+              {/* Länkar */}
               <nav className="hidden lg:flex items-center space-x-8">
                 {navigationItems.map((item) => (
                   <button
@@ -116,7 +108,7 @@ const Header: React.FC = () => {
                 ))}
               </nav>
 
-              {/* Mobilmeny-knapp (syns endast < lg) */}
+              {/* Mobilmeny-knapp */}
               <button
                 onClick={() => setIsMobileMenuOpen((v) => !v)}
                 className={`lg:hidden p-2 rounded-lg transition-colors duration-300 ${
