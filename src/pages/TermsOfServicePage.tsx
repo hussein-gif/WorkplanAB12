@@ -2,27 +2,24 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Calendar, FileText, Shield } from 'lucide-react';
 
 /**
- * TermsOfServicePage – Komprimerad, mer professionell struktur (v2.1)
- * - Kortare och sammanslagna rubriker (inspirerat av branschpraxis)
- * - Tydliga kärnpunkter för användarvillkor; ingen betalningssektion
- * - + Detaljerade standardklausuler: Ansvarsbegränsning, Force majeure, Ogiltighet/Tolkning
- * - Behåller layout, typsnitt (Zen Kaku + Inter) och sticky TOC
+ * TermsOfServicePage – Komprimerad, professionell struktur (v2.2)
+ * - Kortare och sammanslagna rubriker
+ * - Tar bort sektioner för Integritet & Cookies (separat policy) och Kontakt
+ * - Inkluderar Ansvarsbegränsning, Force majeure och Ogiltighet
  */
 
 const sections = [
   { id: 'allmant', label: '1. Allmänt & tillämpning' },
   { id: 'tjanster-anvandning', label: '2. Tjänster & användning' },
   { id: 'konto-ansvar', label: '3. Konto, roller & ansvar' },
-  { id: 'integritet-cookies', label: '4. Integritet & cookies' },
-  { id: 'immaterial-sakerhet', label: '5. Immaterialrätt & säkerhet' },
-  { id: 'sekretess-bakgrund', label: '6. Sekretess & bakgrundskontroller' },
-  { id: 'tillit-tek-komp', label: '7. Länkar, kompatibilitet & tillgänglighet' },
-  { id: 'ansvarsbegransning', label: '8. Ansvarsbegränsning & friskrivningar' },
-  { id: 'force-majeure', label: '9. Force majeure' },
-  { id: 'tolkning-ogiltighet', label: '10. Tolkning, ogiltighet & meddelanden' },
-  { id: 'andringar-upphor', label: '11. Ändringar, upphörande & överlåtelse' },
-  { id: 'lag-tvist', label: '12. Tillämplig lag & tvist' },
-  { id: 'kontakt', label: '13. Kontakt' },
+  { id: 'immaterial-sakerhet', label: '4. Immaterialrätt & säkerhet' },
+  { id: 'sekretess-bakgrund', label: '5. Sekretess & bakgrundskontroller' },
+  { id: 'tillit-tek-komp', label: '6. Länkar, kompatibilitet & tillgänglighet' },
+  { id: 'ansvarsbegransning', label: '7. Ansvarsbegränsning & friskrivningar' },
+  { id: 'force-majeure', label: '8. Force majeure' },
+  { id: 'tolkning-ogiltighet', label: '9. Tolkning, ogiltighet & meddelanden' },
+  { id: 'andringar-upphor', label: '10. Ändringar, upphörande & överlåtelse' },
+  { id: 'lag-tvist', label: '11. Tillämplig lag & tvist' },
 ];
 
 const TermsOfServicePage: React.FC = () => {
@@ -80,7 +77,7 @@ const TermsOfServicePage: React.FC = () => {
               </p>
               <div className="flex items-center gap-6 text-sm text-gray-500 mt-3" style={{ fontFamily: 'Inter, sans-serif' }}>
                 <span className="flex items-center gap-2"><Calendar size={16} /> Senast uppdaterad: 20 augusti 2025</span>
-                <span className="flex items-center gap-2"><Shield size={16} /> Version 2.1</span>
+                <span className="flex items-center gap-2"><Shield size={16} /> Version 2.2</span>
               </div>
             </div>
           </div>
@@ -141,14 +138,7 @@ const TermsOfServicePage: React.FC = () => {
                 </ul>
               </Section>
 
-              <Section id="integritet-cookies" title="4. Integritet & cookies">
-                <p>
-                  Personuppgifter behandlas enligt gällande dataskyddslagstiftning och vår Integritetspolicy, som beskriver ändamål, lagringstider och
-                  rättigheter. Webbplatsen använder cookies för nödvändiga funktioner och statistik enligt vår Cookiepolicy.
-                </p>
-              </Section>
-
-              <Section id="immaterial-sakerhet" title="5. Immaterialrätt & säkerhet">
+              <Section id="immaterial-sakerhet" title="4. Immaterialrätt & säkerhet">
                 <p>
                   Allt innehåll på webbplatsen tillhör Workplan eller licensgivare och skyddas av immaterialrätt. Otillåten kopiering, bearbetning eller
                   spridning är förbjuden. Vi vidtar rimliga tekniska och organisatoriska säkerhetsåtgärder men kan inte garantera fullständig
@@ -156,7 +146,7 @@ const TermsOfServicePage: React.FC = () => {
                 </p>
               </Section>
 
-              <Section id="sekretess-bakgrund" title="6. Sekretess & bakgrundskontroller">
+              <Section id="sekretess-bakgrund" title="5. Sekretess & bakgrundskontroller">
                 <p>
                   Parterna ska skydda konfidentiell information som erhålls inom ramen för samarbetet. Kundspecifik information, prissättning,
                   kandidatuppgifter och affärshemligheter får inte röjas utan skriftligt medgivande, såvida inte skyldighet att röja följer av lag eller
@@ -164,7 +154,7 @@ const TermsOfServicePage: React.FC = () => {
                 </p>
               </Section>
 
-              <Section id="tillit-tek-komp" title="7. Länkar, kompatibilitet & tillgänglighet">
+              <Section id="tillit-tek-komp" title="6. Länkar, kompatibilitet & tillgänglighet">
                 <p>
                   Webbplatsen kan innehålla länkar eller integrationer till tredjepartstjänster som vi inte ansvarar för avseende innehåll, policyer eller
                   tillgänglighet. Vi strävar efter bred teknisk kompatibilitet och förbättrad tillgänglighet (t.ex. i linje med relevanta riktlinjer) men kan
@@ -172,7 +162,7 @@ const TermsOfServicePage: React.FC = () => {
                 </p>
               </Section>
 
-              <Section id="ansvarsbegransning" title="8. Ansvarsbegränsning & friskrivningar">
+              <Section id="ansvarsbegransning" title="7. Ansvarsbegränsning & friskrivningar">
                 <p>
                   I den utsträckning som tillåts enligt tvingande lag ansvarar Workplan inte för indirekta skador, följdskador eller särskilda skador,
                   såsom utebliven vinst, produktionsbortfall, dataförlust, goodwill-förlust eller tredje mans anspråk, som uppstår till följd av eller i
@@ -190,7 +180,7 @@ const TermsOfServicePage: React.FC = () => {
                 </p>
               </Section>
 
-              <Section id="force-majeure" title="9. Force majeure">
+              <Section id="force-majeure" title="8. Force majeure">
                 <p>
                   Part är befriad från påföljd för underlåtenhet att fullgöra förpliktelse enligt dessa Villkor om fullgörandet väsentligen försvåras, hindras
                   eller försenas av omständighet utanför partens rimliga kontroll och som parten inte skäligen kunde ha räknat med vid Villkorens accept eller
@@ -203,7 +193,7 @@ const TermsOfServicePage: React.FC = () => {
                 </ul>
               </Section>
 
-              <Section id="tolkning-ogiltighet" title="10. Tolkning, ogiltighet & meddelanden">
+              <Section id="tolkning-ogiltighet" title="9. Tolkning, ogiltighet & meddelanden">
                 <p>
                   Om någon bestämmelse i Villkoren skulle befinnas ogiltig eller inte kunna göras gällande ska detta inte påverka giltigheten av övriga
                   bestämmelser; sådan bestämmelse ska i stället tillämpas i den utsträckning som medges av gällande lag, och i övrigt ersättas av en giltig
@@ -217,7 +207,7 @@ const TermsOfServicePage: React.FC = () => {
                 </p>
               </Section>
 
-              <Section id="andringar-upphor" title="11. Ändringar, upphörande & överlåtelse">
+              <Section id="andringar-upphor" title="10. Ändringar, upphörande & överlåtelse">
                 <p>
                   Vi kan uppdatera Villkoren; väsentliga ändringar meddelas via webbplatsen. Vi får överlåta rättigheter och skyldigheter i samband med
                   affärstransaktion (t.ex. fusion, förvärv eller verksamhetsöverlåtelse). Du kan avsluta ditt konto genom att kontakta oss; upphörande enligt
@@ -225,26 +215,11 @@ const TermsOfServicePage: React.FC = () => {
                 </p>
               </Section>
 
-              <Section id="lag-tvist" title="12. Tillämplig lag & tvist">
+              <Section id="lag-tvist" title="11. Tillämplig lag & tvist">
                 <p>
                   Svensk materiell rätt gäller med undantag för dess lagvalsregler. Tvister som inte löses genom förhandling prövas av allmän domstol i
                   Sverige med tingsrätten på Workplans hemort som första instans, i den mån tvingande lag inte föreskriver annat.
                 </p>
-              </Section>
-
-              <Section id="kontakt" title="13. Kontakt">
-                <DefinitionList
-                  items={[
-                    ['Företag', 'Workplan AB'],
-                    ['Organisationsnummer', '[Ange org.nr]'],
-                    ['Adress', '[Företagsadress], Sverige'],
-                    ['E‑post', 'info@work-plan.se'],
-                    ['Webbplats', 'work-plan.se'],
-                  ]}
-                />
-                <InfoBox>
-                  Uppdatera kontakt- och bolagsuppgifter innan publicering. Kommersiella villkor (inkl. prissättning/fakturering) regleras endast i separata avtal och ingår inte i dessa användarvillkor.
-                </InfoBox>
               </Section>
             </div>
           </div>
@@ -270,17 +245,6 @@ const Section: React.FC<{ id: string; title: string; children: React.ReactNode }
       {children}
     </div>
   </section>
-);
-
-const DefinitionList: React.FC<{ items: [string, string][] }> = ({ items }) => (
-  <dl className="grid sm:grid-cols-2 gap-x-6 gap-y-3">
-    {items.map(([k, v], idx) => (
-      <div key={idx} className="border border-gray-200 rounded-xl p-3 bg-gray-50">
-        <dt className="text-sm text-gray-500" style={{ fontFamily: 'Inter, sans-serif' }}>{k}</dt>
-        <dd className="text-gray-900" style={{ fontFamily: 'Inter, sans-serif' }}>{v}</dd>
-      </div>
-    ))}
-  </dl>
 );
 
 const InfoBox: React.FC<{ children: React.ReactNode }> = ({ children }) => (
