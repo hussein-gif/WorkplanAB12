@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Calendar, FileText, Shield } from 'lucide-react';
+import { FileText } from 'lucide-react';
 
 /**
  * TermsOfServicePage – Komprimerad, professionell struktur (v2.4)
@@ -70,26 +70,22 @@ const TermsOfServicePage: React.FC = () => {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F7FAFF' }}>
       {/* Hero */}
-      <header className="pt-20 pb-10 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 bg-gradient-to-br from-[#08132B] to-[#0B274D] rounded-2xl flex items-center justify-center shadow-lg">
-              <FileText size={26} className="text-white" />
+      <header className=\"pt-28 pb-10 px-6\">
+        <div className=\"max-w-6xl mx-auto\">
+          <div className=\"flex items-baseline gap-4\">
+            <div className=\"w-14 h-14 bg-gradient-to-br from-[#08132B] to-[#0B274D] rounded-2xl flex items-center justify-center shadow-lg self-baseline\">
+              <FileText size={26} className=\"text-white\" />
             </div>
             <div>
               <h1
-                className="text-4xl md:text-5xl font-medium text-[#08132B] tracking-tight"
+                className=\"text-4xl md:text-5xl font-medium text-[#08132B] tracking-tight\"
                 style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
               >
                 Användarvillkor
               </h1>
-              <p className="text-gray-600 mt-2" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}>
+              <p className=\"text-gray-600 mt-2\" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}>
                 Villkor för användning av Workplan AB:s tjänster och webbplats
               </p>
-              <div className="flex items-center gap-6 text-sm text-gray-500 mt-3" style={{ fontFamily: 'Inter, sans-serif' }}>
-                <span className="flex items-center gap-2"><Calendar size={16} /> Senast uppdaterad: 20 augusti 2025</span>
-                <span className="flex items-center gap-2"><Shield size={16} /> Version 2.4</span>
-              </div>
             </div>
           </div>
         </div>
