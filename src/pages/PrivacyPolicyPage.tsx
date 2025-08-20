@@ -4,11 +4,10 @@ import { Shield, Calendar } from "lucide-react";
 /**
  * PrivacyPolicyPage – Workplan AB (Bemanning inom Lager & Logistik)
  * Matchad design med Användarvillkor-sidan
- * - Rubrik + inledning centrerad
- * - "Senast uppdaterad" över vänstra rutan
- * - Inledning borttagen från TOC
- * - Bort: 13 (Barn), 16 (Kontakt), 17 (Bilaga A), 18 (Bilaga B)
- * - Bort: blå callout längst ner
+ * - Rubrik + inledning centrerad i hero
+ * - "Senast uppdaterad" ovanför vänster TOC
+ * - Inledning ej i TOC
+ * - Bort: 13 (Barn), 16 (Kontakt), 17 (Bilaga A), 18 (Bilaga B), callout
  * - Merge: Profilering + DPIA => "Profilering, automatiserade beslut & DPIA"
  * - Merge: Mottagare + Överföringar => "Mottagare & överföringar"
  * - Aktiv TOC-punkt: bg #08132B + vit text
@@ -113,26 +112,26 @@ const PrivacyPolicyPage: React.FC = () => {
       {/* Innehåll med sidomeny */}
       <main className="px-6 pb-24">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Vänster TOC */}
+          {/* Vänster TOC (smalare, mindre text, alla punkter utan scroll) */}
           <aside className="lg:col-span-4 xl:col-span-3">
             <div className="sticky top-24">
               {/* Senast uppdaterad över menyn */}
               <div
-                className="text-sm text-gray-500 mb-3 flex items-center gap-2"
+                className="text-xs text-gray-500 mb-2 flex items-center gap-1.5"
                 style={{ fontFamily: "Inter, sans-serif" }}
               >
-                <Calendar className="h-4 w-4" /> Senast uppdaterad: {updatedAt}
+                <Calendar className="h-3.5 w-3.5" /> Senast uppdaterad: {updatedAt}
               </div>
               <nav
-                className="bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6 max-h-[80vh] overflow-auto"
+                className="bg-white border border-gray-200 rounded-xl shadow-sm p-3 md:p-4 max-w-xs"
                 aria-label="Innehåll"
               >
-                <ul className="space-y-1" style={{ fontFamily: "Inter, sans-serif" }}>
+                <ul className="space-y-0.5" style={{ fontFamily: "Inter, sans-serif" }}>
                   {sections.map((s, idx) => (
                     <li key={s.id}>
                       <button
                         onClick={() => handleClick(s.id)}
-                        className={`w-full text-left px-3 py-2 rounded-lg transition ${
+                        className={`w-full text-left px-2 py-1.5 rounded-md text-sm transition ${
                           activeId === s.id
                             ? "bg-[#08132B] text-white font-medium"
                             : "text-gray-700 hover:bg-gray-50"
@@ -237,9 +236,7 @@ const PrivacyPolicyPage: React.FC = () => {
                   </li>
                 </ul>
 
-                <h3 className="mt-6 text-lg font-semibold">
-                  Kunder & leverantörer (kontaktpersoner)
-                </h3>
+                <h3 className="mt-6 text-lg font-semibold">Kunder & leverantörer (kontaktpersoner)</h3>
                 <ul className="list-disc pl-6 space-y-2">
                   <li>Business-namn, titel, e-post/telefon, avtal/kommunikationshistorik.</li>
                 </ul>
