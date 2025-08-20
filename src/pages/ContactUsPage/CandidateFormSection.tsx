@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Send, X } from 'lucide-react';
+import { Send } from 'lucide-react';
 
 interface CandidateFormSectionProps {
   userType: 'candidate' | 'company' | null;
@@ -12,25 +12,21 @@ interface CandidateFormSectionProps {
   };
   handleCandidateSubmit: (e: React.FormEvent) => void;
   handleCandidateChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onClose: () => void; // t.ex. göm sektionen
+  onClose: () => void; // kan fortfarande användas om du vill dölja sektionen externt
 }
 
 const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
   candidateForm,
   handleCandidateSubmit,
   handleCandidateChange,
-  onClose,
 }) => {
-  // ESC för att stänga (valfritt men nice)
+  // Smooth scroll till sektionen när den mountas
+  const sectionRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
-  }, [onClose]);
+    sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, []);
 
-  // Focus på första fältet
+  // Fokus på första fältet
   const firstFieldRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
     firstFieldRef.current?.focus();
@@ -38,23 +34,48 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
 
   return (
     <section
+      ref={sectionRef}
       className="
-        relative py-14 sm:py-16
-        px-4 sm:px-6
-        bg-transparent
+        relative py-14 sm:py-16 px-4 sm:px-6
+        bg-white
+        overflow-hidden
       "
       aria-labelledby="candidate-form-heading"
     >
-      {/* Kortet: samma look & feel som modalen, men nu inline */}
+      {/* Elegant vit bakgrund – subtila radialer + lätt grid */}
+      <div className="pointer-events-none absolute inset-0">
+        {/* diskreta radialer */}
+        <div
+          className="absolute -top-24 -left-24 w-[36rem] h-[36rem] rounded-full opacity-[0.08] blur-3xl"
+          style={{ background: 'radial-gradient(ellipse at center, #93C5FD, transparent 60%)' }}
+        />
+        <div
+          className="absolute -bottom-32 -right-16 w-[32rem] h-[32rem] rounded-full opacity-[0.06] blur-3xl"
+          style={{ background: 'radial-gradient(ellipse at center, #A7F3D0, transparent 60%)' }}
+        />
+        {/* fin rutnätsstruktur */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(0,0,0,0.12) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,0,0,0.12) 1px, transparent 1px)
+            `,
+            backgroundSize: '56px 56px',
+          }}
+        />
+      </div>
+
+      {/* Kortet: samma look & feel som tidigare, men inline */}
       <div
         className="
-          w-[min(95vw,44rem)] mx-auto
+          relative w-[min(95vw,44rem)] mx-auto
           bg-white border border-gray-200 rounded-3xl shadow-2xl
           max-h-[85vh] overflow-y-auto
           transition-all duration-200
         "
       >
-        {/* Sticky header (titel + stäng) */}
+        {/* Sticky header – utan X-knapp */}
         <div
           className="
             sticky top-0 z-10
@@ -63,20 +84,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
             px-6 md:px-8 pt-5 pb-4
           "
         >
-          <button
-            type="button"
-            onClick={onClose}
-            className="
-              absolute top-3 right-3 p-2 rounded-full
-              hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500
-              transition
-            "
-            aria-label="Stäng formuläret"
-          >
-            <X size={20} />
-          </button>
-
-          <div className="text-center pr-10">
+          <div className="text-center">
             <h2
               id="candidate-form-heading"
               className="text-2xl md:text-3xl font-medium text-gray-900 mb-1 font-['Zen_Kaku_Gothic_Antique']"
@@ -90,7 +98,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
         </div>
 
         {/* Body – rullar inom kortet vid behov */}
-        <div className="px-6 md:px-8 py-6 relative">
+        <div className="px-6 md:px-8 py-6">
           <form onSubmit={handleCandidateSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
@@ -176,27 +184,41 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
               </label>
             </div>
 
+            {/* Mer levande knapp: mjuk gradient + shimmer på hover */}
             <button
               type="submit"
               className="
-                w-full py-4 px-6
-                bg-blue-600 text-white rounded-2xl
+                relative w-full py-4 px-6
+                text-white rounded-2xl
                 font-semibold text-lg tracking-wide
-                hover:bg-blue-700
                 transition-all duration-300
                 shadow-lg hover:shadow-xl
                 hover:scale-[1.02]
-                flex items-center justify-center space-x-2
+                overflow-hidden
                 font-['Inter']
+                focus:outline-none focus:ring-4 focus:ring-blue-500/25
               "
+              style={{
+                background:
+                  'linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.12)), linear-gradient(135deg, #2563EB 0%, #1D4ED8 50%, #0B69E3 100%)',
+                border: '1px solid rgba(255,255,255,0.18)',
+              }}
             >
-              <Send size={20} />
-              <span>Skicka meddelande</span>
+              {/* Shimmer band på hover */}
+              <span
+                className="
+                  pointer-events-none absolute inset-0
+                  bg-gradient-to-r from-transparent via-white/25 to-transparent
+                  -translate-x-full group-hover:translate-x-full
+                "
+                style={{ transition: 'transform 700ms ease' }}
+              />
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                <Send size={20} />
+                <span>Skicka meddelande</span>
+              </span>
             </button>
           </form>
-
-          {/* Fade-out indikator: visar att man kan skrolla nedåt om innehållet är längre */}
-          <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent" />
         </div>
       </div>
     </section>
