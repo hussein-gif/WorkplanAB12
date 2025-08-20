@@ -18,12 +18,12 @@ const JobDetailPage = () => {
 
   if (!job) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center relative overflow-hidden">
+      <div className="min-h-screen bg-[#F7FAFF] flex items-center justify-center relative overflow-hidden">
         <div className="text-center">
           <div className="relative">
-            <div className="w-20 h-20 border-4 border-[#08132B]/15 border-t-[#08132B] rounded-full animate-spin mx-auto mb-6" />
+            <div className="w-20 h-20 border-4 border-[#0B274D]/20 border-top-[#0B274D] rounded-full animate-spin mx-auto mb-6" />
             <div
-              className="absolute inset-0 w-20 h-20 border-4 border-transparent border-r-[#08132B]/40 rounded-full animate-spin mx-auto"
+              className="absolute inset-0 w-20 h-20 border-4 border-transparent border-r-[#0B274D]/40 rounded-full animate-spin mx-auto"
               style={{ animationDirection: 'reverse', animationDuration: '1.5s' }}
             />
           </div>
@@ -46,23 +46,23 @@ const JobDetailPage = () => {
   const startDate = (job as any).startDate || 'Enligt överenskommelse';
 
   return (
-    <div className="relative min-h-screen bg-white overflow-hidden">
-      {/* Elegant bakgrundsdesign i #08132B */}
+    <div className="relative min-h-screen bg-[#F7FAFF] overflow-hidden">
+      {/* Subtil blå design i #08132B */}
       <div className="pointer-events-none absolute inset-0">
         <div
-          className="absolute -top-24 -left-24 w-[40rem] h-[40rem] rounded-full opacity-10 blur-3xl"
-          style={{ background: 'radial-gradient(circle at top left, rgba(8,19,43,0.15), transparent 60%)' }}
+          className="absolute -top-24 -left-24 w-[40rem] h-[40rem] rounded-full opacity-20 blur-3xl"
+          style={{ background: 'radial-gradient(circle at top left, rgba(8,19,43,0.12), transparent 60%)' }}
         />
         <div
-          className="absolute -bottom-32 -right-16 w-[36rem] h-[36rem] rounded-full opacity-10 blur-3xl"
-          style={{ background: 'radial-gradient(circle at bottom right, rgba(8,19,43,0.12), transparent 60%)' }}
+          className="absolute -bottom-32 -right-16 w-[36rem] h-[36rem] rounded-full opacity-15 blur-3xl"
+          style={{ background: 'radial-gradient(circle at bottom right, rgba(8,19,43,0.10), transparent 60%)' }}
         />
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.05]"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(8,19,43,0.35) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(8,19,43,0.35) 1px, transparent 1px)
+              linear-gradient(rgba(8,19,43,0.18) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(8,19,43,0.18) 1px, transparent 1px)
             `,
             backgroundSize: '56px 56px',
           }}
@@ -71,7 +71,7 @@ const JobDetailPage = () => {
 
       {/* Content */}
       <div className="relative max-w-4xl mx-auto px-6 py-8 pt-28 md:pt-32">
-        {/* Tillbaka-knapp (diskret) */}
+        {/* Tillbaka (diskret) */}
         <button
           onClick={handleBack}
           className={`
@@ -105,9 +105,9 @@ const JobDetailPage = () => {
           </h1>
 
           <div className="shrink-0">
-            <div className="w-16 h-16 rounded-xl bg-[#08132B]/5 border border-[#08132B]/15 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-xl bg-[#0B274D]/5 border border-[#0B274D]/20 flex items-center justify-center">
               <span
-                className="text-2xl font-bold select-none text-[#08132B]"
+                className="text-2xl font-bold select-none text-[#0B274D]"
                 style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
               >
                 {job.companyLogo || (job.company?.[0] ?? '•')}
@@ -116,7 +116,7 @@ const JobDetailPage = () => {
           </div>
         </div>
 
-        {/* Säljande kort text */}
+        {/* Kort säljtext */}
         <p
           className={`
             text-[#08132B]/80 leading-relaxed mb-5 max-w-3xl
@@ -128,21 +128,21 @@ const JobDetailPage = () => {
           {job.summary}
         </p>
 
-        {/* Primär CTA – Ansök här (#08132B + elegant effekt) */}
+        {/* Primär CTA – Ansök här (MATCHAR PartnerHero: #0B274D men med vår hover-effekt) */}
         <div className="mb-8">
           <button
             onClick={handleApply}
-            className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#08132B] text-white font-medium shadow-[0_10px_24px_rgba(8,19,43,0.18)] transition-all duration-300 hover:scale-[1.02] overflow-hidden"
+            className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#0B274D] text-white font-medium shadow-[0_10px_24px_rgba(11,39,77,0.28)] transition-all duration-300 hover:scale-[1.02] overflow-hidden"
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
             <span className="relative z-10">Ansök här</span>
             <ArrowRight size={18} className="relative z-10" />
-            {/* Radial highlight on hover */}
+            {/* Radial highlight */}
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               style={{ background: 'radial-gradient(120px 60px at 20% 0%, rgba(255,255,255,0.22), transparent 70%)' }}
             />
-            {/* Shimmer swipe */}
+            {/* Shimmer */}
             <div className="pointer-events-none absolute -left-16 top-0 bottom-0 w-16 bg-white/25 -skew-x-12 -translate-x-24 group-hover:translate-x-[140%] transition-transform duration-700" />
           </button>
         </div>
@@ -186,7 +186,7 @@ const JobDetailPage = () => {
           </div>
           <div className="text-center">
             <svg className="mx-auto mb-2" width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M4 6h16M4 12h16M4 18h10" stroke="#0a1736" strokeWidth="2" strokeLinecap="round" className="opacity-60" />
+              <path d="M4 6h16M4 12h16M4 18h10" stroke="#0B274D" strokeWidth="2" strokeLinecap="round" className="opacity-60" />
             </svg>
             <div className="text-xs uppercase tracking-wider text-[#08132B]/60 mb-1" style={{ fontFamily: 'Inter, sans-serif' }}>
               Omfattning
@@ -273,7 +273,7 @@ const JobDetailPage = () => {
             </div>
           </section>
 
-          {/* Har du frågor? (lite mindre rubrik) */}
+          {/* Har du frågor? */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <div className="bg-white border border-[#08132B]/10 rounded-xl p-6">
               <h3
@@ -285,9 +285,9 @@ const JobDetailPage = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <a
                   href={`mailto:${job.recruiterEmail}`}
-                  className="flex items-center gap-3 p-4 bg-[#08132B]/5 rounded-lg hover:bg-[#08132B]/10 transition-colors"
+                  className="flex items-center gap-3 p-4 bg-[#0B274D]/5 rounded-lg hover:bg-[#0B274D]/10 transition-colors"
                 >
-                  <Mail size={20} className="text-[#08132B]" />
+                  <Mail size={20} className="text-[#0B274D]" />
                   <div>
                     <div className="text-[#08132B]/60 text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>E-post</div>
                     <div className="text-[#08132B] font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -297,9 +297,9 @@ const JobDetailPage = () => {
                 </a>
                 <a
                   href={`tel:${job.recruiterPhone}`}
-                  className="flex items-center gap-3 p-4 bg-[#08132B]/5 rounded-lg hover:bg-[#08132B]/10 transition-colors"
+                  className="flex items-center gap-3 p-4 bg-[#0B274D]/5 rounded-lg hover:bg-[#0B274D]/10 transition-colors"
                 >
-                  <Phone size={20} className="text-[#08132B]" />
+                  <Phone size={20} className="text-[#0B274D]" />
                   <div>
                     <div className="text-[#08132B]/60 text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>Telefon</div>
                     <div className="text-[#08132B] font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -312,11 +312,11 @@ const JobDetailPage = () => {
           </section>
         </div>
 
-        {/* Slut-CTA */}
+        {/* Slut-CTA – samma färg + effekt */}
         <div className="mt-14 flex">
           <button
             onClick={handleApply}
-            className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#08132B] text-white font-medium shadow-[0_10px_24px_rgba(8,19,43,0.18)] transition-all duration-300 hover:scale-[1.02] overflow-hidden"
+            className="group relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[#0B274D] text-white font-medium shadow-[0_10px_24px_rgba(11,39,77,0.28)] transition-all duration-300 hover:scale-[1.02] overflow-hidden"
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
             <span className="relative z-10">Ansök här</span>
