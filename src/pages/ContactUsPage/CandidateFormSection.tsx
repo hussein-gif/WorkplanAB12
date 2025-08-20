@@ -12,7 +12,7 @@ interface CandidateFormSectionProps {
   };
   handleCandidateSubmit: (e: React.FormEvent) => void;
   handleCandidateChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onClose: () => void; // kan fortfarande användas om du vill dölja sektionen externt
+  onClose?: () => void; // görs valfri ifall någon fortfarande skickar in den
 }
 
 const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
@@ -35,16 +35,11 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
   return (
     <section
       ref={sectionRef}
-      className="
-        relative py-14 sm:py-16 px-4 sm:px-6
-        bg-white
-        overflow-hidden
-      "
+      className="relative py-14 sm:py-16 px-4 sm:px-6 bg-white overflow-hidden"
       aria-labelledby="candidate-form-heading"
     >
       {/* Elegant vit bakgrund – subtila radialer + lätt grid */}
       <div className="pointer-events-none absolute inset-0">
-        {/* diskreta radialer */}
         <div
           className="absolute -top-24 -left-24 w-[36rem] h-[36rem] rounded-full opacity-[0.08] blur-3xl"
           style={{ background: 'radial-gradient(ellipse at center, #93C5FD, transparent 60%)' }}
@@ -53,7 +48,6 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
           className="absolute -bottom-32 -right-16 w-[32rem] h-[32rem] rounded-full opacity-[0.06] blur-3xl"
           style={{ background: 'radial-gradient(ellipse at center, #A7F3D0, transparent 60%)' }}
         />
-        {/* fin rutnätsstruktur */}
         <div
           className="absolute inset-0 opacity-[0.04]"
           style={{
@@ -182,7 +176,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
               </label>
             </div>
 
-            {/* Knapp med shimmer */}
+            {/* Knapp med shimmer (kräver .group) */}
             <button
               type="submit"
               className="
@@ -203,7 +197,6 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
                 border: '1px solid rgba(255,255,255,0.18)',
               }}
             >
-              {/* Shimmer-effekten */}
               <span
                 className="
                   pointer-events-none absolute inset-0
