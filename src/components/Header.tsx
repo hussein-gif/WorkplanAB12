@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, Sparkles } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -9,14 +9,11 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Endast de menyposter du vill ha, med “För företag” -> “Företag”
   const navigationItems = [
     { label: 'Jobb', href: '/jobs' },
     { label: 'Företag', href: '/partner' },
@@ -29,11 +26,12 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
+  const scrolledTextColor = '#08132B';
+
   return (
     <>
-      {/* Själva headern är alltid fixed, men ytan/baren visas bara vid scroll */}
+      {/* Ytan/baren visas bara vid scroll */}
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
-        {/* Header-surface som blir en ljusblå rundad rektangel vid scroll */}
         <div
           className={`
             transition-all duration-300 ease-out
@@ -51,65 +49,60 @@ const Header = () => {
               pointer-events-auto
             `}
           >
-            {/* Logo */}
-            <div
-              className="flex items-center space-x-3 cursor-pointer group"
+            {/* Logo – ingen ruta, bara bilden. Växlar med scroll */}
+            <button
               onClick={() => handleNavigation('/')}
+              className="flex items-center focus:outline-none"
+              aria-label="Gå till startsidan"
             >
-              <div className={`relative w-12 h-12 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-all duration-300 
-                ${isScrolled ? 'bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700' : 'bg-gradient-to-br from-white/20 via-white/15 to-white/10'}
-              `}>
-                <div className="absolute inset-0 rounded-xl bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <Sparkles size={8} className={`absolute top-1 right-1 ${isScrolled ? 'text-white/60' : 'text-white/70'} animate-pulse`} />
-                  <Sparkles size={6} className={`absolute bottom-1 left-1 ${isScrolled ? 'text-white/40' : 'text-white/60'} animate-pulse`} style={{ animationDelay: '300ms' }} />
-                </div>
-                <img
-                  src="https://i.ibb.co/Rkq4d57H/Workplan-ABlogo1.png"
-                  alt="Workplan Logo"
-                  className="relative z-10 w-8 h-8 object-contain"
-                />
-              </div>
-              <div>
-                <h1
-                  className={`text-2xl font-light tracking-tight transition-colors duration-300
-                    ${isScrolled ? 'text-blue-900' : 'text-white'}
-                  `}
-                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                >
-                  Workplan
-                </h1>
-              </div>
-            </div>
+              <img
+                src={
+                  isScrolled
+                    ? 'https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png'
+                    : 'https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png'
+                }
+                alt="Workplan"
+                className={`
+                  transition-all duration-300
+                  ${isScrolled ? 'h-8' : 'h-10'}
+                `}
+                style={{ width: 'auto' }}
+              />
+            </button>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
-              {navigationItems.map((item) => (
-                <button
-                  key={item.href}
-                  onClick={() => handleNavigation(item.href)}
-                  className={`
-                    relative px-3 py-2 text-sm font-medium transition-all duration-300
-                    hover:scale-105
-                    ${location.pathname === item.href
-                      ? (isScrolled ? 'text-blue-700' : 'text-white')
-                      : (isScrolled ? 'text-blue-900/80 hover:text-blue-700' : 'text-white/80 hover:text-white')
-                    }
-                  `}
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  {item.label}
-                  {location.pathname === item.href && (
-                    <div
-                      className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full
-                        ${isScrolled ? 'bg-blue-700' : 'bg-white'}
-                      `}
-                    />
-                  )}
-                </button>
-              ))}
+              {navigationItems.map((item) => {
+                const isActive = location.pathname === item.href;
+                return (
+                  <button
+                    key={item.href}
+                    onClick={() => handleNavigation(item.href)}
+                    className={`
+                      relative px-3 py-2 text-sm font-medium transition-all duration-300
+                      hover:scale-105
+                      ${isScrolled
+                        ? ''
+                        : (isActive ? 'text-white' : 'text-white/80 hover:text-white')}
+                    `}
+                    style={{
+                      fontFamily: 'Inter, sans-serif',
+                      color: isScrolled
+                        ? (isActive ? scrolledTextColor : scrolledTextColor)
+                        : undefined,
+                    }}
+                  >
+                    {item.label}
+                    {isActive && (
+                      <div
+                        className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
+                        style={{ backgroundColor: isScrolled ? scrolledTextColor : '#ffffff' }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
             </nav>
-
-            {/* CTA-knappen är borttagen enligt önskemål */}
 
             {/* Mobile Menu Button */}
             <button
@@ -117,10 +110,11 @@ const Header = () => {
               className={`
                 lg:hidden p-2 rounded-lg transition-colors duration-300
                 ${isScrolled
-                  ? 'text-blue-900 hover:bg-blue-200/50'
-                  : 'text-white hover:bg-white/10'
-                }
+                  ? 'hover:bg-blue-200/50'
+                  : 'text-white hover:bg-white/10'}
               `}
+              style={{ color: isScrolled ? scrolledTextColor : undefined }}
+              aria-label="Öppna meny"
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -136,47 +130,45 @@ const Header = () => {
             className="fixed inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          {/* Själva menykortet – matchar scrolled-stil med rundade hörn */}
+          {/* Menykortet – rundad ljusblå, 2xl-hörn */}
           <div className="fixed top-4 left-3 right-3 bg-blue-100/95 backdrop-blur-md border border-blue-200/60 shadow-xl rounded-2xl overflow-hidden">
             <div className="px-4 py-4 flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <img
-                  src="https://i.ibb.co/Rkq4d57H/Workplan-ABlogo1.png"
-                  alt="Workplan Logo"
-                  className="w-8 h-8 object-contain"
-                />
-                <span
-                  className="text-lg font-medium text-blue-900"
-                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                >
-                  Workplan
-                </span>
-              </div>
+              {/* Mobil logga – använd blå variant här */}
+              <img
+                src="https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
+                alt="Workplan"
+                className="h-8 w-auto"
+              />
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 rounded-lg text-blue-900 hover:bg-blue-200/50 transition-colors"
+                className="p-2 rounded-lg transition-colors"
+                style={{ color: scrolledTextColor }}
+                aria-label="Stäng meny"
               >
                 <X size={22} />
               </button>
             </div>
 
             <nav className="px-4 pb-4 space-y-2">
-              {navigationItems.map((item) => (
-                <button
-                  key={item.href}
-                  onClick={() => handleNavigation(item.href)}
-                  className={`
-                    block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-colors duration-300
-                    ${location.pathname === item.href
-                      ? 'text-blue-800 bg-blue-200/70'
-                      : 'text-blue-900 hover:text-blue-800 hover:bg-blue-200/50'
-                    }
-                  `}
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  {item.label}
-                </button>
-              ))}
+              {navigationItems.map((item) => {
+                const isActive = location.pathname === item.href;
+                return (
+                  <button
+                    key={item.href}
+                    onClick={() => handleNavigation(item.href)}
+                    className={`
+                      block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-colors duration-300
+                      ${isActive ? 'bg-blue-200/70' : 'hover:bg-blue-200/50'}
+                    `}
+                    style={{
+                      fontFamily: 'Inter, sans-serif',
+                      color: scrolledTextColor,
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
             </nav>
           </div>
         </div>
