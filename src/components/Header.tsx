@@ -9,9 +9,9 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const navigationItems = [
@@ -29,35 +29,35 @@ const Header = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
-        {/* Yttre wrapper: centrerar innehållet när man skrollat */}
+        {/* Rad som centrerar chipet när vi scrollat */}
         <div
           className={`
             transition-all duration-300 ease-out
-            ${isScrolled
-              ? 'mx-3 sm:mx-4 md:mx-6 mt-3 sm:mt-4 flex justify-center'
-              : 'bg-transparent'
-            }
+            ${isScrolled ? 'mt-3 sm:mt-4 flex justify-center' : ''}
           `}
         >
-          {/* Inre container */}
+          {/* Container:
+              - När scrolled: chip som bara omsluter innehållet (inline-flex, ingen fullbredd)
+              - Innan scrolled: din original fullbredd-container */}
           <div
             className={`
               pointer-events-auto
               ${isScrolled
                 ? [
-                    // CHIP som exakt omsluter innehållet (ingen extra luft utanför logga/länkar)
-                    'inline-flex items-center gap-8 px-6 h-16',
-                    'bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl',
+                    'inline-flex items-center', // chip-bredd = innehållets bredd
+                    'gap-8',                    // ← behåller avstånd mellan logga & länkar
+                    'px-6 h-16',
+                    'bg-white/90 backdrop-blur-md border border-gray-200/60',
+                    'shadow-lg rounded-2xl'
                   ].join(' ')
                 : [
-                    // Ursprungligt, fullbredd med max-w och centrering
                     'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8',
-                    'h-20 flex items-center justify-between w-full',
+                    'h-20 w-full flex items-center justify-between'
                   ].join(' ')
               }
             `}
           >
-            {/* Logo (samma position) */}
+            {/* Logo (behåller position och storlek) */}
             <div
               className="flex items-center cursor-pointer shrink-0"
               onClick={() => handleNavigation('/')}
@@ -74,7 +74,7 @@ const Header = () => {
               />
             </div>
 
-            {/* Desktop Navigation (samma position) */}
+            {/* Desktop Navigation (behåller spacing) */}
             <nav className="hidden lg:flex items-center space-x-8">
               {navigationItems.map((item) => (
                 <button
@@ -107,10 +107,7 @@ const Header = () => {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`
                 lg:hidden p-2 rounded-lg transition-colors duration-300
-                ${isScrolled
-                  ? 'text-[#08132B] hover:bg-gray-200/50'
-                  : 'text-white hover:bg-white/10'
-                }
+                ${isScrolled ? 'text-[#08132B] hover:bg-gray-200/50' : 'text-white hover:bg-white/10'}
               `}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
