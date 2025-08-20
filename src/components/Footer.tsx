@@ -28,7 +28,7 @@ const Footer = () => {
 
   // Sektion: För arbetsgivare -> PartnerHeroSection.tsx
   const employerLinks = [
-    { label: 'För företag', href: '/partner' }, // navigerar till PartnerHeroSection
+    { label: 'För företag', href: '/partner' },
     { label: 'Om oss', href: '/about' },
     { label: 'Kontakta oss', href: '/contact' }
   ];
@@ -37,15 +37,14 @@ const Footer = () => {
   const aboutLinks = [
     { label: 'Om oss', href: '/about' },
     { label: 'Kontakta oss', href: '/contact' },
-    { label: 'Läs mer', href: '/services' } // navigerar till ServicesHeroSection
+    { label: 'Läs mer', href: '/services' }
   ];
 
-  // Länkar längst ner bredvid pilen
+  // Länkar längst ner bredvid pilen (GDPR borttagen ✅)
   const legalLinks = [
     { label: 'Integritetspolicy', href: '/privacy' },
     { label: 'Användarvillkor', href: '/terms' },
-    { label: 'Cookie Policy', href: '#cookies' },
-    { label: 'GDPR Efterlevnad', href: '#gdpr' }
+    { label: 'Cookie Policy', href: '#cookies' }
   ];
 
   // Sociala medier
