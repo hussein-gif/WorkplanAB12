@@ -9,7 +9,9 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -29,34 +31,25 @@ const Header = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
-        {/* Rad som centrerar chipet när vi scrollat */}
         <div
           className={`
             transition-all duration-300 ease-out
-            ${isScrolled ? 'mt-3 sm:mt-4 flex justify-center' : 'bg-transparent'}
+            ${isScrolled
+              ? 'mx-3 sm:mx-4 md:mx-6 mt-3 sm:mt-4 bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl'
+              : 'bg-transparent'
+            }
           `}
         >
-          {/* CHIP-container */}
           <div
             className={`
-              pointer-events-auto
-              ${isScrolled
-                ? [
-                    'inline-flex items-center gap-6',     // chip som följer innehållets bredd
-                    'px-4 sm:px-5 lg:px-6',               // inre luft
-                    'h-16',
-                    'bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg rounded-2xl'
-                  ].join(' ')
-                : [
-                    'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8', // normal header-läge
-                    'h-20 flex items-center justify-between w-full'
-                  ].join(' ')
-              }
+              flex items-center justify-between
+              ${isScrolled ? 'h-16 px-4 sm:px-6 lg:px-8' : 'h-20 px-4 sm:px-6 lg:px-8'}
+              pointer-events-auto w-full
             `}
           >
             {/* Logo */}
             <div
-              className="flex items-center cursor-pointer shrink-0"
+              className="flex items-center cursor-pointer"
               onClick={() => handleNavigation('/')}
             >
               <img
@@ -66,13 +59,16 @@ const Header = () => {
                     : 'https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png'
                 }
                 alt="Workplan"
-                className={`transition-all duration-300 px-1 ${isScrolled ? 'h-14' : 'h-16'}`}
+                className={`
+                  transition-all duration-300 px-1
+                  ${isScrolled ? 'h-14' : 'h-16'}
+                `}
                 style={{ width: 'auto' }}
               />
             </div>
 
-            {/* Desktop Navigation (ligger i chipet när scrolled) */}
-            <nav className={`hidden lg:flex items-center ${isScrolled ? 'gap-6' : 'space-x-8'}`}>
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center space-x-8">
               {navigationItems.map((item) => (
                 <button
                   key={item.href}
@@ -99,12 +95,15 @@ const Header = () => {
               ))}
             </nav>
 
-            {/* Mobile Menu Button (inte i chip på desktop, men syns i normal-läge) */}
+            {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`
                 lg:hidden p-2 rounded-lg transition-colors duration-300
-                ${isScrolled ? 'text-[#08132B] hover:bg-gray-200/50' : 'text-white hover:bg-white/10'}
+                ${isScrolled
+                  ? 'text-[#08132B] hover:bg-gray-200/50'
+                  : 'text-white hover:bg-white/10'
+                }
               `}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -113,9 +112,10 @@ const Header = () => {
         </div>
       </header>
 
-      {/* Mobile Menu (oförändrat) */}
+      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-[999] lg:hidden">
+          {/* Dim + blur bakom */}
           <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
