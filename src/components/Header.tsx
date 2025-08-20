@@ -6,25 +6,51 @@ const Header: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Refs för att mäta gap i toppläget (logga -> nav)
+  // --- Smooth scroll state med hysteres ---
+  const [isScrolled, setIsScrolled] = useState(false);
+  const scrolledRef = useRef(isScrolled);
+  useEffect(() => {
+    scrolledRef.current = isScrolled;
+  }, [isScrolled]);
+
+  useEffect(() => {
+    // Hysteres: gå IN i chip > enter, gå UT < exit
+    const ENTER_THRESHOLD = 28; // px
+    const EXIT_THRESHOLD = 12;  // px
+    let ticking = false;
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          const cur = scrolledRef.current;
+          if (!cur && y > ENTER_THRESHOLD) {
+            setIsScrolled(true);
+          } else if (cur && y < EXIT_THRESHOLD) {
+            setIsScrolled(false);
+          }
+          ticking = false;
+        });
+      }
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll(); // init
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Refs för att mäta “topp-gapet” (logga -> nav)
   const logoRef = useRef<HTMLDivElement | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
   const [measuredGap, setMeasuredGap] = useState<number | null>(null);
 
-  // Scroll state
-  useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Mät gapet när vi är i toppläget (inte scrolled)
+  // Mät gap i topp-läget (vi rör inte denna logik)
   useEffect(() => {
     const measureGap = () => {
-      if (isScrolled) return; // mät endast i toppläget
+      if (isScrolled) return; // mät endast i topp-läget
       const l = logoRef.current?.getBoundingClientRect();
       const n = navRef.current?.getBoundingClientRect();
       if (l && n) {
@@ -52,21 +78,16 @@ const Header: React.FC = () => {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-[1000] pointer-events-none">
-        {/* Minimal wrapper – ingen bredd/marginal-animation, bara liten top-marg vid scroll */}
-        <div
-          className={`${isScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""}`}
-        >
-          {/* 
-            Inte skrollad: fullbredd (original).
-            Skrollad: chip som wrappar exakt innehållet.
-            Viktigt: vi ANIMERAR INTE width/margins – bara opacity/height/blur/border/shadow för superminimal känsla.
-          */}
+        {/* Minimal wrapper – ingen width-animation; liten top-marg vid scroll */}
+        <div className={`${isScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""}`}>
+          {/* Inte skrollad: fullbredd; Skrollad: chip som wrappar exakt innehållet */}
           <div
             className={`pointer-events-auto ${
               isScrolled
                 ? "inline-block rounded-2xl"
                 : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
             }`}
+            style={{ willChange: "opacity, transform" }}
           >
             {/* Bakgrundslager som bara FADAR in/ut (ingen width-animation) */}
             <div
@@ -75,12 +96,14 @@ const Header: React.FC = () => {
                   ? "bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg"
                   : "bg-transparent border border-transparent shadow-none"
               } rounded-2xl transition-[opacity,background-color,backdrop-filter,box-shadow,border-color] duration-200 ease-out`}
+              style={{ willChange: "opacity, filter" }}
             >
-              {/* Inre rad – liten höjdtransition, annars orört */}
+              {/* Inre rad – liten höjdtransition */}
               <div
                 className={`flex items-center ${
                   isScrolled ? "h-[72px] px-6" : "h-20"
                 } transition-[height] duration-200 ease-out`}
+                style={{ willChange: "height" }}
               >
                 {/* Logo */}
                 <div
@@ -96,20 +119,20 @@ const Header: React.FC = () => {
                     }
                     alt="Workplan"
                     className={`${isScrolled ? "h-14" : "h-16"} px-1 transition-[height] duration-200 ease-out`}
-                    style={{ width: "auto" }}
+                    style={{ width: "auto", willChange: "height" }}
                   />
                 </div>
 
-                {/* SPACER – 90% av topp-gap när skrollad, flex-1 i topp-läget.
-                    Enda animationen här är width (kort & subtil). */}
+                {/* SPACER – 90% av topp-gap när skrollad (subtil width-transition) */}
                 {isScrolled ? (
                   <div
                     style={{
                       width:
                         measuredGap !== null
-                          ? `${measuredGap * 0.9}px` // liiite mindre gap vid scroll
-                          : "clamp(12rem, 24vw, 32rem)", // fallback om sidan laddas mitt i
+                          ? `${measuredGap * 0.9}px` // lite mindre gap vid scroll
+                          : "clamp(12rem, 24vw, 32rem)", // fallback
                       transition: "width 200ms ease-out",
+                      willChange: "width",
                     }}
                   />
                 ) : (
