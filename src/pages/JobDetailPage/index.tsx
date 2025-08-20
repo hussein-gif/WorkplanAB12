@@ -9,6 +9,14 @@ const JobDetailPage = () => {
   const [job, setJob] = useState<JobData | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
+  // 🔹 Tvinga mörk navbar på denna sida
+  useEffect(() => {
+    document.documentElement.classList.add('force-nav-dark');
+    return () => {
+      document.documentElement.classList.remove('force-nav-dark');
+    };
+  }, []);
+
   useEffect(() => {
     if (jobId && mockJobData[jobId as keyof typeof mockJobData]) {
       setJob(mockJobData[jobId as keyof typeof mockJobData]);
@@ -128,7 +136,7 @@ const JobDetailPage = () => {
           {job.summary}
         </p>
 
-        {/* Primär CTA – Ansök här (MATCHAR PartnerHero: #0B274D men med vår hover-effekt) */}
+        {/* Primär CTA */}
         <div className="mb-8">
           <button
             onClick={handleApply}
@@ -137,12 +145,10 @@ const JobDetailPage = () => {
           >
             <span className="relative z-10">Ansök här</span>
             <ArrowRight size={18} className="relative z-10" />
-            {/* Radial highlight */}
             <div
               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               style={{ background: 'radial-gradient(120px 60px at 20% 0%, rgba(255,255,255,0.22), transparent 70%)' }}
             />
-            {/* Shimmer */}
             <div className="pointer-events-none absolute -left-16 top-0 bottom-0 w-16 bg-white/25 -skew-x-12 -translate-x-24 group-hover:translate-x-[140%] transition-transform duration-700" />
           </button>
         </div>
@@ -199,7 +205,6 @@ const JobDetailPage = () => {
 
         {/* Sektioner */}
         <div className="space-y-16">
-          {/* Om rollen */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <h2
               className="text-3xl md:text-4xl text-[#08132B] mb-6"
@@ -214,7 +219,6 @@ const JobDetailPage = () => {
             </div>
           </section>
 
-          {/* Arbetsuppgifter */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <h2
               className="text-3xl md:text-4xl text-[#08132B] mb-6"
@@ -236,7 +240,6 @@ const JobDetailPage = () => {
             </div>
           </section>
 
-          {/* Vem vi söker */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <h2
               className="text-3xl md:text-4xl text-[#08132B] mb-6"
@@ -258,7 +261,6 @@ const JobDetailPage = () => {
             </div>
           </section>
 
-          {/* Vår rekryteringsprocess */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <h2
               className="text-3xl md:text-4xl text-[#08132B] mb-6"
@@ -273,7 +275,6 @@ const JobDetailPage = () => {
             </div>
           </section>
 
-          {/* Har du frågor? */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <div className="bg-white border border-[#08132B]/10 rounded-xl p-6">
               <h3
@@ -312,7 +313,7 @@ const JobDetailPage = () => {
           </section>
         </div>
 
-        {/* Slut-CTA – samma färg + effekt */}
+        {/* Slut-CTA */}
         <div className="mt-14 flex">
           <button
             onClick={handleApply}
