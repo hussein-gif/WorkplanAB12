@@ -44,7 +44,7 @@ const Footer = () => {
   const legalLinks = [
     { label: 'Integritetspolicy', href: '/privacy' },
     { label: 'Användarvillkor', href: '/terms' },
-    { label: 'Cookie Policy', href: '#cookies' }
+    { label: 'Cookie Policy', href: '/cookies' }
   ];
 
   // Sociala medier

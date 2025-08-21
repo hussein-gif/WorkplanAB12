@@ -17,6 +17,7 @@ import ContactUsPage from './pages/ContactUsPage';
 import OurServicesPage from './pages/OurServicesPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import CookiePolicyPage from './pages/CookiePolicyPage';
 
 function HomePage() {
   return (
@@ -48,6 +49,7 @@ function App() {
             <Route path="/services" element={<OurServicesPage />} />
             <Route path="/terms" element={<TermsOfServicePage />} />
             <Route path="/privacy" element={<PrivacyPolicyPage />} />
+            <Route path="/cookies" element={<CookiePolicyPage />} />
           </Routes>
         </main>
         <Footer />
