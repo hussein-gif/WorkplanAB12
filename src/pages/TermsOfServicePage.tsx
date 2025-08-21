@@ -3,12 +3,12 @@ import { FileText, Calendar } from 'lucide-react';
 
 /**
  * TermsOfServicePage – Komprimerad, professionell struktur (v2.4)
- * - Samma innehåll som tidigare (ingen ändring i texter/sektioner)
- * - Rubrik i mitten med logga ovanför och underrubrik under (matchar PrivacyPolicy)
- * - "Senast uppdaterad" flyttad till ovanför vänstra rutan
- * - Vänster TOC smalare, mindre text/padding, ingen scroll (alla punkter syns)
- * - Stabil scroll-spy som markerar sektionen närmast under navbar (NAV_OFFSET_PX)
- * - Aktiv TOC-punkt: bakgrund #08132B och vit text
+ * - Rubrik i mitten, logga ovanför, underrubrik under
+ * - "Senast uppdaterad" ovanför vänstra rutan
+ * - Vänster TOC smalare, mindre text/padding (alla punkter syns utan scroll)
+ * - Stabil scroll-spy (NAV_OFFSET_PX)
+ * - Aktiv TOC-punkt: bg #08132B + vit text
+ * - HEADER FIX: ingen border-linje, och samma bakgrund (#F7FAFF) som resten av sidan
  */
 
 const sections = [
@@ -33,13 +33,12 @@ const TermsOfServicePage: React.FC = () => {
   const activeIdRef = useRef<string>(activeId);
   activeIdRef.current = activeId;
 
-  // Robust scroll-spy: välj sektionen vars topp är närmast ovanför visningsytans topp (med navbar-offset)
+  // Robust scroll-spy: välj den sektion vars topp är närmast ovanför visningsytans topp (med navbar-offset)
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    const getSections = () =>
-      Array.from(el.querySelectorAll('section[data-tos-section]')) as HTMLElement[];
+    const getSections = () => Array.from(el.querySelectorAll('section[data-tos-section]')) as HTMLElement[];
 
     const onScroll = () => {
       const secs = getSections();
@@ -75,9 +74,9 @@ const TermsOfServicePage: React.FC = () => {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F7FAFF' }}>
-      {/* Hero (centrerad, matchar PrivacyPolicy) */}
-      <header className="border-b border-gray-200 bg-white/90 backdrop-blur">
-        <div className="mx-auto max-w-4xl px-6 py-12 text-center">
+      {/* Hero – samma ljusblå bakgrund som resten, ingen border-linje */}
+      <header className="px-6 py-12" style={{ backgroundColor: '#F7FAFF' }}>
+        <div className="mx-auto max-w-4xl text-center">
           <div className="flex justify-center mb-6">
             <div className="w-16 h-16 bg-gradient-to-br from-[#08132B] to-[#0B274D] rounded-2xl flex items-center justify-center shadow-lg">
               <FileText className="h-8 w-8 text-white" />
@@ -134,12 +133,9 @@ const TermsOfServicePage: React.FC = () => {
             </div>
           </aside>
 
-          {/* Höger innehåll (oförändrat innehåll) */}
+          {/* Höger innehåll */}
           <div className="lg:col-span-8 xl:col-span-9">
-            <div
-              ref={containerRef}
-              className="bg-white border border-gray-200 rounded-3xl shadow-sm p-6 md:p-10 space-y-12"
-            >
+            <div ref={containerRef} className="bg-white border border-gray-200 rounded-3xl shadow-sm p-6 md:p-10 space-y-12">
               <Section id="allmant" title="1. Allmänt & tillämpning">
                 <p>
                   Dessa villkor ("Villkoren") gäller när du använder Workplan AB:s ("Workplan", "vi") webbplats och tjänster. Genom att använda
