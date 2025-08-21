@@ -67,6 +67,13 @@ const JobDetailPage = () => {
 
   const startDate = (job as any).startDate || 'Enligt överenskommelse';
 
+  // 🔹 Skicka med bransch + plats till ansökningsarket
+  const industry =
+    (job as any).industry ||
+    (job as any).category ||
+    (job as any).department ||
+    ''; // tom sträng om inget finns
+
   return (
     <div className="relative min-h-screen bg-[#F7FAFF] overflow-hidden">
       {/* Subtil blå design i #08132B */}
@@ -356,6 +363,8 @@ const JobDetailPage = () => {
       <JobApplicationForm
         jobTitle={job.title}
         companyName={job.company}
+        industry={industry}
+        location={job.location}
         isPopupOpen={isApplicationFormOpen}
         onClosePopup={handleCloseForm}
         onMinimize={handleMinimizeForm}
