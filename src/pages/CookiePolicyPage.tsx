@@ -514,9 +514,7 @@ const CookiePolicyPage: React.FC = () => {
                     Kontakta oss om du har frågor om denna policy eller vår hantering av cookies:
                   </p>
                   <div className="mt-2 text-sm">
-                    <p><strong>E-post:</strong> privacy@work-plan.se</p>
-                    <p><strong>Telefon:</strong> +46 8 123 456 78</p>
-                    <p><strong>Adress:</strong> Workplan AB, Att: Dataskydd, [Adress], [Postnr] [Ort]</p>
+                    <p><strong>E-post:</strong> info@work-plan.se</p>
                   </div>
                 </div>
               </CPSection>
