@@ -1,11 +1,14 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { FileText } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { FileText, Calendar } from 'lucide-react';
 
 /**
  * TermsOfServicePage – Komprimerad, professionell struktur (v2.4)
- * - Alla detaljer återställda från den fulla versionen (utan Integritet/Cookies och Kontakt)
- * - Stabil scroll-spy som markerar den sektion som är närmast under navbaren (likt Academic Work)
- * - Aktiv punkt i TOC: bakgrund #08132B och vit text
+ * - Samma innehåll som tidigare (ingen ändring i texter/sektioner)
+ * - Rubrik i mitten med logga ovanför och underrubrik under (matchar PrivacyPolicy)
+ * - "Senast uppdaterad" flyttad till ovanför vänstra rutan
+ * - Vänster TOC smalare, mindre text/padding, ingen scroll (alla punkter syns)
+ * - Stabil scroll-spy som markerar sektionen närmast under navbar (NAV_OFFSET_PX)
+ * - Aktiv TOC-punkt: bakgrund #08132B och vit text
  */
 
 const sections = [
@@ -30,12 +33,13 @@ const TermsOfServicePage: React.FC = () => {
   const activeIdRef = useRef<string>(activeId);
   activeIdRef.current = activeId;
 
-  // Robust scroll-spy: välj den sektion vars topp är närmast ovanför visningsytans topp (med navbar-offset)
+  // Robust scroll-spy: välj sektionen vars topp är närmast ovanför visningsytans topp (med navbar-offset)
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    const getSections = () => Array.from(el.querySelectorAll('section[data-tos-section]')) as HTMLElement[];
+    const getSections = () =>
+      Array.from(el.querySelectorAll('section[data-tos-section]')) as HTMLElement[];
 
     const onScroll = () => {
       const secs = getSections();
@@ -67,61 +71,75 @@ const TermsOfServicePage: React.FC = () => {
     }
   };
 
+  const updatedAt = '20 augusti 2025';
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F7FAFF' }}>
-      {/* Hero */}
-      <header className="pt-28 pb-10 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-baseline gap-4">
-            <div className="w-14 h-14 bg-gradient-to-br from-[#08132B] to-[#0B274D] rounded-2xl flex items-center justify-center shadow-lg self-baseline">
-              <FileText size={26} className="text-white" />
-            </div>
-            <div>
-              <h1
-                className="text-4xl md:text-5xl font-medium text-[#08132B] tracking-tight"
-                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-              >
-                Användarvillkor
-              </h1>
-              <p className="text-gray-600 mt-2" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}>
-                Villkor för användning av Workplan AB:s tjänster och webbplats
-              </p>
-              <p className="text-sm text-gray-500 mt-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                Senast uppdaterad: 20 augusti 2025
-              </p>
+      {/* Hero (centrerad, matchar PrivacyPolicy) */}
+      <header className="border-b border-gray-200 bg-white/90 backdrop-blur">
+        <div className="mx-auto max-w-4xl px-6 py-12 text-center">
+          <div className="flex justify-center mb-6">
+            <div className="w-16 h-16 bg-gradient-to-br from-[#08132B] to-[#0B274D] rounded-2xl flex items-center justify-center shadow-lg">
+              <FileText className="h-8 w-8 text-white" />
             </div>
           </div>
+          <h1
+            className="text-4xl md:text-5xl font-medium text-[#08132B] tracking-tight"
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+          >
+            Användarvillkor
+          </h1>
+          <p
+            className="text-gray-700 mt-4 max-w-2xl mx-auto"
+            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
+          >
+            Villkor för användning av Workplan AB:s tjänster och webbplats
+          </p>
         </div>
       </header>
 
       {/* Innehåll med sidomeny */}
       <main className="px-6 pb-24">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* Vänster TOC */}
+          {/* Vänster TOC – smalare, mindre text, ingen scroll; "Senast uppdaterad" ovanför */}
           <aside className="lg:col-span-4 xl:col-span-3">
-            <nav className="sticky top-24 bg-white border border-gray-200 rounded-2xl shadow-sm p-4 md:p-6 max-h-[80vh] overflow-auto" aria-label="Innehåll">
-              <ul className="space-y-1" style={{ fontFamily: 'Inter, sans-serif' }}>
-                {sections.map((s) => (
-                  <li key={s.id}>
-                    <button
-                      onClick={() => handleClick(s.id)}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition ${
-                        activeId === s.id
-                          ? 'bg-[#08132B] text-white font-medium'
-                          : 'text-gray-700 hover:bg-gray-50'
-                      }`}
-                    >
-                      {s.label}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+            <div className="sticky top-24">
+              <div
+                className="text-xs text-gray-500 mb-2 flex items-center gap-1.5"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                <Calendar className="h-3.5 w-3.5" /> Senast uppdaterad: {updatedAt}
+              </div>
+              <nav
+                className="bg-white border border-gray-200 rounded-xl shadow-sm p-3 md:p-4 max-w-xs"
+                aria-label="Innehåll"
+              >
+                <ul className="space-y-0.5" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  {sections.map((s) => (
+                    <li key={s.id}>
+                      <button
+                        onClick={() => handleClick(s.id)}
+                        className={`w-full text-left px-2 py-1.5 rounded-md text-sm transition ${
+                          activeId === s.id
+                            ? 'bg-[#08132B] text-white font-medium'
+                            : 'text-gray-700 hover:bg-gray-50'
+                        }`}
+                      >
+                        {s.label}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </div>
           </aside>
 
-          {/* Höger innehåll */}
+          {/* Höger innehåll (oförändrat innehåll) */}
           <div className="lg:col-span-8 xl:col-span-9">
-            <div ref={containerRef} className="bg-white border border-gray-200 rounded-3xl shadow-sm p-6 md:p-10 space-y-12">
+            <div
+              ref={containerRef}
+              className="bg-white border border-gray-200 rounded-3xl shadow-sm p-6 md:p-10 space-y-12"
+            >
               <Section id="allmant" title="1. Allmänt & tillämpning">
                 <p>
                   Dessa villkor ("Villkoren") gäller när du använder Workplan AB:s ("Workplan", "vi") webbplats och tjänster. Genom att använda
@@ -211,7 +229,7 @@ const TermsOfServicePage: React.FC = () => {
                   svenska versionen företräde.
                 </p>
                 <p>
-                  Meddelanden enligt Villkoren kan lämnas via e‑post eller inom plattformen till de kontaktuppgifter som användaren eller kunden angivit och
+                  Meddelanden enligt Villkoren kan lämnas via e-post eller inom plattformen till de kontaktuppgifter som användaren eller kunden angivit och
                   anses ha kommit mottagaren till handa när de skickats, om inte annat följer av tvingande lag. Parterna ska hålla sina kontaktuppgifter
                   uppdaterade.
                 </p>
