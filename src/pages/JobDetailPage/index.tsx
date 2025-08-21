@@ -222,75 +222,71 @@ const JobDetailPage = () => {
           {/* Om rollen */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <h2
-              className="text-3xl md:text-4xl text-[#08132B] mb-6"
+              className="text-3xl md:text-4xl text-[#08132B] mb-4 md:mb-6"
               style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
             >
               Om rollen
             </h2>
-            <div className="bg-white border border-[#08132B]/10 rounded-xl p-6">
-              <p className="text-[#08132B]/80 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                {job.aboutRole}
-              </p>
-            </div>
+            {/* 🔻 BORTTAGEN RUTA – text direkt på sidan */}
+            <p className="text-[#08132B]/80 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+              {job.aboutRole}
+            </p>
           </section>
 
           {/* Arbetsuppgifter */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <h2
-              className="text-3xl md:text-4xl text-[#08132B] mb-6"
+              className="text-3xl md:text-4xl text-[#08132B] mb-4 md:mb-6"
               style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
             >
               Arbetsuppgifter
             </h2>
-            <div className="bg-white border border-[#08132B]/10 rounded-xl p-6">
-              <ul className="space-y-3">
-                {job.responsibilities.map((responsibility: string, index: number) => (
-                  <li key={index} className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-[#08132B]/30 rounded-full mt-2.5 flex-shrink-0" />
-                    <span className="text-[#08132B]/80 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {responsibility}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* 🔻 BORTTAGEN RUTA – lista direkt på sidan */}
+            <ul className="space-y-3">
+              {job.responsibilities.map((responsibility: string, index: number) => (
+                <li key={index} className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-[#08132B]/30 rounded-full mt-2.5 flex-shrink-0" />
+                  <span className="text-[#08132B]/80 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    {responsibility}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </section>
 
           {/* Vem vi söker */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <h2
-              className="text-3xl md:text-4xl text-[#08132B] mb-6"
+              className="text-3xl md:text-4xl text-[#08132B] mb-4 md:mb-6"
               style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
             >
               Vem vi söker
             </h2>
-            <div className="bg-white border border-[#08132B]/10 rounded-xl p-6">
-              <ul className="space-y-3">
-                {job.requirements.map((requirement: string, index: number) => (
-                  <li key={index} className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-[#08132B]/30 rounded-full mt-2.5 flex-shrink-0" />
-                    <span className="text-[#08132B]/80 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {requirement}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {/* 🔻 BORTTAGEN RUTA – lista direkt på sidan */}
+            <ul className="space-y-3">
+              {job.requirements.map((requirement: string, index: number) => (
+                <li key={index} className="flex items-start space-x-3">
+                  <div className="w-2 h-2 bg-[#08132B]/30 rounded-full mt-2.5 flex-shrink-0" />
+                  <span className="text-[#08132B]/80 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    {requirement}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </section>
 
           {/* Vår rekryteringsprocess */}
           <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
             <h2
-              className="text-3xl md:text-4xl text-[#08132B] mb-6"
+              className="text-3xl md:text-4xl text-[#08132B] mb-4 md:mb-6"
               style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
             >
               Vår rekryteringsprocess
             </h2>
-            <div className="bg-white border border-[#08132B]/10 rounded-xl p-6">
-              <p className="text-[#08132B]/80 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                {job.recruitmentProcess}
-              </p>
-            </div>
+            {/* 🔻 BORTTAGEN RUTA – text direkt på sidan */}
+            <p className="text-[#08132B]/80 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
+              {job.recruitmentProcess}
+            </p>
           </section>
 
           {/* Har du frågor? */}
