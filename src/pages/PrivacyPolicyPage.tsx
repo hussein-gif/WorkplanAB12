@@ -11,6 +11,7 @@ import { Shield, Calendar } from "lucide-react";
  * - Merge: Profilering + DPIA => "Profilering, automatiserade beslut & DPIA"
  * - Merge: Mottagare + Överföringar => "Mottagare & överföringar"
  * - Aktiv TOC-punkt: bg #08132B + vit text
+ * - NAV FIX: force-nav-dark aktiverar mörk logga & länkar
  */
 
 const sections = [
@@ -34,6 +35,13 @@ const PrivacyPolicyPage: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const activeIdRef = useRef<string>(activeId);
   activeIdRef.current = activeId;
+
+  // Force mörk navbar (mörk logga & mörka länkar i alla lägen)
+  useEffect(() => {
+    const el = document.documentElement;
+    el.classList.add("force-nav-dark");
+    return () => el.classList.remove("force-nav-dark");
+  }, []);
 
   // Robust scroll-spy (utan IntersectionObserver-buggar)
   useEffect(() => {
