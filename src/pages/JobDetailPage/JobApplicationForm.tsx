@@ -5,13 +5,13 @@ interface JobApplicationFormProps {
   jobTitle: string;
   companyName: string;
   isPopupOpen: boolean;
-  onClosePopup: () => void;   // kvar för backdrop-stängning
-  onMinimize: () => void;     // din existerande hook för att scrolla ner till bottensektionen
+  onClosePopup: () => void;
+  onMinimize: () => void;
+  expandSignal: number;              // NEW: bumpas varje gång ”Ansök här” klickas
 }
 
-// Lämna tydligt med bakgrund överst
-const SHEET_TOP_GAP_PX = 56;   // mer än tidigare så man ser bakgrunden
-const SHEET_HEADER_H_PX = 56;  // kompakt sticky-header inne i arket
+const SHEET_TOP_GAP_PX = 56;
+const SHEET_HEADER_H_PX = 56;
 
 const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   jobTitle,
@@ -19,6 +19,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   isPopupOpen,
   onClosePopup,
   onMinimize,
+  expandSignal,                        // NEW
 }) => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -33,9 +34,32 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
+  // Scrolla upp till arket när det öppnas
   useEffect(() => {
     if (isPopupOpen && formRef.current) {
       formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [isPopupOpen]);
+
+  // NEW: Varje gång ”Ansök här” klickas -> MAXIMERA arket
+  useEffect(() => {
+    if (!isPopupOpen) return;
+    setIsMinimized(false);
+  }, [expandSignal, isPopupOpen]);
+
+  // NEW: Lås bakgrundsscroll när arket är öppet
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    if (isPopupOpen) {
+      const prevHtmlOverflow = html.style.overflow;
+      const prevBodyOverflow = body.style.overflow;
+      html.style.overflow = 'hidden';
+      body.style.overflow = 'hidden';
+      return () => {
+        html.style.overflow = prevHtmlOverflow;
+        body.style.overflow = prevBodyOverflow;
+      };
     }
   }, [isPopupOpen]);
 
@@ -62,33 +86,33 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   const handleMinimizeToggle = () => {
     const next = !isMinimized;
     setIsMinimized(next);
-    if (!isMinimized) onMinimize(); // när vi minimerar, scrolla ner till bottensektionen
+    if (!isMinimized) onMinimize();
   };
 
   if (!isPopupOpen) return null;
 
   return (
     <>
-      {/* Backdrop (klick stänger) */}
+      {/* Backdrop (klick stänger & nu kan man inte skrolla pga body-lock) */}
       <div
         className="fixed inset-0 z-40 bg-black/25 backdrop-blur-sm"
         onClick={onClosePopup}
       />
 
-      {/* HELSIDA: kant-till-kant sheet */}
+      {/* Sheet: kant-till-kant */}
       <div
         ref={formRef}
         className="fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-3xl shadow-2xl overflow-hidden transition-transform duration-500 ease-out"
         style={{
-          top: `${SHEET_TOP_GAP_PX}px`,                       // synlig remsa överst
-          height: `calc(100vh - ${SHEET_TOP_GAP_PX}px)`,      // täck resten
+          top: `${SHEET_TOP_GAP_PX}px`,
+          height: `calc(100vh - ${SHEET_TOP_GAP_PX}px)`,
           transform: isMinimized
             ? `translateY(calc(100% - ${SHEET_HEADER_H_PX}px))`
             : 'translateY(0)',
           willChange: 'transform',
         }}
       >
-        {/* Minimal sticky-header med ENDAST pil */}
+        {/* Sticky header med ENDAST pil */}
         <div
           className="sticky top-0 z-10 flex items-center justify-end px-4"
           style={{ height: `${SHEET_HEADER_H_PX}px`, backgroundColor: '#08132B' }}
@@ -104,7 +128,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
         {/* Innehåll (scrollbart) */}
         <div className="h-[calc(100%-56px)] overflow-y-auto">
-          {/* HERO – stor centrerad rubrik innan fälten */}
+          {/* Stor rubrik */}
           <section className="px-6 sm:px-8 pt-6 pb-4 text-center">
             <div className="flex justify-center mb-3">
               <div className="w-12 h-1.5 rounded-full bg-[#08132B]/15" />
@@ -125,7 +149,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
           <hr className="border-t border-gray-200/80" />
 
-          {/* FORMULÄR – under rubriken, man skrollar ner till fälten */}
+          {/* Formulär */}
           <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6 max-w-4xl mx-auto">
             {/* Namn */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
