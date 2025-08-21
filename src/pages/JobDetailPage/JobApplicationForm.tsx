@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, ChevronDown, ChevronUp, Send, Upload, User, Mail, Phone, FileText } from 'lucide-react';
+import { ChevronDown, ChevronUp, Send, Upload, User, Mail, Phone, FileText } from 'lucide-react';
 
 interface JobApplicationFormProps {
   jobTitle: string;
   companyName: string;
   isPopupOpen: boolean;
-  onClosePopup: () => void;
-  onMinimize: () => void;
+  onClosePopup: () => void;   // kvar för backdrop-stängning
+  onMinimize: () => void;     // din existerande hook för att scrolla ner till bottensektionen
 }
 
-const SHEET_TOP_GAP_PX = 12;   // liten remsa överst så bakgrunden syns
-const SHEET_HEADER_H_PX = 72;  // höjden på headern i arket
+// Lämna tydligt med bakgrund överst
+const SHEET_TOP_GAP_PX = 56;   // mer än tidigare så man ser bakgrunden
+const SHEET_HEADER_H_PX = 56;  // kompakt sticky-header inne i arket
 
 const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   jobTitle,
@@ -61,82 +62,71 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   const handleMinimizeToggle = () => {
     const next = !isMinimized;
     setIsMinimized(next);
-    if (!isMinimized) onMinimize(); // när vi minimerar – scrolla till sektionen längst ner (din befintliga logik)
+    if (!isMinimized) onMinimize(); // när vi minimerar, scrolla ner till bottensektionen
   };
 
   if (!isPopupOpen) return null;
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop (klick stänger) */}
       <div
         className="fixed inset-0 z-40 bg-black/25 backdrop-blur-sm"
         onClick={onClosePopup}
       />
 
-      {/* Sheet / Popup */}
+      {/* HELSIDA: kant-till-kant sheet */}
       <div
         ref={formRef}
-        className={`
-          fixed inset-x-0 bottom-0 z-50 mx-2 sm:mx-3 lg:mx-4
-          bg-white rounded-t-3xl shadow-2xl overflow-hidden
-          transition-transform duration-500 ease-out
-        `}
+        className="fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-3xl shadow-2xl overflow-hidden transition-transform duration-500 ease-out"
         style={{
-          top: `${SHEET_TOP_GAP_PX}px`,                 // lämna liten remsa överst
-          height: `calc(100vh - ${SHEET_TOP_GAP_PX}px)`, // täck resten
+          top: `${SHEET_TOP_GAP_PX}px`,                       // synlig remsa överst
+          height: `calc(100vh - ${SHEET_TOP_GAP_PX}px)`,      // täck resten
           transform: isMinimized
             ? `translateY(calc(100% - ${SHEET_HEADER_H_PX}px))`
             : 'translateY(0)',
           willChange: 'transform',
         }}
       >
-        {/* Header – sticky inuti arket */}
+        {/* Minimal sticky-header med ENDAST pil */}
         <div
-          className="sticky top-0 z-10 flex items-center justify-between px-5 sm:px-6"
-          style={{
-            height: `${SHEET_HEADER_H_PX}px`,
-            backgroundColor: '#08132B',
-          }}
+          className="sticky top-0 z-10 flex items-center justify-end px-4"
+          style={{ height: `${SHEET_HEADER_H_PX}px`, backgroundColor: '#08132B' }}
         >
-          <div className="min-w-0">
-            <h3
-              className="truncate text-white text-lg sm:text-xl font-medium"
-              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-              title={`Ansök till ${jobTitle}`}
+          <button
+            onClick={handleMinimizeToggle}
+            className="p-2 rounded-lg text-white/90 hover:text-white hover:bg-white/10 transition"
+            aria-label={isMinimized ? 'Maximera formulär' : 'Minimera formulär'}
+          >
+            {isMinimized ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+          </button>
+        </div>
+
+        {/* Innehåll (scrollbart) */}
+        <div className="h-[calc(100%-56px)] overflow-y-auto">
+          {/* HERO – stor centrerad rubrik innan fälten */}
+          <section className="px-6 sm:px-8 pt-6 pb-4 text-center">
+            <div className="flex justify-center mb-3">
+              <div className="w-12 h-1.5 rounded-full bg-[#08132B]/15" />
+            </div>
+            <h2
+              className="text-3xl sm:text-4xl md:text-5xl leading-tight text-[#08132B]"
+              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 600 }}
             >
               Ansök till {jobTitle}
-            </h3>
+            </h2>
             <p
-              className="text-white/70 text-xs sm:text-sm"
+              className="text-[#08132B]/70 mt-2 text-base sm:text-lg"
               style={{ fontFamily: 'Inter, sans-serif' }}
             >
               {companyName}
             </p>
-          </div>
+          </section>
 
-          <div className="flex items-center gap-1.5">
-            {/* Nedåtpil för att minimera (uppåtpil vid minimerat läge) */}
-            <button
-              onClick={handleMinimizeToggle}
-              className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition"
-              aria-label={isMinimized ? 'Maximera formulär' : 'Minimera formulär'}
-            >
-              {isMinimized ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-            </button>
-            <button
-              onClick={onClosePopup}
-              className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition"
-              aria-label="Stäng formulär"
-            >
-              <X size={20} />
-            </button>
-          </div>
-        </div>
+          <hr className="border-t border-gray-200/80" />
 
-        {/* Innehåll – fyller hela ytan under header, rullbar */}
-        <div className="h-[calc(100%-72px)] overflow-y-auto">
-          <form onSubmit={handleSubmit} className="p-5 sm:p-6 space-y-6">
+          {/* FORMULÄR – under rubriken, man skrollar ner till fälten */}
+          <form onSubmit={handleSubmit} className="p-6 sm:p-8 space-y-6 max-w-4xl mx-auto">
             {/* Namn */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -284,16 +274,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
             {/* Skicka */}
             <button
               type="submit"
-              className="
-                group relative w-full py-4 px-6
-                bg-[#08132B] text-white rounded-xl
-                font-medium text-lg tracking-wide
-                hover:bg-[#0B274D]
-                transition-all duration-300
-                shadow-lg hover:shadow-xl
-                hover:scale-[1.02]
-                overflow-hidden
-              "
+              className="group relative w-full py-4 px-6 bg-[#08132B] text-white rounded-xl font-medium text-lg tracking-wide hover:bg-[#0B274D] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] overflow-hidden"
               style={{ fontFamily: 'Inter, sans-serif' }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
