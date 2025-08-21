@@ -8,6 +8,7 @@ import { Cookie, Calendar } from 'lucide-react';
  * - "Senast uppdaterad" ovanför vänster TOC
  * - Aktiv TOC-punkt: bg #08132B + vit text
  * - Innehållet utökat för att uppfylla GDPR/ePrivacy (samtycke, rättslig grund, återkallelse, m.m.)
+ * - NYTT: Sätter <html class="force-nav-dark"> så att Header visar mörk logga/länkar även i toppläget
  */
 
 const sections = [
@@ -31,6 +32,15 @@ const CookiePolicyPage: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const activeIdRef = useRef<string>(activeId);
   activeIdRef.current = activeId;
+
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  // Force mörk navbar på denna sida (samma mekanik som JobDetailPage)
+  useEffect(() => {
+    const el = document.documentElement;
+    el.classList.add('force-nav-dark');
+    return () => el.classList.remove('force-nav-dark');
+  }, []);
+  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
   // Robust scroll-spy
   useEffect(() => {
@@ -504,7 +514,9 @@ const CookiePolicyPage: React.FC = () => {
                     Kontakta oss om du har frågor om denna policy eller vår hantering av cookies:
                   </p>
                   <div className="mt-2 text-sm">
-                    <p><strong>E-post:</strong> info@work-plan.se</p>
+                    <p><strong>E-post:</strong> privacy@work-plan.se</p>
+                    <p><strong>Telefon:</strong> +46 8 123 456 78</p>
+                    <p><strong>Adress:</strong> Workplan AB, Att: Dataskydd, [Adress], [Postnr] [Ort]</p>
                   </div>
                 </div>
               </CPSection>
