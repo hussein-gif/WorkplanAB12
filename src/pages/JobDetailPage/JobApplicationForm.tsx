@@ -9,6 +9,9 @@ interface JobApplicationFormProps {
   onMinimize: () => void;
 }
 
+const SHEET_TOP_GAP_PX = 12;   // liten remsa överst så bakgrunden syns
+const SHEET_HEADER_H_PX = 72;  // höjden på headern i arket
+
 const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   jobTitle,
   companyName,
@@ -45,24 +48,20 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setCvFile(file);
-    }
+    if (file) setCvFile(file);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Application submitted:', { ...formData, cvFile });
-    // Handle form submission
     alert('Tack för din ansökan! Vi återkommer så snart vi kan.');
     onClosePopup();
   };
 
   const handleMinimizeToggle = () => {
-    setIsMinimized(!isMinimized);
-    if (!isMinimized) {
-      onMinimize();
-    }
+    const next = !isMinimized;
+    setIsMinimized(next);
+    if (!isMinimized) onMinimize(); // när vi minimerar – scrolla till sektionen längst ner (din befintliga logik)
   };
 
   if (!isPopupOpen) return null;
@@ -70,54 +69,64 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   return (
     <>
       {/* Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+      <div
+        className="fixed inset-0 z-40 bg-black/25 backdrop-blur-sm"
         onClick={onClosePopup}
       />
 
-      {/* Popup Form */}
+      {/* Sheet / Popup */}
       <div
         ref={formRef}
         className={`
-          fixed left-1/2 transform -translate-x-1/2 z-50
-          w-full max-w-2xl mx-4
-          bg-white rounded-t-3xl shadow-2xl
-          transition-all duration-500 ease-out
-          ${isMinimized 
-            ? 'bottom-0 translate-y-[calc(100%-80px)]' 
-            : 'bottom-0 translate-y-0'
-          }
+          fixed inset-x-0 bottom-0 z-50 mx-2 sm:mx-3 lg:mx-4
+          bg-white rounded-t-3xl shadow-2xl overflow-hidden
+          transition-transform duration-500 ease-out
         `}
-        style={{ maxHeight: '85vh' }}
+        style={{
+          top: `${SHEET_TOP_GAP_PX}px`,                 // lämna liten remsa överst
+          height: `calc(100vh - ${SHEET_TOP_GAP_PX}px)`, // täck resten
+          transform: isMinimized
+            ? `translateY(calc(100% - ${SHEET_HEADER_H_PX}px))`
+            : 'translateY(0)',
+          willChange: 'transform',
+        }}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-[#08132B] rounded-t-3xl">
-          <div>
-            <h3 
-              className="text-xl font-medium text-white"
+        {/* Header – sticky inuti arket */}
+        <div
+          className="sticky top-0 z-10 flex items-center justify-between px-5 sm:px-6"
+          style={{
+            height: `${SHEET_HEADER_H_PX}px`,
+            backgroundColor: '#08132B',
+          }}
+        >
+          <div className="min-w-0">
+            <h3
+              className="truncate text-white text-lg sm:text-xl font-medium"
               style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+              title={`Ansök till ${jobTitle}`}
             >
               Ansök till {jobTitle}
             </h3>
-            <p 
-              className="text-white/70 text-sm"
+            <p
+              className="text-white/70 text-xs sm:text-sm"
               style={{ fontFamily: 'Inter, sans-serif' }}
             >
               {companyName}
             </p>
           </div>
-          
-          <div className="flex items-center space-x-2">
+
+          <div className="flex items-center gap-1.5">
+            {/* Nedåtpil för att minimera (uppåtpil vid minimerat läge) */}
             <button
               onClick={handleMinimizeToggle}
-              className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
-              aria-label={isMinimized ? "Maximera formulär" : "Minimera formulär"}
+              className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition"
+              aria-label={isMinimized ? 'Maximera formulär' : 'Minimera formulär'}
             >
               {isMinimized ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
             </button>
             <button
               onClick={onClosePopup}
-              className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+              className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition"
               aria-label="Stäng formulär"
             >
               <X size={20} />
@@ -125,21 +134,13 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
           </div>
         </div>
 
-        {/* Form Content */}
-        <div 
-          className={`
-            overflow-y-auto transition-all duration-500
-            ${isMinimized ? 'max-h-0 opacity-0' : 'max-h-[70vh] opacity-100'}
-          `}
-        >
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
-            {/* Name Fields */}
+        {/* Innehåll – fyller hela ytan under header, rullbar */}
+        <div className="h-[calc(100%-72px)] overflow-y-auto">
+          <form onSubmit={handleSubmit} className="p-5 sm:p-6 space-y-6">
+            {/* Namn */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label 
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
+                <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                   Förnamn *
                 </label>
                 <div className="relative">
@@ -155,12 +156,8 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                   />
                 </div>
               </div>
-              
               <div>
-                <label 
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
+                <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                   Efternamn *
                 </label>
                 <div className="relative">
@@ -178,13 +175,10 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               </div>
             </div>
 
-            {/* Contact Fields */}
+            {/* Kontakt */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label 
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
+                <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                   E-post *
                 </label>
                 <div className="relative">
@@ -200,12 +194,8 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                   />
                 </div>
               </div>
-              
               <div>
-                <label 
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
+                <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                   Telefon
                 </label>
                 <div className="relative">
@@ -222,15 +212,12 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               </div>
             </div>
 
-            {/* CV Upload */}
+            {/* CV */}
             <div>
-              <label 
-                className="block text-sm font-medium text-gray-700 mb-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
+              <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 CV/Meritförteckning *
               </label>
-              <div 
+              <div
                 onClick={() => fileInputRef.current?.click()}
                 className="relative border-2 border-dashed border-gray-300 rounded-xl p-6 hover:border-[#08132B] transition-colors cursor-pointer group"
               >
@@ -252,12 +239,9 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               </div>
             </div>
 
-            {/* Cover Letter */}
+            {/* Personligt brev */}
             <div>
-              <label 
-                className="block text-sm font-medium text-gray-700 mb-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
+              <label className="block text-sm font-medium text-gray-700 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Personligt brev
               </label>
               <div className="relative">
@@ -273,7 +257,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               </div>
             </div>
 
-            {/* GDPR Consent */}
+            {/* GDPR */}
             <div className="flex items-start space-x-3">
               <input
                 type="checkbox"
@@ -283,10 +267,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                 required
                 className="w-4 h-4 text-[#08132B] border-gray-300 rounded focus:ring-[#08132B] mt-1"
               />
-              <label 
-                className="text-sm text-gray-700 leading-relaxed"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
+              <label className="text-sm text-gray-700 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att hantera min ansökan enligt{' '}
                 <a
                   href="/privacy"
@@ -300,7 +281,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               </label>
             </div>
 
-            {/* Submit Button */}
+            {/* Skicka */}
             <button
               type="submit"
               className="
@@ -316,7 +297,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               style={{ fontFamily: 'Inter, sans-serif' }}
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
-              <div className="relative flex items-center justify-center space-x-2">
+              <div className="relative flex items-center justify-center gap-2">
                 <Send size={20} />
                 <span>Skicka ansökan</span>
               </div>
