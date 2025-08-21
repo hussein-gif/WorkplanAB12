@@ -2,12 +2,15 @@ import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Clock, MapPin, Building, Mail, Phone } from 'lucide-react';
 import { mockJobData, JobData } from './jobData';
+import JobApplicationForm from './JobApplicationForm';
+import JobApplicationSection from './JobApplicationSection';
 
 const JobDetailPage = () => {
   const navigate = useNavigate();
   const { jobId } = useParams<{ jobId: string }>();
   const [job, setJob] = useState<JobData | null>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
 
   // 🔹 Tvinga mörk navbar på denna sida (innan första paint för att undvika blink)
   useLayoutEffect(() => {
@@ -46,9 +49,20 @@ const JobDetailPage = () => {
   const handleBack = () => navigate('/jobs');
 
   const handleApply = () => {
-    const subject = encodeURIComponent(`Ansökan: ${job.title} – ${job.company}`);
-    const body = encodeURIComponent(`Hej!\n\nJag vill gärna ansöka till tjänsten "${job.title}" hos ${job.company}.\n\nVänliga hälsningar,\n`);
-    window.open(`mailto:${job.recruiterEmail}?subject=${subject}&body=${body}`);
+    setIsApplicationFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setIsApplicationFormOpen(false);
+  };
+
+  const handleMinimizeForm = () => {
+    // Scroll to bottom application section
+    const applicationSection = document.getElementById('application-form');
+    if (applicationSection) {
+      applicationSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsApplicationFormOpen(false);
   };
 
   const startDate = (job as any).startDate || 'Enligt överenskommelse';
@@ -335,6 +349,21 @@ const JobDetailPage = () => {
           </button>
         </div>
       </div>
+
+      {/* Application Form Section at Bottom */}
+      <JobApplicationSection 
+        jobTitle={job.title}
+        companyName={job.company}
+      />
+
+      {/* Popup Application Form */}
+      <JobApplicationForm
+        jobTitle={job.title}
+        companyName={job.company}
+        isPopupOpen={isApplicationFormOpen}
+        onClosePopup={handleCloseForm}
+        onMinimize={handleMinimizeForm}
+      />
     </div>
   );
 };
