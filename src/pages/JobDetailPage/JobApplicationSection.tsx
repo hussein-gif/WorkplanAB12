@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { Send, Upload, User, Mail, Phone, FileText, Briefcase } from 'lucide-react';
+import { Send, Upload, User, Mail, Phone } from 'lucide-react';
 
 interface JobApplicationSectionProps {
   jobTitle: string;
-  companyName: string;
+  companyName: string; // oförändrat, ej visat i UI här (matchar JobApplicationForm)
 }
 
 const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
@@ -18,221 +18,214 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
     coverLetter: '',
     gdprConsent: false,
   });
+
   const [cvFile, setCvFile] = useState<File | null>(null);
+  const [otherFile, setOtherFile] = useState<File | null>(null);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const otherFileInputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setCvFile(file);
-    }
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, kind: 'cv' | 'other') => {
+    const file = e.target.files?.[0] || null;
+    if (kind === 'cv') setCvFile(file);
+    else setOtherFile(file);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Application submitted:', { ...formData, cvFile });
-    // Handle form submission
+    console.log('Application submitted:', { ...formData, cvFile, otherFile });
     alert('Tack för din ansökan! Vi återkommer så snart vi kan.');
   };
 
   return (
-    <section id="application-form" className="relative py-16 px-6 bg-white">
-      {/* Subtle Background */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute -top-24 -left-24 w-[36rem] h-[36rem] rounded-full opacity-[0.03] blur-3xl"
-          style={{ background: 'radial-gradient(ellipse at center, #08132B, transparent 60%)' }}
-        />
-        <div
-          className="absolute -bottom-32 -right-16 w-[32rem] h-[32rem] rounded-full opacity-[0.02] blur-3xl"
-          style={{ background: 'radial-gradient(ellipse at center, #0B274D, transparent 60%)' }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.01]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(8,19,43,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(8,19,43,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '40px 40px',
-          }}
-        />
-      </div>
+    <section id="application-form" className="relative bg-[#08132B] text-white">
+      {/* Subtil bakgrund – samma som arket */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.08]"
+        style={{
+          background: 'radial-gradient(1200px 600px at 50% -200px, rgba(255,255,255,0.25), transparent 60%)',
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-[0.06]"
+        style={{
+          backgroundImage: `
+            linear-gradient(transparent 97%, rgba(255,255,255,0.25) 100%),
+            linear-gradient(90deg, transparent 97%, rgba(255,255,255,0.2) 100%)
+          `,
+          backgroundSize: '26px 26px, 26px 26px',
+        }}
+      />
 
-      <div className="relative max-w-3xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-[#08132B] to-[#0B274D] rounded-xl flex items-center justify-center">
-              <Briefcase className="h-6 w-6 text-white" />
-            </div>
-          </div>
+      {/* Innehåll – identiskt spacing/typografi som arket */}
+      <div className="relative px-5 sm:px-8">
+        {/* Rubrikblock – större och med luft, matchar arket */}
+        <div className="pt-10 sm:pt-12 pb-8">
           <h2
-            className="text-3xl font-medium text-[#08132B] mb-2"
+            className="text-center text-4xl sm:text-5xl font-semibold tracking-tight mb-6"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
-            Ansök till {jobTitle}
+            {jobTitle}
           </h2>
-          <p
-            className="text-gray-600"
-            style={{ fontFamily: 'Inter, sans-serif' }}
-          >
-            Fyll i formuläret nedan för att ansöka till denna tjänst hos {companyName}
-          </p>
         </div>
 
-        {/* Form */}
-        <div className="bg-white border border-gray-200 rounded-3xl shadow-lg p-8">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Name Fields */}
+        <div className="relative pb-16">
+          <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto">
+            {/* Namn */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label 
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
+                <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                   Förnamn *
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#0B274D]/50" size={18} />
                   <input
                     type="text"
                     name="firstName"
+                    required
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:border-[#08132B] focus:ring-4 focus:ring-[#08132B]/10 transition-all duration-200"
+                    className="w-full bg-white text-[#08132B] pl-10 pr-4 py-3 rounded-xl border border-white/0 focus:border-white/30 focus:ring-4 focus:ring-white/10 transition"
                     placeholder="Ditt förnamn"
                   />
                 </div>
               </div>
-              
               <div>
-                <label 
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
+                <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                   Efternamn *
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#0B274D]/50" size={18} />
                   <input
                     type="text"
                     name="lastName"
+                    required
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:border-[#08132B] focus:ring-4 focus:ring-[#08132B]/10 transition-all duration-200"
+                    className="w-full bg-white text-[#08132B] pl-10 pr-4 py-3 rounded-xl border border-white/0 focus:border-white/30 focus:ring-4 focus:ring-white/10 transition"
                     placeholder="Ditt efternamn"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Contact Fields */}
+            {/* Kontakt */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label 
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
+                <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                   E-post *
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#0B274D]/50" size={18} />
                   <input
                     type="email"
                     name="email"
+                    required
                     value={formData.email}
                     onChange={handleInputChange}
-                    required
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:border-[#08132B] focus:ring-4 focus:ring-[#08132B]/10 transition-all duration-200"
+                    className="w-full bg-white text-[#08132B] pl-10 pr-4 py-3 rounded-xl border border-white/0 focus:border-white/30 focus:ring-4 focus:ring-white/10 transition"
                     placeholder="din@email.com"
                   />
                 </div>
               </div>
-              
               <div>
-                <label 
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                  style={{ fontFamily: 'Inter, sans-serif' }}
-                >
-                  Telefon
+                <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Telefon *
                 </label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-[#0B274D]/50" size={18} />
                   <input
                     type="tel"
                     name="phone"
+                    required
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:border-[#08132B] focus:ring-4 focus:ring-[#08132B]/10 transition-all duration-200"
+                    className="w-full bg-white text-[#08132B] pl-10 pr-4 py-3 rounded-xl border border-white/0 focus:border-white/30 focus:ring-4 focus:ring-white/10 transition"
                     placeholder="+46 XX XXX XX XX"
                   />
                 </div>
               </div>
             </div>
 
-            {/* CV Upload */}
+            {/* Ladda upp CV – VIT */}
             <div>
-              <label 
-                className="block text-sm font-medium text-gray-700 mb-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                CV/Meritförteckning *
+              <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Ladda upp CV *
               </label>
-              <div 
+              <div
                 onClick={() => fileInputRef.current?.click()}
-                className="relative border-2 border-dashed border-gray-300 rounded-xl p-8 hover:border-[#08132B] transition-colors cursor-pointer group"
+                className="relative rounded-xl border-2 border-dashed border-gray-300 bg-white p-6 hover:border-gray-400 transition cursor-pointer group"
               >
                 <input
                   ref={fileInputRef}
                   type="file"
                   accept=".pdf,.doc,.docx"
-                  onChange={handleFileChange}
+                  onChange={(e) => handleFileChange(e, 'cv')}
                   className="hidden"
                   required
                 />
                 <div className="text-center">
-                  <Upload className="mx-auto h-10 w-10 text-gray-400 group-hover:text-[#08132B] transition-colors mb-3" />
-                  <p className="text-gray-600 font-medium">
+                  <Upload className="mx-auto h-8 w-8 text-gray-500 group-hover:text-gray-700 transition" />
+                  <p className="mt-2 text-sm text-[#08132B]">
                     {cvFile ? cvFile.name : 'Klicka för att ladda upp ditt CV'}
                   </p>
-                  <p className="text-xs text-gray-500 mt-2">PDF, DOC eller DOCX (max 10MB)</p>
+                  <p className="text-xs text-gray-600 mt-1">PDF, DOC eller DOCX (max 10MB)</p>
                 </div>
               </div>
             </div>
 
-            {/* Cover Letter */}
+            {/* Övriga dokument – VIT (valfritt) */}
             <div>
-              <label 
-                className="block text-sm font-medium text-gray-700 mb-2"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                Personligt brev
+              <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Övriga dokument
               </label>
-              <div className="relative">
-                <FileText className="absolute left-3 top-3 text-gray-400" size={18} />
-                <textarea
-                  name="coverLetter"
-                  value={formData.coverLetter}
-                  onChange={handleInputChange}
-                  rows={5}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:border-[#08132B] focus:ring-4 focus:ring-[#08132B]/10 transition-all duration-200 resize-none"
-                  placeholder="Berätta kort om dig själv och varför du är intresserad av denna tjänst..."
+              <div
+                onClick={() => otherFileInputRef.current?.click()}
+                className="relative rounded-xl border-2 border-dashed border-gray-300 bg-white p-6 hover:border-gray-400 transition cursor-pointer group"
+              >
+                <input
+                  ref={otherFileInputRef}
+                  type="file"
+                  accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                  onChange={(e) => handleFileChange(e, 'other')}
+                  className="hidden"
                 />
+                <div className="text-center">
+                  <Upload className="mx-auto h-8 w-8 text-gray-500 group-hover:text-gray-700 transition" />
+                  <p className="mt-2 text-sm text-[#08132B]">
+                    {otherFile ? otherFile.name : 'Klicka för att bifoga fler filer (valfritt)'}
+                  </p>
+                  <p className="text-xs text-gray-600 mt-1">PDF, DOC, DOCX, PNG, JPG (max 10MB)</p>
+                </div>
               </div>
             </div>
 
-            {/* GDPR Consent */}
+            {/* Personligt brev */}
+            <div>
+              <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Personligt brev
+              </label>
+              <textarea
+                name="coverLetter"
+                value={formData.coverLetter}
+                onChange={handleInputChange}
+                rows={4}
+                className="w-full bg-white text-[#08132B] pl-4 pr-4 py-3 rounded-xl border border-white/0 focus:border-white/30 focus:ring-4 focus:ring-white/10 transition resize-none"
+                placeholder="Berätta kort om dig själv och varför du är intresserad av denna tjänst..."
+              />
+            </div>
+
+            {/* GDPR */}
             <div className="flex items-start space-x-3">
               <input
                 type="checkbox"
@@ -240,16 +233,13 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                 checked={formData.gdprConsent}
                 onChange={handleInputChange}
                 required
-                className="w-4 h-4 text-[#08132B] border-gray-300 rounded focus:ring-[#08132B] mt-1"
+                className="w-4 h-4 text-[#08132B] border-white/40 rounded focus:ring-white/40 mt-1 bg-white"
               />
-              <label 
-                className="text-sm text-gray-700 leading-relaxed"
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
+              <label className="text-sm text-white/90 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att hantera min ansökan enligt{' '}
                 <a
                   href="/privacy"
-                  className="text-[#08132B] hover:text-[#0B274D] underline"
+                  className="underline underline-offset-2 decoration-white/50 hover:decoration-white"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -259,27 +249,30 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
               </label>
             </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="
-                group relative w-full py-4 px-6
-                bg-[#08132B] text-white rounded-xl
-                font-medium text-lg tracking-wide
-                hover:bg-[#0B274D]
-                transition-all duration-300
-                shadow-lg hover:shadow-xl
-                hover:scale-[1.02]
-                overflow-hidden
-              "
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
-              <div className="relative flex items-center justify-center space-x-2">
-                <Send size={20} />
-                <span>Skicka ansökan</span>
-              </div>
-            </button>
+            {/* Skicka ansökan – identisk knapp, centrerad, extra bottenluft */}
+            <div className="pt-2 flex justify-center">
+              <button
+                type="submit"
+                className="
+                  relative inline-flex items-center gap-2 px-8 py-3
+                  rounded-2xl bg-white text-[#08132B] font-semibold
+                  shadow-[0_10px_30px_rgba(255,255,255,0.15),0_8px_20px_rgba(0,0,0,0.25)]
+                  transition-transform duration-300
+                  hover:-translate-y-0.5 active:translate-y-0
+                  focus:outline-none
+                "
+                style={{ fontFamily: 'Inter, sans-serif' }}
+              >
+                <span
+                  className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition-opacity"
+                  style={{
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 40%)',
+                  }}
+                />
+                <Send size={18} />
+                <span className="relative">Skicka ansökan</span>
+              </button>
+            </div>
           </form>
         </div>
       </div>
