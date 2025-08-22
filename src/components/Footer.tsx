@@ -49,7 +49,7 @@ const Footer = () => {
 
   // Sociala medier (uppdaterade länkar för LinkedIn & Instagram)
   const socialLinks = [
-    { icon: Linkedin, href: 'https://www.linkedin.com/company/workplan-ab/?originalSubdomain=se', label: 'LinkedIn', color: 'hover:bg-blue-600' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/company/workplan-ab/', label: 'LinkedIn', color: 'hover:bg-blue-600' },
     { icon: Facebook, href: '#', label: 'Facebook', color: 'hover:bg-blue-700' },
     { icon: Instagram, href: 'https://www.instagram.com/workplan_ab/', label: 'Instagram', color: 'hover:bg-pink-600' }
   ];
