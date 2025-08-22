@@ -102,18 +102,17 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Zen+Kaku+Gothic+Antique:wght@500&display=swap');
 
-        /* Blå palett */
+        /* Lite ljusare blå palett */
         :root {
-          --blue-deep: #08132B;     /* Primär ikonfärg */
-          --blue-900: #0B1A3A;      /* Mörk bakgrundsgradient */
-          --blue-800: #0F2A66;
-          --blue-700: #1A4CA6;
-          --blue-600: #2E6EDC;
-          --blue-300: #BBD0FF;      /* Highlight */
-          --blue-200: #D9E6FF;      /* Subtil glow */
+          --blue-deep: #0F2047;     /* Ljusare än #08132B */
+          --blue-900: #132A55;      
+          --blue-800: #1B3C77;
+          --blue-700: #2A5DA8;
+          --blue-600: #3E7BDB;
+          --blue-300: #BBD0FF;      
+          --blue-200: #D9E6FF;      
         }
 
-        /* 3D-badge med gloss, inner shadow & subtil border */
         .icon-badge-3d {
           position: relative;
           border-radius: 0.75rem;
@@ -128,7 +127,6 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
           transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
         }
         .icon-badge-3d::before {
-          /* Glossy top highlight */
           content: "";
           position: absolute;
           inset: 0;
@@ -163,7 +161,6 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
             0 10px 22px rgba(8,19,43,0.25);
         }
 
-        /* Glow ring bakom ikonen för extra djup */
         .glow-ring {
           background:
             radial-gradient(50% 50% at 50% 50%, rgba(217,230,255,0.55) 0%, rgba(217,230,255,0.12) 40%, transparent 70%);
@@ -176,19 +173,15 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
           opacity: 1;
         }
 
-        /* Ikon-stil: mörkblå stroke + highlight/drop-shadow för 3D-känsla */
+        /* Ikonerna vita istället för mörkblå */
         .icon-3d {
-          color: var(--blue-deep);      /* Lucide använder currentColor för stroke */
-          /* Subtil kant/highlight + skugga för djup */
+          color: #FFFFFF;   /* vit stroke */
           filter:
-            drop-shadow(0 1px 0 rgba(255,255,255,0.35))
-            drop-shadow(0 3px 6px rgba(8,19,43,0.30));
-          /* Gör linjerna lite mer "fylliga" utan att bli för grova */
+            drop-shadow(0 1px 0 rgba(255,255,255,0.45))
+            drop-shadow(0 3px 6px rgba(8,19,43,0.35));
           stroke-linecap: round;
           stroke-linejoin: round;
         }
-
-        /* (Valfritt) mindre skalförändring på hover för “polish” */
         .icon-badge-3d:hover .icon-3d {
           transform: translateY(-0.5px);
         }
