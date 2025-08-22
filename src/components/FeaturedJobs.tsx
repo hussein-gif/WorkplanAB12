@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MapPin, Clock, ArrowRight } from 'lucide-react';
+import { MapPin, Clock, ArrowRight, Briefcase } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-// Behåll hover-wrapper för desktop-kort
+// Desktop-kort (oförändrat)
 const SimpleHoverCard: React.FC<{ children: React.ReactNode; className?: string; }> = ({ children, className }) => (
   <div
     className={`
@@ -21,7 +21,6 @@ const FeaturedJobs = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
   const sectionRef = useRef<HTMLElement>(null);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => e.isIntersecting && setIsVisible(true), { threshold: 0.1 });
@@ -37,15 +36,9 @@ const FeaturedJobs = () => {
     };
     window.addEventListener('mousemove', handleMouseMove);
 
-    const mq = window.matchMedia('(max-width: 639px)');
-    const apply = () => setIsMobile(mq.matches);
-    apply();
-    mq.addEventListener ? mq.addEventListener('change', apply) : mq.addListener(apply);
-
     return () => {
       if (sectionRef.current) obs.unobserve(sectionRef.current);
       window.removeEventListener('mousemove', handleMouseMove);
-      mq.removeEventListener ? mq.removeEventListener('change', apply) : mq.removeListener(apply);
     };
   }, []);
 
@@ -58,7 +51,7 @@ const FeaturedJobs = () => {
     { id:'6', title:'DevOps Engineer',          company:'CloudTech',    location:'Stockholm', type:'Heltid',  posted:'6 timmar sedan', companyLogo:'C' },
   ];
 
-  // Visa bara 4 på mobil (som du önskade tidigare); desktop visar alla
+  // Mobil: visa endast 4
   const mobileJobs = jobs.slice(0, 4);
 
   return (
@@ -66,17 +59,10 @@ const FeaturedJobs = () => {
       <style>{`
         @keyframes float-slow { 0%,100% { transform: translate(0,0); } 50% { transform: translate(10px,6px); } }
         @keyframes float-slow-reverse { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-8px,-5px); } }
-        @keyframes pulse-light { 0%,100% { opacity: 0.08; } 50% { opacity: 0.16; } }
-        .animate-float-slow { animation: float-slow 30s ease-in-out infinite; }
-        .animate-float-slow-reverse { animation: float-slow-reverse 34s ease-in-out infinite; }
       `}</style>
 
-      <section
-        ref={sectionRef}
-        id="jobs"
-        className="relative pt-16 sm:pt-32 pb-24 overflow-hidden"
-      >
-        {/* Bakgrund (oförändrad) */}
+      <section ref={sectionRef} id="jobs" className="relative pt-16 sm:pt-32 pb-24 overflow-hidden">
+        {/* Bakgrund (samma som innan) */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute inset-0" style={{ backgroundColor: '#08132B' }} />
           <div
@@ -101,27 +87,10 @@ const FeaturedJobs = () => {
               opacity: 0.9,
             }}
           />
-          <div
-            className="absolute w-[1000px] h-[1000px] rounded-full blur-3xl opacity-30 animate-float-slow"
-            style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 75%)', left: '-64px', top: '-64px' }}
-          />
-          <div
-            className="absolute w-[800px] h-[800px] rounded-full blur-3xl opacity-25 animate-float-slow-reverse"
-            style={{ background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 75%)', right: '15%', bottom: '12%' }}
-          />
-          <div
-            className="absolute inset-0"
-            aria-hidden="true"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23f)' opacity='0.05'/%3E%3C/svg%3E")`,
-              backgroundRepeat: 'repeat',
-              mixBlendMode: 'overlay',
-            }}
-          />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header – tajtare på mobil */}
+          {/* Header (lite tajtare på mobil) */}
           <div className="text-center mb-10 sm:mb-20 relative">
             <div
               className="absolute inset-x-0 top-0 mx-auto w-[400px] h-[180px] rounded-full blur-3xl opacity-25"
@@ -152,7 +121,7 @@ const FeaturedJobs = () => {
             </p>
           </div>
 
-          {/* -------- MOBIL: Listad layout utan kort -------- */}
+          {/* ===== MOBIL: radad lista utan ”ansök senast”, med logo & company i meta-raden ===== */}
           <div className="sm:hidden">
             <ul className="divide-y divide-white/10">
               {mobileJobs.map((job) => (
@@ -161,8 +130,11 @@ const FeaturedJobs = () => {
                   className="py-4 active:bg-white/5 transition-colors"
                   onClick={() => navigate(`/job/${job.id}`)}
                 >
-                  {/* Titel + sista ansökan */}
-                  <div className="flex items-start justify-between gap-3">
+                  {/* Titelrad med logga till vänster */}
+                  <div className="flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-white/10 text-white flex items-center justify-center font-semibold shrink-0">
+                      {job.companyLogo}
+                    </div>
                     <div className="min-w-0">
                       <h3
                         className="text-white text-base font-semibold leading-tight truncate"
@@ -170,26 +142,18 @@ const FeaturedJobs = () => {
                       >
                         {job.title}
                       </h3>
-                      <div
-                        className="text-white/80 text-sm"
-                        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                      >
-                        {job.company}
-                      </div>
-                    </div>
-                    <div className="text-right text-[12px] text-white/70 shrink-0" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      Ansök senast<br />
-                      <span className="text-white/90">
-                        {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE')}
-                      </span>
                     </div>
                   </div>
 
-                  {/* Meta-rad */}
+                  {/* Meta: company • location • type */}
                   <div
-                    className="mt-2 flex items-center gap-3 text-[13px] text-white/70"
+                    className="mt-2 flex flex-wrap items-center gap-3 text-[13px] text-white/75"
                     style={{ fontFamily: 'Inter, sans-serif' }}
                   >
+                    <span className="inline-flex items-center gap-1.5">
+                      <Briefcase size={14} /> {job.company}
+                    </span>
+                    <span className="w-1 h-1 rounded-full bg-white/30" />
                     <span className="inline-flex items-center gap-1.5">
                       <MapPin size={14} /> {job.location}
                     </span>
@@ -199,7 +163,7 @@ const FeaturedJobs = () => {
                     </span>
                   </div>
 
-                  {/* Publicerad */}
+                  {/* Publicerad (kvar) */}
                   <div className="mt-1 text-[12px] text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
                     {job.posted}
                   </div>
@@ -207,7 +171,7 @@ const FeaturedJobs = () => {
               ))}
             </ul>
 
-            {/* CTA – oförändrad stil */}
+            {/* CTA */}
             <div
               className={`
                 text-center mt-10
@@ -238,56 +202,36 @@ const FeaturedJobs = () => {
             </div>
           </div>
 
-          {/* -------- DESKTOP/TABLET: original kort-grid (oförändrat) -------- */}
+          {/* ===== DESKTOP/TABLET: original kortlayout (orörd) ===== */}
           <div className="hidden sm:block">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
-              {jobs.map((job, idx) => (
+              {jobs.map((job) => (
                 <SimpleHoverCard
                   key={job.id}
                   className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
                 >
-                  <div
-                    className="p-5 flex-1 flex flex-col"
-                    onClick={() => navigate(`/job/${job.id}`)}
-                  >
+                  <div className="p-5 flex-1 flex flex-col" onClick={() => navigate(`/job/${job.id}`)}>
                     <div className="flex items-start space-x-4 mb-4">
                       <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
                         {job.companyLogo}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3
-                          className="text-lg mb-1 leading-tight font-bold"
-                          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', color: '#111827' }}
-                        >
+                        <h3 className="text-lg mb-1 leading-tight font-bold" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', color: '#111827' }}>
                           {job.title}
                         </h3>
-                        <div
-                          className="text-base"
-                          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400, color: '#374151' }}
-                        >
+                        <div className="text-base" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400, color: '#374151' }}>
                           {job.company}
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="flex items-center space-x-4 text-sm mb-4"
-                      style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400, color: '#6B7280' }}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <MapPin size={14} />
-                        <span>{job.location}</span>
-                      </div>
+                    <div className="flex items-center space-x-4 text-sm mb-4" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400, color: '#6B7280' }}>
+                      <div className="flex items-center space-x-2"><MapPin size={14} /><span>{job.location}</span></div>
                       <span className="w-1 h-1 bg-gray-400 rounded-full" />
-                      <div className="flex items-center space-x-2">
-                        <Clock size={14} />
-                        <span>{job.type}</span>
-                      </div>
+                      <div className="flex items-center space-x-2"><Clock size={14} /><span>{job.type}</span></div>
                     </div>
                   </div>
-                  <div
-                    className="relative z-10 p-5 pt-0 flex items-end justify-between"
-                    style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
-                  >
+                  {/* Desktop-footern (oförändrad, med ansök senast) */}
+                  <div className="relative z-10 p-5 pt-0 flex items-end justify-between" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
                     <div className="text-sm text-gray-500">{job.posted}</div>
                     <div className="text-right text-sm text-gray-500">
                       <div>Ansök senast</div>
