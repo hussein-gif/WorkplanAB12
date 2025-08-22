@@ -20,7 +20,10 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
   ];
 
   return (
-    <section className="bg-white py-20 px-6" aria-label="Så går det till">
+    <section
+      className="py-20 px-6 bg-white"
+      aria-label="Så går det till"
+    >
       <div className="max-w-6xl mx-auto">
         {/* Rubrik */}
         <div className="text-center mb-12">
@@ -52,16 +55,25 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
               const el = document.getElementById('featured-jobs');
               if (el) el.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="relative inline-flex items-center gap-2 px-7 py-3 rounded-2xl font-semibold text-white transition-all duration-300 focus:outline-none"
+            className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-2xl font-medium text-white shadow-[0_10px_30px_rgba(2,6,23,0.35)] ring-1 ring-white/10 hover:brightness-110 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-sky-300"
             style={{
-              fontFamily: 'Inter, ui-sans-serif, system-ui',
-              background: 'linear-gradient(145deg, #0A1A38, #14427A)',
-              boxShadow:
-                '0 8px 20px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.1)',
+              fontFamily:
+                'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+              background:
+                'linear-gradient(135deg, #0B1E3A 0%, #10325C 60%, #14427A 100%)',
             }}
           >
             Bläddra bland jobben ovan
             <ArrowRight size={18} />
+            <span className="pointer-events-none absolute inset-0 rounded-2xl opacity-60">
+              <span
+                className="absolute inset-0 rounded-2xl"
+                style={{
+                  backgroundImage: `radial-gradient(220px 160px at 20% 30%, rgba(56,189,248,0.28), transparent 60%), radial-gradient(260px 200px at 80% 70%, rgba(37,99,235,0.22), transparent 60%)`,
+                }}
+              />
+              <span className="absolute left-[-40%] top-0 h-full w-1/3 bg-white/20 skew-x-[-20deg] translate-x-[-120%] group-hover:translate-x-[220%] transition-transform duration-700 ease-in-out" />
+            </span>
           </button>
         </div>
       </div>
@@ -74,7 +86,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
   );
 };
 
-/* ====== PosterCard – mörk navy glass + aurora i blå toner ====== */
+/* ====== PosterCard ====== */
 
 type CardProps = {
   number: string;
@@ -89,10 +101,10 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
     <div
       className="relative overflow-hidden rounded-3xl h-[360px] md:h-[420px] border backdrop-blur-xl"
       style={{
-        background: 'linear-gradient(180deg, rgba(10,20,46,0.75) 0%, rgba(8,19,43,0.88) 100%)',
+        background: 'linear-gradient(180deg, rgba(10,20,46,0.72) 0%, rgba(8,19,43,0.88) 100%)',
         borderColor: 'rgba(255,255,255,0.08)',
         boxShadow:
-          '0 10px 30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -40px 80px rgba(9,31,72,0.55)',
+          '0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -40px 80px rgba(9,31,72,0.55)',
       }}
     >
       {/* Aurora bakgrund */}
@@ -102,7 +114,8 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
           style={{
             backgroundImage: `
               radial-gradient(700px 520px at 20% 25%, rgba(20,90,165,0.45), transparent 60%),
-              radial-gradient(620px 460px at 80% 80%, rgba(23,121,186,0.35), transparent 55%)
+              radial-gradient(620px 460px at 80% 80%, rgba(23,121,186,0.35), transparent 55%),
+              radial-gradient(900px 700px at 60% 20%, rgba(10,24,52,0.7), transparent 55%)
             `,
           }}
         />
