@@ -111,16 +111,31 @@ const IndustryGrid = () => {
           }}
         />
 
-        {/* Icon med enhetlig blå ton */}
+        {/* Ikonruta: #08132B med elegant 3D-stil */}
         <div
           className={`
             relative w-14 h-14 rounded-xl mb-4
-            bg-gradient-to-br from-[#1f3f8b] to-[#3b6de8]
             flex items-center justify-center
-            shadow flex-shrink-0
+            shadow-lg flex-shrink-0
           `}
+          style={{
+            background:
+              'linear-gradient(180deg, #0C1C39 0%, #08132B 70%)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            boxShadow:
+              'inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -10px 16px rgba(0,0,0,0.35), 0 10px 24px rgba(8,19,43,0.28)',
+          }}
         >
-          <pillar.icon size={24} className="text-white" />
+          {/* highlight-skimmer */}
+          <span
+            className="pointer-events-none absolute inset-0 rounded-xl"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 40%)',
+              mixBlendMode: 'overlay',
+            }}
+          />
+          <pillar.icon size={24} className="text-white relative" />
         </div>
 
         {/* Innehåll */}
