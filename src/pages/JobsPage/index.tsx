@@ -48,21 +48,19 @@ const RichBackground: React.FC = () => {
         }
       `}</style>
 
-      {/* Basgradient: djup mörkblå professionell ton */}
+      {/* Bas: solid #08132B */}
       <div
         className="absolute inset-0"
-        style={{
-          background: 'linear-gradient(135deg, #0f233d 0%, #0c1d32 70%, #0f233d 100%)',
-        }}
+        style={{ backgroundColor: '#08132B' }}
       />
 
-      {/* Subtil diagonal linje-textur för unikhet utan att dra uppmärksamhet */}
+      {/* Subtil diagonal textur – diskret och professionell */}
       <div
         className="absolute inset-0"
         style={{
           backgroundImage: `
             repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 40px),
-            repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0 1px, transparent 1px 60px)
+            repeating-linear-gradient(45deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 60px)
           `,
           mixBlendMode: 'overlay',
           pointerEvents: 'none',
@@ -85,7 +83,7 @@ const RichBackground: React.FC = () => {
               height: `${size}px`,
               top: `${top}%`,
               left: `${left}%`,
-              backgroundColor: 'rgba(255,255,255,0.03)',
+              backgroundColor: 'rgba(255,255,255,0.04)',
               borderRadius: '2px',
               transform: `translate(${(mouse.x - 50) * 0.018}px, ${(mouse.y - 50) * 0.018}px)`,
               animation: `fadePulse ${10 + Math.random() * 10}s ease-in-out ${delay}s infinite`,
@@ -100,7 +98,7 @@ const RichBackground: React.FC = () => {
       <div
         className="absolute top-24 left-1/2 -translate-x-1/2 w-[500px] h-[140px] rounded-full pointer-events-none"
         style={{
-          background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.05) 0%, transparent 80%)',
+          background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.07) 0%, transparent 80%)',
         }}
       />
 
@@ -128,7 +126,7 @@ const RichBackground: React.FC = () => {
 
 // Loading placeholder med nya bakgrunden
 const LoadingPlaceholder = () => (
-  <div className="min-h-screen flex items-center justify-center relative">
+  <div className="min-h-screen flex items-center justify-center relative bg-[#08132B]">
     <RichBackground />
     <div className="relative z-10 text-center">
       <div className="inline-flex items-center space-x-3 mb-2">
@@ -389,7 +387,7 @@ const JobsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800">
+    <div className="min-h-screen relative bg-[#08132B]">
       <RichBackground />
 
       <div className="relative z-10">
