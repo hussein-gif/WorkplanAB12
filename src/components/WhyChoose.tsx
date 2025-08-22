@@ -11,7 +11,6 @@ const WhyChoose = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const pillarRefs = useRef<Array<HTMLDivElement | null>>([]);
 
-  // Vilken pelare är närmast vertikalt centrum
   const updateScrollIndex = () => {
     if (!pillarRefs.current.length) return;
     const centerY = window.innerHeight / 2;
@@ -97,8 +96,8 @@ const WhyChoose = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="relative py-32 overflow-hidden">
-      {/* Globala animationer & reduced motion */}
+    // ↓ Mindre vertikal padding på mobil
+    <section ref={sectionRef} className="relative py-20 sm:py-32 overflow-hidden">
       <style>{`
         @keyframes blob {
           0% { transform: scale(1) translate(0,0); }
@@ -148,7 +147,8 @@ const WhyChoose = () => {
         </div>
 
         {/* Rubrik */}
-        <div className="text-center mb-24">
+        {/* ↓ Mindre mellanrum under rubriken på mobil */}
+        <div className="text-center mb-12 sm:mb-24">
           <div className="inline-block relative">
             <div className="absolute inset-0 rounded-md" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 60%)', filter: 'blur(16px)', zIndex: -1 }} />
             <h2
@@ -172,7 +172,7 @@ const WhyChoose = () => {
           </p>
         </div>
 
-        {/* Kort – mindre mellanrum på mobil */}
+        {/* Kort – mindre mellanrum på mobil (oförändrat i övrigt) */}
         <div className="space-y-10 lg:space-y-16">
           {pillars.map((pillar, index) => {
             const isActive = effectiveActive === index;
@@ -238,7 +238,7 @@ const WhyChoose = () => {
                   </div>
                 </div>
 
-                {/* Separator-linje – lite kortare på mobil */}
+                {/* Separator-linje */}
                 {index < pillars.length - 1 && (
                   <div className="mt-10 lg:mt-16 flex justify-center">
                     <div
