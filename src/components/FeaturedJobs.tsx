@@ -93,14 +93,12 @@ const FeaturedJobs = () => {
         id="jobs"
         className="relative py-32 overflow-hidden"
       >
-        {/* Förbättrad bakgrund: mörk, lager på lager, parallax, grid, liv */}
+        {/* Bakgrund: #08132B med eleganta, subtila overlays */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Djupare basgradient med lätt hue animation */}
+          {/* Basfärg */}
           <div
-            className="absolute inset-0 animate-hue"
-            style={{
-              background: 'linear-gradient(135deg, #0e1b33 0%, #111827 45%, #1f2f54 100%)',
-            }}
+            className="absolute inset-0"
+            style={{ backgroundColor: '#08132B' }}
           />
 
           {/* Vignette för djup i kanter */}
@@ -114,7 +112,7 @@ const FeaturedJobs = () => {
             }}
           />
 
-          {/* Parallax grid (ton-i-ton) förstärkt */}
+          {/* Parallax grid (ton-i-ton) */}
           <div
             className="absolute inset-0"
             style={{
@@ -129,11 +127,11 @@ const FeaturedJobs = () => {
             }}
           />
 
-          {/* Flytande former med större synlighet och parallax */}
+          {/* Flytande ljusa radialer (tonalitet mot #08132B) */}
           <div
             className="absolute w-[1000px] h-[1000px] rounded-full blur-3xl opacity-28 animate-float-slow"
             style={{
-              background: 'radial-gradient(circle, rgba(31,41,55,0.55) 0%, transparent 75%)',
+              background: 'radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 75%)',
               left: `calc(-64px + ${(mousePosition.x - 50) * 0.25}px)`,
               top: `calc(-64px + ${(mousePosition.y - 50) * 0.18}px)`,
             }}
@@ -141,7 +139,7 @@ const FeaturedJobs = () => {
           <div
             className="absolute w-[800px] h-[800px] rounded-full blur-3xl opacity-22 animate-float-slow-reverse"
             style={{
-              background: 'radial-gradient(circle, rgba(17,23,39,0.4) 0%, transparent 75%)',
+              background: 'radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 75%)',
               right: `calc(25% + ${(mousePosition.x - 50) * -0.18}px)`,
               bottom: `calc(80px + ${(mousePosition.y - 50) * -0.12}px)`,
             }}
@@ -149,7 +147,7 @@ const FeaturedJobs = () => {
           <div
             className="absolute w-[500px] h-[500px] rounded-full blur-2xl opacity-16"
             style={{
-              background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%)',
+              background: 'radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)',
               left: `12%`,
               top: `22%`,
               transform: `translate(${(mousePosition.x - 50) * 0.12}px, ${(mousePosition.y - 50) * 0.09}px)`,
@@ -159,7 +157,7 @@ const FeaturedJobs = () => {
           <div
             className="absolute w-[420px] h-[420px] rounded-full blur-2xl opacity-14"
             style={{
-              background: 'radial-gradient(circle, rgba(125,211,252,0.1) 0%, transparent 75%)',
+              background: 'radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 75%)',
               right: `15%`,
               bottom: `15%`,
               transform: `translate(${(mousePosition.x - 50) * -0.1}px, ${(mousePosition.y - 50) * -0.07}px)`,
@@ -182,7 +180,7 @@ const FeaturedJobs = () => {
           <div
             className="absolute inset-0"
             style={{
-              background: 'radial-gradient(circle at 45% 40%, rgba(255,255,255,0.1) 0%, transparent 70%)',
+              background: 'radial-gradient(circle at 45% 40%, rgba(255,255,255,0.10) 0%, transparent 70%)',
               mixBlendMode: 'soft-light',
               pointerEvents: 'none',
             }}
