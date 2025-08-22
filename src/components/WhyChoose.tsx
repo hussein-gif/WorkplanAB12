@@ -96,7 +96,7 @@ const WhyChoose = () => {
   ];
 
   return (
-    // ↓ Mindre vertikal padding på mobil
+    {/* Mindre vertikal padding på mobil (oförändrat på desktop) */}
     <section ref={sectionRef} className="relative py-20 sm:py-32 overflow-hidden">
       <style>{`
         @keyframes blob {
@@ -126,7 +126,7 @@ const WhyChoose = () => {
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-8">
-        {/* Progress-line + boll (desktop) */}
+        {/* Progress-line (endast desktop) */}
         <div
           className={`
             absolute left-1/2 transform -translate-x-1/2 z-0 hidden lg:flex flex-col items-center
@@ -146,14 +146,14 @@ const WhyChoose = () => {
           </div>
         </div>
 
-        {/* Rubrik */}
-        {/* ↓ Mindre mellanrum under rubriken på mobil */}
+        {/* Rubrik (mindre på mobil) */}
         <div className="text-center mb-12 sm:mb-24">
           <div className="inline-block relative">
             <div className="absolute inset-0 rounded-md" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 60%)', filter: 'blur(16px)', zIndex: -1 }} />
             <h2
               className={`
-                text-5xl md:text-6xl font-normal text-gray-900 mb-4 tracking-tight leading-[1.1]
+                text-4xl sm:text-5xl md:text-6xl font-normal text-gray-900 mb-4
+                tracking-tight leading-[1.15] sm:leading-[1.1]
                 transition-all duration-1000 transform
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
               `}
@@ -162,9 +162,16 @@ const WhyChoose = () => {
               Vår Metod För <span className="font-medium">Framgång</span>
             </h2>
           </div>
-          <div className={`w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-4 transition-all duration-1000 delay-200 transform ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}`} />
+          <div
+            className={`w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-4 transition-all duration-1000 delay-200 transform ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}`}
+          />
           <p
-            className={`text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed font-light -mt-2 transition-all duration-1000 delay-400 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}
+            className={`
+              text-base sm:text-lg text-gray-500 max-w-2xl mx-auto
+              leading-relaxed font-light -mt-2
+              transition-all duration-1000 delay-400 transform
+              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+            `}
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
             Tre pelare som garanterar att ni får rätt kompetens—snabbt, precist
@@ -172,7 +179,7 @@ const WhyChoose = () => {
           </p>
         </div>
 
-        {/* Kort – mindre mellanrum på mobil (oförändrat i övrigt) */}
+        {/* Kort */}
         <div className="space-y-10 lg:space-y-16">
           {pillars.map((pillar, index) => {
             const isActive = effectiveActive === index;
@@ -221,7 +228,7 @@ const WhyChoose = () => {
                     </div>
                   </div>
 
-                  {/* Höger: Illustration – DÖLJ PÅ MOBIL */}
+                  {/* Höger: Illustration – dold på mobil */}
                   <div className={`lg:col-span-5 relative ${index % 2 === 1 ? 'lg:col-start-1' : ''} hidden sm:block`}>
                     <div className={`aspect-square max-w-sm mx-auto relative transition-all duration-700 ${isActive ? 'scale-105' : ''}`}>
                       <div className="absolute inset-0 rounded-full" style={{ border: '1px solid rgba(107,114,128,0.08)', background: 'rgba(255,255,255,0.03)', boxShadow: isActive ? '0 0 30px rgba(30,58,138,0.1)' : '0 0 15px rgba(0,0,0,0.03)' }} />
