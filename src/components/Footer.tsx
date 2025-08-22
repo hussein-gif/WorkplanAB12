@@ -14,54 +14,41 @@ const Footer = () => {
         y: (e.clientY / window.innerHeight) * 100,
       });
     };
-
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Sektion: Hitta ett jobb
   const jobLinks = [
     { label: 'För jobbsökande', href: '/for-candidates' },
     { label: 'Alla jobb', href: '/jobs' },
     { label: 'Kontakta oss', href: '/contact' }
   ];
-
-  // Sektion: För arbetsgivare
   const employerLinks = [
     { label: 'För företag', href: '/partner' },
     { label: 'Om oss', href: '/about' },
     { label: 'Kontakta oss', href: '/contact' }
   ];
-
-  // Sektion: Om oss
   const aboutLinks = [
     { label: 'Om oss', href: '/about' },
     { label: 'Kontakta oss', href: '/contact' },
     { label: 'Läs mer', href: '/services' }
   ];
-
-  // Länkar längst ner bredvid pilen
   const legalLinks = [
     { label: 'Integritetspolicy', href: '/privacy' },
     { label: 'Användarvillkor', href: '/terms' },
     { label: 'Cookie Policy', href: '/cookies' }
   ];
-
-  // Sociala medier (uppdaterade länkar för LinkedIn & Instagram)
   const socialLinks = [
     { icon: Linkedin, href: 'https://www.linkedin.com/company/workplan-ab/', label: 'LinkedIn', color: 'hover:bg-blue-600' },
     { icon: Facebook, href: '#', label: 'Facebook', color: 'hover:bg-blue-700' },
     { icon: Instagram, href: 'https://www.instagram.com/workplan_ab/', label: 'Instagram', color: 'hover:bg-pink-600' }
   ];
 
-  // Scroll to top
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
     <footer className="relative overflow-hidden" style={{ backgroundColor: '#08132B' }}>
-      {/* Elegant bakgrund */}
+      {/* Bakgrund */}
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute -top-24 -left-24 w-[40rem] h-[40rem] rounded-full opacity-[0.08] blur-3xl"
@@ -105,34 +92,45 @@ const Footer = () => {
                   </h3>
                 </div>
 
-                {/* Social ikoner */}
+                {/* Social + mobil-pil (pilen flyttad hit på mobil) */}
                 <div className="flex items-center gap-4">
-                  {socialLinks.map((social, index) => (
-                    <a
-                      key={index}
-                      href={social.href}
-                      aria-label={social.label}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`
-                        group relative w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm
-                        flex items-center justify-center
-                        border border-white/20 ${social.color}
-                        transition-all duration-300 hover:scale-110 hover:border-white/40
-                        overflow-hidden
-                      `}
-                    >
-                      <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <social.icon size={16} className="relative z-10 text-white/80 group-hover:text-white transition-colors" />
-                    </a>
-                  ))}
+                  <div className="flex items-center gap-4">
+                    {socialLinks.map((social, index) => (
+                      <a
+                        key={index}
+                        href={social.href}
+                        aria-label={social.label}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`
+                          group relative w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm
+                          flex items-center justify-center
+                          border border-white/20 ${social.color}
+                          transition-all duration-300 hover:scale-110 hover:border-white/40
+                          overflow-hidden
+                        `}
+                      >
+                        <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <social.icon size={16} className="relative z-10 text-white/80 group-hover:text-white transition-colors" />
+                      </a>
+                    ))}
+                  </div>
+
+                  {/* Mobil: pilen till höger om sociala ikoner */}
+                  <button
+                    onClick={scrollToTop}
+                    aria-label="Till toppen"
+                    className="ml-auto sm:hidden inline-flex items-center justify-center w-11 h-11 rounded-full bg-white/10 border border-white/20 hover:bg-white/15 hover:border-white/40 transition-all duration-300"
+                  >
+                    <ArrowUp size={18} className="text-white" />
+                  </button>
                 </div>
               </div>
             </div>
 
-            {/* Navigation */}
-            <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Hitta ett jobb */}
+            {/* Navigation – mobil: 2 kolumner där ”För arbetsgivare” ligger till höger om ”Hitta ett jobb” */}
+            <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+              {/* Hitta ett jobb (vänster på mobil) */}
               <div className="space-y-6">
                 <h4 className="text-lg font-medium text-white flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-blue-400 rounded-full" />
@@ -142,28 +140,19 @@ const Footer = () => {
                   {jobLinks.map((link, index) => (
                     <a
                       key={index}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigate(link.href);
-                      }}
+                      onClick={(e) => { e.preventDefault(); navigate(link.href); }}
                       className="block text-white/70 hover:text-white font-light transition-all duration-300 hover:translate-x-2 relative group cursor-pointer"
                       onMouseEnter={() => setIsHovered(`job-${index}`)}
                       onMouseLeave={() => setIsHovered(null)}
                     >
-                      <div
-                        className={`
-                          absolute left-0 top-1/2 -translate-y-1/2 w-0 h-4 bg-blue-500 rounded-r-full
-                          transition-all duration-300
-                          ${isHovered === `job-${index}` ? 'w-1' : ''}
-                        `}
-                      />
+                      <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-0 h-4 bg-blue-500 rounded-r-full transition-all duration-300 ${isHovered === `job-${index}` ? 'w-1' : ''}`} />
                       <span className="relative z-10">{link.label}</span>
                     </a>
                   ))}
                 </nav>
               </div>
 
-              {/* För arbetsgivare */}
+              {/* För arbetsgivare (höger på mobil) */}
               <div className="space-y-6">
                 <h4 className="text-lg font-medium text-white flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full" />
@@ -173,29 +162,20 @@ const Footer = () => {
                   {employerLinks.map((link, index) => (
                     <a
                       key={index}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigate(link.href);
-                      }}
+                      onClick={(e) => { e.preventDefault(); navigate(link.href); }}
                       className="block text-white/70 hover:text-white font-light transition-all duration-300 hover:translate-x-2 relative group cursor-pointer"
                       onMouseEnter={() => setIsHovered(`employer-${index}`)}
                       onMouseLeave={() => setIsHovered(null)}
                     >
-                      <div
-                        className={`
-                          absolute left-0 top-1/2 -translate-y-1/2 w-0 h-4 bg-emerald-500 rounded-r-full
-                          transition-all duration-300
-                          ${isHovered === `employer-${index}` ? 'w-1' : ''}
-                        `}
-                      />
+                      <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-0 h-4 bg-emerald-500 rounded-r-full transition-all duration-300 ${isHovered === `employer-${index}` ? 'w-1' : ''}`} />
                       <span className="relative z-10">{link.label}</span>
                     </a>
                   ))}
                 </nav>
               </div>
 
-              {/* Om oss */}
-              <div className="space-y-6">
+              {/* Om oss – fullbredd på mobil, vanlig kolumn på ≥sm */}
+              <div className="space-y-6 col-span-2 sm:col-span-1">
                 <h4 className="text-lg font-medium text-white flex items-center gap-2">
                   <div className="w-1.5 h-1.5 bg-purple-400 rounded-full" />
                   <span>Om oss</span>
@@ -204,21 +184,12 @@ const Footer = () => {
                   {aboutLinks.map((link, index) => (
                     <a
                       key={index}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigate(link.href);
-                      }}
+                      onClick={(e) => { e.preventDefault(); navigate(link.href); }}
                       className="block text-white/70 hover:text-white font-light transition-all duration-300 hover:translate-x-2 relative group cursor-pointer"
                       onMouseEnter={() => setIsHovered(`about-${index}`)}
                       onMouseLeave={() => setIsHovered(null)}
                     >
-                      <div
-                        className={`
-                          absolute left-0 top-1/2 -translate-y-1/2 w-0 h-4 bg-purple-500 rounded-r-full
-                          transition-all duration-300
-                          ${isHovered === `about-${index}` ? 'w-1' : ''}
-                        `}
-                      />
+                      <div className={`absolute left-0 top-1/2 -translate-y-1/2 w-0 h-4 bg-purple-500 rounded-r-full transition-all duration-300 ${isHovered === `about-${index}` ? 'w-1' : ''}`} />
                       <span className="relative z-10">{link.label}</span>
                     </a>
                   ))}
@@ -230,22 +201,15 @@ const Footer = () => {
           {/* Bottom Section */}
           <div className="border-t border-white/10 py-8 mt-2 relative">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-              <p className="text-white/70 font-light">
-                © 2025 Workplan AB. Alla rättigheter förbehållna.
-              </p>
-
-              {/* Juridiska länkar längst ner */}
-              <div className="flex flex-wrap items-center gap-6">
+              {/* Juridiska länkar – överst på mobil */}
+              <div className="flex flex-wrap items-center gap-6 order-1">
                 {legalLinks.map((link, index) => (
                   <a
                     key={index}
                     onClick={(e) => {
                       e.preventDefault();
-                      if (link.href.startsWith('/')) {
-                        navigate(link.href);
-                      } else {
-                        window.location.href = link.href;
-                      }
+                      if (link.href.startsWith('/')) navigate(link.href);
+                      else window.location.href = link.href;
                     }}
                     className="text-white/70 hover:text-white text-sm font-light transition-colors cursor-pointer"
                   >
@@ -254,18 +218,23 @@ const Footer = () => {
                 ))}
               </div>
 
-              {/* Till toppen-knapp */}
+              {/* Copyright – under på mobil, oförändrat på desktop */}
+              <p className="text-white/70 font-light order-2 lg:order-none">
+                © 2025 Workplan AB. Alla rättigheter förbehållna.
+              </p>
+
+              {/* Desktop: pilen kvar här, dold på mobil */}
               <button
                 onClick={scrollToTop}
                 aria-label="Till toppen"
-                className="group inline-flex items-center justify-center w-11 h-11 rounded-full bg-white/10 border border-white/20 hover:bg-white/15 hover:border-white/40 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/30"
+                className="hidden sm:inline-flex items-center justify-center w-11 h-11 rounded-full bg-white/10 border border-white/20 hover:bg-white/15 hover:border-white/40 transition-all duration-300"
               >
-                <ArrowUp size={18} className="text-white group-hover:-translate-y-0.5 transition-transform duration-300" />
+                <ArrowUp size={18} className="text-white" />
               </button>
             </div>
           </div>
 
-          {/* Decorative Bottom Accent */}
+          {/* Dekorativ bottenaccent */}
           <div className="pb-8">
             <div className="flex items-center justify-center gap-4">
               <div className="w-12 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
