@@ -90,18 +90,18 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
   return (
     <>
-      {/* Backdrop */}
+      {/* Backdrop — högst upp under arket */}
       <div
-        className={`fixed inset-0 z-[70] bg-black/30 backdrop-blur-sm transition-opacity duration-300
+        className={`fixed inset-0 z-[9998] bg-black/30 backdrop-blur-sm transition-opacity duration-300
         ${animateIn && !animatingOut ? 'opacity-100' : 'opacity-0'}`}
         onClick={() => closeSmoothly()}
       />
 
-      {/* Sheet */}
+      {/* Sheet — absolut överst */}
       <div
         ref={sheetRef}
         className={`
-          fixed z-[80] left-0 right-0 bottom-0 top-10 sm:top-12
+          fixed z-[9999] left-0 right-0 bottom-0 top-10 sm:top-12
           bg-[#08132B] text-white rounded-t-3xl
           overflow-y-auto overscroll-contain
           shadow-[0_-20px_60px_rgba(0,0,0,0.35)]
@@ -129,21 +129,21 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
           }}
         />
 
-        {/* Sticky pil uppe till höger – syns alltid vid scroll */}
-        <div className="sticky top-2 z-[85] w-full">
+        {/* Sticky pil uppe till höger – stänger utan att minimera/scrolla */}
+        <div className="sticky top-2 z-[10000] w-full">
           <div className="flex justify-end pr-4">
             <button
-              onClick={() => closeSmoothly(true)}
+              onClick={() => closeSmoothly(/* inte minimize */)}
               className="h-10 w-10 rounded-xl bg-white/10 hover:bg-white/15 active:bg-white/20 flex items-center justify-center transition"
-              aria-label="Minimera formulär"
+              aria-label="Stäng formulär"
             >
               <ChevronDown size={18} />
             </button>
           </div>
         </div>
 
-        {/* Rubriker */}
-        <div className="px-5 sm:px-8 pt-2 pb-4">
+        {/* Rubriker — större och mer luft under */}
+        <div className="px-5 sm:px-8 pt-2 pb-8">
           {industry && location && (
             <div
               className="text-center text-xs tracking-[0.22em] uppercase text-white/70 mb-2"
@@ -153,7 +153,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
             </div>
           )}
           <h2
-            className="text-center text-3xl sm:text-4xl font-semibold tracking-tight"
+            className="text-center text-4xl sm:text-5xl font-semibold tracking-tight mb-6"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
             {jobTitle}
@@ -161,7 +161,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
         </div>
 
         {/* Innehåll */}
-        <div className="relative px-5 sm:px-8 pb-10">
+        <div className="relative px-5 sm:px-8 pb-16">
           <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto">
             {/* Namn */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
