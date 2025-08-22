@@ -38,7 +38,7 @@ const AudienceTiles = () => {
     };
   }, []);
 
-  // Mobil-läge (endast för att styra mobilspecifika tweaks; desktop lämnas orörd)
+  // Mobil-only flag (desktop lämnas orörd)
   const isMobile =
     typeof window !== 'undefined' &&
     window.matchMedia('(max-width: 639px)').matches;
@@ -104,7 +104,8 @@ const AudienceTiles = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative py-32 overflow-hidden">
+    // ↓ Mindre padding på mobil
+    <section ref={sectionRef} className="relative py-20 sm:py-32 overflow-hidden">
       <style>{`
         @keyframes float-slow { 0%,100% { transform: translate(0,0); } 50% { transform: translate(10px,6px); } }
         @keyframes float-slow-reverse { 0%,100% { transform: translate(0,0); } 50% { transform: translate(-8px,-5px); } }
@@ -200,8 +201,8 @@ const AudienceTiles = () => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-8">
-        {/* Rubrik */}
-        <div className="text-center mb-20 relative">
+        {/* Rubrik – mindre spacing på mobil */}
+        <div className="text-center mb-12 sm:mb-20 relative">
           <div
             className="absolute inset-x-0 mx-auto top-0 w-[360px] h-[160px] rounded-full blur-3xl opacity-25"
             style={{
@@ -365,7 +366,7 @@ const AudienceTiles = () => {
                     {audience.description}
                   </p>
 
-                  {/* Features – DÖLJ HELT PÅ MOBIL för att ta bort punkterna */}
+                  {/* Features – dolda helt på mobil */}
                   <div className="hidden sm:block space-y-3 mb-8 flex-1">
                     {audience.features.map((feature, fIdx) => (
                       <div key={fIdx} className="flex items-center space-x-3">
