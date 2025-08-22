@@ -1,4 +1,3 @@
-// JobApplicationForm.tsx
 import React, { useEffect, useRef, useState } from 'react';
 import { ChevronDown, Send, Upload, User, Mail, Phone } from 'lucide-react';
 
@@ -21,7 +20,7 @@ interface JobApplicationFormProps {
   industry?: string;
   location?: string;
 
-  // NYTT (valfritt, för delad state)
+  /** Valfritt: kontrollerad state för att spegla med sektionen */
   formData?: JobApplicationFormData;
   setFormData?: React.Dispatch<React.SetStateAction<JobApplicationFormData>>;
   cvFile?: File | null;
@@ -37,8 +36,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   onMinimize,
   industry,
   location,
-
-  // NYTT: ev. kontrollerade props
+  // kontrollerade props (valfria)
   formData: extFormData,
   setFormData: extSetFormData,
   cvFile: extCv,
@@ -46,7 +44,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   otherFile: extOther,
   setOtherFile: extSetOther,
 }) => {
-  // Interna fallback-state (används endast om props saknas)
+  // fallback-intern state om kontrollerad state ej skickas in
   const [intFormData, setIntFormData] = useState<JobApplicationFormData>({
     firstName: '',
     lastName: '',
@@ -58,7 +56,6 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   const [intCvFile, setIntCvFile] = useState<File | null>(null);
   const [intOtherFile, setIntOtherFile] = useState<File | null>(null);
 
-  // Välj källan (extern om finns, annars intern)
   const formData = extFormData ?? intFormData;
   const setFormData = extSetFormData ?? setIntFormData;
   const cvFile = extCv ?? intCvFile;
@@ -73,6 +70,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   const otherFileInputRef = useRef<HTMLInputElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
 
+  // Lås bakgrund-scroll och trigga in-animation
   useEffect(() => {
     if (isPopupOpen) {
       const prev = document.documentElement.style.overflow;
@@ -86,6 +84,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
     }
   }, [isPopupOpen]);
 
+  // Säkerställ att vi startar överst i arket
   useEffect(() => {
     if (isPopupOpen && sheetRef.current) {
       sheetRef.current.scrollTop = 0;
@@ -123,14 +122,14 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
 
   return (
     <>
-      {/* Backdrop – högst upp */}
+      {/* Backdrop */}
       <div
         className={`fixed inset-0 z-[9998] bg-black/30 backdrop-blur-sm transition-opacity duration-300
         ${animateIn && !animatingOut ? 'opacity-100' : 'opacity-0'}`}
         onClick={() => closeSmoothly()}
       />
 
-      {/* Sheet – överst */}
+      {/* Sheet */}
       <div
         ref={sheetRef}
         className={`
@@ -142,19 +141,27 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
           ${animateIn && !animatingOut ? 'translate-y-0' : 'translate-y-full'}
         `}
       >
-        {/* bakgrunder */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.08]"
-          style={{ background: 'radial-gradient(1200px 600px at 50% -200px, rgba(255,255,255,0.25), transparent 60%)' }} />
-        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-[0.06]"
+        {/* Subtil bakgrund */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.08]"
+          style={{
+            background: 'radial-gradient(1200px 600px at 50% -200px, rgba(255,255,255,0.25), transparent 60%)',
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
           style={{
             backgroundImage: `
               linear-gradient(transparent 97%, rgba(255,255,255,0.25) 100%),
               linear-gradient(90deg, transparent 97%, rgba(255,255,255,0.2) 100%)
             `,
             backgroundSize: '26px 26px, 26px 26px',
-          }} />
+          }}
+        />
 
-        {/* Stäng-ikon (ingen scroll/minimera) */}
+        {/* Sticky pil uppe till höger – stänger utan att minimera/scrolla */}
         <div className="sticky top-2 z-[10000] w-full">
           <div className="flex justify-end pr-4">
             <button
@@ -162,7 +169,6 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               className="h-10 w-10 rounded-xl bg-white/10 hover:bg-white/15 active:bg-white/20 flex items-center justify-center transition"
               aria-label="Stäng formulär"
             >
-              {/* ChevronDown import finns redan */}
               <ChevronDown size={18} />
             </button>
           </div>
@@ -189,7 +195,6 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
         {/* Innehåll */}
         <div className="relative px-5 sm:px-8 pb-16">
           <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto">
-            {/* --- fälten nedan är oförändrade, binder mot formData/cvFile/otherFile --- */}
             {/* Namn */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -266,7 +271,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               </div>
             </div>
 
-            {/* Ladda upp CV */}
+            {/* Ladda upp CV – VIT */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Ladda upp CV *
@@ -293,7 +298,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               </div>
             </div>
 
-            {/* Övriga dokument */}
+            {/* Övriga dokument – VIT (valfritt) */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Övriga dokument
