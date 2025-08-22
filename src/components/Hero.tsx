@@ -20,6 +20,14 @@ const Hero = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  // Mobilflagga för att tona ned vissa effekter (desktop lämnas orörd)
+  const isMobile =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(max-width: 639px)').matches;
+
+  const parallaxX = isMobile ? 0.0 : 0.02;
+  const parallaxY = isMobile ? 0.0 : 0.02;
+
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden">
       {/* Dynamic Background with Parallax */}
@@ -27,7 +35,9 @@ const Hero = () => {
         <div
           className="absolute inset-0 transition-transform duration-1000 ease-out"
           style={{
-            transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px) scale(1.05)`,
+            transform: `translate(${mousePosition.x * parallaxX}px, ${
+              mousePosition.y * parallaxY
+            }px) scale(1.05)`,
           }}
         >
           <img
@@ -37,61 +47,82 @@ const Hero = () => {
           />
         </div>
 
-        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+        {/* Overlays */}
+        {/* Lite mörkare scrim på mobil för bättre kontrast */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70 sm:from-black/60 sm:via-black/40 sm:to-black/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent sm:from-black/50" />
 
-        {/* Animated Geometric Elements */}
+        {/* Animated Geometric Elements (tonas ned på mobil via opacitet) */}
         <div className="absolute inset-0 overflow-hidden">
           <div
-            className="absolute w-96 h-96 rounded-full bg-white/5 blur-3xl animate-pulse"
+            className={`absolute w-96 h-96 rounded-full bg-white/5 blur-3xl animate-pulse ${
+              isMobile ? 'opacity-40' : 'opacity-100'
+            }`}
             style={{
               top: '10%',
               right: '15%',
               animationDuration: '4s',
-              transform: `translate(${mousePosition.x * 0.05}px, ${mousePosition.y * 0.05}px)`,
+              transform: `translate(${mousePosition.x * 0.05}px, ${
+                mousePosition.y * 0.05
+              }px)`,
             }}
           />
           <div
-            className="absolute w-64 h-64 rounded-full bg-blue-500/10 blur-2xl animate-pulse"
+            className={`absolute w-64 h-64 rounded-full bg-blue-500/10 blur-2xl animate-pulse ${
+              isMobile ? 'opacity-40' : 'opacity-100'
+            }`}
             style={{
               bottom: '20%',
               left: '10%',
               animationDuration: '6s',
               animationDelay: '2s',
-              transform: `translate(${mousePosition.x * -0.03}px, ${mousePosition.y * -0.03}px)`,
+              transform: `translate(${mousePosition.x * -0.03}px, ${
+                mousePosition.y * -0.03
+              }px)`,
             }}
           />
           <div
-            className="absolute inset-0 opacity-[0.03]"
+            className={`absolute inset-0 ${
+              isMobile ? 'opacity-[0.02]' : 'opacity-[0.03]'
+            }`}
             style={{
               backgroundImage: `
                 linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
               `,
               backgroundSize: '100px 100px',
-              transform: `translate(${mousePosition.x * 0.01}px, ${mousePosition.y * 0.01}px)`,
+              transform: `translate(${mousePosition.x * 0.01}px, ${
+                mousePosition.y * 0.01
+              }px)`,
             }}
           />
         </div>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex-1 flex items-center py-16">
-        <div className="w-full px-6 sm:px-8">
+      <div className="relative z-10 flex-1 flex items-center py-12 sm:py-16">
+        <div className="w-full px-5 sm:px-8">
           <div className="max-w-3xl text-left">
-            {/* Titel + underrubrik */}
-            <div 
+            {/* Textblock med diskret bakgrund på mobil för läsbarhet */}
+            <div
               className={`
-                space-y-3 
-                transition-all duration-700
-                mt-12 sm:mt-0
+                space-y-3 transition-all duration-700
+                mt-8 sm:mt-0
+                rounded-2xl sm:rounded-none
+                bg-black/25 sm:bg-transparent
+                backdrop-blur-[2px] sm:backdrop-blur-0
+                p-4 sm:p-0
+                shadow-[0_0_0_1px_rgba(255,255,255,0.06)] sm:shadow-none
               `}
             >
               <h1
                 className={`
-                  text-4xl sm:text-5xl lg:text-6xl xl:text-7xl
-                  font-light text-white leading-tight tracking-tight
+                  /* Mobil: något mindre & tätare; Desktop oförändrat via sm: */
+                  text-[34px] leading-[1.15] tracking-tight
+                  sm:text-5xl lg:text-6xl xl:text-7xl
+                  font-light text-white
                   transition-all duration-1200 delay-200 transform
+                  drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
                 `}
               >
@@ -108,6 +139,7 @@ const Hero = () => {
                   >
                     Drömteam
                   </span>
+                  {/* Understrykning kvar som tidigare */}
                   <div className="relative inline-block">
                     <img
                       src="https://i.ibb.co/6c1JcWdr/image.png"
@@ -121,22 +153,25 @@ const Hero = () => {
 
               <div
                 className={`
-                  w-24 h-px bg-gradient-to-r from-white/60 to-transparent
+                  w-20 sm:w-24 h-px bg-gradient-to-r from-white/70 to-transparent
                   transition-all duration-1000 delay-600 transform
                   ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
                 `}
               />
 
+              {/* Mobil: ta bort kursiv, kortare rader, lite högre opacitet */}
               <p
                 className={`
-                  text-sm md:text-base text-white/80 italic leading-relaxed
+                  text-[15px] sm:text-base text-white/85 sm:text-white/80
+                  not-italic leading-relaxed
+                  max-w-[42ch] sm:max-w-none
                   transition-all duration-1000 delay-800 transform
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
                 `}
-                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontStyle: 'italic' }}
+                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
               >
                 Skräddarsydda bemanningslösningar –
-                <span className="block mt-1 text-white/60">
+                <span className="block mt-1 text-white/70">
                   snabbt, flexibelt och med rätt kompetens.
                 </span>
               </p>
@@ -145,45 +180,46 @@ const Hero = () => {
             {/* Action Buttons */}
             <div
               className={`
-                flex flex-col sm:flex-row gap-4 pt-6
+                flex flex-col sm:flex-row gap-3 sm:gap-4 pt-5 sm:pt-6
                 transition-all duration-500 delay-200 transform
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-                mt-16 sm:mt-0
+                mt-8 sm:mt-0
               `}
               style={{ willChange: 'transform, opacity' }}
             >
+              {/* Primär – fullbredd/48px höjd på mobil */}
               <button
                 onClick={() => navigate('/jobs')}
                 className="
-                  group relative px-5 py-2.5 min-w-[150px]
+                  group relative w-full sm:w-auto h-12 sm:h-auto px-5 py-2.5
                   bg-white text-gray-900 rounded-xl
-                  font-semibold text-base tracking-wide
+                  font-semibold text-[16px] sm:text-base tracking-wide
                   transition-all duration-300
                   hover:-translate-y-0.5 active:translate-y-0
                   overflow-hidden select-none
-                  shadow-[0_4px_6px_rgba(0,0,0,0.15),0_8px_20px_rgba(0,0,0,0.12)]
-                  hover:shadow-[0_6px_10px_rgba(0,0,0,0.2),0_12px_24px_rgba(0,0,0,0.18)]
-                  active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)]
+                  shadow-[0_4px_10px_rgba(0,0,0,0.18)]
+                  hover:shadow-[0_6px_14px_rgba(0,0,0,0.22)]
+                  active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.18)]
                   border border-white/60
                 "
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
                 <span className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-b from-white/90 to-transparent" />
                 <span className="pointer-events-none absolute inset-x-2 top-1 h-px bg-gradient-to-r from-white/70 via-white to-white/70" />
-                <span className="pointer-events-none absolute -inset-y-8 -left-24 w-24 h-24 rotate-12 bg-white/60 blur-md opacity-0 transform transition-all duration-700 ease-out group-hover:opacity-100 group-hover:translate-x-[220%]" />
                 <span className="relative z-10">Lediga Tjänster</span>
               </button>
 
+              {/* Sekundär – mjukare kant/kontrast på mobil, fullbredd */}
               <button
                 onClick={() => navigate('/partner')}
                 className="
-                  group relative px-5 py-2.5 min-w-[150px]
-                  bg-transparent text-white border-2 border-white/30 rounded-xl
-                  font-semibold text-base tracking-wide
-                  hover:border-white/60 hover:bg-white/10
+                  group relative w-full sm:w-auto h-12 sm:h-auto px-5 py-2.5
+                  bg-white/10 text-white border border-white/35 sm:border-2 sm:border-white/30 rounded-xl
+                  font-semibold text-[16px] sm:text-base tracking-wide
+                  hover:border-white/60 hover:bg-white/15
                   transition-all duration-300
                   backdrop-blur-sm
-                  hover:scale-105 hover:-translate-y-0.5
+                  hover:-translate-y-0.5
                   overflow-hidden
                 "
                 style={{ fontFamily: 'Inter, sans-serif' }}
@@ -196,7 +232,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Badges längst ner – döljs på mobil */}
+      {/* Badges – fortsatt dolda på mobil */}
       <div
         className={`
           absolute bottom-8 inset-x-0 z-10
