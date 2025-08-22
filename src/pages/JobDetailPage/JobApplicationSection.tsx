@@ -1,4 +1,3 @@
-// JobApplicationSection.tsx
 import React, { useState, useRef } from 'react';
 import { Send, Upload, User, Mail, Phone } from 'lucide-react';
 
@@ -14,10 +13,11 @@ export type JobApplicationFormData = {
 interface JobApplicationSectionProps {
   jobTitle: string;
   companyName: string;
+  /** Valfritt: visas som liten överrubrik "INDUSTRI • PLATS" precis som i arket */
   industry?: string;
   location?: string;
 
-  // NYTT (valfritt, för delad state)
+  /** Valfritt: kontrollerad state för att spegla med arket */
   formData?: JobApplicationFormData;
   setFormData?: React.Dispatch<React.SetStateAction<JobApplicationFormData>>;
   cvFile?: File | null;
@@ -31,8 +31,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
   companyName,
   industry,
   location,
-
-  // ev. kontrollerade props
+  // kontrollerad state (valfritt)
   formData: extFormData,
   setFormData: extSetFormData,
   cvFile: extCv,
@@ -40,7 +39,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
   otherFile: extOther,
   setOtherFile: extSetOther,
 }) => {
-  // Fallback-intern state om ingen extern ges
+  // Fallback-intern state om kontrollerad state ej skickas in
   const [intFormData, setIntFormData] = useState<JobApplicationFormData>({
     firstName: '',
     lastName: '',
@@ -105,7 +104,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
       />
 
       <div className="relative px-5 sm:px-8">
-        {/* Bransch • Ort och rubrik – exakt som i arket */}
+        {/* Rubrikblock – med "bransch • ort" exakt som i JobApplicationForm */}
         <div className="pt-10 sm:pt-12 pb-8">
           {industry && location && (
             <div
@@ -123,7 +122,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
           </h2>
         </div>
 
-        {/* Formulär – identiskt UI */}
+        {/* Formulär – identiskt UI, ingen pil här */}
         <div className="relative pb-16">
           <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto">
             {/* Namn */}
@@ -202,7 +201,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
               </div>
             </div>
 
-            {/* Ladda upp CV */}
+            {/* Ladda upp CV – VIT */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Ladda upp CV *
@@ -229,100 +228,11 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
               </div>
             </div>
 
-            {/* Övriga dokument */}
+            {/* Övriga dokument – VIT (valfritt) */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Övriga dokument
               </label>
               <div
                 onClick={() => otherFileInputRef.current?.click()}
-                className="relative rounded-xl border-2 border-dashed border-gray-300 bg-white p-6 hover:border-gray-400 transition cursor-pointer group"
-              >
-                <input
-                  ref={otherFileInputRef}
-                  type="file"
-                  accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
-                  onChange={(e) => handleFileChange(e, 'other')}
-                  className="hidden"
-                />
-                <div className="text-center">
-                  <Upload className="mx-auto h-8 w-8 text-gray-500 group-hover:text-gray-700 transition" />
-                  <p className="mt-2 text-sm text-[#08132B]">
-                    {otherFile ? otherFile.name : 'Klicka för att bifoga fler filer (valfritt)'}
-                  </p>
-                  <p className="text-xs text-gray-600 mt-1">PDF, DOC, DOCX, PNG, JPG (max 10MB)</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Personligt brev */}
-            <div>
-              <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-                Personligt brev
-              </label>
-              <textarea
-                name="coverLetter"
-                value={formData.coverLetter}
-                onChange={handleInputChange}
-                rows={4}
-                className="w-full bg-white text-[#08132B] pl-4 pr-4 py-3 rounded-xl border border-white/0 focus:border-white/30 focus:ring-4 focus:ring-white/10 transition resize-none"
-                placeholder="Berätta kort om dig själv och varför du är intresserad av denna tjänst..."
-              />
-            </div>
-
-            {/* GDPR */}
-            <div className="flex items-start space-x-3">
-              <input
-                type="checkbox"
-                name="gdprConsent"
-                checked={formData.gdprConsent}
-                onChange={handleInputChange}
-                required
-                className="w-4 h-4 text-[#08132B] border-white/40 rounded focus:ring-white/40 mt-1 bg-white"
-              />
-              <label className="text-sm text-white/90 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
-                Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att hantera min ansökan enligt{' '}
-                <a
-                  href="/privacy"
-                  className="underline underline-offset-2 decoration-white/50 hover:decoration-white"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  integritetspolicyn
-                </a>
-                . *
-              </label>
-            </div>
-
-            {/* Skicka ansökan */}
-            <div className="pt-2 flex justify-center">
-              <button
-                type="submit"
-                className="
-                  relative inline-flex items-center gap-2 px-8 py-3
-                  rounded-2xl bg-white text-[#08132B] font-semibold
-                  shadow-[0_10px_30px_rgba(255,255,255,0.15),0_8px_20px_rgba(0,0,0,0.25)]
-                  transition-transform duration-300
-                  hover:-translate-y-0.5 active:translate-y-0
-                  focus:outline-none
-                "
-                style={{ fontFamily: 'Inter, sans-serif' }}
-              >
-                <span
-                  className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition-opacity"
-                  style={{
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 40%)',
-                  }}
-                />
-                <Send size={18} />
-                <span className="relative">Skicka ansökan</span>
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default JobApplicationSection;
+                className="relative rounded-xl border-2 border-d
