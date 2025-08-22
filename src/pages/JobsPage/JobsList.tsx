@@ -147,7 +147,7 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
                   <div
                     style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}
                   >
-                    Apply by
+                    Ansök senast
                   </div>
                   <div
                     className="text-gray-700"
