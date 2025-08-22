@@ -26,32 +26,32 @@ const Footer = () => {
     { label: 'Kontakta oss', href: '/contact' }
   ];
 
-  // Sektion: För arbetsgivare -> PartnerHeroSection.tsx
+  // Sektion: För arbetsgivare
   const employerLinks = [
     { label: 'För företag', href: '/partner' },
     { label: 'Om oss', href: '/about' },
     { label: 'Kontakta oss', href: '/contact' }
   ];
 
-  // Sektion: Om oss -> ServicesHeroSection.tsx för "Läs mer"
+  // Sektion: Om oss
   const aboutLinks = [
     { label: 'Om oss', href: '/about' },
     { label: 'Kontakta oss', href: '/contact' },
     { label: 'Läs mer', href: '/services' }
   ];
 
-  // Länkar längst ner bredvid pilen (GDPR borttagen ✅)
+  // Länkar längst ner bredvid pilen
   const legalLinks = [
     { label: 'Integritetspolicy', href: '/privacy' },
     { label: 'Användarvillkor', href: '/terms' },
     { label: 'Cookie Policy', href: '/cookies' }
   ];
 
-  // Sociala medier
+  // Sociala medier (uppdaterade länkar för LinkedIn & Instagram)
   const socialLinks = [
-    { icon: Linkedin, href: '#', label: 'LinkedIn', color: 'hover:bg-blue-600' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/company/workplan-ab/?originalSubdomain=se', label: 'LinkedIn', color: 'hover:bg-blue-600' },
     { icon: Facebook, href: '#', label: 'Facebook', color: 'hover:bg-blue-700' },
-    { icon: Instagram, href: '#', label: 'Instagram', color: 'hover:bg-pink-600' }
+    { icon: Instagram, href: 'https://www.instagram.com/workplan_ab/', label: 'Instagram', color: 'hover:bg-pink-600' }
   ];
 
   // Scroll to top
@@ -112,6 +112,8 @@ const Footer = () => {
                       key={index}
                       href={social.href}
                       aria-label={social.label}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className={`
                         group relative w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm
                         flex items-center justify-center
