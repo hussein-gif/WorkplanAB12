@@ -1,11 +1,10 @@
-// src/components/JobApplicationSection.tsx
 import React, { useState, useRef } from 'react';
 import { Send, Upload, User, Mail, Phone } from 'lucide-react';
 
 interface JobApplicationSectionProps {
   jobTitle: string;
   companyName: string;
-  /** Valfritt: visas som liten överrubrik "INDUSTRI • PLATS" precis som i arket */
+  /** Valfritt: visas som liten överrubrik "INDUSTRI • PLATS" */
   industry?: string;
   location?: string;
 }
@@ -52,7 +51,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
 
   return (
     <section id="application-form" className="relative bg-[#08132B] text-white">
-      {/* Subtil bakgrund – samma som i arket */}
+      {/* Subtil bakgrund */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.08]"
@@ -73,7 +72,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
       />
 
       <div className="relative px-5 sm:px-8">
-        {/* Rubrikblock – med "bransch • ort" exakt som i JobApplicationForm */}
+        {/* Rubrikblock med bransch • ort */}
         <div className="pt-10 sm:pt-12 pb-8">
           {industry && location && (
             <div
@@ -91,7 +90,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
           </h2>
         </div>
 
-        {/* Formulär – identiskt utseende som arket, ingen pil här */}
+        {/* Formulär */}
         <div className="relative pb-16">
           <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto">
             {/* Namn */}
@@ -170,7 +169,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
               </div>
             </div>
 
-            {/* Ladda upp CV – VIT */}
+            {/* CV */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Ladda upp CV *
@@ -197,7 +196,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
               </div>
             </div>
 
-            {/* Övriga dokument – VIT (valfritt) */}
+            {/* Övriga dokument */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Övriga dokument
@@ -262,7 +261,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
               </label>
             </div>
 
-            {/* Skicka ansökan – centrerad, med extra bottenluft */}
+            {/* Submit */}
             <div className="pt-2 flex justify-center">
               <button
                 type="submit"
