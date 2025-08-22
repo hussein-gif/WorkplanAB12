@@ -6,16 +6,6 @@ const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  // ⬇️ NYTT: upptäck mobilstorlek för att justera skalan (zoom ut på mobil)
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 640px)');
-    const apply = () => setIsMobile(mq.matches);
-    apply();
-    mq.addEventListener?.('change', apply);
-    return () => mq.removeEventListener?.('change', apply);
-  }, []);
-
   useEffect(() => {
     setIsVisible(true);
 
@@ -31,15 +21,13 @@ const Hero = () => {
   }, []);
 
   return (
-    // ⬇️ ÄNDRAT: lite kortare på mobil, oförändrat (screen) på ≥ sm
-    <section className="relative min-h-[88vh] sm:min-h-screen flex flex-col overflow-hidden">
+    <section className="relative min-h-screen flex flex-col overflow-hidden">
       {/* Dynamic Background with Parallax */}
       <div className="absolute inset-0 z-0">
         <div
           className="absolute inset-0 transition-transform duration-1000 ease-out"
           style={{
-            // ⬇️ ÄNDRAT: zooma ut på mobil (0.95) och behåll 1.05 på större skärmar
-            transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px) scale(${isMobile ? 0.95 : 1.05})`,
+            transform: `translate(${mousePosition.x * 0.02}px, ${mousePosition.y * 0.02}px) scale(1.05)`,
           }}
         >
           <img
@@ -156,7 +144,7 @@ const Hero = () => {
               `}
               style={{ willChange: 'transform, opacity' }}
             >
-              {/* VITA KNAPPEN */}
+              {/* VITA KNAPPEN UPPDATERAD – behåller rounded-xl men med 3D/glossy design */}
               <button
                 onClick={() => navigate('/jobs')}
                 className="
@@ -173,9 +161,15 @@ const Hero = () => {
                 "
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
+                {/* Inre highlight för gloss */}
                 <span className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-b from-white/90 to-transparent" />
+
+                {/* Diskret top-line highlight */}
                 <span className="pointer-events-none absolute inset-x-2 top-1 h-px bg-gradient-to-r from-white/70 via-white to-white/70" />
+
+                {/* Shine-svep vid hover */}
                 <span className="pointer-events-none absolute -inset-y-8 -left-24 w-24 h-24 rotate-12 bg-white/60 blur-md opacity-0 transform transition-all duration-700 ease-out group-hover:opacity-100 group-hover:translate-x-[220%]" />
+
                 <span className="relative z-10">Lediga Tjänster</span>
               </button>
 
@@ -201,13 +195,12 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Badges längst ner – ⬇️ DÖLJ PÅ MOBIL, visa på ≥ sm */}
+      {/* Badges längst ner */}
       <div
         className={`
           absolute bottom-8 inset-x-0 z-10
           transition-all duration-1000 delay-1200 transform
           ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-          hidden sm:block
         `}
       >
         <div
