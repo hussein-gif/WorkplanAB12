@@ -144,22 +144,38 @@ const Hero = () => {
               `}
               style={{ willChange: 'transform, opacity' }}
             >
+              {/* VITA KNAPPEN UPPDATERAD */}
               <button
                 onClick={() => navigate('/jobs')}
                 className="
                   group relative px-5 py-2.5 min-w-[150px]
-                  bg-white text-gray-900 rounded-xl
-                  font-semibold text-base tracking-wide
-                  hover:bg-white/95 
+                  rounded-2xl
+                  font-semibold text-base tracking-wide text-gray-900
+                  bg-gradient-to-b from-white to-neutral-100
+                  border border-neutral-200
+                  shadow-[0_8px_0_0_rgba(0,0,0,0.12),0_18px_25px_-15px_rgba(0,0,0,0.35)]
+                  hover:shadow-[0_10px_0_0_rgba(0,0,0,0.12),0_22px_30px_-15px_rgba(0,0,0,0.45)]
+                  active:shadow-[0_2px_0_0_rgba(0,0,0,0.15),0_8px_15px_-10px_rgba(0,0,0,0.3)]
                   transition-all duration-300
-                  shadow-lg hover:shadow-white/20
-                  hover:scale-105 hover:-translate-y-0.5
-                  overflow-hidden
+                  hover:-translate-y-0.5 active:translate-y-0
+                  focus:outline-none focus:ring-4 focus:ring-blue-200/60
+                  overflow-hidden select-none
                 "
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
+                {/* Top highlight line */}
+                <span className="pointer-events-none absolute inset-x-2 top-1 h-px bg-gradient-to-r from-white/60 via-white to-white/60 opacity-70" />
+
+                {/* Soft gloss */}
+                <span className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-white/80 via-white/30 to-transparent" />
+
+                {/* Bottom rim for 3D edge */}
+                <span className="pointer-events-none absolute inset-x-0 -bottom-px h-3 rounded-b-2xl bg-gradient-to-t from-black/10 via-black/5 to-transparent" />
+
+                {/* Hover shine sweep */}
+                <span className="pointer-events-none absolute -inset-y-8 -left-24 w-24 h-24 rotate-12 bg-white/60 blur-md opacity-0 transform transition-all duration-700 ease-out group-hover:opacity-100 group-hover:translate-x-[220%]" />
+
                 <span className="relative z-10">Lediga Tjänster</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
 
               <button
