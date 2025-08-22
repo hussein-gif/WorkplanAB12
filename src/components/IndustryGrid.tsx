@@ -9,9 +9,7 @@ const IndustryGrid = () => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
       { threshold: 0.1 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
@@ -63,7 +61,9 @@ const IndustryGrid = () => {
     },
   ];
 
-  // ===== Desktop-kort (oförändrad look) =====
+  /* =========================
+     DESKTOP CARD (oförändrat)
+     ========================= */
   const renderDesktopCard = (
     pillar: typeof trustPillars[0],
     index: number,
@@ -72,8 +72,7 @@ const IndustryGrid = () => {
     <div
       key={`d-${index}`}
       className={`
-        relative flex
-        transition-all duration-1000 transform
+        relative flex transition-all duration-1000 transform
         ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
       `}
       style={{ transitionDelay: `${600 + index * 150}ms`, flex: flexGrow }}
@@ -84,8 +83,7 @@ const IndustryGrid = () => {
         className={`
           relative flex-1 flex flex-col p-6 rounded-2xl overflow-hidden
           bg-white/30 backdrop-blur-3xl border border-blue-50/40
-          transition-all duration-500 ease-out
-          min-h-[260px]
+          transition-all duration-500 ease-out min-h-[260px]
           ${activeCard === index ? 'scale-[1.01]' : ''}
         `}
         style={{
@@ -98,11 +96,9 @@ const IndustryGrid = () => {
       >
         {/* Glow när aktiv */}
         <div
-          className={`
-            absolute inset-0 rounded-2xl pointer-events-none
-            transition-opacity duration-500
-            ${activeCard === index ? 'opacity-100' : 'opacity-0'}
-          `}
+          className={`absolute inset-0 rounded-2xl pointer-events-none transition-opacity duration-500 ${
+            activeCard === index ? 'opacity-100' : 'opacity-0'
+          }`}
           style={{
             background: `radial-gradient(circle at 50% 50%, ${pillar.glowColor} 0%, transparent 70%)`,
           }}
@@ -156,66 +152,73 @@ const IndustryGrid = () => {
     </div>
   );
 
-  // ===== Mobil-kort (ny, kompakt och mer professionell) =====
+  /* =========================
+     MOBIL CARD – Compact Media
+     ========================= */
   const renderMobileCard = (pillar: typeof trustPillars[0], index: number) => (
     <div
       key={`m-${index}`}
-      className={`
-        relative transition-all duration-500
-        ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'}
-      `}
-      style={{ transitionDelay: `${400 + index * 120}ms` }}
+      className={`relative transition-all duration-400 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+      }`}
+      style={{ transitionDelay: `${350 + index * 100}ms` }}
     >
       <div
         className="
-          rounded-xl bg-white/20 backdrop-blur-md border border-blue-50/30
-          shadow-md px-5 py-5
-          min-h-[200px]
+          rounded-xl bg-white/85 backdrop-blur-sm border border-black/5
+          shadow-sm px-4 py-4
         "
         style={{ cursor: 'default' }}
       >
-        <div className="relative z-10 flex items-start gap-3">
-          {/* Ikon */}
-          <div
-            className="w-12 h-12 rounded-lg flex items-center justify-center shadow shrink-0"
-            style={{
-              background: 'linear-gradient(180deg, #1A3D73 0%, #0B274D 70%)',
-              border: '1px solid rgba(255,255,255,0.08)',
-            }}
-          >
-            <pillar.icon size={20} className="text-white" />
-          </div>
-
-          {/* Text */}
-          <div className="flex-1">
+        {/* Topp-rad: Titel + ikon */}
+        <div className="flex items-start gap-3">
+          <div className="flex-1 min-w-0">
             <h3
-              className="text-[17px] font-semibold leading-tight mb-1"
-              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', color: '#000' }}
+              className="text-[16.5px] font-semibold leading-tight truncate"
+              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', color: '#0B1424' }}
+              title={pillar.title}
             >
               {pillar.title}
             </h3>
 
-            <p
-              className="text-[14px] leading-6 text-gray-700 mb-3"
-              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
-            >
-              {pillar.description}
-            </p>
-
+            {/* Badge under titel */}
             <span
-              className="inline-block text-[11px] uppercase tracking-wide bg-gray-900/5 text-gray-600 px-2 py-1 rounded"
-              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
+              className="inline-block mt-1 text-[11px] uppercase tracking-wide
+                         bg-gray-900/5 text-gray-600 px-2 py-0.5 rounded"
+              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600 }}
             >
               {pillar.highlight}
             </span>
           </div>
+
+          {/* Ikon-chip till höger */}
+          <div
+            className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 shadow"
+            style={{
+              background: 'linear-gradient(180deg, #1A3D73 0%, #0B274D 70%)',
+              border: '1px solid rgba(255,255,255,0.10)',
+            }}
+          >
+            <pillar.icon size={18} className="text-white" />
+          </div>
         </div>
+
+        {/* Divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-3" />
+
+        {/* Beskrivning */}
+        <p
+          className="text-[14px] leading-6 text-gray-700"
+          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
+        >
+          {pillar.description}
+        </p>
       </div>
     </div>
   );
 
   return (
-    // ↓ Mindre vertikal padding på mobil
+    // Mindre vertikal padding på mobil
     <section ref={sectionRef} className="relative py-20 sm:py-24 overflow-hidden">
       <style>{`
         @keyframes softPulse {
@@ -238,7 +241,9 @@ const IndustryGrid = () => {
       <div className="absolute inset-0">
         <div
           className="absolute inset-0"
-          style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f0f5fa 55%, #ffffff 100%)' }}
+          style={{
+            background: 'linear-gradient(135deg, #ffffff 0%, #f0f5fa 55%, #ffffff 100%)',
+          }}
         />
         <div
           className="absolute inset-0 pointer-events-none"
@@ -256,7 +261,7 @@ const IndustryGrid = () => {
           }}
         />
 
-        {/* Stora blobbar – dämpade på mobil */}
+        {/* Blobbar/parallax – nedtonat på mobil */}
         <div
           className="absolute -left-32 top-10 w-[420px] h-[420px] rounded-full opacity-0 sm:opacity-30 blur-3xl"
           style={{
@@ -334,7 +339,7 @@ const IndustryGrid = () => {
       </div>
 
       <div className="relative z-10 max-w-[1040px] mx-auto px-8">
-        {/* Header – tajtare på mobil */}
+        {/* Header – lite tajtare på mobil */}
         <div className="text-center mb-12 sm:mb-16">
           <h2
             className={`
@@ -366,12 +371,12 @@ const IndustryGrid = () => {
           </p>
         </div>
 
-        {/* ===== Mobil-layout: 1 kolumn ===== */}
+        {/* MOBIL – 1 kolumn, Compact Media-kort */}
         <div className="grid grid-cols-1 gap-4 sm:hidden">
           {trustPillars.map((p, i) => renderMobileCard(p, i))}
         </div>
 
-        {/* ===== Desktop-layout: din originala två-rads-flex ===== */}
+        {/* DESKTOP – din originala två-rads-flex */}
         <div className="hidden sm:flex flex-col gap-2 relative">
           <div
             className="absolute left-1/2 top-1/2 w-[520px] h-[520px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 sm:opacity-100"
@@ -395,8 +400,7 @@ const IndustryGrid = () => {
         {/* Bottom dots – oförändrat */}
         <div
           className={`
-            text-center mt-12
-            transition-all duration-1000 delay-1200 transform
+            text-center mt-12 transition-all duration-1000 delay-1200 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}
         >
