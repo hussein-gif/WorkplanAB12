@@ -95,11 +95,11 @@ const Header: React.FC = () => {
         <div className={`${isScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""}`}>
           {/* Container – chip endast när scrolled. Färger styrs separat av isDarkTheme. */}
           <div
-            className={`pointer-events-auto ${
-              isScrolled
-                ? "inline-block rounded-2xl"
-                : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
-            }`}
+            className={`pointer-events-auto
+              ${isScrolled ? "inline-block rounded-2xl" : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"}
+              ${/* NYTT: dölj header-chip på mobil när menyn är öppen */""}
+              ${isMobileMenuOpen ? "hidden lg:block" : ""}
+            `}
             style={{ willChange: "opacity, transform" }}
           >
             {/* Bakgrund/ruta – visas endast när scrolled */}
@@ -211,6 +211,7 @@ const Header: React.FC = () => {
             onClick={() => setIsMobileMenuOpen(false)}
           />
           <div className="fixed top-4 left-3 right-3 bg-white/95 backdrop-blur-md border border-gray-200/60 shadow-xl rounded-2xl overflow-hidden">
+            {/* Övre raden med logga + X i panelen behålls (inte den lilla chipen) */}
             <div className="px-4 py-4 flex items-center justify-between">
               <div className="flex items-center">
                 <img
