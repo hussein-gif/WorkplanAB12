@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { Search, MapPin, Building, Clock, X, ChevronDown } from 'lucide-react';
 
@@ -120,7 +120,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             boxShadow: '0 30px 80px -10px rgba(0,0,0,0.5)',
             paddingTop: 4,
             paddingBottom: 4,
-            zIndex: 400, // ligger över jobbkorten men under navbaren (sätt navbaren till t.ex. z-50 eller högre)
+            zIndex: 400,
             fontFamily: 'Inter, sans-serif',
             transition: 'opacity .15s ease, transform .15s ease',
           }}
@@ -236,7 +236,8 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                 placeholder="Alla omfattningar"
               />
             </div>
-            <div className="lg:col-span-5">
+            {/* ÄNDRINGEN ÄR HÄR: lagt till lg:ml-2 */}
+            <div className="lg:col-span-5 lg:ml-2">
               <div className="relative">
                 <div className="flex items-center gap-2 mb-1">
                   <span
