@@ -75,17 +75,24 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Content – alltid vänsterankrad */}
+      {/* Content */}
       <div className="relative z-10 flex-1 flex items-center py-16">
         <div className="w-full px-6 sm:px-8">
           <div className="max-w-3xl text-left">
-            <div className="space-y-3">
+            <div 
+              className="space-y-3 flex flex-col 
+                         justify-start items-start 
+                         sm:justify-start sm:items-start
+                         h-full"
+            >
+              {/* Titel & underrubrik */}
               <h1
                 className={`
                   text-4xl sm:text-5xl lg:text-6xl xl:text-7xl
                   font-light text-white leading-tight tracking-tight
                   transition-all duration-1200 delay-200 transform
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
+                  text-center sm:text-left
                 `}
               >
                 <span
@@ -114,7 +121,7 @@ const Hero = () => {
 
               <div
                 className={`
-                  w-24 h-px bg-gradient-to-r from-white/60 to-transparent
+                  w-24 h-px bg-gradient-to-r from-white/60 to-transparent mx-auto sm:mx-0
                   transition-all duration-1000 delay-600 transform
                   ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
                 `}
@@ -125,6 +132,7 @@ const Hero = () => {
                   text-sm md:text-base text-white/80 italic leading-relaxed
                   transition-all duration-1000 delay-800 transform
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+                  text-center sm:text-left
                 `}
                 style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontStyle: 'italic' }}
               >
@@ -135,17 +143,17 @@ const Hero = () => {
               </p>
             </div>
 
-            {/* Action Buttons – snabbare in-animation */}
+            {/* Action Buttons */}
             <div
               className={`
                 flex flex-col sm:flex-row gap-4 pt-6
                 transition-all duration-500 delay-200 transform
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-                mt-10 sm:mt-0
+                mt-16 sm:mt-0
               `}
               style={{ willChange: 'transform, opacity' }}
             >
-              {/* VITA KNAPPEN UPPDATERAD – behåller rounded-xl men med 3D/glossy design */}
+              {/* Lediga Tjänster */}
               <button
                 onClick={() => navigate('/jobs')}
                 className="
@@ -162,15 +170,9 @@ const Hero = () => {
                 "
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
-                {/* Inre highlight för gloss */}
                 <span className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-b from-white/90 to-transparent" />
-
-                {/* Diskret top-line highlight */}
                 <span className="pointer-events-none absolute inset-x-2 top-1 h-px bg-gradient-to-r from-white/70 via-white to-white/70" />
-
-                {/* Shine-svep vid hover */}
                 <span className="pointer-events-none absolute -inset-y-8 -left-24 w-24 h-24 rotate-12 bg-white/60 blur-md opacity-0 transform transition-all duration-700 ease-out group-hover:opacity-100 group-hover:translate-x-[220%]" />
-
                 <span className="relative z-10">Lediga Tjänster</span>
               </button>
 
