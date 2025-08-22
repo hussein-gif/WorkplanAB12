@@ -79,20 +79,20 @@ const Hero = () => {
       <div className="relative z-10 flex-1 flex items-center py-16">
         <div className="w-full px-6 sm:px-8">
           <div className="max-w-3xl text-left">
+            {/* Titel + underrubrik */}
             <div 
-              className="space-y-3 flex flex-col 
-                         justify-start items-start 
-                         sm:justify-start sm:items-start
-                         h-full"
+              className={`
+                space-y-3 
+                transition-all duration-700
+                mt-12 sm:mt-0
+              `}
             >
-              {/* Titel & underrubrik */}
               <h1
                 className={`
                   text-4xl sm:text-5xl lg:text-6xl xl:text-7xl
                   font-light text-white leading-tight tracking-tight
                   transition-all duration-1200 delay-200 transform
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
-                  text-center sm:text-left
                 `}
               >
                 <span
@@ -121,7 +121,7 @@ const Hero = () => {
 
               <div
                 className={`
-                  w-24 h-px bg-gradient-to-r from-white/60 to-transparent mx-auto sm:mx-0
+                  w-24 h-px bg-gradient-to-r from-white/60 to-transparent
                   transition-all duration-1000 delay-600 transform
                   ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
                 `}
@@ -132,7 +132,6 @@ const Hero = () => {
                   text-sm md:text-base text-white/80 italic leading-relaxed
                   transition-all duration-1000 delay-800 transform
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-                  text-center sm:text-left
                 `}
                 style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontStyle: 'italic' }}
               >
@@ -153,7 +152,6 @@ const Hero = () => {
               `}
               style={{ willChange: 'transform, opacity' }}
             >
-              {/* Lediga Tjänster */}
               <button
                 onClick={() => navigate('/jobs')}
                 className="
