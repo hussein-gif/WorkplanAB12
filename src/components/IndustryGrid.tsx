@@ -111,7 +111,7 @@ const IndustryGrid = () => {
           }}
         />
 
-        {/* Ikonruta: #08132B med elegant 3D-stil */}
+        {/* Ikonruta: ljusare blå med elegant 3D-stil */}
         <div
           className={`
             relative w-14 h-14 rounded-xl mb-4
@@ -119,11 +119,10 @@ const IndustryGrid = () => {
             shadow-lg flex-shrink-0
           `}
           style={{
-            background:
-              'linear-gradient(180deg, #0C1C39 0%, #08132B 70%)',
+            background: 'linear-gradient(180deg, #1A3D73 0%, #0B274D 70%)',
             border: '1px solid rgba(255,255,255,0.08)',
             boxShadow:
-              'inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -10px 16px rgba(0,0,0,0.35), 0 10px 24px rgba(8,19,43,0.28)',
+              'inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -10px 16px rgba(0,0,0,0.35), 0 10px 24px rgba(11,39,77,0.28)',
           }}
         >
           {/* highlight-skimmer */}
