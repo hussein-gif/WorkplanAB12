@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Users, Building2 } from 'lucide-react';
+import { ArrowRight, Building2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const ConversionBanner = () => {
@@ -140,7 +140,6 @@ const ConversionBanner = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
 
               <div className="relative flex items-center justify-center space-x-2 md:space-x-3">
-                <Users className="w-4 h-4 md:w-[18px] md:h-[18px] text-[#1f2a63]" />
                 <span className="text-[#1f2a63] whitespace-nowrap">Kontakta Oss</span>
                 <ArrowRight className="w-4 h-4 md:w-4 md:h-4 text-[#1f2a63] group-hover:translate-x-1 transition-transform duration-300" />
               </div>
