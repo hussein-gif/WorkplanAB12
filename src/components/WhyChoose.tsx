@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Zap, Target, Handshake } from 'lucide-react';
 
-const clamp = (val: number, min: number, max: number) => Math.min(Math.max(val, min), max);
+const clamp = (val: number, min: number, max: number) =>
+  Math.min(Math.max(val, min), max);
 
 const WhyChoose = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -96,8 +97,9 @@ const WhyChoose = () => {
   ];
 
   return (
-    {/* Mindre vertikal padding på mobil (oförändrat på desktop) */}
+    // Mindre vertikal padding på mobil; desktop oförändrad
     <section ref={sectionRef} className="relative py-20 sm:py-32 overflow-hidden">
+      {/* CSS-animationer */}
       <style>{`
         @keyframes blob {
           0% { transform: scale(1) translate(0,0); }
@@ -113,12 +115,47 @@ const WhyChoose = () => {
 
       {/* Bakgrund */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #f5f7fa 0%, #fffdf7 80%)' }} />
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(circle at 50% 40%, rgba(0,0,0,0.06) 0%, transparent 80%)', mixBlendMode: 'multiply' }} />
-        <div className="absolute inset-0" style={{ background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E") repeat` }} />
-        <div className="absolute inset-0" style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)`, backgroundSize: '100px 100px' }} />
-        <div className="absolute -top-10 left-1/3 w-[450px] h-[450px] rounded-full blur-3xl opacity-10 animate-blob" style={{ background: 'radial-gradient(circle at 40% 40%, #7C3AED 0%, transparent 70%)' }} />
-        <div className="absolute bottom-12 right-1/4 w-[500px] h-[500px] rounded-full blur-3xl opacity-10 animate-blob" style={{ background: 'radial-gradient(circle at 60% 50%, #10B981 0%, transparent 70%)', animationDelay: '3s' }} />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(135deg, #f5f7fa 0%, #fffdf7 80%)' }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(circle at 50% 40%, rgba(0,0,0,0.06) 0%, transparent 80%)',
+            mixBlendMode: 'multiply',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E") repeat`,
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)',
+            backgroundSize: '100px 100px',
+          }}
+        />
+        <div
+          className="absolute -top-10 left-1/3 w-[450px] h-[450px] rounded-full blur-3xl opacity-10 animate-blob"
+          style={{
+            background:
+              'radial-gradient(circle at 40% 40%, #7C3AED 0%, transparent 70%)',
+          }}
+        />
+        <div
+          className="absolute bottom-12 right-1/4 w-[500px] h-[500px] rounded-full blur-3xl opacity-10 animate-blob"
+          style={{
+            background:
+              'radial-gradient(circle at 60% 50%, #10B981 0%, transparent 70%)',
+            animationDelay: '3s',
+          }}
+        />
         <div className="absolute top-20 right-20 w-2 h-2 bg-gray-200 rounded-full opacity-40" />
         <div className="absolute top-40 left-16 w-1 h-1 bg-gray-300 rounded-full opacity-60" />
         <div className="absolute bottom-32 right-32 w-1.5 h-1.5 bg-gray-200 rounded-full opacity-50" />
@@ -128,50 +165,74 @@ const WhyChoose = () => {
       <div className="relative z-10 max-w-6xl mx-auto px-8">
         {/* Progress-line (endast desktop) */}
         <div
-          className={`
-            absolute left-1/2 transform -translate-x-1/2 z-0 hidden lg:flex flex-col items-center
-            transition-all duration-1000 ease-out
-            ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}
-          `}
+          className={`absolute left-1/2 -translate-x-1/2 z-0 hidden lg:flex flex-col items-center transition-all duration-1000 ease-out ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
           style={{ top: '14rem', bottom: '20rem' }}
         >
           <div className="relative w-px flex-1">
-            <div className="absolute left-1/2 -translate-x-1/2 w-px rounded" style={{ top: 0, bottom: 0, background: 'linear-gradient(to bottom, transparent 0%, rgba(107,114,128,0.75) 25%, rgba(107,114,128,0.75) 75%, transparent 100%)', filter: 'blur(0.6px)' }} />
-            <div className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full" style={{ top: 0, background: 'rgba(107,114,128,0.4)' }} />
-            <div className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full" style={{ bottom: 0, background: 'rgba(107,114,128,0.4)' }} />
-            <div className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full shadow-lg transition-all duration-500 ease-out" style={{ backgroundColor: '#1e3a8a', top: `${scrollProgress * 100}%`, transform: 'translate(-50%, -50%)' }}>
+            <div
+              className="absolute left-1/2 -translate-x-1/2 w-px rounded"
+              style={{
+                top: 0,
+                bottom: 0,
+                background:
+                  'linear-gradient(to bottom, transparent 0%, rgba(107,114,128,0.75) 25%, rgba(107,114,128,0.75) 75%, transparent 100%)',
+                filter: 'blur(0.6px)',
+              }}
+            />
+            <div
+              className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full"
+              style={{ top: 0, background: 'rgba(107,114,128,0.4)' }}
+            />
+            <div
+              className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full"
+              style={{ bottom: 0, background: 'rgba(107,114,128,0.4)' }}
+            />
+            <div
+              className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full shadow-lg transition-all duration-500 ease-out"
+              style={{
+                backgroundColor: '#1e3a8a',
+                top: `${scrollProgress * 100}%`,
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
               <div className="absolute inset-0 bg-white/20 rounded-full animate-pulse" />
               <div className="absolute -inset-1 border-2 border-blue-900/30 rounded-full" />
             </div>
           </div>
         </div>
 
-        {/* Rubrik (mindre på mobil) */}
+        {/* Rubrik – mindre på mobil */}
         <div className="text-center mb-12 sm:mb-24">
           <div className="inline-block relative">
-            <div className="absolute inset-0 rounded-md" style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 60%)', filter: 'blur(16px)', zIndex: -1 }} />
+            <div
+              className="absolute inset-0 rounded-md"
+              style={{
+                background:
+                  'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 60%)',
+                filter: 'blur(16px)',
+                zIndex: -1,
+              }}
+            />
             <h2
-              className={`
-                text-4xl sm:text-5xl md:text-6xl font-normal text-gray-900 mb-4
-                tracking-tight leading-[1.15] sm:leading-[1.1]
-                transition-all duration-1000 transform
-                ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-              `}
+              className={`text-4xl sm:text-5xl md:text-6xl font-normal text-gray-900 mb-4 tracking-tight leading-[1.15] sm:leading-[1.1] transition-all duration-1000 transform ${
+                isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+              }`}
               style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
             >
               Vår Metod För <span className="font-medium">Framgång</span>
             </h2>
           </div>
           <div
-            className={`w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-4 transition-all duration-1000 delay-200 transform ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}`}
+            className={`w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-4 transition-all duration-1000 delay-200 transform ${
+              isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
+            }`}
           />
           <p
-            className={`
-              text-base sm:text-lg text-gray-500 max-w-2xl mx-auto
-              leading-relaxed font-light -mt-2
-              transition-all duration-1000 delay-400 transform
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-            `}
+            className={`text-base sm:text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed font-light -mt-2 transition-all duration-1000 delay-400 transform ${
+              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
             Tre pelare som garanterar att ni får rätt kompetens—snabbt, precist
@@ -187,60 +248,148 @@ const WhyChoose = () => {
               <div
                 key={index}
                 ref={(el) => (pillarRefs.current[index] = el)}
-                className={`group relative transition-all duration-1000 transform ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+                className={`group relative transition-all duration-1000 transform ${
+                  isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                }`}
                 style={{ transitionDelay: `${800 + index * 200}ms` }}
                 onMouseEnter={() => setHoverIndex(index)}
                 onMouseLeave={() => setHoverIndex(null)}
               >
-                <div className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-center ${index % 2 === 1 ? 'lg:grid-flow-col-dense lg:pl-16' : ''}`}>
+                <div
+                  className={`grid grid-cols-1 lg:grid-cols-12 gap-8 items-center ${
+                    index % 2 === 1 ? 'lg:grid-flow-col-dense lg:pl-16' : ''
+                  }`}
+                >
                   {/* Vänster: Text */}
-                  <div className={`lg:col-span-7 space-y-6 ${index % 2 === 1 ? 'lg:col-start-7' : ''}`}>
+                  <div
+                    className={`lg:col-span-7 space-y-6 ${
+                      index % 2 === 1 ? 'lg:col-start-7' : ''
+                    }`}
+                  >
                     <div className="flex items-center space-x-4">
-                      <span className="text-6xl font-normal text-gray-200 leading-none" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
+                      <span
+                        className="text-6xl font-normal text-gray-200 leading-none"
+                        style={{
+                          fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                        }}
+                      >
                         {pillar.number}
                       </span>
                       <div
-                        className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 ${isActive ? 'scale-110' : ''}`}
+                        className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
+                          isActive ? 'scale-110' : ''
+                        }`}
                         style={{
                           backgroundColor: isActive ? '#1e3a8a' : '#f9f9f9',
-                          boxShadow: isActive ? '0 0 25px rgba(30,58,138,0.4)' : undefined,
+                          boxShadow: isActive
+                            ? '0 0 25px rgba(30,58,138,0.4)'
+                            : undefined,
                         }}
                       >
-                        <pillar.icon size={20} className={`transition-colors duration-500 ${isActive ? 'text-white' : 'text-gray-600'}`} />
+                        <pillar.icon
+                          size={20}
+                          className={`transition-colors duration-500 ${
+                            isActive ? 'text-white' : 'text-gray-600'
+                          }`}
+                        />
                       </div>
                     </div>
 
-                    <h3 className="text-3xl font-medium text-gray-900 tracking-tight" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
+                    <h3
+                      className="text-3xl font-medium text-gray-900 tracking-tight"
+                      style={{
+                        fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                      }}
+                    >
                       {pillar.title}
                     </h3>
 
-                    <p className="text-lg text-gray-600 leading-relaxed font-light max-w-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    <p
+                      className="text-lg text-gray-600 leading-relaxed font-light max-w-lg"
+                      style={{ fontFamily: 'Inter, sans-serif' }}
+                    >
                       {pillar.description}
                     </p>
 
                     <div className="pt-4">
-                      <div className="text-2xl font-normal text-gray-900 mb-1" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
+                      <div
+                        className="text-2xl font-normal text-gray-900 mb-1"
+                        style={{
+                          fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                        }}
+                      >
                         {pillar.metric}
                       </div>
-                      <div className="text-sm text-gray-400 uppercase tracking-wider" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      <div
+                        className="text-sm text-gray-400 uppercase tracking-wider"
+                        style={{ fontFamily: 'Inter, sans-serif' }}
+                      >
                         {pillar.metricLabel}
                       </div>
                     </div>
                   </div>
 
                   {/* Höger: Illustration – dold på mobil */}
-                  <div className={`lg:col-span-5 relative ${index % 2 === 1 ? 'lg:col-start-1' : ''} hidden sm:block`}>
-                    <div className={`aspect-square max-w-sm mx-auto relative transition-all duration-700 ${isActive ? 'scale-105' : ''}`}>
-                      <div className="absolute inset-0 rounded-full" style={{ border: '1px solid rgba(107,114,128,0.08)', background: 'rgba(255,255,255,0.03)', boxShadow: isActive ? '0 0 30px rgba(30,58,138,0.1)' : '0 0 15px rgba(0,0,0,0.03)' }} />
-                      <div className="absolute inset-10 rounded-full" style={{ background: 'rgba(255,255,255,0.015)', backdropFilter: 'blur(3px)', ...(isActive ? { transform: 'scale(1.02)' } : {}) }} />
+                  <div
+                    className={`lg:col-span-5 relative ${
+                      index % 2 === 1 ? 'lg:col-start-1' : ''
+                    } hidden sm:block`}
+                  >
+                    <div
+                      className={`aspect-square max-w-sm mx-auto relative transition-all duration-700 ${
+                        isActive ? 'scale-105' : ''
+                      }`}
+                    >
+                      <div
+                        className="absolute inset-0 rounded-full"
+                        style={{
+                          border: '1px solid rgba(107,114,128,0.08)',
+                          background: 'rgba(255,255,255,0.03)',
+                          boxShadow: isActive
+                            ? '0 0 30px rgba(30,58,138,0.1)'
+                            : '0 0 15px rgba(0,0,0,0.03)',
+                        }}
+                      />
+                      <div
+                        className="absolute inset-10 rounded-full"
+                        style={{
+                          background: 'rgba(255,255,255,0.015)',
+                          backdropFilter: 'blur(3px)',
+                          ...(isActive ? { transform: 'scale(1.02)' } : {}),
+                        }}
+                      />
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <div className={`w-20 h-20 rounded-full shadow-sm border border-gray-100 flex items-center justify-center transition-all duration-700 ${isActive ? 'scale-125 shadow-lg' : ''}`} style={{ background: 'rgba(255,255,255,0.85)' }}>
-                          <pillar.icon size={32} className={`transition-colors duration-500 ${isActive ? 'text-[#1e3a8a]' : 'text-gray-400'}`} />
+                        <div
+                          className={`w-20 h-20 rounded-full shadow-sm border border-gray-100 flex items-center justify-center transition-all duration-700 ${
+                            isActive ? 'scale-125 shadow-lg' : ''
+                          }`}
+                          style={{
+                            background: 'rgba(255,255,255,0.85)',
+                          }}
+                        >
+                          <pillar.icon
+                            size={32}
+                            className={`transition-colors duration-500 ${
+                              isActive ? 'text-[#1e3a8a]' : 'text-gray-400'
+                            }`}
+                          />
                         </div>
                       </div>
-                      <div className={`absolute top-4 right-8 w-2 h-2 rounded-full transition-all duration-700 ${isActive ? 'scale-150 bg-[#1e3a8a]' : 'bg-gray-200'}`} />
-                      <div className={`absolute bottom-8 left-4 w-1.5 h-1.5 rounded-full transition-all duration-700 delay-100 ${isActive ? 'scale-150 bg-[#1e3a8a]' : 'bg-gray-300'}`} />
-                      <div className={`absolute top-1/3 left-2 w-1 h-1 rounded-full transition-all duration-700 delay-200 ${isActive ? 'scale-150 bg-[#1e3a8a]' : 'bg-gray-200'}`} />
+                      <div
+                        className={`absolute top-4 right-8 w-2 h-2 rounded-full transition-all duration-700 ${
+                          isActive ? 'scale-150 bg-[#1e3a8a]' : 'bg-gray-200'
+                        }`}
+                      />
+                      <div
+                        className={`absolute bottom-8 left-4 w-1.5 h-1.5 rounded-full transition-all duration-700 delay-100 ${
+                          isActive ? 'scale-150 bg-[#1e3a8a]' : 'bg-gray-300'
+                        }`}
+                      />
+                      <div
+                        className={`absolute top-1/3 left-2 w-1 h-1 rounded-full transition-all duration-700 delay-200 ${
+                          isActive ? 'scale-150 bg-[#1e3a8a]' : 'bg-gray-200'
+                        }`}
+                      />
                     </div>
                   </div>
                 </div>
@@ -249,7 +398,9 @@ const WhyChoose = () => {
                 {index < pillars.length - 1 && (
                   <div className="mt-10 lg:mt-16 flex justify-center">
                     <div
-                      className={`w-px h-10 lg:h-16 bg-gradient-to-b from-transparent via-gray-200 to-transparent transition-all duration-1000 ${isVisible ? 'scale-y-100' : 'scale-y-0'}`}
+                      className={`w-px h-10 lg:h-16 bg-gradient-to-b from-transparent via-gray-200 to-transparent transition-all duration-1000 ${
+                        isVisible ? 'scale-y-100' : 'scale-y-0'
+                      }`}
                       style={{ transitionDelay: `${1200 + index * 200}ms` }}
                     />
                   </div>
