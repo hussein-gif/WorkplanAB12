@@ -31,8 +31,8 @@ const Hero = () => {
           }}
         >
           <img
-            src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg"
-            alt="Professional garden landscape"
+            src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg"
+            alt="Professional staffing and teamwork"
             className="w-full h-full object-cover"
           />
         </div>
