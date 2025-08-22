@@ -132,8 +132,8 @@ const ConversionBanner = () => {
                 shadow-2xl hover:shadow-white/20
                 hover:-translate-y-1
                 overflow-hidden
-                w-[46%] md:w-auto
-                min-w-0 md:min-w-[200px]
+                w-[48%] md:w-auto
+                min-w-[140px] md:min-w-[200px]
               "
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}
             >
@@ -141,7 +141,7 @@ const ConversionBanner = () => {
 
               <div className="relative flex items-center justify-center space-x-2 md:space-x-3">
                 <Users className="w-4 h-4 md:w-[18px] md:h-[18px] text-[#1f2a63]" />
-                <span className="text-[#1f2a63]">Kontakta Oss</span>
+                <span className="text-[#1f2a63] whitespace-nowrap">Kontakta Oss</span>
                 <ArrowRight className="w-4 h-4 md:w-4 md:h-4 text-[#1f2a63] group-hover:translate-x-1 transition-transform duration-300" />
               </div>
             </button>
@@ -158,8 +158,8 @@ const ConversionBanner = () => {
                 backdrop-blur-sm
                 hover:-translate-y-1
                 overflow-hidden
-                w-[46%] md:w-auto
-                min-w-0 md:min-w-[200px]
+                w-[48%] md:w-auto
+                min-w-[120px] md:min-w-[200px]
               "
               style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}
             >
