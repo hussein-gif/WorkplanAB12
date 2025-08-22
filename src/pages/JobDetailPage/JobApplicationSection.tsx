@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Send, Upload, User, Mail, Phone } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export type JobApplicationFormData = {
   firstName: string;
@@ -281,14 +282,12 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
               />
               <label className="text-sm text-white/90 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att hantera min ansökan enligt{' '}
-                <a
-                  href="/privacy"
+                <Link
+                  to="/privacy"
                   className="underline underline-offset-2 decoration-white/50 hover:decoration-white"
-                  target="_blank"
-                  rel="noopener noreferrer"
                 >
                   integritetspolicyn
-                </a>
+                </Link>
                 . *
               </label>
             </div>
