@@ -13,11 +13,11 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <radialGradient id="bgBlob-why" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="rgba(59,130,246,0.15)" />
+              <stop offset="0%" stopColor="rgba(59,130,246,0.12)" />
               <stop offset="100%" stopColor="transparent" />
             </radialGradient>
             <pattern id="zigzag-why" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
-              <path d="M0 5 l5 -5 l5 5" stroke="rgba(16,185,129,0.05)" strokeWidth="2" fill="none" />
+              <path d="M0 5 l5 -5 l5 5" stroke="rgba(8,19,43,0.05)" strokeWidth="2" fill="none" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#zigzag-why)" />
@@ -71,9 +71,15 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
               `}
               style={{ transitionDelay: `${1200 + index * 150}ms` }}
             >
-              {/* Emerald ruta som knappen */}
-              <div className="w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center btn-min">
-                <item.icon size={24} className="text-white" />
+              {/* 3D blå badge */}
+              <div className="icon-badge-3d w-16 h-16 mx-auto mb-6 rounded-2xl flex items-center justify-center relative">
+                {/* Glow ring bakom ikonen */}
+                <span className="absolute inset-0 rounded-2xl glow-ring pointer-events-none" />
+                <item.icon
+                  size={28}
+                  strokeWidth={2}
+                  className="icon-3d"
+                />
               </div>
 
               <h3
@@ -96,22 +102,95 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Zen+Kaku+Gothic+Antique:wght@500&display=swap');
 
-        .btn-min {
-          border: 1px solid rgba(255, 255, 255, 0.22);
-          background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #189A4C;
+        /* Blå palett */
+        :root {
+          --blue-deep: #08132B;     /* Primär ikonfärg */
+          --blue-900: #0B1A3A;      /* Mörk bakgrundsgradient */
+          --blue-800: #0F2A66;
+          --blue-700: #1A4CA6;
+          --blue-600: #2E6EDC;
+          --blue-300: #BBD0FF;      /* Highlight */
+          --blue-200: #D9E6FF;      /* Subtil glow */
+        }
+
+        /* 3D-badge med gloss, inner shadow & subtil border */
+        .icon-badge-3d {
+          position: relative;
           border-radius: 0.75rem;
-          box-shadow: 0 8px 20px rgba(24, 154, 76, 0.28);
+          background:
+            radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 40%),
+            linear-gradient(180deg, var(--blue-800), var(--blue-900));
+          border: 1px solid rgba(255,255,255,0.14);
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.10),
+            inset 0 -4px 10px rgba(0,0,0,0.25),
+            0 10px 22px rgba(8,19,43,0.25);
+          transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
         }
-        .btn-min:hover {
-          background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #1FB259;
-          box-shadow: 0 10px 28px rgba(24, 154, 76, 0.35);
+        .icon-badge-3d::before {
+          /* Glossy top highlight */
+          content: "";
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background:
+            linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.10) 20%, rgba(255,255,255,0) 50%);
+          pointer-events: none;
+          mix-blend-mode: screen;
         }
-        .btn-min:active {
-          box-shadow: inset 0 2px 8px rgba(0,0,0,0.25), 0 6px 18px rgba(24, 154, 76, 0.24);
+        .icon-badge-3d:hover {
+          background:
+            radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 40%),
+            linear-gradient(180deg, var(--blue-700), var(--blue-800));
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.12),
+            inset 0 -4px 10px rgba(0,0,0,0.22),
+            0 14px 28px rgba(8,19,43,0.28);
+          transform: translateY(-2px);
         }
-        .btn-min:focus-visible {
+        .icon-badge-3d:active {
+          transform: translateY(0);
+          box-shadow:
+            inset 0 2px 8px rgba(0,0,0,0.28),
+            0 8px 20px rgba(8,19,43,0.22);
+        }
+        .icon-badge-3d:focus-visible {
           outline: none;
-          box-shadow: 0 0 0 3px rgba(52, 211, 153, .35), 0 0 0 1px rgba(255,255,255,.2) inset;
+          box-shadow:
+            0 0 0 3px rgba(46,110,220,0.35),
+            inset 0 1px 0 rgba(255,255,255,0.10),
+            inset 0 -4px 10px rgba(0,0,0,0.25),
+            0 10px 22px rgba(8,19,43,0.25);
+        }
+
+        /* Glow ring bakom ikonen för extra djup */
+        .glow-ring {
+          background:
+            radial-gradient(50% 50% at 50% 50%, rgba(217,230,255,0.55) 0%, rgba(217,230,255,0.12) 40%, transparent 70%);
+          filter: blur(6px);
+          opacity: 0.9;
+          transition: opacity 220ms ease, filter 220ms ease;
+        }
+        .icon-badge-3d:hover .glow-ring {
+          filter: blur(7px);
+          opacity: 1;
+        }
+
+        /* Ikon-stil: mörkblå stroke + highlight/drop-shadow för 3D-känsla */
+        .icon-3d {
+          color: var(--blue-deep);      /* Lucide använder currentColor för stroke */
+          /* Subtil kant/highlight + skugga för djup */
+          filter:
+            drop-shadow(0 1px 0 rgba(255,255,255,0.35))
+            drop-shadow(0 3px 6px rgba(8,19,43,0.30));
+          /* Gör linjerna lite mer "fylliga" utan att bli för grova */
+          stroke-linecap: round;
+          stroke-linejoin: round;
+        }
+
+        /* (Valfritt) mindre skalförändring på hover för “polish” */
+        .icon-badge-3d:hover .icon-3d {
+          transform: translateY(-0.5px);
         }
       `}</style>
     </section>
