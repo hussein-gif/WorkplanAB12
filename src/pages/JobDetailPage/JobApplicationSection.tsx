@@ -1,26 +1,22 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Send, Upload, User, Mail, Phone } from 'lucide-react';
+import { useJobApplication } from './JobApplicationProvider'; // Delad state
 
 interface JobApplicationSectionProps {
   jobTitle: string;
-  companyName: string; // oförändrat, ej visat i UI här (matchar JobApplicationForm)
+  companyName: string;
+  /** Valfritt: samma överskrift som i arket "INDUSTRI • PLATS" */
+  industry?: string;
+  location?: string;
 }
 
 const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
   jobTitle,
   companyName,
+  industry,
+  location,
 }) => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    coverLetter: '',
-    gdprConsent: false,
-  });
-
-  const [cvFile, setCvFile] = useState<File | null>(null);
-  const [otherFile, setOtherFile] = useState<File | null>(null);
+  const { formData, setFormData, cvFile, setCvFile, otherFile, setOtherFile } = useJobApplication();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const otherFileInputRef = useRef<HTMLInputElement>(null);
@@ -47,7 +43,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
 
   return (
     <section id="application-form" className="relative bg-[#08132B] text-white">
-      {/* Subtil bakgrund – samma som arket */}
+      {/* Subtil bakgrund – samma som i arket */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.08]"
@@ -67,10 +63,17 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
         }}
       />
 
-      {/* Innehåll – identiskt spacing/typografi som arket */}
       <div className="relative px-5 sm:px-8">
-        {/* Rubrikblock – större och med luft, matchar arket */}
+        {/* Rubrikblock – med bransch • ort precis som i arket */}
         <div className="pt-10 sm:pt-12 pb-8">
+          {industry && location && (
+            <div
+              className="text-center text-xs tracking-[0.22em] uppercase text-white/70 mb-2"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              {industry} • {location}
+            </div>
+          )}
           <h2
             className="text-center text-4xl sm:text-5xl font-semibold tracking-tight mb-6"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
@@ -79,6 +82,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
           </h2>
         </div>
 
+        {/* Formulär – identiskt som i arket */}
         <div className="relative pb-16">
           <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto">
             {/* Namn */}
@@ -157,7 +161,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
               </div>
             </div>
 
-            {/* Ladda upp CV – VIT */}
+            {/* CV */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Ladda upp CV *
@@ -184,7 +188,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
               </div>
             </div>
 
-            {/* Övriga dokument – VIT (valfritt) */}
+            {/* Övriga dokument */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Övriga dokument
@@ -249,7 +253,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
               </label>
             </div>
 
-            {/* Skicka ansökan – identisk knapp, centrerad, extra bottenluft */}
+            {/* Skicka ansökan */}
             <div className="pt-2 flex justify-center">
               <button
                 type="submit"
