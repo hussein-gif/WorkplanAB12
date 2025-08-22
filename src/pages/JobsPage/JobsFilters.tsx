@@ -206,39 +206,8 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
       <div className="max-w-7xl mx-auto">
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 mb-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
-            <div className="lg:col-span-2">
-              <DropdownSelect
-                label="Plats"
-                value={selectedLocation}
-                onChange={setSelectedLocation}
-                options={locations}
-                icon={MapPin}
-                placeholder="Alla platser"
-              />
-            </div>
-            <div className="lg:col-span-2">
-              <DropdownSelect
-                label="Bransch"
-                value={selectedIndustry}
-                onChange={setSelectedIndustry}
-                options={industries}
-                icon={Building}
-                placeholder="Alla branscher"
-              />
-            </div>
-            {/* ÄNDRAD från lg:col-span-2 → lg:col-span-3 */}
-            <div className="lg:col-span-3">
-              <DropdownSelect
-                label="Omfattning"
-                value={selectedOmfattning}
-                onChange={setSelectedOmfattning}
-                options={omfattningar}
-                icon={Clock}
-                placeholder="Alla omfattningar"
-              />
-            </div>
-            {/* ÄNDRAD från lg:col-span-5 → lg:col-span-4 */}
-            <div className="lg:col-span-4">
+            {/* Sökfältet först på mobil, originalplats på lg+ */}
+            <div className="lg:col-span-4 order-first lg:order-none">
               <div className="relative">
                 <div className="flex items-center gap-2 mb-1">
                   <span
@@ -261,6 +230,42 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                 </div>
               </div>
             </div>
+
+            <div className="lg:col-span-2">
+              <DropdownSelect
+                label="Plats"
+                value={selectedLocation}
+                onChange={setSelectedLocation}
+                options={locations}
+                icon={MapPin}
+                placeholder="Alla platser"
+              />
+            </div>
+
+            <div className="lg:col-span-2">
+              <DropdownSelect
+                label="Bransch"
+                value={selectedIndustry}
+                onChange={setSelectedIndustry}
+                options={industries}
+                icon={Building}
+                placeholder="Alla branscher"
+              />
+            </div>
+
+            {/* ÄNDRAD från lg:col-span-2 → lg:col-span-3 (oförändrat från din kod) */}
+            <div className="lg:col-span-3">
+              <DropdownSelect
+                label="Omfattning"
+                value={selectedOmfattning}
+                onChange={setSelectedOmfattning}
+                options={omfattningar}
+                icon={Clock}
+                placeholder="Alla omfattningar"
+              />
+            </div>
+
+            {/* tom spacer som innan */}
             <div className="lg:col-span-1 flex items-center" />
           </div>
 
@@ -324,7 +329,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
 
               <button
                 onClick={clearFilters}
-                className="inline-flex items-center gap-1 text-sm bg-white/10 hover:bg-white/20 text-white rounded-full px-3 py-1 transition"
+                className="inline-flex items-center gap-1 text-sm bg-white/10 hover:bg白/20 text-white rounded-full px-3 py-1 transition"
                 style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
               >
                 <X size={14} />
