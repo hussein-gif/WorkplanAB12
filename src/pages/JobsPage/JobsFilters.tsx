@@ -226,7 +226,8 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                 placeholder="Alla branscher"
               />
             </div>
-            <div className="lg:col-span-2">
+            {/* ÄNDRAD från lg:col-span-2 → lg:col-span-3 */}
+            <div className="lg:col-span-3">
               <DropdownSelect
                 label="Omfattning"
                 value={selectedOmfattning}
@@ -236,8 +237,8 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                 placeholder="Alla omfattningar"
               />
             </div>
-            {/* ÄNDRINGEN ÄR HÄR: lagt till lg:ml-2 */}
-            <div className="lg:col-span-5 lg:ml-2">
+            {/* ÄNDRAD från lg:col-span-5 → lg:col-span-4 */}
+            <div className="lg:col-span-4">
               <div className="relative">
                 <div className="flex items-center gap-2 mb-1">
                   <span
