@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ChevronDown, ChevronUp, Send, Upload, User, Mail, Phone, X } from 'lucide-react';
+import { ChevronDown, ChevronUp, Send, Upload, User, Mail, Phone } from 'lucide-react';
 
 interface JobApplicationFormProps {
   jobTitle: string;
@@ -7,17 +7,18 @@ interface JobApplicationFormProps {
   isPopupOpen: boolean;
   onClosePopup: () => void;
   onMinimize: () => void;
-  // valfritt – används om du redan skickar dessa
+  /** Valfritt: visas som liten överrubrik "INDUSTRI • PLATS" */
   industry?: string;
   location?: string;
 }
 
 const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   jobTitle,
-  companyName,
   isPopupOpen,
   onClosePopup,
   onMinimize,
+  industry,
+  location,
 }) => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -30,31 +31,28 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [otherFile, setOtherFile] = useState<File | null>(null);
 
-  const [isMinimized, setIsMinimized] = useState(false); // används för pil-ikonens state
-  const [animateIn, setAnimateIn] = useState(false);     // styr mjuk in-anim
-  const [animatingOut, setAnimatingOut] = useState(false); // mjuk ut-anim
+  const [animateIn, setAnimateIn] = useState(false);
+  const [animatingOut, setAnimatingOut] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const otherFileInputRef = useRef<HTMLInputElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
 
-  // Lås bakgrundscroll när arket är öppet
+  // Lås bakgrund-scroll och trigga in-animation
   useEffect(() => {
     if (isPopupOpen) {
-      const original = document.documentElement.style.overflow;
+      const prev = document.documentElement.style.overflow;
       document.documentElement.style.overflow = 'hidden';
-      // trigger mjuk in-animation
       requestAnimationFrame(() => setAnimateIn(true));
       return () => {
-        document.documentElement.style.overflow = original;
+        document.documentElement.style.overflow = prev;
         setAnimateIn(false);
         setAnimatingOut(false);
-        setIsMinimized(false);
       };
     }
   }, [isPopupOpen]);
 
-  // Scrolla sheetens topp i bild när det öppnas
+  // Säkerställ att vi startar överst i arket
   useEffect(() => {
     if (isPopupOpen && sheetRef.current) {
       sheetRef.current.scrollTop = 0;
@@ -72,16 +70,13 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
     else setOtherFile(file);
   };
 
-  const closeSmoothly = (alsoCallMinimize?: boolean) => {
-    // Mjuk ut-anim och stäng efter transition
+  const closeSmoothly = (alsoMinimize?: boolean) => {
     setAnimatingOut(true);
-    setIsMinimized(true);
-    if (alsoCallMinimize) onMinimize?.();
+    if (alsoMinimize) onMinimize?.();
     setTimeout(() => {
       onClosePopup();
       setAnimatingOut(false);
-      setIsMinimized(false);
-    }, 350); // matchar duration-300 + lite marginal
+    }, 350);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -99,28 +94,27 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
       <div
         className={`fixed inset-0 z-[70] bg-black/30 backdrop-blur-sm transition-opacity duration-300
         ${animateIn && !animatingOut ? 'opacity-100' : 'opacity-0'}`}
-        onClick={() => closeSmoothly()} // klick utanför stänger också – behåll samma beteende
+        onClick={() => closeSmoothly()}
       />
 
-      {/* Sheet (arket) */}
+      {/* Sheet */}
       <div
         ref={sheetRef}
         className={`
-          fixed z-[80] left-0 right-0 bottom-0 top-10 sm:top-12   /* 🔹 lite större topp-gap */
+          fixed z-[80] left-0 right-0 bottom-0 top-10 sm:top-12
           bg-[#08132B] text-white rounded-t-3xl
           overflow-y-auto overscroll-contain
           shadow-[0_-20px_60px_rgba(0,0,0,0.35)]
           transition-transform duration-300 ease-out will-change-transform
-          ${animateIn && !animatingOut ? 'translate-y-0' : 'translate-y-full'} /* 🔹 mjuk in/ut */
+          ${animateIn && !animatingOut ? 'translate-y-0' : 'translate-y-full'}
         `}
       >
-        {/* Enkel elegant bakgrund – subtil radial + diagonalt mönster */}
+        {/* Subtil bakgrund */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-[0.08]"
           style={{
-            background:
-              'radial-gradient(1200px 600px at 50% -200px, rgba(255,255,255,0.25), transparent 60%)',
+            background: 'radial-gradient(1200px 600px at 50% -200px, rgba(255,255,255,0.25), transparent 60%)',
           }}
         />
         <div
@@ -135,17 +129,29 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
           }}
         />
 
-        {/* Header */}
-        <div className="relative px-5 sm:px-8 pt-6 pb-4">
-          <button
-            onClick={() => closeSmoothly(true)}
-            className="absolute right-4 top-4 h-10 w-10 rounded-xl bg-white/10 hover:bg-white/15 active:bg-white/20 flex items-center justify-center transition"
-            aria-label={isMinimized ? 'Öppna formulär' : 'Minimera formulär'}
-          >
-            {isMinimized ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-          </button>
+        {/* Sticky pil uppe till höger – syns alltid vid scroll */}
+        <div className="sticky top-2 z-[85] w-full">
+          <div className="flex justify-end pr-4">
+            <button
+              onClick={() => closeSmoothly(true)}
+              className="h-10 w-10 rounded-xl bg-white/10 hover:bg-white/15 active:bg-white/20 flex items-center justify-center transition"
+              aria-label="Minimera formulär"
+            >
+              <ChevronDown size={18} />
+            </button>
+          </div>
+        </div>
 
-          {/* Rubrik */}
+        {/* Rubriker */}
+        <div className="px-5 sm:px-8 pt-2 pb-4">
+          {industry && location && (
+            <div
+              className="text-center text-xs tracking-[0.22em] uppercase text-white/70 mb-2"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              {industry} • {location}
+            </div>
+          )}
           <h2
             className="text-center text-3xl sm:text-4xl font-semibold tracking-tight"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
@@ -233,14 +239,14 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               </div>
             </div>
 
-            {/* Ladda upp CV */}
+            {/* Ladda upp CV – VIT */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Ladda upp CV *
               </label>
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="relative rounded-xl border-2 border-dashed border-white/30 bg-white/5 hover:bg-white/10 transition p-6 cursor-pointer group"
+                className="relative rounded-xl border-2 border-dashed border-gray-300 bg-white p-6 hover:border-gray-400 transition cursor-pointer group"
               >
                 <input
                   ref={fileInputRef}
@@ -251,23 +257,23 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                   required
                 />
                 <div className="text-center">
-                  <Upload className="mx-auto h-8 w-8 text-white/70 group-hover:text-white transition" />
-                  <p className="mt-2 text-sm text-white/90">
+                  <Upload className="mx-auto h-8 w-8 text-gray-500 group-hover:text-gray-700 transition" />
+                  <p className="mt-2 text-sm text-[#08132B]">
                     {cvFile ? cvFile.name : 'Klicka för att ladda upp ditt CV'}
                   </p>
-                  <p className="text-xs text-white/70 mt-1">PDF, DOC eller DOCX (max 10MB)</p>
+                  <p className="text-xs text-gray-600 mt-1">PDF, DOC eller DOCX (max 10MB)</p>
                 </div>
               </div>
             </div>
 
-            {/* Övriga dokument (valfritt) */}
+            {/* Övriga dokument – VIT (valfritt) */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Övriga dokument
               </label>
               <div
                 onClick={() => otherFileInputRef.current?.click()}
-                className="relative rounded-xl border-2 border-dashed border-white/30 bg-white/5 hover:bg-white/10 transition p-6 cursor-pointer group"
+                className="relative rounded-xl border-2 border-dashed border-gray-300 bg-white p-6 hover:border-gray-400 transition cursor-pointer group"
               >
                 <input
                   ref={otherFileInputRef}
@@ -277,11 +283,11 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                   className="hidden"
                 />
                 <div className="text-center">
-                  <Upload className="mx-auto h-8 w-8 text-white/70 group-hover:text-white transition" />
-                  <p className="mt-2 text-sm text-white/90">
+                  <Upload className="mx-auto h-8 w-8 text-gray-500 group-hover:text-gray-700 transition" />
+                  <p className="mt-2 text-sm text-[#08132B]">
                     {otherFile ? otherFile.name : 'Klicka för att bifoga fler filer (valfritt)'}
                   </p>
-                  <p className="text-xs text-white/70 mt-1">PDF, DOC, DOCX, PNG, JPG (max 10MB)</p>
+                  <p className="text-xs text-gray-600 mt-1">PDF, DOC, DOCX, PNG, JPG (max 10MB)</p>
                 </div>
               </div>
             </div>
@@ -291,16 +297,14 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Personligt brev
               </label>
-              <div className="relative">
-                <textarea
-                  name="coverLetter"
-                  value={formData.coverLetter}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="w-full bg-white text-[#08132B] pl-4 pr-4 py-3 rounded-xl border border-white/0 focus:border-white/30 focus:ring-4 focus:ring-white/10 transition resize-none"
-                  placeholder="Berätta kort om dig själv och varför du är intresserad av denna tjänst..."
-                />
-              </div>
+              <textarea
+                name="coverLetter"
+                value={formData.coverLetter}
+                onChange={handleInputChange}
+                rows={4}
+                className="w-full bg-white text-[#08132B] pl-4 pr-4 py-3 rounded-xl border border-white/0 focus:border-white/30 focus:ring-4 focus:ring-white/10 transition resize-none"
+                placeholder="Berätta kort om dig själv och varför du är intresserad av denna tjänst..."
+              />
             </div>
 
             {/* GDPR */}
@@ -327,7 +331,7 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
               </label>
             </div>
 
-            {/* Skicka ansökan – vit, elegant, centrerad, 3D-känsla */}
+            {/* Skicka ansökan */}
             <div className="pt-2 flex justify-center">
               <button
                 type="submit"
@@ -341,12 +345,10 @@ const JobApplicationForm: React.FC<JobApplicationFormProps> = ({
                 "
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
-                {/* glans-effekt */}
                 <span
                   className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition-opacity"
                   style={{
-                    background:
-                      'linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 40%)',
+                    background: 'linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 40%)',
                   }}
                 />
                 <Send size={18} />
