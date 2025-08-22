@@ -141,6 +141,7 @@ const Hero = () => {
                 flex flex-col sm:flex-row gap-4 pt-6
                 transition-all duration-500 delay-200 transform
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+                mt-10 sm:mt-0
               `}
               style={{ willChange: 'transform, opacity' }}
             >
@@ -195,12 +196,13 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Badges längst ner */}
+      {/* Badges längst ner – döljs på mobil */}
       <div
         className={`
           absolute bottom-8 inset-x-0 z-10
           transition-all duration-1000 delay-1200 transform
           ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+          hidden sm:block
         `}
       >
         <div
