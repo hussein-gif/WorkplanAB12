@@ -1,12 +1,29 @@
+// JobApplicationSection.tsx
 import React, { useState, useRef } from 'react';
 import { Send, Upload, User, Mail, Phone } from 'lucide-react';
+
+export type JobApplicationFormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  coverLetter: string;
+  gdprConsent: boolean;
+};
 
 interface JobApplicationSectionProps {
   jobTitle: string;
   companyName: string;
-  /** Valfritt: visas som liten överrubrik "INDUSTRI • PLATS" */
   industry?: string;
   location?: string;
+
+  // NYTT (valfritt, för delad state)
+  formData?: JobApplicationFormData;
+  setFormData?: React.Dispatch<React.SetStateAction<JobApplicationFormData>>;
+  cvFile?: File | null;
+  setCvFile?: (f: File | null) => void;
+  otherFile?: File | null;
+  setOtherFile?: (f: File | null) => void;
 }
 
 const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
@@ -14,8 +31,17 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
   companyName,
   industry,
   location,
+
+  // ev. kontrollerade props
+  formData: extFormData,
+  setFormData: extSetFormData,
+  cvFile: extCv,
+  setCvFile: extSetCv,
+  otherFile: extOther,
+  setOtherFile: extSetOther,
 }) => {
-  const [formData, setFormData] = useState({
+  // Fallback-intern state om ingen extern ges
+  const [intFormData, setIntFormData] = useState<JobApplicationFormData>({
     firstName: '',
     lastName: '',
     email: '',
@@ -23,8 +49,15 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
     coverLetter: '',
     gdprConsent: false,
   });
-  const [cvFile, setCvFile] = useState<File | null>(null);
-  const [otherFile, setOtherFile] = useState<File | null>(null);
+  const [intCvFile, setIntCvFile] = useState<File | null>(null);
+  const [intOtherFile, setIntOtherFile] = useState<File | null>(null);
+
+  const formData = extFormData ?? intFormData;
+  const setFormData = extSetFormData ?? setIntFormData;
+  const cvFile = extCv ?? intCvFile;
+  const setCvFile = extSetCv ?? setIntCvFile;
+  const otherFile = extOther ?? intOtherFile;
+  const setOtherFile = extSetOther ?? setIntOtherFile;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const otherFileInputRef = useRef<HTMLInputElement>(null);
@@ -51,7 +84,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
 
   return (
     <section id="application-form" className="relative bg-[#08132B] text-white">
-      {/* Subtil bakgrund */}
+      {/* Subtil bakgrund – samma som i arket */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-[0.08]"
@@ -72,7 +105,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
       />
 
       <div className="relative px-5 sm:px-8">
-        {/* Rubrikblock med bransch • ort */}
+        {/* Bransch • Ort och rubrik – exakt som i arket */}
         <div className="pt-10 sm:pt-12 pb-8">
           {industry && location && (
             <div
@@ -90,7 +123,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
           </h2>
         </div>
 
-        {/* Formulär */}
+        {/* Formulär – identiskt UI */}
         <div className="relative pb-16">
           <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto">
             {/* Namn */}
@@ -169,7 +202,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
               </div>
             </div>
 
-            {/* CV */}
+            {/* Ladda upp CV */}
             <div>
               <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Ladda upp CV *
@@ -261,7 +294,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
               </label>
             </div>
 
-            {/* Submit */}
+            {/* Skicka ansökan */}
             <div className="pt-2 flex justify-center">
               <button
                 type="submit"
