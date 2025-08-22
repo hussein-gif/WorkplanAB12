@@ -5,12 +5,33 @@ import { mockJobData, JobData } from './jobData';
 import JobApplicationForm from './JobApplicationForm';
 import JobApplicationSection from './JobApplicationSection';
 
+type SharedFormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  coverLetter: string;
+  gdprConsent: boolean;
+};
+
 const JobDetailPage = () => {
   const navigate = useNavigate();
   const { jobId } = useParams<{ jobId: string }>();
   const [job, setJob] = useState<JobData | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
+
+  // 🔹 Delad state mellan ark och sektion (så fält speglas båda vägar)
+  const [formData, setFormData] = useState<SharedFormData>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    coverLetter: '',
+    gdprConsent: false,
+  });
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [otherFile, setOtherFile] = useState<File | null>(null);
 
   // 🔹 Tvinga mörk navbar på denna sida (innan första paint för att undvika blink)
   useLayoutEffect(() => {
@@ -57,7 +78,7 @@ const JobDetailPage = () => {
   };
 
   const handleMinimizeForm = () => {
-    // Scroll to bottom application section
+    // Scrolla till sektionen om man väljer att minimera via annan trigger
     const applicationSection = document.getElementById('application-form');
     if (applicationSection) {
       applicationSection.scrollIntoView({ behavior: 'smooth' });
@@ -67,12 +88,12 @@ const JobDetailPage = () => {
 
   const startDate = (job as any).startDate || 'Enligt överenskommelse';
 
-  // 🔹 Skicka med bransch + plats till ansökningsarket
+  // 🔹 Bransch (industry) som i din kod
   const industry =
     (job as any).industry ||
     (job as any).category ||
     (job as any).department ||
-    ''; // tom sträng om inget finns
+    '';
 
   return (
     <div className="relative min-h-screen bg-[#F7FAFF] overflow-hidden">
@@ -234,7 +255,6 @@ const JobDetailPage = () => {
             >
               Om rollen
             </h2>
-            {/* 🔻 BORTTAGEN RUTA – text direkt på sidan */}
             <p className="text-[#08132B]/80 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
               {job.aboutRole}
             </p>
@@ -248,7 +268,6 @@ const JobDetailPage = () => {
             >
               Arbetsuppgifter
             </h2>
-            {/* 🔻 BORTTAGEN RUTA – lista direkt på sidan */}
             <ul className="space-y-3">
               {job.responsibilities.map((responsibility: string, index: number) => (
                 <li key={index} className="flex items-start space-x-3">
@@ -269,7 +288,6 @@ const JobDetailPage = () => {
             >
               Vem vi söker
             </h2>
-            {/* 🔻 BORTTAGEN RUTA – lista direkt på sidan */}
             <ul className="space-y-3">
               {job.requirements.map((requirement: string, index: number) => (
                 <li key={index} className="flex items-start space-x-3">
@@ -290,7 +308,6 @@ const JobDetailPage = () => {
             >
               Vår rekryteringsprocess
             </h2>
-            {/* 🔻 BORTTAGEN RUTA – text direkt på sidan */}
             <p className="text-[#08132B]/80 leading-relaxed" style={{ fontFamily: 'Inter, sans-serif' }}>
               {job.recruitmentProcess}
             </p>
@@ -353,13 +370,21 @@ const JobDetailPage = () => {
         </div>
       </div>
 
-      {/* Application Form Section at Bottom */}
-      <JobApplicationSection 
+      {/* Application Form Section at Bottom — får bransch & ort + delad state */}
+      <JobApplicationSection
         jobTitle={job.title}
         companyName={job.company}
+        industry={industry}
+        location={job.location}
+        formData={formData}
+        setFormData={setFormData}
+        cvFile={cvFile}
+        setCvFile={setCvFile}
+        otherFile={otherFile}
+        setOtherFile={setOtherFile}
       />
 
-      {/* Popup Application Form */}
+      {/* Popup Application Form — använder samma delade state */}
       <JobApplicationForm
         jobTitle={job.title}
         companyName={job.company}
@@ -368,6 +393,12 @@ const JobDetailPage = () => {
         isPopupOpen={isApplicationFormOpen}
         onClosePopup={handleCloseForm}
         onMinimize={handleMinimizeForm}
+        formData={formData}
+        setFormData={setFormData}
+        cvFile={cvFile}
+        setCvFile={setCvFile}
+        otherFile={otherFile}
+        setOtherFile={setOtherFile}
       />
     </div>
   );
