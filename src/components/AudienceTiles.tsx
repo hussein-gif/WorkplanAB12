@@ -201,7 +201,7 @@ const AudienceTiles = () => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-8">
-        {/* Rubrik – mindre spacing på mobil */}
+        {/* Rubrik – mindre på mobil */}
         <div className="text-center mb-12 sm:mb-20 relative">
           <div
             className="absolute inset-x-0 mx-auto top-0 w-[360px] h-[160px] rounded-full blur-3xl opacity-25"
@@ -212,7 +212,7 @@ const AudienceTiles = () => {
           />
           <h2
             className={`
-              text-5xl md:text-6xl mb-6 tracking-tight leading-[0.9]
+              text-4xl sm:text-5xl md:text-6xl mb-6 tracking-tight leading-[1.05] sm:leading-[0.9]
               transition-all duration-1000 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
             `}
@@ -238,7 +238,7 @@ const AudienceTiles = () => {
           </div>
           <p
             className={`
-              text-xl max-w-2xl mx-auto leading-relaxed
+              text-base sm:text-xl max-w-2xl mx-auto leading-relaxed
               transition-all duration-1000 delay-400 transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
             `}
