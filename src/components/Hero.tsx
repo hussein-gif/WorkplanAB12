@@ -20,7 +20,6 @@ const Hero = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Mobilflagga för att tona ned vissa effekter (desktop lämnas orörd)
   const isMobile =
     typeof window !== 'undefined' &&
     window.matchMedia('(max-width: 639px)').matches;
@@ -48,11 +47,10 @@ const Hero = () => {
         </div>
 
         {/* Overlays */}
-        {/* Lite mörkare scrim på mobil för bättre kontrast */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70 sm:from-black/60 sm:via-black/40 sm:to-black/70" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent sm:from-black/50" />
 
-        {/* Animated Geometric Elements (tonas ned på mobil via opacitet) */}
+        {/* Animated Geometric Elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div
             className={`absolute w-96 h-96 rounded-full bg-white/5 blur-3xl animate-pulse ${
@@ -103,21 +101,15 @@ const Hero = () => {
       <div className="relative z-10 flex-1 flex items-center py-12 sm:py-16">
         <div className="w-full px-5 sm:px-8">
           <div className="max-w-3xl text-left">
-            {/* Textblock med diskret bakgrund på mobil för läsbarhet */}
+            {/* Titel + underrubrik */}
             <div
               className={`
                 space-y-3 transition-all duration-700
                 mt-8 sm:mt-0
-                rounded-2xl sm:rounded-none
-                bg-black/25 sm:bg-transparent
-                backdrop-blur-[2px] sm:backdrop-blur-0
-                p-4 sm:p-0
-                shadow-[0_0_0_1px_rgba(255,255,255,0.06)] sm:shadow-none
               `}
             >
               <h1
                 className={`
-                  /* Mobil: något mindre & tätare; Desktop oförändrat via sm: */
                   text-[34px] leading-[1.15] tracking-tight
                   sm:text-5xl lg:text-6xl xl:text-7xl
                   font-light text-white
@@ -139,7 +131,6 @@ const Hero = () => {
                   >
                     Drömteam
                   </span>
-                  {/* Understrykning kvar som tidigare */}
                   <div className="relative inline-block">
                     <img
                       src="https://i.ibb.co/6c1JcWdr/image.png"
@@ -159,7 +150,6 @@ const Hero = () => {
                 `}
               />
 
-              {/* Mobil: ta bort kursiv, kortare rader, lite högre opacitet */}
               <p
                 className={`
                   text-[15px] sm:text-base text-white/85 sm:text-white/80
@@ -187,7 +177,6 @@ const Hero = () => {
               `}
               style={{ willChange: 'transform, opacity' }}
             >
-              {/* Primär – fullbredd/48px höjd på mobil */}
               <button
                 onClick={() => navigate('/jobs')}
                 className="
@@ -209,7 +198,6 @@ const Hero = () => {
                 <span className="relative z-10">Lediga Tjänster</span>
               </button>
 
-              {/* Sekundär – mjukare kant/kontrast på mobil, fullbredd */}
               <button
                 onClick={() => navigate('/partner')}
                 className="
@@ -232,7 +220,7 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Badges – fortsatt dolda på mobil */}
+      {/* Badges längst ner – döljs på mobil */}
       <div
         className={`
           absolute bottom-8 inset-x-0 z-10
