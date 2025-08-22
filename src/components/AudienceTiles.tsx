@@ -124,55 +124,61 @@ const AudienceTiles = () => {
         }
       `}</style>
 
-      {/* Samma bakgrund som FeaturedJobs för visuell konsistens */}
+      {/* Bakgrund: #08132B med eleganta, subtila overlays */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Basgradient med hue-shift */}
+        {/* Basfärg */}
         <div
-          className="absolute inset-0 animate-hue"
-          style={{
-            background: 'linear-gradient(135deg, #0e1b33 0%, #111827 45%, #1f2f54 100%)',
-          }}
+          className="absolute inset-0"
+          style={{ backgroundColor: '#08132B' }}
         />
 
-        {/* Parallax grid */}
+        {/* Parallax-grid (mycket subtil) */}
         <div
           className="absolute inset-0"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px)
+              linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
             `,
-            backgroundSize: '150px 150px',
-            transform: `translate(${(mousePosition.x - 50) * 0.08}px, ${(mousePosition.y - 50) * 0.08}px)`,
+            backgroundSize: '140px 140px',
+            transform: `translate(${(mousePosition.x - 50) * 0.06}px, ${(mousePosition.y - 50) * 0.06}px)`,
             mixBlendMode: 'overlay',
-            opacity: 0.9,
+            opacity: 0.5,
           }}
         />
 
-        {/* Driftande ljus-overlay */}
+        {/* Svaga spotlight-radialer */}
         <div
           className="absolute inset-0"
           style={{
-            background: 'radial-gradient(circle at 20% 30%, rgba(255,255,255,0.02) 0%, transparent 60%)',
-            mixBlendMode: 'soft-light',
+            background:
+              'radial-gradient(600px 280px at 20% 10%, rgba(255,255,255,0.06), transparent 60%)',
             animation: 'drift 60s linear infinite',
           }}
         />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(800px 360px at 85% 90%, rgba(255,255,255,0.05), transparent 70%)',
+            animation: 'drift 80s linear infinite',
+          }}
+        />
 
-        {/* Flytande glows */}
+        {/* Flytande blå glows (samma färgfamilj) */}
         <div
           className="absolute -left-28 -top-28 w-[600px] h-[600px] rounded-full blur-3xl animate-float-slow"
           style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(99,102,241,0.35) 0%, transparent 70%)',
-            opacity: 0.3,
+            background: 'radial-gradient(circle at 50% 50%, rgba(11,39,77,0.35) 0%, transparent 70%)',
+            opacity: 0.28,
             transform: `translate(${(mousePosition.x - 50) * 0.02}px, ${(mousePosition.y - 50) * 0.015}px)`,
           }}
         />
         <div
           className="absolute right-1/4 bottom-24 w-[500px] h-[500px] rounded-full blur-3xl animate-float-slow-reverse"
           style={{
-            background: 'radial-gradient(circle at 60% 50%, rgba(16,185,129,0.25) 0%, transparent 70%)',
-            opacity: 0.2,
+            background: 'radial-gradient(circle at 60% 50%, rgba(22,74,128,0.22) 0%, transparent 70%)',
+            opacity: 0.22,
             transform: `translate(${(mousePosition.x - 50) * -0.015}px, ${(mousePosition.y - 50) * -0.01}px)`,
           }}
         />
@@ -204,7 +210,7 @@ const AudienceTiles = () => {
           />
         ))}
 
-        {/* Textur / noise */}
+        {/* Noise-textur */}
         <div
           className="absolute inset-0"
           aria-hidden="true"
