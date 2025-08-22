@@ -154,11 +154,12 @@ const IndustryGrid = () => {
 
   /* =========================
      MOBIL CARD – Compact Media
+     (utan grå highlight-ruta)
      ========================= */
   const renderMobileCard = (pillar: typeof trustPillars[0], index: number) => (
     <div
       key={`m-${index}`}
-      className={`relative transition-all duration-400 ${
+      className={`relative transition-all duration-300 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
       }`}
       style={{ transitionDelay: `${350 + index * 100}ms` }}
@@ -166,7 +167,7 @@ const IndustryGrid = () => {
       <div
         className="
           rounded-xl bg-white/85 backdrop-blur-sm border border-black/5
-          shadow-sm px-4 py-4
+          shadow-sm px-4 py-5
         "
         style={{ cursor: 'default' }}
       >
@@ -174,21 +175,13 @@ const IndustryGrid = () => {
         <div className="flex items-start gap-3">
           <div className="flex-1 min-w-0">
             <h3
-              className="text-[16.5px] font-semibold leading-tight truncate"
+              className="text-[17px] font-semibold leading-snug truncate mb-1"
               style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', color: '#0B1424' }}
               title={pillar.title}
             >
               {pillar.title}
             </h3>
-
-            {/* Badge under titel */}
-            <span
-              className="inline-block mt-1 text-[11px] uppercase tracking-wide
-                         bg-gray-900/5 text-gray-600 px-2 py-0.5 rounded"
-              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 600 }}
-            >
-              {pillar.highlight}
-            </span>
+            {/* Highlight-rutan borttagen på mobil enligt önskemål */}
           </div>
 
           {/* Ikon-chip till höger */}
@@ -203,7 +196,7 @@ const IndustryGrid = () => {
           </div>
         </div>
 
-        {/* Divider */}
+        {/* Divider – kompakt spacing */}
         <div className="h-px bg-gradient-to-r from-transparent via-black/10 to-transparent my-3" />
 
         {/* Beskrivning */}
@@ -218,7 +211,7 @@ const IndustryGrid = () => {
   );
 
   return (
-    // Mindre vertikal padding på mobil
+    // Mindre vertikal padding på mobil för tajtare intryck
     <section ref={sectionRef} className="relative py-20 sm:py-24 overflow-hidden">
       <style>{`
         @keyframes softPulse {
@@ -237,14 +230,17 @@ const IndustryGrid = () => {
         }
       `}</style>
 
-      {/* Bakgrund */}
+      {/* Bakgrund med subtila effekter (dämpade på mobil, oförändrade på desktop) */}
       <div className="absolute inset-0">
+        {/* Basgradient */}
         <div
           className="absolute inset-0"
           style={{
             background: 'linear-gradient(135deg, #ffffff 0%, #f0f5fa 55%, #ffffff 100%)',
           }}
         />
+
+        {/* Diagonalt mönster */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -252,6 +248,8 @@ const IndustryGrid = () => {
               'repeating-linear-gradient(135deg, rgba(0,0,0,0.015) 0px, rgba(0,0,0,0.015) 1px, transparent 1px, transparent 12px)',
           }}
         />
+
+        {/* Ljuspunkt + puls */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
@@ -261,7 +259,7 @@ const IndustryGrid = () => {
           }}
         />
 
-        {/* Blobbar/parallax – nedtonat på mobil */}
+        {/* Stora blobbar – dämpade på mobil */}
         <div
           className="absolute -left-32 top-10 w-[420px] h-[420px] rounded-full opacity-0 sm:opacity-30 blur-3xl"
           style={{
@@ -286,7 +284,7 @@ const IndustryGrid = () => {
           }}
         />
 
-        {/* Parallax-orbs/grids – dämpade på mobil */}
+        {/* Parallax-orbs + grids (dämpa på mobil) */}
         <div
           className="absolute w-[800px] h-[800px] rounded-full opacity-0 sm:opacity-[0.04] blur-3xl transition-all duration-1000"
           style={{
@@ -339,7 +337,7 @@ const IndustryGrid = () => {
       </div>
 
       <div className="relative z-10 max-w-[1040px] mx-auto px-8">
-        {/* Header – lite tajtare på mobil */}
+        {/* Header */}
         <div className="text-center mb-12 sm:mb-16">
           <h2
             className={`
@@ -371,13 +369,14 @@ const IndustryGrid = () => {
           </p>
         </div>
 
-        {/* MOBIL – 1 kolumn, Compact Media-kort */}
+        {/* MOBIL – 1 kolumn, Compact Media (utan highlight-ruta) */}
         <div className="grid grid-cols-1 gap-4 sm:hidden">
           {trustPillars.map((p, i) => renderMobileCard(p, i))}
         </div>
 
-        {/* DESKTOP – din originala två-rads-flex */}
+        {/* DESKTOP – original två-rads flex */}
         <div className="hidden sm:flex flex-col gap-2 relative">
+          {/* Gradient bubble över korten (desktop) */}
           <div
             className="absolute left-1/2 top-1/2 w-[520px] h-[520px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-0 sm:opacity-100"
             style={{
