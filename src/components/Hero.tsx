@@ -31,7 +31,7 @@ const Hero = () => {
           }}
         >
           <img
-            src="https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg"
+            src="https://i.ibb.co/1tB9G6G9/7babd8f2cc495c7355b45544d232bb26-1.jpg"
             alt="Professional staffing and teamwork"
             className="w-full h-full object-cover"
           />
