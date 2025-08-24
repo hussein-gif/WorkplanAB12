@@ -16,8 +16,8 @@ const Hero: React.FC = () => {
   const rafId = useRef<number | null>(null);
   const lastPos = useRef({ x: 0, y: 0 });
 
-  // Sticky CTA (mobil) – syns när knappraden inte längre är i bild
-  const [showStickyCTA, setShowStickyCTA] = useState(false);
+  // Sticky CTA (mobil) – **borttagen**, men behåller ref för minimal diff
+  const [showStickyCTA] = useState(false);
   const ctaContainerRef = useRef<HTMLDivElement | null>(null);
 
   // Device helpers
@@ -56,7 +56,6 @@ const Hero: React.FC = () => {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'image';
-      // AVIF preload (bäst), annars JPEG
       link.href = 'https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg';
       document.head.appendChild(link);
     }
@@ -67,23 +66,16 @@ const Hero: React.FC = () => {
     };
   }, [isMobile, prefersReduced]);
 
-  // Sticky CTA observer (mobil)
+  // Sticky CTA observer (mobil) – **inte använd längre**
   useEffect(() => {
     if (!ctaContainerRef.current || typeof IntersectionObserver === 'undefined') return;
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        setShowStickyCTA(!entry.isIntersecting);
-      },
-      { root: null, threshold: 0 }
-    );
+    const obs = new IntersectionObserver(() => {}, { root: null, threshold: 0 });
     obs.observe(ctaContainerRef.current);
     return () => obs.disconnect();
   }, []);
 
-  // Analytics helpers
   const track = (event: string, meta?: Record<string, unknown>) => {
-    // Byt till din analytics (GA4, PostHog, etc.)
+    // ersätt med din analytics
     // eslint-disable-next-line no-console
     console.log('[analytics]', event, meta ?? {});
   };
@@ -102,7 +94,6 @@ const Hero: React.FC = () => {
             transform: `translate(${mouse.x * parallaxX}px, ${mouse.y * parallaxY}px) scale(1.05)`,
           }}
         >
-          {/* <picture> med AVIF/WebP/JPEG och separata källor för mobil/desktop */}
           {/* Mobil */}
           <picture className="block sm:hidden w-full h-full">
             <source
@@ -158,16 +149,11 @@ const Hero: React.FC = () => {
         </div>
 
         {/* Overlays */}
-        {/* Mobil: starkare vänster→höger scrim för läsbarhet */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/10 sm:bg-none" />
-        {/* Desktop: vänster→höger scrim (från din senaste version) */}
         <div className="absolute inset-0 hidden sm:block bg-gradient-to-r from-black/80 via-black/55 to-transparent" />
-        {/* Topp-scrim */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent sm:from-black/50" />
-        {/* Mobil: vignette i botten så knappar står på mörkare yta */}
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/50 via-transparent to-transparent sm:hidden pointer-events-none" />
 
-        {/* Geometriska element – tonas ned om prefers-reduced-motion */}
         {!prefersReduced && (
           <div className="absolute inset-0 overflow-hidden">
             <div
@@ -212,7 +198,6 @@ const Hero: React.FC = () => {
 
       {/* === Innehåll === */}
       <div className="relative z-10 flex-1 flex items-center py-12 sm:py-16">
-        {/* Safe-area vänster/höger på mobil */}
         <div
           className="w-full sm:px-8"
           style={{
@@ -220,9 +205,7 @@ const Hero: React.FC = () => {
             paddingRight: 'max(env(safe-area-inset-right), 1.25rem)',
           }}
         >
-          {/* Lätt uppdraget block på desktop */}
           <div className="max-w-[40ch] sm:max-w-3xl text-left md:-mt-8">
-            {/* Titel + underrubrik */}
             <div
               className={`
                 space-y-3 transition-all duration-700
@@ -263,7 +246,6 @@ const Hero: React.FC = () => {
                 </span>
               </h1>
 
-              {/* Underline */}
               <div
                 className={`
                   w-28 sm:w-32 h-px bg-gradient-to-r from-white/70 to-transparent
@@ -272,7 +254,6 @@ const Hero: React.FC = () => {
                 `}
               />
 
-              {/* Ingress – clampad på mobil */}
               <p
                 className={`
                   text-[17px] sm:text-base text-white/85 sm:text-white/80
@@ -327,7 +308,6 @@ const Hero: React.FC = () => {
                 <span className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-b from-white/90 to-transparent" />
                 <span className="pointer-events-none absolute inset-x-2 top-1 h-px bg-gradient-to-r from-white/70 via-white to-white/70" />
                 <span className="relative z-10">Lediga Tjänster</span>
-                {/* Shimmer */}
                 <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-200 sm:duration-500" />
               </button>
 
@@ -355,55 +335,24 @@ const Hero: React.FC = () => {
               </button>
             </div>
 
-            {/* Mikro-social proof under primär CTA (mobil) */}
-            <div className="mt-1 text-xs text-white/70 sm:hidden">
+            {/* Mobil info-rad under knappar – **BORTTAGEN** */}
+            {/* <div className="mt-1 text-xs text-white/70 sm:hidden">
               Svar inom 24h • +240 tillsättningar i år
-            </div>
+            </div> */}
 
-            {/* Sekundär länk – desktop (oförändrad) */}
-            <div className="hidden md:block mt-3">
-              <button
-                onClick={() => {
-                  track('cta_click', { id: 'see_how', placement: 'hero' });
-                  const el = document.getElementById('how-it-works');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="text-white/80 hover:text-white transition-colors text-sm inline-flex items-center gap-1"
-                aria-label="Se hur vi jobbar"
-                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
-              >
-                Se hur vi jobbar
-                <span className="inline-block translate-x-0 group-hover:translate-x-0.5 transition-transform">→</span>
-              </button>
-            </div>
+            {/* Sekundär länk – **BORTTAGEN PÅ DESKTOP** */}
+            {/* <div className="hidden md:block mt-3">
+              ...
+            </div> */}
           </div>
         </div>
       </div>
 
-      {/* Sticky mini-CTA – visas på mobil när knapparna gått ur bild */}
-      {showStickyCTA && (
-        <div className="sm:hidden fixed inset-x-0 bottom-0 z-20 px-[max(env(safe-area-inset-left),1rem)] pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-2">
-          <div className="rounded-2xl bg-black/60 backdrop-blur-md border border-white/10 p-2 shadow-2xl">
-            <button
-              aria-label="Se alla lediga tjänster"
-              onClick={() => {
-                track('cta_click', { id: 'jobs_primary_sticky', placement: 'hero_sticky' });
-                navigate('/jobs');
-              }}
-              className="w-full h-12 rounded-xl bg-white text-gray-900 font-semibold tracking-wide active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              Visa lediga jobb
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Sticky mini-CTA – **BORTTAGEN** */}
+      {/* {showStickyCTA && (...)} */}
 
-      {/* Scroll-hint – desktop (oförändrad) */}
-      <div className="hidden md:flex absolute left-8 bottom-8 items-center gap-2 text-white/70 text-xs tracking-widest">
-        <span className="inline-block w-2 h-2 rounded-full bg-white/60 animate-pulse" />
-        SCROLLA
-      </div>
+      {/* Scroll-hint – **BORTTAGEN** på desktop */}
+      {/* <div className="hidden md:flex absolute left-8 bottom-8 ...">SCROLLA</div> */}
 
       {/* Badges – desktop (oförändrat) */}
       <div
