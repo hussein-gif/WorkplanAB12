@@ -39,7 +39,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
   ] as const;
 
   return (
-    <section className="relative py-14 md:py-24 px-6 md:px-8 bg-white overflow-hidden -mt-px md:mt-0 scroll-mt-24">
+    <section className="relative py-14 md:py-24 px-6 md:px-8 bg-white overflow-hidden -mt-[2px] md:mt-0 scroll-mt-24">
       {/* Background design layers */}
       <div
         aria-hidden
