@@ -42,7 +42,7 @@ function HomePage() {
             "availableLanguage": ["Swedish", "English"]
           },
           "sameAs": [
-            "https://www.linkedin.com/company/workplan"
+            "https://www.linkedin.com/company/workplan-ab/"
           ]
         }}
       />
