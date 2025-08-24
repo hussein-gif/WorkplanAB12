@@ -88,7 +88,7 @@ const PrivacyPolicyPage: React.FC = () => {
       <SEO
         title="Integritetspolicy | Workplan AB – Bemanning inom lager & logistik"
         description="Läs Workplans integritetspolicy. Så samlar vi in, använder och skyddar personuppgifter inom vår bemannings- och rekryteringsverksamhet. GDPR-säker hantering."
-        canonical="https://www.workplan.se/integritetspolicy"
+        canonical="https://www.work-plan.se/integritetspolicy"
       />
 
       <div className="min-h-screen" style={{ backgroundColor: "#F7FAFF" }}>
