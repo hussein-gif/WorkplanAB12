@@ -86,7 +86,7 @@ const TermsOfServicePage: React.FC = () => {
       <SEO
         title="Användarvillkor | Workplan AB – Bemanning inom lager & logistik"
         description="Läs Workplans användarvillkor. Här hittar du regler för användning av våra tjänster och webbplats inom bemanning och rekrytering."
-        canonical="https://www.workplan.se/anvandarvillkor"
+        canonical="https://www.work-plan.se/anvandarvillkor"
       />
 
       <div className="min-h-screen" style={{ backgroundColor: '#F7FAFF' }}>
