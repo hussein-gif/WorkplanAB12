@@ -43,7 +43,6 @@ const PartnerWithUsPage = () => {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Form submitted:', formData);
-    // Handle form submission
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -76,10 +75,8 @@ const PartnerWithUsPage = () => {
   };
 
   return (
-    {/* Gör containern relativ och stäng av horisontell scroll */}
     <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 overflow-x-hidden">
       {/* Sophisticated Background */}
-      {/* Döljer spill från de stora globerna för säkerhets skull */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-slate-900/90 to-gray-800/95" />
         
