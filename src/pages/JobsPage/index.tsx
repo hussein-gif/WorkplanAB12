@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import JobsHeader from './JobsHeader';
 import JobsFilters from './JobsFilters';
 import JobsList from './JobsList';
+import SEO from '../../components/SEO'; // ⬅️ SEO import (från pages/JobsPage/)
 
 export interface Job {
   id: string;
@@ -397,46 +398,55 @@ const JobsPage = () => {
   }
 
   return (
-    // NYTT: overflow-x-hidden även på containern (extra säkerhet)
-    <div className="min-h-screen relative bg-[#08132B] overflow-x-hidden">
-      <RichBackground />
+    <>
+      {/* ✅ SEO för jobblistan */}
+      <SEO
+        title="Lediga jobb inom lager & logistik – sök idag | Workplan"
+        description="Bläddra bland aktuella tjänster inom lager och logistik. Filtrera på ort, bransch och omfattning. Enkel ansökan och snabb återkoppling från Workplan."
+        canonical="https://www.workplan.se/jobb"
+      />
 
-      <div className="relative z-10">
-        {/* Diskret halo bakom header för subtilt liv */}
-        <div
-          className="absolute top-24 left-1/2 -translate-x-1/2 w-[600px] h-[160px] rounded-full blur-3xl opacity-10 pointer-events-none"
-          style={{
-            background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 70%)',
-          }}
-        />
+      {/* NYTT: overflow-x-hidden även på containern (extra säkerhet) */}
+      <div className="min-h-screen relative bg-[#08132B] overflow-x-hidden">
+        <RichBackground />
 
-        {/* Header */}
-        <JobsHeader filteredJobsCount={filteredJobs.length} />
+        <div className="relative z-10">
+          {/* Diskret halo bakom header för subtilt liv */}
+          <div
+            className="absolute top-24 left-1/2 -translate-x-1/2 w-[600px] h-[160px] rounded-full blur-3xl opacity-10 pointer-events-none"
+            style={{
+              background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08) 0%, transparent 70%)',
+            }}
+          />
 
-        {/* Search and Filters */}
-        <JobsFilters
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          selectedLocation={selectedLocation}
-          setSelectedLocation={setSelectedLocation}
-          selectedIndustry={selectedIndustry}
-          setSelectedIndustry={setSelectedIndustry}
-          selectedOmfattning={selectedOmfattning}
-          setSelectedOmfattning={setSelectedOmfattning}
-          locations={locations}
-          industries={industries}
-          omfattningar={omfattningar}
-          clearFilters={clearFilters}
-        />
+          {/* Header */}
+          <JobsHeader filteredJobsCount={filteredJobs.length} />
 
-        {/* Jobs List / Empty */}
-        {filteredJobs.length === 0 ? (
-          <EmptyState clearFilters={clearFilters} />
-        ) : (
-          <JobsList jobs={filteredJobs} />
-        )}
+          {/* Search and Filters */}
+          <JobsFilters
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            selectedLocation={selectedLocation}
+            setSelectedLocation={setSelectedLocation}
+            selectedIndustry={selectedIndustry}
+            setSelectedIndustry={setSelectedIndustry}
+            selectedOmfattning={selectedOmfattning}
+            setSelectedOmfattning={setSelectedOmfattning}
+            locations={locations}
+            industries={industries}
+            omfattningar={omfattningar}
+            clearFilters={clearFilters}
+          />
+
+          {/* Jobs List / Empty */}
+          {filteredJobs.length === 0 ? (
+            <EmptyState clearFilters={clearFilters} />
+          ) : (
+            <JobsList jobs={filteredJobs} />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
