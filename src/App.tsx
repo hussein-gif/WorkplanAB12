@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
 
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -11,7 +11,7 @@ import ConversionBanner from './components/ConversionBanner';
 import Footer from './components/Footer';
 
 import ScrollToTop from './components/ScrollToTop';
-import { routes } from './routes'; // ⬅️ Importera de svenska routes här
+import { routes } from './routes'; // ⬅️ Svenska routes
 
 function HomePage() {
   return (
@@ -24,6 +24,12 @@ function HomePage() {
       <ConversionBanner />
     </>
   );
+}
+
+/** Redirect helper that preserves :jobId param from legacy /job/:jobId to /jobb/:jobId */
+function LegacyJobRedirect() {
+  const { jobId } = useParams();
+  return <Navigate to={`/jobb/${encodeURIComponent(jobId ?? '')}`} replace />;
 }
 
 function App() {
@@ -44,7 +50,8 @@ function App() {
 
             {/* Redirects från gamla engelska paths */}
             <Route path="/jobs" element={<Navigate to="/jobb" replace />} />
-            <Route path="/job/:jobId" element={<Navigate to="/jobb/:jobId" replace />} />
+            {/* IMPORTANT: keep param when redirecting */}
+            <Route path="/job/:jobId" element={<LegacyJobRedirect />} />
             <Route path="/partner" element={<Navigate to="/foretag" replace />} />
             <Route path="/for-candidates" element={<Navigate to="/for-kandidater" replace />} />
             <Route path="/about" element={<Navigate to="/om-oss" replace />} />
