@@ -165,7 +165,6 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
   handleFormSubmit,
   handleInputChange,
 }) => {
-  /* Defensive handling för undefined formData */
   const safeFormData = formData || {
     fornamn: '',
     efternamn: '',
@@ -375,9 +374,9 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               </div>
             </div>
 
-            {/* ----- Åtgärder + GDPR (mobil först) ----- */}
+            {/* ----- Åtgärder + GDPR ----- */}
             <div className="pt-2 md:pt-4 space-y-4">
-              {/* MOBIL: checkbox ovanför knappen */}
+              {/* MOBIL: checkbox ovanför knappen (oförändrat) */}
               <div className="block md:hidden">
                 <label className="flex items-start gap-3 mb-3">
                   <input
@@ -410,8 +409,23 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 </button>
               </div>
 
-              {/* DESKTOP: behåll original layout */}
+              {/* DESKTOP: GDPR till vänster, knapp till höger (ändringen) */}
               <div className="hidden md:flex md:items-center md:justify-between md:gap-6">
+                <label className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    name="gdprAccept"
+                    checked={safeFormData.gdprAccept}
+                    onChange={handleInputChange}
+                    required
+                    className="mt-0.5 w-4 h-4 text-blue-600 border-white/30 rounded focus:ring-blue-500 bg-white/10"
+                  />
+                  <span className="text-white/70 text-sm leading-relaxed">
+                    Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att
+                    kunna återkomma med information om bemanningslösningar.
+                  </span>
+                </label>
+
                 <button
                   type="submit"
                   className="btn-min group inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-white text-base tracking-wide transition-all duration-200"
@@ -427,21 +441,6 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                     Skicka
                   </span>
                 </button>
-
-                <label className="flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    name="gdprAccept"
-                    checked={safeFormData.gdprAccept}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-0.5 w-4 h-4 text-blue-600 border-white/30 rounded focus:ring-blue-500 bg-white/10"
-                  />
-                  <span className="text-white/70 text-sm leading-relaxed">
-                    Jag godkänner att Workplan lagrar och behandlar mina uppgifter för att
-                    kunna återkomma med information om bemanningslösningar.
-                  </span>
-                </label>
               </div>
             </div>
           </form>
