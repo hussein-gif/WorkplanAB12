@@ -41,7 +41,7 @@ const ForCandidatesPage = () => {
       <SEO
         title="För kandidater – jobb inom lager & logistik | Workplan"
         description="Sök uppdrag inom lager och logistik via Workplan. Enkel ansökan, snabb återkoppling och trygga villkor – vi matchar dig med seriösa arbetsgivare."
-        canonical="https://www.workplan.se/for-kandidater"
+        canonical="https://www.work-plan.se/for-kandidater"
       />
 
       <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 overflow-x-hidden">
