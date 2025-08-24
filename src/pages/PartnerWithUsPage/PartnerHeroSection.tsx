@@ -1,6 +1,5 @@
 import React from 'react';
 import { ArrowRight, ChevronDown } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 interface PartnerHeroSectionProps {
   isVisible: boolean;
@@ -13,16 +12,6 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
   scrollToContact,
   scrollToProcess,
 }) => {
-  // Framer Motion variants (smidig, konsekvent timing)
-  const fadeUp = (delay = 0) => ({
-    hidden: { opacity: 0, y: 16 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay },
-    },
-  });
-
   return (
     <section className="group relative min-h-screen flex items-center justify-start overflow-hidden">
       {/* Background Image */}
@@ -65,23 +54,20 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           pl-4 pr-4           
           sm:pl-6 sm:pr-6     
           md:pl-10 md:pr-10
-          lg:pl-24 xl:pl-32     /* mer luft på desktop */
+          lg:pl-24 xl:pl-32
           text-left
         "
       >
         {/* Subtil backdrop bakom text för extra kontrast på desktop */}
         <div className="inline-block rounded-2xl lg:rounded-3xl lg:bg-black/15 lg:backdrop-blur-[2px] lg:ring-1 lg:ring-white/10 lg:p-6 xl:p-8">
           {/* Rubrik – alltid två rader */}
-          <motion.h1
-            initial="hidden"
-            animate={isVisible ? 'visible' : 'hidden'}
-            variants={fadeUp(0)}
+          <h1
             className={`
               text-white mb-4 sm:mb-5
               tracking-[-0.01em] sm:tracking-tight
               leading-[1.05] sm:leading-[0.95]
               text-[34px] sm:text-6xl lg:text-7xl
-              transition-all duration-1000 transform
+              transition-all duration-1000 transform will-change-transform
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
               text-shadow-soft sm:text-shadow-none
             `}
@@ -89,6 +75,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
               fontWeight: 300,
               maxWidth: '18ch',
+              transitionDelay: isVisible ? '0ms' : '0ms',
             }}
           >
             <span className="block font-extralight lg:text-5xl">Team Som</span>
@@ -98,37 +85,31 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
                 Framtiden
               </span>
             </span>
-          </motion.h1>
+          </h1>
 
           {/* Underrubrik */}
-          <motion.p
-            initial="hidden"
-            animate={isVisible ? 'visible' : 'hidden'}
-            variants={fadeUp(0.12)}
+          <p
             className={`
               text-[15px] sm:text-xl
               leading-[1.55] sm:leading-relaxed
               text-white/85 sm:text-gray-300
               mb-6 sm:mb-12
-              transition-all duration-1000 transform
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+              transition-all duration-1000 transform will-change-transform
+              ${isVisible ? 'translate-y-0 opacity-100 delay-[120ms]' : 'translate-y-4 opacity-0'}
               text-shadow-soft sm:text-shadow-none
               max-w-2xl
             `}
             style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
           >
             Vi levererar rätt människor till varje steg i ert flöde.
-          </motion.p>
+          </p>
 
           {/* Knappar */}
-          <motion.div
-            initial="hidden"
-            animate={isVisible ? 'visible' : 'hidden'}
-            variants={fadeUp(0.22)}
+          <div
             className={`
               flex flex-col sm:flex-row gap-3 sm:gap-6 justify-start items-start
-              transition-all duration-1000 transform mt-4 sm:mt-0
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+              transition-all duration-1000 transform mt-4 sm:mt-0 will-change-transform
+              ${isVisible ? 'translate-y-0 opacity-100 delay-[220ms]' : 'translate-y-4 opacity-0'}
             `}
           >
             <button
@@ -172,20 +153,17 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
             >
               Så jobbar vi
             </button>
-          </motion.div>
+          </div>
         </div>
       </div>
 
       {/* BETRODD AV */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isVisible ? 1 : 0 }}
-        transition={{ duration: 0.7, delay: 0.28 }}
+      <div
         className={`
           trusted absolute left-1/2 -translate-x-1/2
           bottom-2 sm:bottom-0
-          z-10 text-center
-          ${isVisible ? 'opacity-80 sm:opacity-100' : 'opacity-0'}
+          z-10 text-center transition-opacity duration-700
+          ${isVisible ? 'opacity-80 sm:opacity-100 delay-[280ms]' : 'opacity-0'}
         `}
       >
         <div
@@ -199,7 +177,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           alt="Betrodd av logotyp"
           className="h-12 sm:h-16 lg:h-20 mt-1.5 sm:mt-3 mx-auto object-contain filter grayscale hover:grayscale-0 transition-[filter,opacity] duration-300 opacity-90"
         />
-      </motion.div>
+      </div>
 
       {/* Scroll hint */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 hidden lg:flex items-center gap-2 text-white/70 animate-bounce">
