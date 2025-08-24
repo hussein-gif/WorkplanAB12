@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -10,18 +10,19 @@ import FeaturedJobs from './components/FeaturedJobs';
 import ConversionBanner from './components/ConversionBanner';
 import Footer from './components/Footer';
 
-import JobsPage from './pages/JobsPage';
-import JobDetailPage from './pages/JobDetailPage';
-import PartnerWithUsPage from './pages/PartnerWithUsPage';
-import ForCandidatesPage from './pages/ForCandidatesPage';
-import AboutUsPage from './pages/AboutUsPage';
-import ContactUsPage from './pages/ContactUsPage';
-import OurServicesPage from './pages/OurServicesPage';
-import TermsOfServicePage from './pages/TermsOfServicePage';
-import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
-import CookiePolicyPage from './pages/CookiePolicyPage';
+// Svenska sidkomponenter (börjar med stor bokstav)
+import Jobb from './pages/Jobb';
+import JobbDetalj from './pages/JobbDetalj';
+import Foretag from './pages/Foretag';
+import ForKandidater from './pages/ForKandidater';
+import OmOss from './pages/OmOss';
+import Kontakt from './pages/Kontakt';
+import Tjanster from './pages/Tjanster';
+import Villkor from './pages/Villkor';
+import Integritetspolicy from './pages/Integritetspolicy';
+import Cookiepolicy from './pages/Cookiepolicy';
 
-// ⬅️ Lägg till denna import
+// Scroll helper
 import ScrollToTop from './components/ScrollToTop';
 
 function HomePage() {
@@ -40,24 +41,35 @@ function HomePage() {
 function App() {
   return (
     <Router>
-      {/* ⬇️ Scrollar automatiskt till toppen vid varje route-ändring */}
       <ScrollToTop />
-
       <div className="min-h-screen bg-white">
         <Header />
         <main>
           <Routes>
+            {/* Svenska routes */}
             <Route path="/" element={<HomePage />} />
-            <Route path="/jobs" element={<JobsPage />} />
-            <Route path="/job/:jobId" element={<JobDetailPage />} />
-            <Route path="/partner" element={<PartnerWithUsPage />} />
-            <Route path="/for-candidates" element={<ForCandidatesPage />} />
-            <Route path="/about" element={<AboutUsPage />} />
-            <Route path="/contact" element={<ContactUsPage />} />
-            <Route path="/services" element={<OurServicesPage />} />
-            <Route path="/terms" element={<TermsOfServicePage />} />
-            <Route path="/privacy" element={<PrivacyPolicyPage />} />
-            <Route path="/cookies" element={<CookiePolicyPage />} />
+            <Route path="/jobb" element={<Jobb />} />
+            <Route path="/jobb/:jobId" element={<JobbDetalj />} />
+            <Route path="/foretag" element={<Foretag />} />
+            <Route path="/for-kandidater" element={<ForKandidater />} />
+            <Route path="/om-oss" element={<OmOss />} />
+            <Route path="/kontakt" element={<Kontakt />} />
+            <Route path="/tjanster" element={<Tjanster />} />
+            <Route path="/villkor" element={<Villkor />} />
+            <Route path="/integritetspolicy" element={<Integritetspolicy />} />
+            <Route path="/cookiepolicy" element={<Cookiepolicy />} />
+
+            {/* Redirects från gamla engelska paths */}
+            <Route path="/jobs" element={<Navigate to="/jobb" replace />} />
+            <Route path="/job/:jobId" element={<Navigate to="/jobb/:jobId" replace />} />
+            <Route path="/partner" element={<Navigate to="/foretag" replace />} />
+            <Route path="/for-candidates" element={<Navigate to="/for-kandidater" replace />} />
+            <Route path="/about" element={<Navigate to="/om-oss" replace />} />
+            <Route path="/contact" element={<Navigate to="/kontakt" replace />} />
+            <Route path="/services" element={<Navigate to="/tjanster" replace />} />
+            <Route path="/terms" element={<Navigate to="/villkor" replace />} />
+            <Route path="/privacy" element={<Navigate to="/integritetspolicy" replace />} />
+            <Route path="/cookies" element={<Navigate to="/cookiepolicy" replace />} />
           </Routes>
         </main>
         <Footer />
