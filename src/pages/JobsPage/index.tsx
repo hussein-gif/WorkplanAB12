@@ -397,13 +397,34 @@ const JobsPage = () => {
     return <LoadingPlaceholder />;
   }
 
+  // ✅ JSON-LD: WebSite + SearchAction + Breadcrumbs (work-plan.se)
+  const websiteLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://www.work-plan.se/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://www.work-plan.se/jobb?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  const breadcrumbsLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Jobb", "item": "https://www.work-plan.se/jobb" }
+    ]
+  };
+
   return (
     <>
-      {/* ✅ SEO för jobblistan */}
+      {/* ✅ SEO för jobblistan + JSON-LD */}
       <SEO
         title="Lediga jobb inom lager & logistik – sök idag | Workplan"
         description="Bläddra bland aktuella tjänster inom lager och logistik. Filtrera på ort, bransch och omfattning. Enkel ansökan och snabb återkoppling från Workplan."
         canonical="https://www.work-plan.se/jobb"
+        jsonLd={[websiteLd, breadcrumbsLd]}
       />
 
       {/* NYTT: overflow-x-hidden även på containern (extra säkerhet) */}
