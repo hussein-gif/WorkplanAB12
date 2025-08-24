@@ -4,11 +4,21 @@ import { Plus, Minus } from 'lucide-react';
 
 const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
   const navigate = useNavigate();
-
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
+  // Mobil: auto-scrolla öppnad fråga in i vy (under ev. sticky header)
   const toggleFAQ = (index: number) => {
-    setOpenFAQ(openFAQ === index ? null : index);
+    setOpenFAQ(prev => {
+      const next = prev === index ? null : index;
+
+      if (next !== null && typeof window !== 'undefined' && window.innerWidth < 768) {
+        requestAnimationFrame(() => {
+          const el = document.getElementById(`faq-answer-${next}`)?.parentElement; // kortet
+          el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+      return next;
+    });
   };
 
   const faqs = [
@@ -33,8 +43,14 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
 
   return (
     <section
-      className="relative py-24 px-8"
+      className="relative py-16 md:py-24 px-6 md:px-8"
       style={{ backgroundColor: '#08132B' }}
+      // Mobil: stäng om man klickar utanför korten
+      onClick={(e) => {
+        if (typeof window !== 'undefined' && window.innerWidth < 768) {
+          if (e.target === e.currentTarget) setOpenFAQ(null);
+        }
+      }}
     >
       {/* Dekorativ bakgrund */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -73,15 +89,14 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
           }}
         />
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 opacity-[0.15] md:opacity-[0.25]"
           style={{
             backgroundImage: [
               'radial-gradient(1px 1px at 18% 26%, rgba(255,255,255,0.35) 50%, transparent 51%)',
               'radial-gradient(1px 1px at 62% 12%, rgba(255,255,255,0.25) 50%, transparent 51%)',
               'radial-gradient(1px 1px at 82% 72%, rgba(255,255,255,0.25) 50%, transparent 51%)',
               'radial-gradient(1px 1px at 36% 82%, rgba(255,255,255,0.2) 50%, transparent 51%)'
-            ].join(', '),
-            opacity: 0.25,
+            ].join(', ')
           }}
         />
         <div
@@ -98,34 +113,45 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
       </div>
 
       <div className="max-w-6xl mx-auto relative">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <h2
-            className="text-3xl md:text-4xl font-medium text-white mb-6"
+            className="text-[26px] md:text-4xl font-medium text-white mb-6 tracking-tight"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
             Vanliga Frågor & Svar
           </h2>
         </div>
 
-        <div className="max-w-4xl mx-auto space-y-4 mb-8">
+        {/* Mobil hjälpknapp (expandera/stäng) */}
+        <div className="mb-4 flex justify-end md:hidden">
+          <button
+            className="text-white/70 text-sm underline underline-offset-2"
+            onClick={() => setOpenFAQ(openFAQ === null ? 0 : null)}
+          >
+            {openFAQ === null ? 'Expandera första' : 'Stäng alla'}
+          </button>
+        </div>
+
+        <div className="max-w-4xl mx-auto space-y-3 md:space-y-4 mb-8">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl overflow-hidden"
+              className="bg-white/10 backdrop-blur-[2px] md:backdrop-blur-sm border border-white/20 rounded-2xl overflow-hidden"
             >
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full px-8 py-6 text-left flex items-center justify-between hover:bg-white/5 transition-colors"
+                className="w-full px-6 md:px-8 py-5 md:py-6 min-h-[56px] text-left flex items-center justify-between hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-xl"
                 aria-expanded={openFAQ === index}
                 aria-controls={`faq-answer-${index}`}
+                id={`faq-question-${index}`}
               >
-                <h3 className="text-lg font-semibold text-white pr-4">
+                <h3 className="text-[17px] md:text-lg font-semibold text-white pr-4 tracking-tight">
                   {faq.question}
                 </h3>
                 {openFAQ === index ? (
-                  <Minus size={20} className="text-white/60 flex-shrink-0" />
+                  <Minus size={20} className="text-white/70 md:text-white/60 flex-shrink-0" />
                 ) : (
-                  <Plus size={20} className="text-white/60 flex-shrink-0" />
+                  <Plus size={20} className="text-white/70 md:text-white/60 flex-shrink-0" />
                 )}
               </button>
 
@@ -135,8 +161,9 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
                 style={{
                   maxHeight: openFAQ === index ? '500px' : '0',
                 }}
+                aria-labelledby={`faq-question-${index}`}
               >
-                <div className="px-8 pb-6">
+                <div className="px-6 md:px-8 pb-6">
                   <p className="text-white/80 leading-relaxed">{faq.answer}</p>
                 </div>
               </div>
@@ -174,6 +201,23 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
         .faq-collapse.open {
           opacity: 1;
           transform: translateY(0);
+        }
+
+        /* Mobil: snabbare animation */
+        @media (max-width: 767px) {
+          .faq-collapse {
+            transition:
+              max-height 200ms cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 200ms ease,
+              transform 200ms ease;
+          }
+        }
+
+        /* Respekt för reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+          .faq-collapse {
+            transition: none !important;
+          }
         }
       `}</style>
     </section>
