@@ -10,7 +10,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
   handleBrowseRoles,
 }) => {
   return (
-    <section className="relative min-h-[100svh] md:min-h-screen flex items-center justify-start overflow-hidden">
+    <section className="relative min-h-[100svh] md:min-h-screen flex items-center justify-start overflow-hidden -mb-px md:mb-0">
       {/* Ny bakgrundsbild */}
       <div className="absolute inset-0">
         <img
