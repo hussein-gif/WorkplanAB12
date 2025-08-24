@@ -283,7 +283,7 @@ const Hero: React.FC = () => {
                   navigate('/jobs');
                 }}
                 className="
-                  group relative w-auto min-w-[14rem] max-w-[16rem] sm:w-auto min-h-[52px] sm:min-h-0 px-5 py-2.5
+                  group relative w-auto min-w-[14rem] max-w-[16rem] sm:w-auto min-h-[52px] px-5 py-2.5
                   bg-white text-gray-900 rounded-xl
                   font-semibold text-[16px] sm:text-base tracking-wide
                   transition-all duration-200 sm:duration-300
@@ -311,7 +311,7 @@ const Hero: React.FC = () => {
                   navigate('/partner');
                 }}
                 className="
-                  group relative w-auto min-w-[14rem] max-w-[16rem] sm:w-auto min-h-[52px] sm:min-h-0 px-5 py-2.5
+                  group relative w-auto min-w-[14rem] max-w-[16rem] sm:w-auto min-h-[52px] px-5 py-2.5
                   bg-white/10 text-white border border-white/50 sm:border-2 sm:border-white/30 rounded-xl
                   font-semibold text-[16px] sm:text-base tracking-wide
                   hover:border-white/70 hover:bg-white/15
