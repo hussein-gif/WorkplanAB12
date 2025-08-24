@@ -10,7 +10,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
   handleBrowseRoles,
 }) => {
   return (
-    <section className="relative min-h-[100svh] md:min-h-screen flex items-center justify-start overflow-hidden -mb-px md:mb-0">
+    <section className="relative min-h-[calc(100svh+3px)] md:min-h-screen flex items-center justify-start overflow-hidden md:mb-0">
       {/* Ny bakgrundsbild */}
       <div className="absolute inset-0">
         <img
@@ -74,6 +74,9 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Sömlös övergång: täcker ev. subpixellinje (endast mobil) */}
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-black md:hidden pointer-events-none" />
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@200;400&family=Inter:wght@300;500&display=swap');
