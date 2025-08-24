@@ -37,7 +37,8 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
           style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 200 }}
         >
           <span className="block">Hitta Jobbet</span>
-          <span className="block font-semibold">Som Passar Dig</span>
+          {/* Mindre bold än innan – font-medium (500) */}
+          <span className="block font-medium">Som Passar Dig</span>
         </h1>
 
         {/* Underrubrik */}
