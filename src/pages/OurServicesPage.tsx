@@ -33,9 +33,10 @@ const OurServicesPage = () => {
         canonical="https://www.workplan.se/tjanster"
       />
 
-      <div className="min-h-screen bg-white">
+      {/* ✅ Förhindrar horisontell scroll på denna sida */}
+      <div className="relative min-h-screen bg-white overflow-x-hidden">
         {/* Subtle Background */}
-        <div className="absolute inset-0">
+        <div className="absolute inset-0 pointer-events-none">
           {/* Dynamic Gradient Orbs */}
           <div 
             className="absolute w-[600px] h-[600px] rounded-full opacity-[0.02] blur-3xl transition-all duration-1000"
