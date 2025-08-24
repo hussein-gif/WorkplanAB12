@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface WhyChooseUsSectionProps {
   isVisible: boolean;
@@ -36,13 +37,46 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
     },
   ];
 
-  // Ett litet kort-komponent så vi kan återanvända markup mellan mobil & desktop
+  // --- Slider helpers (mobil) ---
+  const sliderRef = useRef<HTMLDivElement | null>(null);
+  const [canLeft, setCanLeft] = useState(false);
+  const [canRight, setCanRight] = useState(false);
+
+  const updateArrows = () => {
+    const el = sliderRef.current;
+    if (!el) return;
+    const epsilon = 4; // litet spelrum
+    setCanLeft(el.scrollLeft > epsilon);
+    setCanRight(el.scrollLeft + el.clientWidth < el.scrollWidth - epsilon);
+  };
+
+  useEffect(() => {
+    updateArrows();
+    const el = sliderRef.current;
+    if (!el) return;
+    const onScroll = () => updateArrows();
+    el.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      el.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, []);
+
+  const scrollByCard = (dir: 1 | -1) => {
+    const el = sliderRef.current;
+    if (!el) return;
+    const amount = Math.round(el.clientWidth * 0.9); // ungefär ett kort
+    el.scrollBy({ left: dir * amount, behavior: 'smooth' });
+  };
+
+  // --- Återanvändbart kort ---
   const Card = ({
     feature,
     index,
-    strongOverlay = false, // mobil: starkare overlay för bättre läsbarhet
+    strongOverlay = false,
     className = '',
-    heightClass = 'h-[350px]', // desktop standardhöjd
+    heightClass = 'h-[350px]',
   }: {
     feature: typeof features[number];
     index: number;
@@ -61,12 +95,10 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
       `}
       style={{
         transitionDelay: `${600 + index * 150}ms`,
-        // Snabbare rendering på mobil
         contentVisibility: 'auto',
         containIntrinsicSize: '300px 200px',
       } as React.CSSProperties}
     >
-      {/* Bild som <img> för bättre prestanda (lazy) */}
       <img
         src={feature.backgroundImage}
         alt={feature.title}
@@ -75,7 +107,6 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
         className="absolute inset-0 w-full h-full object-cover will-change-transform"
       />
 
-      {/* Badge */}
       <div className="absolute top-4 right-4 z-10">
         <div
           className="px-3 py-1 rounded-full bg-black/35 md:bg-black/40 text-white uppercase text-[10px] tracking-wide font-medium backdrop-blur-sm ring-1 ring-white/20"
@@ -85,7 +116,6 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
         </div>
       </div>
 
-      {/* Titel + beskrivning */}
       <div
         className={`
           absolute inset-x-0 bottom-0 z-10 p-5
@@ -110,21 +140,15 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
 
   return (
     <section className="py-16 px-6 md:py-24 md:px-8 relative overflow-hidden">
-      {/* Light Gradient Background */}
+      {/* Ljus bakgrund + mönster */}
       <div
         className="absolute inset-0 pointer-events-none overflow-hidden"
         style={{ background: 'linear-gradient(135deg, #ffffff 0%, #f7f9fc 100%)' }}
       />
-      {/* Hexagon pattern + blobs */}
       <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs>
           <pattern id="hexLight" width="60" height="52" patternUnits="userSpaceOnUse">
-            <path
-              d="M30 0 L60 15 L60 45 L30 60 L0 45 L0 15 Z"
-              stroke="rgba(0,0,0,0.03)"
-              strokeWidth="1"
-              fill="none"
-            />
+            <path d="M30 0 L60 15 L60 45 L30 60 L0 45 L0 15 Z" stroke="rgba(0,0,0,0.03)" strokeWidth="1" fill="none" />
           </pattern>
           <filter id="blurSmall"><feGaussianBlur stdDeviation="80" /></filter>
         </defs>
@@ -150,13 +174,14 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
           </p>
         </div>
 
-        {/* --- MOBIL: Horisontell slider med snap --- */}
-        <div className="md:hidden -mx-6">
+        {/* --- MOBIL: slider med pilar & snap --- */}
+        <div className="md:hidden -mx-6 relative">
+          {/* Själva sliden */}
           <div
+            ref={sliderRef}
             className="
-              flex gap-4 px-1
+              flex gap-4 px-1 no-scrollbar
               overflow-x-auto snap-x snap-mandatory
-              scroll-px-6
               pb-2
             "
             style={{
@@ -164,12 +189,9 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
             } as React.CSSProperties}
+            onScroll={updateArrows}
           >
-            {/* Dölj scrollbar på iOS/Chromium */}
-            <style>{`
-              .no-scrollbar::-webkit-scrollbar { display: none; }
-            `}</style>
-
+            <style>{`.no-scrollbar::-webkit-scrollbar{display:none;}`}</style>
             {features.map((f, i) => (
               <Card
                 key={i}
@@ -181,9 +203,41 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ isVisible }) =>
               />
             ))}
           </div>
+
+          {/* Vänster gradient + pil */}
+          <div
+            className={`absolute inset-y-0 left-0 w-14 pointer-events-none transition-opacity duration-200 ${canLeft ? 'opacity-100' : 'opacity-0'}`}
+            aria-hidden={!canLeft}
+          >
+            <div className="absolute inset-y-0 left-0 w-full bg-gradient-to-r from-white/70 to-transparent" />
+            <button
+              type="button"
+              aria-label="Föregående kort"
+              onClick={() => scrollByCard(-1)}
+              className={`absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/45 text-white backdrop-blur-md ring-1 ring-white/20 shadow-md pointer-events-auto transition ${canLeft ? 'opacity-100' : 'opacity-0'}`}
+            >
+              <ChevronLeft size={18} />
+            </button>
+          </div>
+
+          {/* Höger gradient + pil */}
+          <div
+            className={`absolute inset-y-0 right-0 w-14 pointer-events-none transition-opacity duration-200 ${canRight ? 'opacity-100' : 'opacity-0'}`}
+            aria-hidden={!canRight}
+          >
+            <div className="absolute inset-y-0 right-0 w-full bg-gradient-to-l from-white/70 to-transparent" />
+            <button
+              type="button"
+              aria-label="Nästa kort"
+              onClick={() => scrollByCard(1)}
+              className={`absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/45 text-white backdrop-blur-md ring-1 ring-white/20 shadow-md pointer-events-auto transition ${canRight ? 'opacity-100' : 'opacity-0'}`}
+            >
+              <ChevronRight size={18} />
+            </button>
+          </div>
         </div>
 
-        {/* --- DESKTOP/TABLET: original grid, oförändrat --- */}
+        {/* --- DESKTOP/TABLET: original grid, oförändrad --- */}
         <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((f, i) => (
             <Card key={i} feature={f} index={i} />
