@@ -10,55 +10,60 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
   handleBrowseRoles,
 }) => {
   return (
-    <section className="relative min-h-screen flex items-center justify-start overflow-hidden">
+    <section className="relative min-h-[100svh] md:min-h-screen flex items-center justify-start overflow-hidden">
       {/* Ny bakgrundsbild */}
       <div className="absolute inset-0">
         <img
           src="https://i.ibb.co/ZzdGcXm1/2e9d69c0-7749-414b-bc27-fefb6a4061e7.png"
           alt="Professionell arbetsmiljö"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-[center_right] md:object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/20" />
+        {/* Starkare overlay på mobil, original på desktop */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/30 md:from-black/70 md:via-black/50 md:to-black/20" />
       </div>
 
-      <div className="relative z-10 max-w-4xl px-8 md:px-16 text-left">
-        {/* Rubrik */}
-        <h1
-          className={`
-            text-6xl md:text-7xl text-white mb-6 tracking-tight leading-[0.9]
-            transition-all duration-1000 transform
-            ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'}
-          `}
-          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 200 }}
-        >
-          <span className="block">Hitta Jobbet</span>
-          <span className="block font-normal">Som Passar Dig</span>
-        </h1>
+      <div className="relative z-10 max-w-4xl w-full px-8 md:px-16 text-left">
+        {/* Scrim/card bakom text ENDAST på mobil (transparent på desktop) */}
+        <div className="rounded-2xl bg-black/25 backdrop-blur-[2px] ring-1 ring-white/10 p-5 md:bg-transparent md:backdrop-blur-0 md:ring-0 md:p-0">
+          {/* Rubrik */}
+          <h1
+            className={`
+              text-5xl sm:text-6xl md:text-7xl text-white mb-6 tracking-tight leading-[0.9] [text-wrap:balance] md:[text-wrap:pretty]
+              transition-all duration-1000 transform max-w-[22ch] md:max-w-none
+              ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'}
+            `}
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 200 }}
+          >
+            <span className="block">Hitta Jobbet</span>
+            <span className="block font-normal">Som Passar Dig</span>
+          </h1>
 
-        {/* Underrubrik */}
-        <p
-          className={`
-            text-xl text-white/80 mb-12 leading-relaxed max-w-2xl
-            transition-all duration-1000 delay-200 transform
-            ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-6 opacity-0'}
-          `}
-          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
-        >
-          Vi matchar dig med rätt jobb – snabbt och utan krångel.
-        </p>
+          {/* Underrubrik */}
+          <p
+            className={`
+              text-base sm:text-lg md:text-xl text-white/85 mb-6 md:mb-12 leading-relaxed max-w-prose md:max-w-2xl
+              transition-all duration-1000 delay-200 transform
+              ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-6 opacity-0'}
+            `}
+            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
+          >
+            Vi matchar dig med rätt jobb – snabbt och utan krångel.
+          </p>
 
-        {/* Knapp - mörkblå variant */}
-        <button
-          onClick={handleBrowseRoles}
-          className={`
-            group relative inline-flex items-center justify-center gap-2 px-8 py-4 rounded-2xl text-white text-lg font-medium tracking-wide transition-all duration-200 min-w-[250px]
-            ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'}
-          `}
-          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
-        >
-          <span className="btn-hero-bg absolute inset-0 rounded-2xl" />
-          <span className="relative z-10">Visa lediga jobb</span>
-        </button>
+          {/* Knapp - mörkblå variant (fullbredd på mobil, original på desktop) */}
+          <button
+            onClick={handleBrowseRoles}
+            className={`
+              group relative inline-flex items-center justify-center gap-2 px-6 md:px-8 py-3 md:py-4 rounded-2xl text-white text-base md:text-lg font-medium tracking-wide transition-all duration-200
+              w-full md:w-auto min-h-[48px]
+              ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-4 opacity-0'}
+            `}
+            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
+          >
+            <span className="btn-hero-bg absolute inset-0 rounded-2xl" />
+            <span className="relative z-10">Visa lediga jobb</span>
+          </button>
+        </div>
       </div>
 
       <style>{`
