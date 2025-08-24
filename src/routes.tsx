@@ -1,26 +1,27 @@
 import React from "react";
 
-// Importera sidor (alla börjar med stor bokstav nu)
-import Jobb from "./pages/Jobb";
-import JobbDetalj from "./pages/JobbDetalj";
-import Foretag from "./pages/Foretag";
-import ForKandidater from "./pages/ForKandidater";
-import OmOss from "./pages/OmOss";
-import Kontakt from "./pages/Kontakt";
-import Tjanster from "./pages/Tjanster";
-import Villkor from "./pages/Villkor";
-import Integritetspolicy from "./pages/Integritetspolicy";
-import Cookiepolicy from "./pages/Cookiepolicy";
+// Importera dina befintliga filer (engelska filnamn)
+import JobsPage from "./pages/JobsPage";
+import JobDetailPage from "./pages/JobDetailPage";
+import PartnerWithUsPage from "./pages/PartnerWithUsPage";
+import ForCandidatesPage from "./pages/ForCandidatesPage";
+import AboutUsPage from "./pages/AboutUsPage";
+import ContactUsPage from "./pages/ContactUsPage";
+import OurServicesPage from "./pages/OurServicesPage";
+import TermsOfServicePage from "./pages/TermsOfServicePage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import CookiePolicyPage from "./pages/CookiePolicyPage";
 
+// Svenska URL:er → befintliga komponenter
 export const routes = [
-  { path: "/jobb", element: <Jobb /> },
-  { path: "/jobb/:jobId", element: <JobbDetalj /> },
-  { path: "/foretag", element: <Foretag /> },
-  { path: "/for-kandidater", element: <ForKandidater /> },
-  { path: "/om-oss", element: <OmOss /> },
-  { path: "/kontakt", element: <Kontakt /> },
-  { path: "/tjanster", element: <Tjanster /> },
-  { path: "/villkor", element: <Villkor /> },
-  { path: "/integritetspolicy", element: <Integritetspolicy /> },
-  { path: "/cookiepolicy", element: <Cookiepolicy /> },
+  { path: "/jobb", element: <JobsPage /> },
+  { path: "/jobb/:jobId", element: <JobDetailPage /> },
+  { path: "/foretag", element: <PartnerWithUsPage /> },
+  { path: "/for-kandidater", element: <ForCandidatesPage /> },
+  { path: "/om-oss", element: <AboutUsPage /> },
+  { path: "/kontakt", element: <ContactUsPage /> },
+  { path: "/tjanster", element: <OurServicesPage /> },
+  { path: "/villkor", element: <TermsOfServicePage /> },
+  { path: "/integritetspolicy", element: <PrivacyPolicyPage /> },
+  { path: "/cookiepolicy", element: <CookiePolicyPage /> },
 ];
