@@ -7,7 +7,7 @@ const CallToActionSection: React.FC = () => {
   return (
     <section
       className="
-        relative py-16 md:py-24 px-6 md:px-8 overflow-hidden rounded-2xl md:rounded-3xl
+        relative py-12 md:py-24 px-8 overflow-hidden rounded-3xl
       "
       style={{ backgroundColor: '#08132B' }}
     >
@@ -100,9 +100,9 @@ const CallToActionSection: React.FC = () => {
         />
       </div>
 
-      <div className="relative z-10 max-w-lg md:max-w-4xl mx-auto text-center">
+      <div className="relative z-10 max-w-4xl mx-auto text-center">
         <h2
-          className="text-3xl md:text-5xl text-white mb-8 md:mb-12 leading-tight font-medium"
+          className="text-4xl md:text-5xl text-white mb-12 leading-tight font-medium"
           style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
         >
           Redo att stärka ert team?
@@ -118,14 +118,14 @@ const CallToActionSection: React.FC = () => {
             }
           }}
           className="
-            group relative px-8 md:px-10 py-3 md:py-4 
+            group relative px-10 py-4 
             rounded-2xl
-            text-white text-base md:text-lg tracking-wide
+            text-white text-lg tracking-wide
             transition-all duration-300
             shadow-lg hover:shadow-xl
             hover:scale-105
             overflow-hidden
-            min-w-[180px] md:min-w-[200px]
+            min-w-[200px]
             border border-white/15
             bg-white/5 hover:bg-white/10
           "
