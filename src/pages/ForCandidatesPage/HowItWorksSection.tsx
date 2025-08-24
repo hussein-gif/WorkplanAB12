@@ -99,15 +99,16 @@ type CardProps = {
 const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
   return (
     <div
-      className="relative overflow-hidden rounded-2xl md:rounded-3xl h-[300px] md:h-[420px] border backdrop-blur-xl touch-manipulation"
+      className="relative overflow-hidden rounded-2xl md:rounded-3xl h-[260px] md:h-[420px] border backdrop-blur-xl touch-manipulation"
       style={{
+        /* 👇 behåller originalfärger */
         background: 'linear-gradient(180deg, rgba(10,20,46,0.72) 0%, rgba(8,19,43,0.88) 100%)',
         borderColor: 'rgba(255,255,255,0.08)',
         boxShadow:
-          '0 10px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -32px 60px rgba(9,31,72,0.45)',
+          '0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -40px 80px rgba(9,31,72,0.55)',
       }}
     >
-      {/* Aurora bakgrund: enklare på mobil, full på md+ */}
+      {/* Aurora (endast desktop) */}
       <div className="absolute inset-0 -z-0 pointer-events-none">
         <div
           className="hidden md:block absolute inset-0 opacity-70"
@@ -157,7 +158,7 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
         <div className="relative flex-1">
           <span
             aria-hidden
-            className="pointer-events-none select-none absolute bottom-[-6px] left-5 md:left-6 text-white/95 leading-none font-extrabold tracking-tight"
+            className="pointer-events-none select-none absolute bottom-[-4px] left-5 md:left-6 text-white/95 leading-none font-extrabold tracking-tight"
             style={{
               fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui',
               fontSize: 'clamp(84px, 16vw, 120px)',
