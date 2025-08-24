@@ -8,12 +8,11 @@ interface IndustriesSectionProps {
 const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
   return (
     <section className="industries-section">
-      {/* Mobil: extra top-padding så rubriken aldrig krockar med header-chipet.
-         Desktop (md+) behåller din padding. */}
+      {/* Mobil har extra topp-padding för att inte krocka med headern; desktop oförändrad */}
       <div className="content max-w-6xl mx-auto px-6 md:px-8 pt-28 pb-12 md:py-16 relative z-10">
-        <div className="text-center mb-8 md:mb-12">
+        <div className="text-center mb-6 md:mb-12">
           <h2
-            className="text-3xl md:text-4xl text-white font-medium tracking-tight leading-tight md:leading-snug"
+            className="text-[26px] sm:text-3xl md:text-4xl text-white font-medium tracking-tight leading-tight md:leading-snug"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
             Specialister på Lager &amp; Logistik
@@ -79,13 +78,11 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           inset: 0;
           background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><g fill='none' stroke='rgba(255,255,255,0.08)' stroke-width='2'><path d='M0 200 Q200 100 400 200 T800 200' /><path d='M0 300 Q200 200 400 300 T800 300' /><path d='M0 400 Q200 300 400 400 T800 400' /></g></svg>");
           background-size: cover;
-          opacity: 0.5; /* något diskretare linjer */
+          opacity: 0.5;
           z-index: 0;
         }
         .industries-section .content { position: relative; z-index: 1; }
 
-        /* Kort: lite mer glas, rundare hörn och djupare skugga på mobil,
-           desktop behåller ditt uttryck via md:-reglerna. */
         .card {
           display: flex;
           flex-direction: column;
@@ -94,7 +91,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           background: rgba(255,255,255,0.06);
           backdrop-filter: blur(8px);
           border: 1px solid rgba(255,255,255,0.12);
-          border-radius: 1.25rem;            /* mobil: något rundare */
+          border-radius: 1.25rem;
           box-shadow:
             0 22px 60px -12px rgba(0,0,0,0.45),
             0 4px 12px rgba(0,0,0,0.24);
@@ -110,7 +107,6 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           }
         }
 
-        /* Icon container – kompaktare på mobil */
         .icon-bg {
           width: 3.5rem;
           height: 3.5rem;
@@ -123,7 +119,6 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           .icon-bg { width: 4rem; height: 4rem; }
         }
 
-        /* 3D, professionell stil */
         .icon-3d {
           position: relative;
           background: linear-gradient(180deg, #1FB259 0%, #189A4C 55%, #147C43 100%);
