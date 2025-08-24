@@ -1,4 +1,4 @@
-# robots.txt for https://www.workplan.se
+# robots.txt for https://www.work-plan.se
 User-agent: *
 Allow: /
 
