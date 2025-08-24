@@ -80,11 +80,11 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
             fontWeight: 300,
           }}
         >
-          <span className="block font-extralight">Bygg Teamet</span>
+          <span className="block font-extralight">Team Som</span>
           <span
             className="block font-semibold bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200"
           >
-            Som Klarar Morgondagen
+            Klarar Framtiden
           </span>
         </h1>
 
