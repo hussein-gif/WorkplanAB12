@@ -8,9 +8,9 @@ interface IndustriesSectionProps {
 const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
   return (
     <section className="industries-section">
-      {/* Mobil har extra topp-padding för att inte krocka med headern; desktop oförändrad */}
-      <div className="content max-w-6xl mx-auto px-6 md:px-8 pt-28 pb-12 md:py-16 relative z-10">
-        <div className="text-center mb-6 md:mb-12">
+      {/* Mobil: något mindre top-padding; desktop oförändrad */}
+      <div className="content max-w-6xl mx-auto px-6 md:px-8 pt-24 pb-12 md:py-16 relative z-10">
+        <div className="text-center mb-4 md:mb-12">
           <h2
             className="text-[26px] sm:text-3xl md:text-4xl text-white font-medium tracking-tight leading-tight md:leading-snug"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
@@ -19,7 +19,8 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           </h2>
         </div>
 
-        <div className="max-w-md md:max-w-2xl mx-auto mb-8">
+        {/* Dra upp kortet lite på mobil (-mt-2), oförändrat på md+ */}
+        <div className="max-w-md md:max-w-2xl mx-auto mb-8 -mt-2 md:mt-0">
           <div className="card p-6 md:p-8 text-center flex flex-col justify-between h-full">
             <div className="icon-bg icon-3d mb-5 md:mb-6 mx-auto">
               <Truck size={26} className="text-white md:hidden" />
