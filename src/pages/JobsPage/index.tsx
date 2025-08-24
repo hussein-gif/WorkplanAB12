@@ -403,7 +403,7 @@ const JobsPage = () => {
       <SEO
         title="Lediga jobb inom lager & logistik – sök idag | Workplan"
         description="Bläddra bland aktuella tjänster inom lager och logistik. Filtrera på ort, bransch och omfattning. Enkel ansökan och snabb återkoppling från Workplan."
-        canonical="https://www.workplan.se/jobb"
+        canonical="https://www.work-plan.se/jobb"
       />
 
       {/* NYTT: overflow-x-hidden även på containern (extra säkerhet) */}
