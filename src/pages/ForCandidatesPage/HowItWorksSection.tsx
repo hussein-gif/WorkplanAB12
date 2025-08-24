@@ -21,20 +21,20 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
 
   return (
     <section
-      className="py-20 px-6 bg-white"
+      className="py-14 md:py-20 px-5 md:px-6 bg-white pt-[calc(1.25rem+env(safe-area-inset-top))]"
       aria-label="Så går det till"
     >
       <div className="max-w-6xl mx-auto">
         {/* Rubrik */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 md:mb-12">
           <h2
-            className="text-3xl md:text-4xl font-semibold tracking-tight text-gray-900"
+            className="text-[1.875rem] md:text-4xl font-semibold tracking-tight text-gray-900 leading-tight [text-wrap:balance]"
             style={{ fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui' }}
           >
             Så Går Det Till
           </h2>
           <p
-            className="mt-3 text-gray-600 max-w-2xl mx-auto font-medium"
+            className="mt-2 md:mt-3 text-[1rem] md:text-base text-gray-600 max-w-xl md:max-w-2xl mx-auto font-medium leading-relaxed"
             style={{ fontFamily: 'Inter, ui-sans-serif, system-ui' }}
           >
             En tydlig process från ansökan till anställning – enkelt och professionellt.
@@ -42,14 +42,14 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
         </div>
 
         {/* Korten */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {steps.map((s, i) => (
             <PosterCard key={i} {...s} index={i} />
           ))}
         </div>
 
         {/* CTA */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-10 md:mt-12">
           <button
             onClick={() => {
               const el = document.getElementById('featured-jobs');
@@ -99,18 +99,18 @@ type CardProps = {
 const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
   return (
     <div
-      className="relative overflow-hidden rounded-3xl h-[360px] md:h-[420px] border backdrop-blur-xl"
+      className="relative overflow-hidden rounded-2xl md:rounded-3xl h-[300px] md:h-[420px] border backdrop-blur-xl touch-manipulation"
       style={{
         background: 'linear-gradient(180deg, rgba(10,20,46,0.72) 0%, rgba(8,19,43,0.88) 100%)',
         borderColor: 'rgba(255,255,255,0.08)',
         boxShadow:
-          '0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -40px 80px rgba(9,31,72,0.55)',
+          '0 10px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -32px 60px rgba(9,31,72,0.45)',
       }}
     >
-      {/* Aurora bakgrund */}
+      {/* Aurora bakgrund: enklare på mobil, full på md+ */}
       <div className="absolute inset-0 -z-0 pointer-events-none">
         <div
-          className="absolute inset-0 opacity-70"
+          className="hidden md:block absolute inset-0 opacity-70"
           style={{
             backgroundImage: `
               radial-gradient(700px 520px at 20% 25%, rgba(20,90,165,0.45), transparent 60%),
@@ -120,7 +120,7 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
           }}
         />
         <div
-          className="absolute -left-24 bottom-6 w-[420px] h-[280px] rounded-[160px] blur-3xl"
+          className="hidden md:block absolute -left-24 bottom-6 w-[420px] h-[280px] rounded-[160px] blur-3xl"
           style={{
             background:
               'radial-gradient(closest-side, rgba(32,137,220,0.35), rgba(16,85,165,0.28), transparent 70%)',
@@ -137,33 +137,33 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
 
       {/* Innehåll */}
       <div className="relative z-[1] h-full flex flex-col">
-        <div className="px-7 pt-7">
+        <div className="px-6 pt-6 md:px-7 md:pt-7">
           <h3
-            className="text-2xl md:text-3xl font-bold tracking-tight text-white leading-[1.15]"
+            className="text-[1.35rem] md:text-3xl font-bold tracking-tight text-white leading-[1.1]"
             style={{ fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui' }}
           >
             {title}
           </h3>
           <p
-            className="mt-3 text-xs md:text-sm text-slate-200/85 max-w-[88%] font-medium"
+            className="mt-2 md:mt-3 text-[0.95rem] md:text-sm text-slate-200/90 max-w-[92%] font-medium leading-relaxed"
             style={{ fontFamily: 'Inter, ui-sans-serif, system-ui' }}
           >
             {description}
           </p>
-          <div className="mt-5 border-t border-white/15" />
+          <div className="mt-4 md:mt-5 border-t border-white/15" />
         </div>
 
         {/* Stor siffra */}
         <div className="relative flex-1">
           <span
             aria-hidden
-            className="pointer-events-none select-none absolute bottom-[-10px] left-6 text-white/95 leading-none font-extrabold tracking-tight"
+            className="pointer-events-none select-none absolute bottom-[-6px] left-5 md:left-6 text-white/95 leading-none font-extrabold tracking-tight"
             style={{
               fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui',
-              fontSize: 'clamp(120px, 18vw, 200px)',
+              fontSize: 'clamp(84px, 16vw, 120px)',
               WebkitTextStroke: '1px rgba(255,255,255,0.06)',
               textShadow:
-                '0 10px 30px rgba(0,0,0,0.35), 0 2px 30px rgba(32,137,220,0.15)',
+                '0 10px 24px rgba(0,0,0,0.25), 0 2px 24px rgba(32,137,220,0.12)',
             }}
           >
             {number.replace(/^0/, '')}
