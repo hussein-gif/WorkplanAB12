@@ -7,4 +7,4 @@ Disallow: /admin/
 Disallow: /api-test/
 
 # Peka ut din sitemap
-Sitemap: https://www.workplan.se/sitemap.xml
+Sitemap: https://www.work-plan.se/sitemap.xml
