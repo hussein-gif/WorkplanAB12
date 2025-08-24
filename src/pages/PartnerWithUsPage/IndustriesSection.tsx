@@ -9,7 +9,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
   return (
     <section className="industries-section">
       {/* Mobil: något mindre top-padding; desktop oförändrad */}
-      <div className="content max-w-6xl mx-auto px-6 md:px-8 pt-24 pb-12 md:py-16 relative z-10">
+      <div className="content max-w-6xl mx-auto px-6 md:px-8 pt-14 md:pt-24 pb-12 md:py-16 relative z-10">
         <div className="text-center mb-4 md:mb-12">
           <h2
             className="text-[26px] sm:text-3xl md:text-4xl text-white font-medium tracking-tight leading-tight md:leading-snug"
