@@ -21,7 +21,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
 
   return (
     <section
-      className="py-14 md:py-20 px-5 md:px-6 bg-white pt-[calc(1.25rem+env(safe-area-inset-top))]"
+      className="pt-6 md:pt-20 pb-14 md:pb-20 px-5 md:px-6 bg-white"
       aria-label="Så går det till"
     >
       <div className="max-w-6xl mx-auto">
@@ -101,7 +101,6 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
     <div
       className="relative overflow-hidden rounded-2xl md:rounded-3xl h-[260px] md:h-[420px] border backdrop-blur-xl touch-manipulation"
       style={{
-        /* 👇 behåller originalfärger */
         background: 'linear-gradient(180deg, rgba(10,20,46,0.72) 0%, rgba(8,19,43,0.88) 100%)',
         borderColor: 'rgba(255,255,255,0.08)',
         boxShadow:
