@@ -75,8 +75,6 @@ const Hero: React.FC = () => {
   }, []);
 
   const track = (event: string, meta?: Record<string, unknown>) => {
-    // ersätt med din analytics
-    // eslint-disable-next-line no-console
     console.log('[analytics]', event, meta ?? {});
   };
 
@@ -157,9 +155,7 @@ const Hero: React.FC = () => {
         {!prefersReduced && (
           <div className="absolute inset-0 overflow-hidden">
             <div
-              className={`absolute w-96 h-96 rounded-full bg-white/5 blur-3xl animate-pulse ${
-                isMobile ? 'opacity-40' : 'opacity-100'
-              }`}
+              className={`absolute w-96 h-96 rounded-full bg-white/5 blur-3xl animate-pulse ${isMobile ? 'opacity-40' : 'opacity-100'}`}
               style={{
                 top: '10%',
                 right: '15%',
@@ -168,9 +164,7 @@ const Hero: React.FC = () => {
               }}
             />
             <div
-              className={`absolute w-64 h-64 rounded-full bg-blue-500/10 blur-2xl animate-pulse ${
-                isMobile ? 'opacity-40' : 'opacity-100'
-              }`}
+              className={`absolute w-64 h-64 rounded-full bg-blue-500/10 blur-2xl animate-pulse ${isMobile ? 'opacity-40' : 'opacity-100'}`}
               style={{
                 bottom: '20%',
                 left: '10%',
@@ -180,9 +174,7 @@ const Hero: React.FC = () => {
               }}
             />
             <div
-              className={`absolute inset-0 ${
-                isMobile ? 'opacity-[0.02]' : 'opacity-[0.03]'
-              }`}
+              className={`absolute inset-0 ${isMobile ? 'opacity-[0.02]' : 'opacity-[0.03]'}`}
               style={{
                 backgroundImage: `
                   linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
@@ -280,6 +272,7 @@ const Hero: React.FC = () => {
                 transition-all duration-500 delay-200 transform
                 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
                 mt-8 sm:mt-0
+                items-start justify-start
               `}
               style={{ willChange: 'transform, opacity' }}
             >
@@ -290,7 +283,7 @@ const Hero: React.FC = () => {
                   navigate('/jobs');
                 }}
                 className="
-                  group relative w-full sm:w-auto min-h-[52px] sm:min-h-0 px-5 py-2.5
+                  group relative w-auto min-w-[14rem] max-w-[16rem] sm:w-auto min-h-[52px] sm:min-h-0 px-5 py-2.5
                   bg-white text-gray-900 rounded-xl
                   font-semibold text-[16px] sm:text-base tracking-wide
                   transition-all duration-200 sm:duration-300
@@ -318,7 +311,7 @@ const Hero: React.FC = () => {
                   navigate('/partner');
                 }}
                 className="
-                  group relative w-full sm:w-auto min-h-[52px] sm:min-h-0 px-5 py-2.5
+                  group relative w-auto min-w-[14rem] max-w-[16rem] sm:w-auto min-h-[52px] sm:min-h-0 px-5 py-2.5
                   bg-white/10 text-white border border-white/50 sm:border-2 sm:border-white/30 rounded-xl
                   font-semibold text-[16px] sm:text-base tracking-wide
                   hover:border-white/70 hover:bg-white/15
@@ -341,18 +334,10 @@ const Hero: React.FC = () => {
             </div> */}
 
             {/* Sekundär länk – **BORTTAGEN PÅ DESKTOP** */}
-            {/* <div className="hidden md:block mt-3">
-              ...
-            </div> */}
+            {/* <div className="hidden md:block mt-3"> ... </div> */}
           </div>
         </div>
       </div>
-
-      {/* Sticky mini-CTA – **BORTTAGEN** */}
-      {/* {showStickyCTA && (...)} */}
-
-      {/* Scroll-hint – **BORTTAGEN** på desktop */}
-      {/* <div className="hidden md:flex absolute left-8 bottom-8 ...">SCROLLA</div> */}
 
       {/* Badges – desktop (oförändrat) */}
       <div
