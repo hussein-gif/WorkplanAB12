@@ -81,11 +81,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           }}
         >
           <span className="block font-extralight">Team Som</span>
-          <span
-            className="block font-semibold bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200"
-          >
-            Klarar Framtiden
-          </span>
+          <span className="block font-normal">Klarar Framtiden</span>
         </h1>
 
         {/* Underrubrik */}
