@@ -21,8 +21,8 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           alt="Professionals collaborating"
           className="w-full h-full object-cover"
         />
-        {/* Lite mörkare scrim för läsbarhet (mobil något starkare) */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/65 to-black/85 sm:from-black/70 sm:via-black/55 sm:to-black/85" />
+        {/* Lite mörkare scrim för läsbarhet */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/75 via-black/60 to-black/85 sm:from-black/70 sm:via-black/55 sm:to-black/85" />
         <div
           className="pointer-events-none absolute -top-24 -left-24 w-[40rem] h-[40rem] rounded-full opacity-25 blur-3xl"
           style={{
@@ -50,109 +50,94 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       <div
         className="
           relative z-10 w-full max-w-none
-          pl-4 pr-4
-          pt-8
-          sm:pl-6 sm:pr-6
+          pl-4 pr-4           
+          sm:pl-6 sm:pr-6     
           md:pl-10 md:pr-10
           lg:pl-14 xl:pl-16
           text-left
         "
       >
-        {/* MOBIL: kortbakgrund för bättre läsbarhet. På desktop är detta transparent. */}
-        <div
-          className="
-            rounded-2xl p-4 ring-1 ring-white/10 bg-black/25 backdrop-blur-[2px]
-            sm:bg-transparent sm:backdrop-blur-0 sm:ring-0 sm:p-0
-          "
+        {/* Rubrik – alltid två rader */}
+        <h1
+          className={`
+            text-white mb-4 sm:mb-5
+            tracking-[-0.01em] sm:tracking-tight
+            leading-[1.05] sm:leading-[0.95]
+            text-[34px] sm:text-6xl lg:text-7xl
+            transition-all duration-1000 transform
+            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
+            text-shadow-soft sm:text-shadow-none
+          `}
+          style={{
+            fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+            fontWeight: 300,
+            maxWidth: '18ch',
+          }}
         >
-          {/* Rubrik – alltid två rader */}
-          <h1
-            className={`
-              text-white mb-3 sm:mb-5
-              tracking-[-0.01em] sm:tracking-tight
-              leading-[1.08] sm:leading-[0.95]
-              text-[32px] sm:text-6xl lg:text-7xl
-              transition-all duration-1000 transform
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
-              text-shadow-soft sm:text-shadow-none
-            `}
-            style={{
-              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-              fontWeight: 300,
-              maxWidth: '20ch', // lite bredare på mobil så radbryt blir snygg
-            }}
-          >
-            <span className="block font-extralight">Team Som</span>
-            <span className="block font-normal whitespace-normal sm:whitespace-nowrap">
-              Klarar Framtiden
-            </span>
-          </h1>
+          <span className="block font-extralight">Team Som</span>
+          <span className="block font-normal whitespace-nowrap">Klarar Framtiden</span>
+        </h1>
 
-          {/* Underrubrik */}
-          <p
-            className={`
-              text-[15px] sm:text-xl
-              leading-[1.6] sm:leading-relaxed
-              text-white/85 sm:text-gray-300
-              mb-4 sm:mb-12
-              transition-all duration-1000 delay-150 transform
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-              text-shadow-soft sm:text-shadow-none
-              max-w-[34ch] sm:max-w-[36ch]
-            `}
-            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
-          >
-            Vi levererar rätt människor till varje steg i ert flöde.
-          </p>
+        {/* Underrubrik */}
+        <p
+          className={`
+            text-[15px] sm:text-xl
+            leading-[1.55] sm:leading-relaxed
+            text-white/85 sm:text-gray-300
+            mb-6 sm:mb-12
+            transition-all duration-1000 delay-150 transform
+            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+            text-shadow-soft sm:text-shadow-none
+          `}
+          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, maxWidth: '36ch' }}
+        >
+          Vi levererar rätt människor till varje steg i ert flöde.
+        </p>
 
-          {/* Knappar */}
-          <div
-            className={`
-              flex flex-col sm:flex-row gap-3 sm:gap-6 justify-start items-stretch sm:items-start
-              transition-all duration-1000 delay-300 transform mt-4 sm:mt-0
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-            `}
+        {/* Knappar */}
+        <div
+          className={`
+            flex flex-col sm:flex-row gap-3 sm:gap-6 justify-start items-start
+            transition-all duration-1000 delay-300 transform mt-4 sm:mt-0
+            ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
+          `}
+        >
+          <button
+            onClick={scrollToContact}
+            className="
+              group relative inline-flex items-center justify-center gap-2
+              w-full sm:w-auto
+              px-6 py-3 sm:px-8 sm:py-4
+              rounded-xl sm:rounded-2xl
+              text-white text-[16px] sm:text-lg font-medium tracking-wide
+              transition-all duration-200
+            "
+            style={{ fontFamily: 'Inter, sans-serif' }}
           >
-            <button
-              onClick={scrollToContact}
-              className="
-                group relative inline-flex items-center justify-center gap-2
-                w-full sm:w-auto
-                px-6 py-4 sm:px-8 sm:py-4
-                rounded-2xl
-                text-white text-[17px] sm:text-lg font-medium tracking-wide
-                transition-all duration-200
-                shadow-[0_10px_25px_rgba(11,39,77,0.35)]
-                active:scale-[0.99]
-              "
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              <span className="btn-hero-bg absolute inset-0 rounded-2xl" />
-              <span className="relative z-10">Kontakta oss</span>
-              <ArrowRight
-                size={18}
-                className="relative z-10 transition-transform duration-200 group-hover:translate-x-0.5"
-              />
-            </button>
+            <span className="btn-hero-bg absolute inset-0 rounded-xl sm:rounded-2xl" />
+            <span className="relative z-10">Kontakta oss</span>
+            <ArrowRight
+              size={18}
+              className="relative z-10 transition-transform duration-200 group-hover:translate-x-0.5"
+            />
+          </button>
 
-            <button
-              onClick={scrollToProcess}
-              className="
-                relative inline-flex items-center justify-center
-                w-full sm:w-auto
-                px-6 py-4 sm:px-8 sm:py-4
-                rounded-2xl
-                text-white text-[17px] sm:text-lg font-medium tracking-wide
-                border border-white/25 bg-white/10
-                hover:bg-white/15 hover:border-white/40
-                transition-all duration-200
-                active:scale-[0.99]
-              "
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              Så jobbar vi
-            </button>
-          </div>
+          <button
+            onClick={scrollToProcess}
+            className="
+              relative inline-flex items-center justify-center
+              w-full sm:w-auto
+              px-6 py-3 sm:px-8 sm:py-4
+              rounded-xl sm:rounded-2xl
+              text-white text-[16px] sm:text-lg font-medium tracking-wide
+              border border-white/25 bg-white/5
+              hover:bg-white/10 hover:border-white/40
+              transition-all duration-200
+            "
+            style={{ fontFamily: 'Inter, sans-serif' }}
+          >
+            Så jobbar vi
+          </button>
         </div>
       </div>
 
@@ -160,13 +145,13 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
       <div
         className={`
           trusted absolute left-1/2 -translate-x-1/2
-          bottom-[max(12px,env(safe-area-inset-bottom))] sm:bottom-0
+          bottom-2 sm:bottom-0
           z-10 text-center transition-all duration-700
           ${isVisible ? 'opacity-80 sm:opacity-100' : 'opacity-0'}
         `}
       >
         <div
-          className="text-[10px] sm:text-sm tracking-wide uppercase relative -translate-y-[2px] sm:-translate-y-[4px]"
+          className="text-[11px] sm:text-sm tracking-wide uppercase relative -translate-y-[4px]"
           style={{ fontFamily: 'Inter, sans-serif', color: '#D1D5DB', fontWeight: 500 }}
         >
           BETRODD AV
@@ -174,7 +159,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         <img
           src="https://i.ibb.co/W4J67ydJ/Namnl-s-design-1-removebg-preview.png"
           alt="Betrodd av logotyp"
-          className="h-10 sm:h-16 lg:h-20 mt-1 sm:mt-3 mx-auto object-contain opacity-95"
+          className="h-12 sm:h-16 lg:h-20 mt-1.5 sm:mt-3 mx-auto object-contain"
         />
       </div>
 
