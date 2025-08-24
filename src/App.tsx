@@ -42,7 +42,8 @@ function HomePage() {
             "availableLanguage": ["Swedish", "English"]
           },
           "sameAs": [
-            "https://www.linkedin.com/company/workplan-ab/"
+            "https://www.linkedin.com/company/workplan-ab/",
+            "https://www.instagram.com/workplan_ab/"
           ]
         }}
       />
