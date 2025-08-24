@@ -144,13 +144,74 @@ const JobDetailPage = () => {
     (job as any).department ||
     '';
 
+  // =========================
+  // ✅ SEO: JobPosting + BreadcrumbList (work-plan.se)
+  // =========================
+  const employmentType =
+    job.omfattning === 'Heltid' ? 'FULL_TIME' :
+    job.omfattning === 'Deltid' ? 'PART_TIME' : 'OTHER';
+
+  // Byt till din riktiga logotyp-URL om du har en annan placering/fil
+  const hiringOrgLogo = 'https://www.work-plan.se/logo.png';
+
+  // Kanonisk URL till denna annons (svensk route)
+  const canonicalUrl = `https://www.work-plan.se/jobb/${encodeURIComponent(jobId ?? '')}`;
+
+  // Enkelt HTML-innehåll för beskrivning
+  const jobDescription = `
+    <p>${job.summary || ''}</p>
+    ${job.aboutRole ? `<p>${job.aboutRole}</p>` : ''}
+  `.trim();
+
+  const jobPostingLd = {
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    "title": job.title,
+    "description": jobDescription,
+    "datePosted": new Date().toISOString(),
+    "employmentType": employmentType,
+    "hiringOrganization": {
+      "@type": "Organization",
+      "name": job.company,
+      "sameAs": "https://www.work-plan.se",
+      "logo": hiringOrgLogo
+    },
+    "jobLocation": {
+      "@type": "Place",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": job.location,
+        "addressCountry": "SE"
+      }
+    },
+    "applicantLocationRequirements": {
+      "@type": "Country",
+      "name": "SE"
+    },
+    "industry": industry || "Lager & Logistik",
+    "incentiveCompensation": job.salary || undefined,
+    "validThrough": undefined, // sätt "YYYY-MM-DD" om sista ansökningsdag finns
+    "directApply": true,
+    "url": canonicalUrl
+  };
+
+  const breadcrumbsLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Jobb", "item": "https://www.work-plan.se/jobb" },
+      { "@type": "ListItem", "position": 2, "name": job.title, "item": canonicalUrl }
+    ]
+  };
+
   return (
     <>
-      {/* ✅ SEO med dynamiska värden per jobb */}
+      {/* ✅ SEO med dynamiska värden + JSON-LD */}
       <SEO
         title={`${job.title} – ${job.location} | Workplan`}
         description={`Workplan söker ${job.title} för ${job.company} i ${job.location}. Start: ${startDate}. Ansök idag och bli en del av framtidens lager & logistik.`}
-        canonical={`https://www.work-plan.se/jobb/${jobId}`}
+        canonical={canonicalUrl}
+        jsonLd={[jobPostingLd, breadcrumbsLd]}
       />
 
       <div className="relative min-h-screen bg-[#F7FAFF] overflow-hidden">
