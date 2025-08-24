@@ -3,6 +3,7 @@ import ContactHeroSection from './ContactUsPage/ContactHeroSection';
 import CandidateFormSection from './ContactUsPage/CandidateFormSection';
 import CompanyFormSection from './ContactUsPage/CompanyFormSection';
 import AlternativeContactSection from './ContactUsPage/AlternativeContactSection';
+import SEO from '../../components/SEO'; // ⬅️ Import SEO
 
 const ContactUsPage = () => {
   const [userType, setUserType] = useState<'candidate' | 'company' | null>(null);
@@ -42,13 +43,11 @@ const ContactUsPage = () => {
   const handleCandidateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Candidate form submitted:', candidateForm);
-    // Handle form submission
   };
 
   const handleCompanySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Company form submitted:', companyForm);
-    // Handle form submission
   };
 
   const handleCandidateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -68,36 +67,44 @@ const ContactUsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="relative z-10">
-        <ContactHeroSection 
-          isVisible={isVisible}
-          mousePosition={mousePosition}
-          userType={userType}
-          setUserType={setUserType}
-        />
+    <>
+      <SEO
+        title="Kontakta Workplan – bemanning & rekrytering inom lager & logistik"
+        description="Kontakta Workplan för frågor om bemanning, rekrytering eller samarbeten inom lager och logistik. Vi återkopplar snabbt och hjälper dig med rätt lösning."
+        canonical="https://www.workplan.se/kontakt"
+      />
 
-        {userType === 'candidate' && (
-          <CandidateFormSection 
-            candidateForm={candidateForm}
-            handleCandidateSubmit={handleCandidateSubmit}
-            handleCandidateChange={handleCandidateChange}
-            onClose={() => setUserType(null)}
+      <div className="min-h-screen bg-white">
+        <div className="relative z-10">
+          <ContactHeroSection 
+            isVisible={isVisible}
+            mousePosition={mousePosition}
+            userType={userType}
+            setUserType={setUserType}
           />
-        )}
 
-        {userType === 'company' && (
-          <CompanyFormSection 
-            companyForm={companyForm}
-            handleCompanySubmit={handleCompanySubmit}
-            handleCompanyChange={handleCompanyChange}
-            onClose={() => setUserType(null)}
-          />
-        )}
+          {userType === 'candidate' && (
+            <CandidateFormSection 
+              candidateForm={candidateForm}
+              handleCandidateSubmit={handleCandidateSubmit}
+              handleCandidateChange={handleCandidateChange}
+              onClose={() => setUserType(null)}
+            />
+          )}
 
-        <AlternativeContactSection />
+          {userType === 'company' && (
+            <CompanyFormSection 
+              companyForm={companyForm}
+              handleCompanySubmit={handleCompanySubmit}
+              handleCompanyChange={handleCompanyChange}
+              onClose={() => setUserType(null)}
+            />
+          )}
+
+          <AlternativeContactSection />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
