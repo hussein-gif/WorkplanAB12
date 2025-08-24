@@ -7,24 +7,24 @@ interface TeamSectionProps {
 const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
   return (
     <section className="team-section">
-      <div className="content max-w-6xl mx-auto py-24 px-8">
-        <div className="text-center mb-16">
+      <div className="content max-w-6xl mx-auto py-12 md:py-24 px-6 sm:px-8">
+        <div className="text-center mb-10 md:mb-16">
           <h2
-            className="text-4xl md:text-5xl font-medium text-white mb-4"
+            className="text-3xl sm:text-4xl md:text-5xl font-medium text-white mb-3 md:mb-4"
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
             Teamet Bakom Workplan
           </h2>
           <p
-            className="text-base text-white/70 max-w-2xl mx-auto leading-normal font-light"
+            className="text-sm sm:text-base text-white/70 max-w-2xl mx-auto leading-normal font-light"
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
             Två dedikerade kontaktpersoner som tar ansvar från första behovsanalys till uppföljning – utan mellanhänder.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-          <div className="card p-8 text-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
+          <div className="card p-6 md:p-8 text-center">
             <div className="avatar bg-gradient-to-br from-blue-500 to-purple-600 mb-4 mx-auto">
               <img
                 src="https://i.ibb.co/WNwzR4vM/Black-and-White-Modern-Linkedln-Profile-Picture-4.png"
@@ -33,16 +33,17 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
               />
             </div>
             <h3
-              className="text-xl font-medium text-white mb-2"
+              className="text-lg sm:text-xl font-medium text-white mb-1 sm:mb-2"
               style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
             >
               Jawad Abbas
             </h3>
-            <p className="text-blue-400 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-blue-400 font-medium text-sm sm:text-base" style={{ fontFamily: 'Inter, sans-serif' }}>
               Medgrundare & Affärsansvarig
             </p>
           </div>
-          <div className="card p-8 text-center">
+
+          <div className="card p-6 md:p-8 text-center">
             <div className="avatar bg-gradient-to-br from-blue-500 to-purple-600 mb-4 mx-auto">
               <img
                 src="https://i.ibb.co/cpq3pkZ/Black-and-White-Modern-Linkedln-Profile-Picture-3.png"
@@ -51,12 +52,12 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
               />
             </div>
             <h3
-              className="text-xl font-medium text-white mb-2"
+              className="text-lg sm:text-xl font-medium text-white mb-1 sm:mb-2"
               style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
             >
               Arvin Mahmoudi
             </h3>
-            <p className="text-blue-400 font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <p className="text-blue-400 font-medium text-sm sm:text-base" style={{ fontFamily: 'Inter, sans-serif' }}>
               Medgrundare & Leveranschef
             </p>
           </div>
