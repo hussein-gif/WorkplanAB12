@@ -73,7 +73,7 @@ const ContactUsPage = () => {
       <SEO
         title="Kontakta Workplan – bemanning & rekrytering inom lager & logistik"
         description="Kontakta Workplan för frågor om bemanning, rekrytering eller samarbeten inom lager och logistik. Vi återkopplar snabbt och hjälper dig med rätt lösning."
-        canonical="https://www.workplan.se/kontakt"
+        canonical="https://www.work-plan.se/kontakt"
       />
 
       <div className="min-h-screen bg-white">
