@@ -36,10 +36,10 @@ const ServicesHeroSection: React.FC<ServicesHeroSectionProps> = ({
             transition-all duration-700 md:duration-1000 delay-200 transform
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 md:translate-y-6'}
           `}
-          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 200 }}
+          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
         >
-          <span style={{ fontWeight: 200 }} className="block">Specialiserad bemanning</span>
-          <span style={{ fontWeight: 300 }} className="block">För Lager & Logistik</span>
+          <span style={{ fontWeight: 200 }} className="block">Lager & Logistik</span>
+          <span style={{ fontWeight: 400 }} className="block">Vår Specialitet</span>
         </h1>
 
         {/* Tagline */}
