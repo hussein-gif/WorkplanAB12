@@ -39,14 +39,14 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
   ] as const;
 
   return (
-    <section className="relative py-24 px-8 bg-white overflow-hidden">
+    <section className="relative py-14 md:py-24 px-6 md:px-8 bg-white overflow-hidden mt-8 md:mt-0 scroll-mt-24">
       {/* Background design layers */}
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none opacity-[0.015] md:opacity-[0.02]"
         style={{
           backgroundImage:
-            'linear-gradient(rgba(8,19,43,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(8,19,43,0.04) 1px, transparent 1px)',
+            'linear-gradient(rgba(8,19,43,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(8,19,43,0.1) 1px, transparent 1px)',
           backgroundSize: '22px 22px, 22px 22px',
         }}
       />
@@ -80,9 +80,9 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
       />
 
       <div className="relative max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 md:mb-16">
           <h2
-            className="text-3xl md:text-4xl font-semibold text-black"
+            className="text-[26px] md:text-4xl font-semibold text-black tracking-tight"
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
               fontWeight: 600,
@@ -92,28 +92,29 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
             return (
               <div
                 key={index}
-                className={`wc-card is-${benefit.variant} group relative rounded-2xl p-8 bg-white pb-16`}
+                className={`wc-card is-${benefit.variant} group relative rounded-xl md:rounded-2xl p-6 md:p-8 bg-white pb-8 md:pb-16`}
               >
-                <div className="card-pattern absolute inset-0 pointer-events-none rounded-2xl" />
+                <div className="card-pattern absolute inset-0 pointer-events-none rounded-xl md:rounded-2xl" />
                 <span className="card-accent" />
                 <span className="card-sheen" />
 
                 <div
-                  className={`icon-3d relative w-16 h-16 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center mb-6 mx-auto`}
+                  className={`icon-3d relative w-14 h-14 md:w-16 md:h-16 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center mb-4 md:mb-6 mx-auto`}
                 >
-                  <Icon size={28} className="text-white" />
+                  <Icon size={24} className="text-white md:hidden" />
+                  <Icon size={28} className="text-white hidden md:block" />
                   <span className="icon-ring" />
                 </div>
 
                 {/* Rubrik */}
                 <h3
-                  className="text-xl text-gray-900 mb-3 text-center"
+                  className="text-[19px] md:text-xl text-gray-900 tracking-tight mb-2.5 md:mb-3 text-center"
                   style={{
                     fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
                     fontWeight: 500,
@@ -124,7 +125,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
 
                 {/* Brödtext */}
                 <p
-                  className="text-gray-600 leading-relaxed mb-5 text-center"
+                  className="text-gray-600 text-[15px] md:text-base leading-7 md:leading-7 mb-4 md:mb-5 text-center max-w-[32ch] mx-auto"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontWeight: 300,
@@ -133,9 +134,28 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
                   {benefit.description}
                 </p>
 
-                {/* Highlight längst ner */}
+                {/* Highlight – inline på mobil, absolut på desktop (oförändrat) */}
+                <div className="text-center">
+                  <span
+                    className="md:hidden inline-flex px-3 py-1 rounded-full text-[11px] font-medium"
+                    style={{
+                      fontFamily: 'Inter, sans-serif',
+                      backgroundColor: 'rgba(0,0,0,0.04)',
+                      color:
+                        benefit.variant === 'blue'
+                          ? 'rgb(59,130,246)'
+                          : benefit.variant === 'emerald'
+                          ? 'rgb(16,185,129)'
+                          : 'rgb(168,85,247)',
+                    }}
+                  >
+                    {benefit.highlight}
+                  </span>
+                </div>
+
+                {/* Desktop-badge (din original, absolut placerad) */}
                 <div
-                  className="absolute bottom-5 left-1/2 -translate-x-1/2 text-[12px] tracking-wide text-center inline-block px-4 py-1 rounded-full"
+                  className="hidden md:block absolute bottom-5 left-1/2 -translate-x-1/2 text-[12px] tracking-wide text-center inline-block px-4 py-1 rounded-full"
                   style={{
                     fontFamily: 'Inter, sans-serif',
                     fontWeight: 500,
@@ -151,7 +171,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
                   {benefit.highlight}
                 </div>
 
-                <span className="card-bottom-bar" />
+                <span className="hidden md:block card-bottom-bar" />
               </div>
             );
           })}
