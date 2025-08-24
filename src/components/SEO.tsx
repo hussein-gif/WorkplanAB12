@@ -5,11 +5,11 @@ type SEOProps = {
   title: string;
   description?: string;
   canonical?: string;
-  image?: string;     // full URL till en OG-bild (t.ex. https://dindoman.se/og.jpg)
+  image?: string;     // full URL till en OG-bild (t.ex. https://workplan.se/og.jpg)
   noindex?: boolean;  // för ev. sidor du inte vill indexera
 };
 
-const SITE_NAME = 'Ditt Företag'; // <-- byt till ditt företagsnamn
+const SITE_NAME = 'Workplan';
 
 const SEO: React.FC<SEOProps> = ({ title, description, canonical, image, noindex }) => {
   return (
