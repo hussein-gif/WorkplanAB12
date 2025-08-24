@@ -38,12 +38,10 @@ const AudienceTiles = () => {
     };
   }, []);
 
-  // Mobil-only flag (desktop lämnas orörd)
   const isMobile =
     typeof window !== 'undefined' &&
     window.matchMedia('(max-width: 639px)').matches;
 
-  // Lås tilt/parallax på mobil
   const safeTilt = isMobile ? [{ x: 0, y: 0 }, { x: 0, y: 0 }] : tilt;
   const safeMouse = isMobile ? { x: 50, y: 50 } : mousePosition;
 
@@ -81,7 +79,7 @@ const AudienceTiles = () => {
   ];
 
   const handleTilt = (e: React.MouseEvent, idx: number) => {
-    if (isMobile) return; // ingen tilt på mobil
+    if (isMobile) return;
     const card = e.currentTarget as HTMLElement;
     const rect = card.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width;
@@ -104,7 +102,6 @@ const AudienceTiles = () => {
   };
 
   return (
-    // ↓ Mindre padding på mobil
     <section ref={sectionRef} className="relative py-20 sm:py-32 overflow-hidden">
       <style>{`
         @keyframes float-slow { 0%,100% { transform: translate(0,0); } 50% { transform: translate(10px,6px); } }
@@ -116,10 +113,9 @@ const AudienceTiles = () => {
         .animate-hue { animation: hueShift 70s ease-in-out infinite; }
       `}</style>
 
-      {/* Bakgrund: #08132B + overlays (nedtonade på mobil) */}
+      {/* Bakgrund */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0" style={{ backgroundColor: '#08132B' }} />
-
         <div
           className="absolute inset-0 opacity-0 sm:opacity-50"
           style={{
@@ -132,7 +128,6 @@ const AudienceTiles = () => {
             mixBlendMode: 'overlay',
           }}
         />
-
         <div
           className="absolute inset-0 opacity-0 sm:opacity-100"
           style={{
@@ -149,7 +144,6 @@ const AudienceTiles = () => {
             animation: 'drift 80s linear infinite',
           }}
         />
-
         <div
           className="absolute -left-28 -top-28 w-[600px] h-[600px] rounded-full blur-3xl animate-float-slow opacity-0 sm:opacity-30"
           style={{
@@ -164,7 +158,6 @@ const AudienceTiles = () => {
             transform: `translate(${(safeMouse.x - 50) * -0.015}px, ${(safeMouse.y - 50) * -0.01}px)`,
           }}
         />
-
         <div
           className="absolute inset-0"
           style={{
@@ -172,7 +165,6 @@ const AudienceTiles = () => {
             pointerEvents: 'none',
           }}
         />
-
         {subtleStars.map((s, i) => (
           <div
             key={i}
@@ -188,7 +180,6 @@ const AudienceTiles = () => {
             }}
           />
         ))}
-
         <div
           className="absolute inset-0 opacity-0 sm:opacity-100"
           aria-hidden="true"
@@ -201,7 +192,7 @@ const AudienceTiles = () => {
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-8">
-        {/* Rubrik – mindre på mobil */}
+        {/* Rubrik */}
         <div className="text-center mb-12 sm:mb-20 relative">
           <div
             className="absolute inset-x-0 mx-auto top-0 w-[360px] h-[160px] rounded-full blur-3xl opacity-25"
@@ -295,7 +286,7 @@ const AudienceTiles = () => {
                   border: '1px solid rgba(255,255,255,0.15)',
                 }}
               >
-                {/* Header gradient area – kompakt på mobil */}
+                {/* Header */}
                 <div
                   className={`
                     relative h-36 sm:h-48 flex items-center justify-center overflow-hidden
@@ -366,7 +357,6 @@ const AudienceTiles = () => {
                     {audience.description}
                   </p>
 
-                  {/* Features – dolda helt på mobil */}
                   <div className="hidden sm:block space-y-3 mb-8 flex-1">
                     {audience.features.map((feature, fIdx) => (
                       <div key={fIdx} className="flex items-center space-x-3">
@@ -382,7 +372,7 @@ const AudienceTiles = () => {
                   </div>
                 </div>
 
-                {/* CTA – fullbredd på mobil, dockad i botten */}
+                {/* CTA */}
                 <div className="absolute left-6 right-6 bottom-6 sm:left-auto sm:right-6">
                   <button
                     className={`
@@ -390,7 +380,7 @@ const AudienceTiles = () => {
                       bg-gradient-to-r ${audience.gradient} text-white
                       shadow-lg hover:shadow-xl transition-all duration-300
                       hover:scale-105 active:scale-95 overflow-hidden font-medium
-                      flex items-center gap-2
+                      flex items-center gap-2 relative
                     `}
                     style={{ fontFamily: 'Inter, sans-serif' }}
                     onClick={(e) => {
@@ -398,9 +388,21 @@ const AudienceTiles = () => {
                       navigate(audience.id === 'candidates' ? '/for-candidates' : '/partner');
                     }}
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-500" />
-                    <span>{audience.id === 'candidates' ? 'Utforska Jobb' : 'Bli Partner'}</span>
-                    <ArrowRight size={16} className="transition-transform duration-300" />
+                    {/* Sheen: desktop-fix – osynlig i vila, startar helt utanför */}
+                    <div
+                      className="
+                        pointer-events-none will-change-transform absolute inset-0
+                        bg-gradient-to-r from-transparent via-white/20 to-transparent
+                        -translate-x-full group-hover:translate-x-full
+                        sm:opacity-0 sm:group-hover:opacity-100
+                        sm:-translate-x-[120%] sm:group-hover:translate-x-[120%]
+                        transition-transform duration-500
+                      "
+                    />
+                    <span className="relative z-10">
+                      {audience.id === 'candidates' ? 'Utforska Jobb' : 'Bli Partner'}
+                    </span>
+                    <ArrowRight size={16} className="relative z-10 transition-transform duration-300" />
                   </button>
                 </div>
               </div>
