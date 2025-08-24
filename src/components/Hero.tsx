@@ -24,8 +24,9 @@ const Hero = () => {
     typeof window !== 'undefined' &&
     window.matchMedia('(max-width: 639px)').matches;
 
-  const parallaxX = isMobile ? 0.0 : 0.02;
-  const parallaxY = isMobile ? 0.0 : 0.02;
+  // ↓ Lite lugnare parallax på desktop
+  const parallaxX = isMobile ? 0.0 : 0.012;
+  const parallaxY = isMobile ? 0.0 : 0.012;
 
   return (
     <section className="relative min-h-screen flex flex-col overflow-hidden">
@@ -39,23 +40,29 @@ const Hero = () => {
             }px) scale(1.05)`,
           }}
         >
-          {/* Mobil: nuvarande bild */}
+          {/* Mobil: nuvarande bild (oförändrad) */}
           <img
             src="https://i.ibb.co/LdnVsvf2/IMAGE-2025-08-22-23-02-16.jpg"
             alt="Professional staffing and teamwork"
             className="w-full h-full object-cover block sm:hidden"
+            loading="lazy"
           />
 
-          {/* Desktop: ny bild */}
+          {/* Desktop: ny bild + performance-attribut */}
           <img
             src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg"
             alt="Professional staffing and teamwork"
             className="w-full h-full object-cover hidden sm:block"
+            fetchPriority="high"
+            sizes="(min-width: 640px) 100vw, 100vw"
+            srcSet="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg 1600w"
           />
         </div>
 
         {/* Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70 sm:from-black/60 sm:via-black/40 sm:to-black/70" />
+        {/* Starkare vänster→höger scrim på desktop för bättre kontrast */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/70 sm:bg-none" />
+        <div className="absolute inset-0 hidden sm:block bg-gradient-to-r from-black/80 via-black/55 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent sm:from-black/50" />
 
         {/* Animated Geometric Elements */}
@@ -108,7 +115,8 @@ const Hero = () => {
       {/* Content */}
       <div className="relative z-10 flex-1 flex items-center py-12 sm:py-16">
         <div className="w-full px-5 sm:px-8">
-          <div className="max-w-3xl text-left">
+          {/* Flytta blocket aningen upp på desktop */}
+          <div className="max-w-[40ch] sm:max-w-3xl text-left md:-mt-8">
             {/* Titel + underrubrik */}
             <div
               className={`
@@ -122,20 +130,20 @@ const Hero = () => {
                   sm:text-5xl lg:text-6xl xl:text-7xl
                   font-light text-white
                   transition-all duration-1200 delay-200 transform
-                  drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)]
+                  drop-shadow-[0_1px_1px_rgba(0,0,0,0.45)]
                   ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}
                 `}
               >
                 <span
-                  className="block text-white"
+                  className="block text-white tracking-tight"
                   style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 300 }}
                 >
                   Bemanna Ditt
                 </span>
-                <span className="block text-white">
+                <span className="block text-white tracking-tight leading-[0.95]">
                   <span
-                    className="font-medium"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
+                    className="font-semibold"
+                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 600 }}
                   >
                     Drömteam
                   </span>
@@ -150,9 +158,10 @@ const Hero = () => {
                 </span>
               </h1>
 
+              {/* Längre underline, desktop lite längre */}
               <div
                 className={`
-                  w-20 sm:w-24 h-px bg-gradient-to-r from-white/70 to-transparent
+                  w-28 sm:w-32 h-px bg-gradient-to-r from-white/70 to-transparent
                   transition-all duration-1000 delay-600 transform
                   ${isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'}
                 `}
@@ -186,6 +195,7 @@ const Hero = () => {
               style={{ willChange: 'transform, opacity' }}
             >
               <button
+                aria-label="Se alla lediga tjänster"
                 onClick={() => navigate('/jobs')}
                 className="
                   group relative w-full sm:w-auto h-12 sm:h-auto px-5 py-2.5
@@ -198,6 +208,7 @@ const Hero = () => {
                   hover:shadow-[0_6px_14px_rgba(0,0,0,0.22)]
                   active:shadow-[inset_0_2px_4px_rgba(0,0,0,0.18)]
                   border border-white/60
+                  md:ring-1 md:ring-white/20 md:hover:ring-white/40
                 "
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
@@ -207,6 +218,7 @@ const Hero = () => {
               </button>
 
               <button
+                aria-label="Läs mer och bli partner"
                 onClick={() => navigate('/partner')}
                 className="
                   group relative w-full sm:w-auto h-12 sm:h-auto px-5 py-2.5
@@ -224,11 +236,33 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
             </div>
+
+            {/* Sekundär länk – desktop-only, liten orientering */}
+            <div className="hidden md:block mt-3">
+              <button
+                onClick={() => {
+                  const el = document.getElementById('how-it-works');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="text-white/80 hover:text-white transition-colors text-sm inline-flex items-center gap-1"
+                aria-label="Se hur vi jobbar"
+                style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
+              >
+                Se hur vi jobbar
+                <span className="inline-block translate-x-0 group-hover:translate-x-0.5 transition-transform">→</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Badges längst ner – döljs på mobil */}
+      {/* Diskret scroll-hint – desktop only */}
+      <div className="hidden md:flex absolute left-8 bottom-8 items-center gap-2 text-white/70 text-xs tracking-widest">
+        <span className="inline-block w-2 h-2 rounded-full bg-white/60 animate-pulse" />
+        SCROLLA
+      </div>
+
+      {/* Badges längst ner – döljs på mobil (oförändrat) */}
       <div
         className={`
           absolute bottom-8 inset-x-0 z-10
