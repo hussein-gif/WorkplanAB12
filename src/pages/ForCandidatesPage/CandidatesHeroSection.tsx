@@ -12,7 +12,6 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
   return (
     <section
       className="relative min-h-[calc(100svh+3px)] md:min-h-screen flex items-center justify-center overflow-hidden md:mb-0"
-      // lite extra padding upptill på mobil för att inte krocka med notch/statusbar
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
       {/* Bakgrundsbild */}
@@ -21,19 +20,16 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
           src="https://i.ibb.co/ZzdGcXm1/2e9d69c0-7749-414b-bc27-fefb6a4061e7.png"
           alt="Professionell arbetsmiljö"
           className="w-full h-full object-cover md:object-center"
-          // flytta fokus lite uppåt på mobil så motivet syns tydligare
           style={{ objectPosition: 'center 35%' }}
         />
 
         {/* MOBIL overlay – ljusare & vertikal gradient */}
         <div className="absolute inset-0 md:hidden pointer-events-none">
-          {/* mjuk vertikal: låt bakgrunden synas mer */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/30 to-black/15" />
-          {/* svag vignette för premium-känsla utan att mörka ned för mycket */}
           <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_40%,rgba(0,0,0,0.10)_0%,rgba(0,0,0,0.00)_60%)]" />
         </div>
 
-        {/* DESKTOP overlay – samma som tidigare */}
+        {/* DESKTOP overlay */}
         <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/10" />
       </div>
 
@@ -52,7 +48,6 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
           style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 200 }}
         >
           <span className="block">Hitta Jobbet</span>
-          {/* Mindre bold än tidigare men starkare än första raden */}
           <span className="block font-medium">Som Passar Dig</span>
         </h1>
 
@@ -77,7 +72,9 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
             px-6 md:px-8 py-4 md:py-4
             rounded-2xl text-white text-base sm:text-lg font-medium tracking-wide
             transition-all duration-200
-            w-full sm:w-[min(24rem,100%)] md:w-auto min-h-[48px]
+            w-auto max-w-[16rem] mx-auto
+            md:w-auto md:max-w-none
+            min-h-[48px]
             ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0'}
             md:hover:scale-[1.03] md:active:scale-[0.99]
           `}
