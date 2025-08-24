@@ -87,7 +87,7 @@ const CookiePolicyPage: React.FC = () => {
       <SEO
         title="Cookiepolicy | Workplan"
         description="Läs hur Workplan använder cookies och liknande tekniker. Vi förklarar typer av cookies, rättslig grund, lagringstider och hur du kan ändra eller återkalla ditt samtycke."
-        canonical="https://www.workplan.se/cookiepolicy"
+        canonical="https://www.work-plan.se/cookiepolicy"
       />
 
       <div className="min-h-screen" style={{ backgroundColor: "#F7FAFF" }}>
