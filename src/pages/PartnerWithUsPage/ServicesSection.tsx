@@ -179,13 +179,13 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible, onServiceS
           </div>
         </div>
 
-        {/* ====================== DESKTOP/TABLET: originalkort (oförändrat) ====================== */}
+        {/* ====================== DESKTOP/TABLET: originalkort ====================== */}
         <div className="hidden sm:block">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
             {services.map((service, idx) => (
               <div
                 key={idx}
-                className="relative p-6 transition-all duration-300 ease-out hover:scale-[1.02] cursor-pointer"
+                className="relative p-6 transition-all duration-300 ease-out hover:scale-[1.02]"
                 onClick={() => handleServiceClick(service.id)}
                 style={{
                   backgroundColor: 'rgba(255, 255, 255, 0.04)',
@@ -197,7 +197,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({ isVisible, onServiceS
                     0 8px 24px rgba(0, 0, 0, 0.2),
                     0 0 12px rgba(42, 140, 255, 0.5)
                   `,
-                  cursor: 'default',
+                  cursor: 'pointer', // 🔥 ändrad från default → pointer
                 }}
                 onMouseEnter={(e) =>
                   Object.assign(e.currentTarget.style, {
