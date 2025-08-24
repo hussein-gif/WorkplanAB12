@@ -7,6 +7,7 @@ import IndustriesSection from './IndustriesSection';
 import PromiseBandSection from './PromiseBandSection';
 import TeamSection from './TeamSection';
 import ContactFormSection from './ContactFormSection';
+import SEO from '../../components/SEO'; // ⬅️ Import SEO
 
 const PartnerWithUsPage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -75,70 +76,78 @@ const PartnerWithUsPage = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 overflow-x-hidden">
-      {/* Sophisticated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-slate-900/90 to-gray-800/95" />
-        
-        {/* Dynamic Gradient Orbs */}
-        <div 
-          className="absolute w-[800px] h-[800px] rounded-full opacity-[0.06] blur-3xl transition-all duration-1000 pointer-events-none"
-          style={{
-            background: `radial-gradient(circle, #3B82F6 0%, transparent 70%)`,
-            left: `${mousePosition.x * 0.3}%`,
-            top: `${mousePosition.y * 0.2}%`,
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
-        <div 
-          className="absolute w-[600px] h-[600px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000 delay-500 pointer-events-none"
-          style={{
-            background: `radial-gradient(circle, #10B981 0%, transparent 70%)`,
-            right: `${mousePosition.x * 0.2}%`,
-            bottom: `${mousePosition.y * 0.3}%`,
-            transform: 'translate(50%, 50%)',
-          }}
-        />
+    <>
+      <SEO
+        title="Bemanning & rekrytering inom lager & logistik | Workplan"
+        description="Workplan hjälper företag med bemanning och rekrytering inom lager och logistik. Vi levererar rätt personal vid rätt tidpunkt – flexibelt, pålitligt och professionellt."
+        canonical="https://www.workplan.se/foretag"
+      />
 
-        {/* Grid Pattern */}
-        <div 
-          className="absolute inset-0 opacity-[0.02] pointer-events-none"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '60px 60px',
-          }}
-        />
-      </div>
+      <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 overflow-x-hidden">
+        {/* Sophisticated Background */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-slate-900/90 to-gray-800/95" />
+          
+          {/* Dynamic Gradient Orbs */}
+          <div 
+            className="absolute w-[800px] h-[800px] rounded-full opacity-[0.06] blur-3xl transition-all duration-1000 pointer-events-none"
+            style={{
+              background: `radial-gradient(circle, #3B82F6 0%, transparent 70%)`,
+              left: `${mousePosition.x * 0.3}%`,
+              top: `${mousePosition.y * 0.2}%`,
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+          <div 
+            className="absolute w-[600px] h-[600px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000 delay-500 pointer-events-none"
+            style={{
+              background: `radial-gradient(circle, #10B981 0%, transparent 70%)`,
+              right: `${mousePosition.x * 0.2}%`,
+              bottom: `${mousePosition.y * 0.3}%`,
+              transform: 'translate(50%, 50%)',
+            }}
+          />
 
-      <div className="relative z-10">
-        <PartnerHeroSection 
-          isVisible={isVisible}
-          scrollToContact={scrollToContact}
-          scrollToProcess={scrollToProcess}
-        />
-        
-        <WhyChooseUsSection isVisible={isVisible} />
-        
-        <ServicesSection isVisible={isVisible} onServiceSelect={handleServiceSelect} />
-        
-        <ProcessSection isVisible={isVisible} />
-        
-        <IndustriesSection isVisible={isVisible} />
-        
-        <PromiseBandSection isVisible={isVisible} />
-        
-        <TeamSection isVisible={isVisible} />
-        
-        <ContactFormSection 
-          formData={formData}
-          handleFormSubmit={handleFormSubmit}
-          handleInputChange={handleInputChange}
-        />
+          {/* Grid Pattern */}
+          <div 
+            className="absolute inset-0 opacity-[0.02] pointer-events-none"
+            style={{
+              backgroundImage: `
+                linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+              `,
+              backgroundSize: '60px 60px',
+            }}
+          />
+        </div>
+
+        <div className="relative z-10">
+          <PartnerHeroSection 
+            isVisible={isVisible}
+            scrollToContact={scrollToContact}
+            scrollToProcess={scrollToProcess}
+          />
+          
+          <WhyChooseUsSection isVisible={isVisible} />
+          
+          <ServicesSection isVisible={isVisible} onServiceSelect={handleServiceSelect} />
+          
+          <ProcessSection isVisible={isVisible} />
+          
+          <IndustriesSection isVisible={isVisible} />
+          
+          <PromiseBandSection isVisible={isVisible} />
+          
+          <TeamSection isVisible={isVisible} />
+          
+          <ContactFormSection 
+            formData={formData}
+            handleFormSubmit={handleFormSubmit}
+            handleInputChange={handleInputChange}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
