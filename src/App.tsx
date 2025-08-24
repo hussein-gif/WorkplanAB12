@@ -12,10 +12,41 @@ import Footer from './components/Footer';
 
 import ScrollToTop from './components/ScrollToTop';
 import { routes } from './routes'; // ⬅️ Svenska routes
+import SEO from './components/SEO'; // ⬅️ SEO-komponenten
 
 function HomePage() {
   return (
     <>
+      <SEO
+        title="Workplan AB – Bemanning inom Lager & Logistik"
+        description="Workplan AB är din pålitliga partner för bemanning och rekrytering inom lager- och logistikbranschen. Vi levererar rätt människor i varje steg av ert flöde."
+        canonical="https://www.work-plan.se/"
+        jsonLd={{
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Workplan AB",
+          "url": "https://www.work-plan.se",
+          "logo": "https://www.work-plan.se/logo.png",
+          "description": "Workplan AB är din pålitliga partner för bemanning och rekrytering inom lager- och logistikbranschen i Sverige.",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Exempelgatan 10",
+            "addressLocality": "Örebro",
+            "postalCode": "702 10",
+            "addressCountry": "SE"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+46-70-064 64 16",
+            "contactType": "customer service",
+            "availableLanguage": ["Swedish", "English"]
+          },
+          "sameAs": [
+            "https://www.linkedin.com/company/workplan"
+          ]
+        }}
+      />
+
       <Hero />
       <WhyChoose />
       <AudienceTiles />
