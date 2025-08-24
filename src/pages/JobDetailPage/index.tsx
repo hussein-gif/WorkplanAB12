@@ -150,7 +150,7 @@ const JobDetailPage = () => {
       <SEO
         title={`${job.title} – ${job.location} | Workplan`}
         description={`Workplan söker ${job.title} för ${job.company} i ${job.location}. Start: ${startDate}. Ansök idag och bli en del av framtidens lager & logistik.`}
-        canonical={`https://www.workplan.se/jobb/${jobId}`}
+        canonical={`https://www.work-plan.se/jobb/${jobId}`}
       />
 
       <div className="relative min-h-screen bg-[#F7FAFF] overflow-hidden">
