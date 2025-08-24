@@ -60,6 +60,7 @@ const PartnerWithUsPage = () => {
       typAvBehov: serviceType
     }));
   };
+
   const scrollToContact = () => {
     const element = document.getElementById('kontakt-form');
     if (element) {
@@ -75,14 +76,16 @@ const PartnerWithUsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800">
+    {/* Gör containern relativ och stäng av horisontell scroll */}
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 overflow-x-hidden">
       {/* Sophisticated Background */}
-      <div className="absolute inset-0">
+      {/* Döljer spill från de stora globerna för säkerhets skull */}
+      <div className="absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-slate-900/90 to-gray-800/95" />
         
         {/* Dynamic Gradient Orbs */}
         <div 
-          className="absolute w-[800px] h-[800px] rounded-full opacity-[0.06] blur-3xl transition-all duration-1000"
+          className="absolute w-[800px] h-[800px] rounded-full opacity-[0.06] blur-3xl transition-all duration-1000 pointer-events-none"
           style={{
             background: `radial-gradient(circle, #3B82F6 0%, transparent 70%)`,
             left: `${mousePosition.x * 0.3}%`,
@@ -91,7 +94,7 @@ const PartnerWithUsPage = () => {
           }}
         />
         <div 
-          className="absolute w-[600px] h-[600px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000 delay-500"
+          className="absolute w-[600px] h-[600px] rounded-full opacity-[0.04] blur-3xl transition-all duration-1000 delay-500 pointer-events-none"
           style={{
             background: `radial-gradient(circle, #10B981 0%, transparent 70%)`,
             right: `${mousePosition.x * 0.2}%`,
@@ -102,7 +105,7 @@ const PartnerWithUsPage = () => {
 
         {/* Grid Pattern */}
         <div 
-          className="absolute inset-0 opacity-[0.02]"
+          className="absolute inset-0 opacity-[0.02] pointer-events-none"
           style={{
             backgroundImage: `
               linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
