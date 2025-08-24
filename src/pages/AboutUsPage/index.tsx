@@ -35,7 +35,7 @@ const AboutUsPage = () => {
       <SEO
         title="Om oss | Workplan"
         description="Lär känna Workplan – vi hjälper företag och kandidater inom lager och logistik med smart bemanning och rekrytering. Läs om vår mission, värderingar och hur vi bygger team som klarar framtiden."
-        canonical="https://www.workplan.se/om-oss"
+        canonical="https://www.work-plan.se/om-oss"
       />
 
       {/* ✅ Fix: gör wrappern relativ och stäng av horisontell scroll */}
