@@ -26,7 +26,7 @@ function HomePage() {
           "@type": "Organization",
           "name": "Workplan AB",
           "url": "https://www.work-plan.se",
-          "logo": "https://www.work-plan.se/logo.png",
+          "logo": "https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png",
           "description": "Workplan AB är din pålitliga partner för bemanning och rekrytering inom lager- och logistikbranschen i Sverige.",
           "contactPoint": {
             "@type": "ContactPoint",
