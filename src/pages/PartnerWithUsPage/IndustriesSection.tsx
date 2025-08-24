@@ -8,46 +8,47 @@ interface IndustriesSectionProps {
 const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
   return (
     <section className="industries-section">
-      <div className="content max-w-6xl mx-auto py-16 px-8 relative z-10">
-        <div className="text-center mb-12">
+      {/* Mobil: extra top-padding så rubriken aldrig krockar med header-chipet.
+         Desktop (md+) behåller din padding. */}
+      <div className="content max-w-6xl mx-auto px-6 md:px-8 pt-28 pb-12 md:py-16 relative z-10">
+        <div className="text-center mb-8 md:mb-12">
           <h2
-            className="text-3xl md:text-4xl text-white mb-6 font-medium"
-            style={{
-              fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-              lineHeight: 1.1,
-            }}
+            className="text-3xl md:text-4xl text-white font-medium tracking-tight leading-tight md:leading-snug"
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
             Specialister på Lager &amp; Logistik
           </h2>
         </div>
 
-        <div className="max-w-2xl mx-auto mb-8">
-          <div className="card p-8 text-center flex flex-col justify-between h-full">
-            <div className="icon-bg icon-3d mb-6 mx-auto">
-              <Truck size={28} className="text-white" />
+        <div className="max-w-md md:max-w-2xl mx-auto mb-8">
+          <div className="card p-6 md:p-8 text-center flex flex-col justify-between h-full">
+            <div className="icon-bg icon-3d mb-5 md:mb-6 mx-auto">
+              <Truck size={26} className="text-white md:hidden" />
+              <Truck size={28} className="text-white hidden md:block" />
             </div>
+
             <div>
               <h3
-                className="text-2xl font-medium text-white mb-4"
-                style={{
-                  fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-                }}
+                className="text-xl md:text-2xl font-medium text-white mb-3 md:mb-4"
+                style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
               >
                 Lager &amp; Logistik
               </h3>
+
               <p
-                className="text-white/80 leading-relaxed"
+                className="text-white/85 md:text-white/80 text-[15px] md:text-base leading-relaxed md:leading-relaxed"
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
-                Orderplock, truckförare, lageradministration, skiftledare m.fl. Vi täcker bemanningsbehoven över hela flödet.
+                Orderplock, truckförare, lageradministration, skiftledare m.fl. Vi täcker
+                bemanningsbehoven över hela flödet.
               </p>
             </div>
           </div>
         </div>
 
-        <div className="text-center py-4">
+        <div className="text-center py-3 md:py-4">
           <p
-            className="text-white/70 text-lg font-light"
+            className="text-white/80 md:text-white/70 text-base md:text-lg font-light"
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
             Behöver du kompetens utanför detta?{' '}
@@ -76,35 +77,53 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           content: '';
           position: absolute;
           inset: 0;
-          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><g fill='none' stroke='rgba(255,255,255,0.1)' stroke-width='2'><path d='M0 200 Q200 100 400 200 T800 200' /><path d='M0 300 Q200 200 400 300 T800 300' /><path d='M0 400 Q200 300 400 400 T800 400' /></g></svg>");
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><g fill='none' stroke='rgba(255,255,255,0.08)' stroke-width='2'><path d='M0 200 Q200 100 400 200 T800 200' /><path d='M0 300 Q200 200 400 300 T800 300' /><path d='M0 400 Q200 300 400 400 T800 400' /></g></svg>");
           background-size: cover;
-          opacity: 0.4;
+          opacity: 0.5; /* något diskretare linjer */
           z-index: 0;
         }
         .industries-section .content { position: relative; z-index: 1; }
 
+        /* Kort: lite mer glas, rundare hörn och djupare skugga på mobil,
+           desktop behåller ditt uttryck via md:-reglerna. */
         .card {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           height: 100%;
-          background: rgba(255,255,255,0.05);
+          background: rgba(255,255,255,0.06);
           backdrop-filter: blur(8px);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 1rem;
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: 1.25rem;            /* mobil: något rundare */
+          box-shadow:
+            0 22px 60px -12px rgba(0,0,0,0.45),
+            0 4px 12px rgba(0,0,0,0.24);
+        }
+        @media (min-width: 768px) {
+          .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 1rem;
+            border: 1px solid rgba(255,255,255,0.10);
+            box-shadow:
+              0 18px 48px -12px rgba(0,0,0,0.38),
+              0 3px 10px rgba(0,0,0,0.22);
+          }
         }
 
-        /* Icon container */
+        /* Icon container – kompaktare på mobil */
         .icon-bg {
-          width: 4rem;
-          height: 4rem;
+          width: 3.5rem;
+          height: 3.5rem;
           border-radius: 0.75rem;
           display: flex;
           align-items: center;
           justify-content: center;
         }
+        @media (min-width: 768px) {
+          .icon-bg { width: 4rem; height: 4rem; }
+        }
 
-        /* 3D, professionell stil med samma gröna som knappen (#189A4C / hover #1FB259) */
+        /* 3D, professionell stil */
         .icon-3d {
           position: relative;
           background: linear-gradient(180deg, #1FB259 0%, #189A4C 55%, #147C43 100%);
