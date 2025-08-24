@@ -3,7 +3,7 @@ import ContactHeroSection from './ContactUsPage/ContactHeroSection';
 import CandidateFormSection from './ContactUsPage/CandidateFormSection';
 import CompanyFormSection from './ContactUsPage/CompanyFormSection';
 import AlternativeContactSection from './ContactUsPage/AlternativeContactSection';
-import SEO from '../../components/SEO'; // ⬅️ Import SEO
+import SEO from '../components/SEO'; // ✅ FIXAD SÖKVÄG
 
 const ContactUsPage = () => {
   const [userType, setUserType] = useState<'candidate' | 'company' | null>(null);
@@ -43,11 +43,13 @@ const ContactUsPage = () => {
   const handleCandidateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Candidate form submitted:', candidateForm);
+    // Handle form submission
   };
 
   const handleCompanySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Company form submitted:', companyForm);
+    // Handle form submission
   };
 
   const handleCandidateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
