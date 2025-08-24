@@ -80,7 +80,7 @@ const PartnerWithUsPage = () => {
       <SEO
         title="Bemanning & rekrytering inom lager & logistik | Workplan"
         description="Workplan hjälper företag med bemanning och rekrytering inom lager och logistik. Vi levererar rätt personal vid rätt tidpunkt – flexibelt, pålitligt och professionellt."
-        canonical="https://www.workplan.se/foretag"
+        canonical="https://www.work-plan.se/foretag"
       />
 
       <div className="relative min-h-screen bg-gradient-to-br from-gray-900 via-slate-900 to-gray-800 overflow-x-hidden">
