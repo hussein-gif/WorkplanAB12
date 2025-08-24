@@ -10,41 +10,56 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
   handleBrowseRoles,
 }) => {
   return (
-    <section className="relative min-h-[calc(100svh+3px)] md:min-h-screen flex items-center justify-center overflow-hidden md:mb-0">
-      {/* Ny bakgrundsbild */}
+    <section
+      className="relative min-h-[calc(100svh+3px)] md:min-h-screen flex items-center justify-center overflow-hidden md:mb-0"
+      // lite extra padding upptill på mobil för att inte krocka med notch/statusbar
+      style={{ paddingTop: 'env(safe-area-inset-top)' }}
+    >
+      {/* Bakgrundsbild */}
       <div className="absolute inset-0">
         <img
           src="https://i.ibb.co/ZzdGcXm1/2e9d69c0-7749-414b-bc27-fefb6a4061e7.png"
           alt="Professionell arbetsmiljö"
-          className="w-full h-full object-cover object-[center_right] md:object-center"
+          className="w-full h-full object-cover md:object-center"
+          // flytta fokus lite uppåt på mobil så motivet syns tydligare
+          style={{ objectPosition: 'center 35%' }}
         />
-        {/* Starkare overlay på mobil, svagare på desktop */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/70 to-black/30 md:from-black/60 md:via-black/40 md:to-black/10" />
+
+        {/* MOBIL overlay – ljusare & vertikal gradient */}
+        <div className="absolute inset-0 md:hidden pointer-events-none">
+          {/* mjuk vertikal: låt bakgrunden synas mer */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/30 to-black/15" />
+          {/* svag vignette för premium-känsla utan att mörka ned för mycket */}
+          <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_40%,rgba(0,0,0,0.10)_0%,rgba(0,0,0,0.00)_60%)]" />
+        </div>
+
+        {/* DESKTOP overlay – samma som tidigare */}
+        <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/10" />
       </div>
 
       {/* Centralt innehåll */}
-      <div className="relative z-10 max-w-4xl w-full px-8 md:px-16 text-center mx-auto">
+      <div className="relative z-10 w-full max-w-4xl px-6 sm:px-8 md:px-16 text-center mx-auto">
         {/* Rubrik */}
         <h1
           className={`
-            text-[2.5rem] sm:text-6xl md:text-7xl text-white mb-5 md:mb-6
+            text-[2.3rem] sm:text-6xl md:text-7xl text-white mb-4 sm:mb-5 md:mb-6
             leading-tight tracking-tight
             [text-wrap:balance]
-            drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]
+            drop-shadow-[0_1px_1px_rgba(0,0,0,0.45)]
             transition-all duration-1000 transform
             ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-6 opacity-0'}
           `}
           style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 200 }}
         >
           <span className="block">Hitta Jobbet</span>
-          {/* Mindre bold än innan – font-medium (500) */}
+          {/* Mindre bold än tidigare men starkare än första raden */}
           <span className="block font-medium">Som Passar Dig</span>
         </h1>
 
         {/* Underrubrik */}
         <p
           className={`
-            text-[1.05rem] sm:text-lg md:text-xl text-white/85 mb-6 md:mb-12
+            text-base sm:text-lg md:text-xl text-white/85 mb-5 sm:mb-6 md:mb-12
             leading-relaxed max-w-prose md:max-w-2xl mx-auto
             transition-all duration-1000 delay-200 transform
             ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'}
@@ -59,10 +74,10 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
           onClick={handleBrowseRoles}
           className={`
             group relative inline-flex items-center justify-center gap-2
-            px-6 md:px-8 py-3 md:py-4
-            rounded-2xl text-white text-base md:text-lg font-medium tracking-wide
+            px-6 md:px-8 py-4 md:py-4
+            rounded-2xl text-white text-base sm:text-lg font-medium tracking-wide
             transition-all duration-200
-            w-full md:w-auto min-h-[48px]
+            w-full sm:w-[min(24rem,100%)] md:w-auto min-h-[48px]
             ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0'}
             md:hover:scale-[1.03] md:active:scale-[0.99]
           `}
@@ -81,7 +96,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
         </button>
       </div>
 
-      {/* Sömlös övergång: täcker ev. subpixellinje (endast mobil) */}
+      {/* Sömlös övergång (endast mobil) */}
       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-black md:hidden pointer-events-none" />
 
       <style>{`
