@@ -6,19 +6,9 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
   const navigate = useNavigate();
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
 
-  // Mobil: auto-scrolla öppnad fråga in i vy (under ev. sticky header)
+  // Toggle utan auto-scroll (mobil stannar på samma position)
   const toggleFAQ = (index: number) => {
-    setOpenFAQ(prev => {
-      const next = prev === index ? null : index;
-
-      if (next !== null && typeof window !== 'undefined' && window.innerWidth < 768) {
-        requestAnimationFrame(() => {
-          const el = document.getElementById(`faq-answer-${next}`)?.parentElement; // kortet
-          el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-      }
-      return next;
-    });
+    setOpenFAQ(prev => (prev === index ? null : index));
   };
 
   const faqs = [
@@ -45,8 +35,8 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
     <section
       className="relative py-16 md:py-24 px-6 md:px-8"
       style={{ backgroundColor: '#08132B' }}
-      // Mobil: stäng om man klickar utanför korten
       onClick={(e) => {
+        // Behåll: klick utanför korten stänger på mobil
         if (typeof window !== 'undefined' && window.innerWidth < 768) {
           if (e.target === e.currentTarget) setOpenFAQ(null);
         }
@@ -122,15 +112,7 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
           </h2>
         </div>
 
-        {/* Mobil hjälpknapp (expandera/stäng) */}
-        <div className="mb-4 flex justify-end md:hidden">
-          <button
-            className="text-white/70 text-sm underline underline-offset-2"
-            onClick={() => setOpenFAQ(openFAQ === null ? 0 : null)}
-          >
-            {openFAQ === null ? 'Expandera första' : 'Stäng alla'}
-          </button>
-        </div>
+        {/* (Mobilknappen "Expandera första" borttagen) */}
 
         <div className="max-w-4xl mx-auto space-y-3 md:space-y-4 mb-8">
           {faqs.map((faq, index) => (
