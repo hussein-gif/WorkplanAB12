@@ -15,6 +15,15 @@ type SharedFormData = {
   gdprConsent: boolean;
 };
 
+// Hjälpare för att kunna matcha mot titel i URL (slug)
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
 const JobDetailPage = () => {
   const navigate = useNavigate();
   const { jobId } = useParams<{ jobId: string }>();
@@ -43,10 +52,49 @@ const JobDetailPage = () => {
   }, []);
 
   useEffect(() => {
-    if (jobId && mockJobData[jobId as keyof typeof mockJobData]) {
-      setJob(mockJobData[jobId as keyof typeof mockJobData]);
-    }
     setIsVisible(true);
+
+    if (!jobId) {
+      setJob(null);
+      return;
+    }
+
+    const key = decodeURIComponent(jobId);
+
+    let found: JobData | null = null;
+
+    // Stöd både objekt (map) och array
+    if (Array.isArray(mockJobData)) {
+      const keyNum = Number.isNaN(Number(key)) ? null : Number(key);
+      found =
+        (mockJobData as any[]).find(
+          (j: any) =>
+            String(j.id) === key || // id i string
+            (keyNum !== null && j.id === keyNum) || // id i number
+            (j.slug && j.slug === key) || // slugfält
+            (j.title && slugify(j.title) === key) // slugifierad titel
+        ) || null;
+    } else {
+      // Objekt: direkt nyckel
+      const asObj: Record<string, any> = mockJobData as any;
+      found = (asObj[key] as JobData) ?? null;
+
+      // Om inte direktträff, sök bland värden (som om det vore en lista)
+      if (!found) {
+        const values: any[] = Object.values(asObj);
+        const keyNum = Number.isNaN(Number(key)) ? null : Number(key);
+        found =
+          values.find(
+            (j: any) =>
+              String(j.id) === key ||
+              (keyNum !== null && j.id === keyNum) ||
+              (j.slug && j.slug === key) ||
+              (j.title && slugify(j.title) === key)
+          ) || null;
+      }
+    }
+
+    setJob(found);
   }, [jobId]);
 
   if (!job) {
