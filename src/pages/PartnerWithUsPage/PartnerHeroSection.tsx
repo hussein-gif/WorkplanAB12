@@ -93,7 +93,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         {/* Knappar */}
         <div
           className={`
-            flex flex-col sm:flex-row gap-3 sm:gap-6 justify-start sm:justify-start items-center sm:items-start
+            flex flex-col sm:flex-row gap-3 sm:gap-6 justify-center sm:justify-start items-center
             transition-all duration-1000 delay-300 transform mt-4 sm:mt-0
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}
@@ -102,7 +102,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
             onClick={scrollToContact}
             className="
               group relative inline-flex items-center justify-center gap-2
-              w-auto max-w-[16rem] mx-auto sm:mx-0
+              w-auto min-w-[14rem] max-w-[16rem] mx-auto sm:mx-0
               px-6 py-3 sm:px-8 sm:py-4
               rounded-xl sm:rounded-2xl
               text-white text-[16px] sm:text-lg font-medium tracking-wide
@@ -122,7 +122,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
             onClick={scrollToProcess}
             className="
               relative inline-flex items-center justify-center
-              w-auto max-w-[16rem] mx-auto sm:mx-0
+              w-auto min-w-[14rem] max-w-[16rem] mx-auto sm:mx-0
               px-6 py-3 sm:px-8 sm:py-4
               rounded-xl sm:rounded-2xl
               text-white text-[16px] sm:text-lg font-medium tracking-wide
