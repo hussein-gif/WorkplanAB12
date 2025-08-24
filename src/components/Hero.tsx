@@ -39,10 +39,18 @@ const Hero = () => {
             }px) scale(1.05)`,
           }}
         >
+          {/* Mobil: nuvarande bild */}
           <img
             src="https://i.ibb.co/LdnVsvf2/IMAGE-2025-08-22-23-02-16.jpg"
             alt="Professional staffing and teamwork"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover block sm:hidden"
+          />
+
+          {/* Desktop: ny bild */}
+          <img
+            src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg"
+            alt="Professional staffing and teamwork"
+            className="w-full h-full object-cover hidden sm:block"
           />
         </div>
 
