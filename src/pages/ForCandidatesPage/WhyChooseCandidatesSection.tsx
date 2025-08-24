@@ -39,7 +39,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
   ] as const;
 
   return (
-    <section className="relative py-14 md:py-24 px-6 md:px-8 bg-white overflow-hidden mt-8 md:mt-0 scroll-mt-24">
+    <section className="relative py-14 md:py-24 px-6 md:px-8 bg-white overflow-hidden -mt-px md:mt-0 scroll-mt-24">
       {/* Background design layers */}
       <div
         aria-hidden
@@ -134,7 +134,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
                   {benefit.description}
                 </p>
 
-                {/* Highlight – inline på mobil, absolut på desktop (oförändrat) */}
+                {/* Highlight – inline på mobil, absolut på desktop */}
                 <div className="text-center">
                   <span
                     className="md:hidden inline-flex px-3 py-1 rounded-full text-[11px] font-medium"
@@ -153,7 +153,7 @@ const WhyChooseCandidatesSection: React.FC<WhyChooseCandidatesSectionProps> = ({
                   </span>
                 </div>
 
-                {/* Desktop-badge (din original, absolut placerad) */}
+                {/* Desktop-badge (absolut placerad) */}
                 <div
                   className="hidden md:block absolute bottom-5 left-1/2 -translate-x-1/2 text-[12px] tracking-wide text-center inline-block px-4 py-1 rounded-full"
                   style={{
