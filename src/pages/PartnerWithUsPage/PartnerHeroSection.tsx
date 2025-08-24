@@ -21,7 +21,6 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           alt="Professionals collaborating"
           className="w-full h-full object-cover"
         />
-        {/* Lite mörkare scrim för läsbarhet */}
         <div className="absolute inset-0 bg-gradient-to-br from-black/75 via-black/60 to-black/85 sm:from-black/70 sm:via-black/55 sm:to-black/85" />
         <div
           className="pointer-events-none absolute -top-24 -left-24 w-[40rem] h-[40rem] rounded-full opacity-25 blur-3xl"
@@ -46,18 +45,15 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         />
       </div>
 
-      {/* Content – vänsterkanten */}
+      {/* Content */}
       <div
         className="
           relative z-10 w-full max-w-none
-          pl-4 pr-4           
-          sm:pl-6 sm:pr-6     
-          md:pl-10 md:pr-10
-          lg:pl-14 xl:pl-16
+          pl-4 pr-4 sm:pl-6 sm:pr-6 md:pl-10 md:pr-10 lg:pl-14 xl:pl-16
           text-left
         "
       >
-        {/* Rubrik – alltid två rader */}
+        {/* Rubrik */}
         <h1
           className={`
             text-white mb-4 sm:mb-5
@@ -97,7 +93,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
         {/* Knappar */}
         <div
           className={`
-            flex flex-col sm:flex-row gap-3 sm:gap-6 justify-start items-start
+            flex flex-col sm:flex-row gap-3 sm:gap-6 justify-start sm:justify-start items-center sm:items-start
             transition-all duration-1000 delay-300 transform mt-4 sm:mt-0
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
           `}
@@ -106,7 +102,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
             onClick={scrollToContact}
             className="
               group relative inline-flex items-center justify-center gap-2
-              w-full sm:w-auto
+              w-auto max-w-[16rem] mx-auto sm:mx-0
               px-6 py-3 sm:px-8 sm:py-4
               rounded-xl sm:rounded-2xl
               text-white text-[16px] sm:text-lg font-medium tracking-wide
@@ -126,7 +122,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
             onClick={scrollToProcess}
             className="
               relative inline-flex items-center justify-center
-              w-full sm:w-auto
+              w-auto max-w-[16rem] mx-auto sm:mx-0
               px-6 py-3 sm:px-8 sm:py-4
               rounded-xl sm:rounded-2xl
               text-white text-[16px] sm:text-lg font-medium tracking-wide
