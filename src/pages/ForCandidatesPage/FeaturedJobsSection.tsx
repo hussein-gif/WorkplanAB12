@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MapPin, Clock } from 'lucide-react';
+import { MapPin, Clock, Briefcase } from 'lucide-react';
 
 interface FeaturedJobsSectionProps {
   isVisible: boolean;
@@ -114,54 +114,111 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({ isVisible }) 
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
-          {featuredJobs.map((job) => (
-            <SimpleHoverCard
-              key={job.id}
-              className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
-            >
-              <div
-                className="p-5 flex-1 flex flex-col"
+        {/* ===== MOBIL: radad lista (EXAKT design enligt referens) ===== */}
+        <div className="sm:hidden px-0">
+          <ul className="divide-y divide-white/10">
+            {featuredJobs.map((job) => (
+              <li
+                key={job.id}
+                className="py-4 active:bg-white/5 transition-colors cursor-pointer"
                 onClick={() => navigate(`/job/${job.id}`)}
               >
-                <div className="flex items-start space-x-4 mb-4">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-lg bg-white/10 text-white flex items-center justify-center font-semibold shrink-0">
                     {job.companyLogo}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-lg mb-1 leading-tight font-bold" style={{ color: '#111827' }}>
+                  <div className="min-w-0">
+                    <h3
+                      className="text-white text-base font-semibold leading-tight truncate"
+                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                    >
                       {job.title}
                     </h3>
-                    <div className="text-base" style={{ color: '#374151' }}>
-                      {job.company}
+                  </div>
+                </div>
+
+                <div
+                  className="mt-2 flex flex-wrap items-center gap-3 text-[13px] text-white/75"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  <span className="inline-flex items-center gap-1.5">
+                    <Briefcase size={14} /> {job.company}
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-white/30" />
+                  <span className="inline-flex items-center gap-1.5">
+                    <MapPin size={14} /> {job.location}
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-white/30" />
+                  <span className="inline-flex items-center gap-1.5">
+                    <Clock size={14} /> {job.type}
+                  </span>
+                </div>
+
+                <div
+                  className="mt-1 text-[12px] text-white/60"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  {job.posted}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* ===== DESKTOP: oförändrad grid ===== */}
+        <div className="hidden sm:block">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
+            {featuredJobs.map((job) => (
+              <SimpleHoverCard
+                key={job.id}
+                className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
+              >
+                <div
+                  className="p-5 flex-1 flex flex-col"
+                  onClick={() => navigate(`/job/${job.id}`)}
+                >
+                  <div className="flex items-start space-x-4 mb-4">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
+                      {job.companyLogo}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg mb-1 leading-tight font-bold" style={{ color: '#111827' }}>
+                        {job.title}
+                      </h3>
+                      <div className="text-base" style={{ color: '#374151' }}>
+                        {job.company}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-4 text-sm mb-4" style={{ color: '#6B7280' }}>
+                    <div className="flex items-center space-x-2">
+                      <MapPin size={14} />
+                      <span>{job.location}</span>
+                    </div>
+                    <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                    <div className="flex items-center space-x-2">
+                      <Clock size={14} />
+                      <span>{job.type}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-4 text-sm mb-4" style={{ color: '#6B7280' }}>
-                  <div className="flex items-center space-x-2">
-                    <MapPin size={14} />
-                    <span>{job.location}</span>
-                  </div>
-                  <span className="w-1 h-1 bg-gray-400 rounded-full" />
-                  <div className="flex items-center space-x-2">
-                    <Clock size={14} />
-                    <span>{job.type}</span>
+                <div className="relative z-10 p-5 pt-0 flex items-end justify-between">
+                  <div className="text-sm text-gray-500">{job.posted}</div>
+                  <div className="text-right text-sm text-gray-500">
+                    <div>Ansök senast</div>
+                    <div className="text-gray-700">
+                      {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE')}
+                    </div>
                   </div>
                 </div>
-              </div>
-
-              <div className="relative z-10 p-5 pt-0 flex items-end justify-between">
-                <div className="text-sm text-gray-500">{job.posted}</div>
-                <div className="text-right text-sm text-gray-500">
-                  <div>Ansök senast</div>
-                  <div className="text-gray-700">{new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE')}</div>
-                </div>
-              </div>
-            </SimpleHoverCard>
-          ))}
+              </SimpleHoverCard>
+            ))}
+          </div>
         </div>
 
+        {/* CTA-knapp – oförändrad */}
         <div className="text-center mt-12">
           <button
             onClick={() => navigate('/jobs')}
