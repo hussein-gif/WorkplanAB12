@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import Header from './components/Header';
 import Hero from './components/Hero';
 import WhyChoose from './components/WhyChoose';
@@ -8,6 +9,7 @@ import IndustryGrid from './components/IndustryGrid';
 import FeaturedJobs from './components/FeaturedJobs';
 import ConversionBanner from './components/ConversionBanner';
 import Footer from './components/Footer';
+
 import JobsPage from './pages/JobsPage';
 import JobDetailPage from './pages/JobDetailPage';
 import PartnerWithUsPage from './pages/PartnerWithUsPage';
@@ -18,6 +20,9 @@ import OurServicesPage from './pages/OurServicesPage';
 import TermsOfServicePage from './pages/TermsOfServicePage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import CookiePolicyPage from './pages/CookiePolicyPage';
+
+// ⬅️ Lägg till denna import
+import ScrollToTop from './components/ScrollToTop';
 
 function HomePage() {
   return (
@@ -35,6 +40,9 @@ function HomePage() {
 function App() {
   return (
     <Router>
+      {/* ⬇️ Scrollar automatiskt till toppen vid varje route-ändring */}
+      <ScrollToTop />
+
       <div className="min-h-screen bg-white">
         <Header />
         <main>
