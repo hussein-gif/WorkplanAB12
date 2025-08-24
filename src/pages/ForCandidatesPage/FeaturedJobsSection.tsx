@@ -40,7 +40,7 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({ isVisible }) 
   ];
 
   return (
-    <section id="featured-jobs" className="relative py-24 px-8" style={{ backgroundColor: '#08132B' }}>
+    <section id="featured-jobs" className="relative py-16 md:py-24 px-6 md:px-8" style={{ backgroundColor: '#08132B' }}>
       {/* Artistic background */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
@@ -114,7 +114,7 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({ isVisible }) 
           </p>
         </div>
 
-        {/* ===== MOBIL: radad lista (EXAKT design enligt referens) ===== */}
+        {/* ===== MOBIL: radad lista ===== */}
         <div className="sm:hidden px-0">
           <ul className="divide-y divide-white/10">
             {featuredJobs.map((job) => (
