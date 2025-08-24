@@ -1,0 +1,10 @@
+# robots.txt for https://www.workplan.se
+User-agent: *
+Allow: /
+
+# Blockera ev. tekniska mappar om du använder dem
+Disallow: /admin/
+Disallow: /api-test/
+
+# Peka ut din sitemap
+Sitemap: https://www.workplan.se/sitemap.xml
