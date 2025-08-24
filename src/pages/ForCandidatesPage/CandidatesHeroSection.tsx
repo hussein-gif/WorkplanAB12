@@ -23,19 +23,18 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
       </div>
 
       <div className="relative z-10 max-w-4xl w-full px-8 md:px-16 text-left">
-        {/* Scrim/card bakom text ENDAST på mobil (transparent på desktop) */}
-        <div className="rounded-2xl bg-black/25 backdrop-blur-[2px] ring-1 ring-white/10 p-5 md:bg-transparent md:backdrop-blur-0 md:ring-0 md:p-0">
+        {/* Scrim ENDAST desktop, ingen bakgrund på mobil */}
+        <div className="md:rounded-2xl md:bg-black/25 md:backdrop-blur-[2px] md:ring-1 md:ring-white/10 md:p-8">
           {/* Rubrik */}
           <h1
             className={`
-              text-5xl sm:text-6xl md:text-7xl text-white mb-6 tracking-tight leading-[0.9] [text-wrap:balance] md:[text-wrap:pretty]
-              transition-all duration-1000 transform max-w-[22ch] md:max-w-none
+              text-5xl sm:text-6xl md:text-7xl text-white mb-6 tracking-tight leading-tight [text-wrap:balance]
+              transition-all duration-1000 transform max-w-[18ch] md:max-w-none
               ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'}
             `}
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 200 }}
           >
-            <span className="block">Hitta Jobbet</span>
-            <span className="block font-normal">Som Passar Dig</span>
+            Hitta Jobbet <span className="font-normal">Som Passar Dig</span>
           </h1>
 
           {/* Underrubrik */}
@@ -50,7 +49,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
             Vi matchar dig med rätt jobb – snabbt och utan krångel.
           </p>
 
-          {/* Knapp - mörkblå variant (fullbredd på mobil, original på desktop) */}
+          {/* Knapp */}
           <button
             onClick={handleBrowseRoles}
             className={`
@@ -69,7 +68,6 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@200;400&family=Inter:wght@300;500&display=swap');
 
-        /* Mörkblå hero-knapp (samma som PartnerHeroSection) */
         .btn-hero-bg {
           background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.12)), #0B274D;
           box-shadow: 0 10px 24px rgba(11,39,77,0.32);
