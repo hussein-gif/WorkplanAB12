@@ -79,7 +79,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
               fontWeight: 300,
-              maxWidth: '20ch',
+              maxWidth: '20ch', // lite bredare på mobil så radbryt blir snygg
             }}
           >
             <span className="block font-extralight">Team Som</span>
@@ -108,7 +108,7 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
           {/* Knappar */}
           <div
             className={`
-              flex flex-col sm:flex-row gap-3 sm:gap-6 justify-center sm:justify-start items-center sm:items-start
+              flex flex-col sm:flex-row gap-3 sm:gap-6 justify-start items-stretch sm:items-start
               transition-all duration-1000 delay-300 transform mt-4 sm:mt-0
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
             `}
@@ -118,7 +118,6 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
               className="
                 group relative inline-flex items-center justify-center gap-2
                 w-full sm:w-auto
-                max-w-[280px]
                 px-6 py-4 sm:px-8 sm:py-4
                 rounded-2xl
                 text-white text-[17px] sm:text-lg font-medium tracking-wide
@@ -141,7 +140,6 @@ const PartnerHeroSection: React.FC<PartnerHeroSectionProps> = ({
               className="
                 relative inline-flex items-center justify-center
                 w-full sm:w-auto
-                max-w-[280px]
                 px-6 py-4 sm:px-8 sm:py-4
                 rounded-2xl
                 text-white text-[17px] sm:text-lg font-medium tracking-wide
