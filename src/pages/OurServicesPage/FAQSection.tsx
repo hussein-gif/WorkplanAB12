@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Minus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 const FAQSection: React.FC = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const FAQSection: React.FC = () => {
 
   return (
     <section className="relative py-16 md:py-24 px-5 md:px-8 bg-white overflow-hidden">
-      {/* Dekorativ bakgrund – lugnare på mobil, full på md+ */}
+      {/* Dekorativ bakgrund */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
           className="absolute inset-0 opacity-90 md:opacity-100"
@@ -50,49 +50,7 @@ const FAQSection: React.FC = () => {
             mixBlendMode: 'normal',
           }}
         />
-        {/* Band/kon döljs på mobil */}
-        <div
-          className="hidden md:block absolute inset-0 opacity-20 rotate-[-8deg]"
-          style={{
-            backgroundImage:
-              'linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(17,24,39,0.06) 40%, rgba(0,0,0,0) 70%)',
-            maskImage:
-              'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
-            WebkitMaskImage:
-              'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
-          }}
-        />
-        <div
-          className="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[1100px] h-[1100px] opacity-10"
-          style={{
-            background:
-              'conic-gradient(from 0deg at 50% 50%, rgba(17,24,39,0.08) 0deg, rgba(17,24,39,0) 60deg, rgba(17,24,39,0.08) 120deg, rgba(17,24,39,0) 180deg, rgba(17,24,39,0.08) 240deg, rgba(17,24,39,0) 300deg, rgba(17,24,39,0.08) 360deg)',
-            WebkitMaskImage:
-              'radial-gradient(circle at center, transparent 0, black 28%, black 55%, transparent 70%)',
-            maskImage:
-              'radial-gradient(circle at center, transparent 0, black 28%, black 55%, transparent 70%)',
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: [
-              'radial-gradient(1px 1px at 18% 26%, rgba(17,24,39,0.25) 50%, transparent 51%)',
-              'radial-gradient(1px 1px at 62% 12%, rgba(17,24,39,0.18) 50%, transparent 51%)',
-              'radial-gradient(1px 1px at 82% 72%, rgba(17,24,39,0.18) 50%, transparent 51%)',
-              'radial-gradient(1px 1px at 36% 82%, rgba(17,24,39,0.15) 50%, transparent 51%)'
-            ].join(', '),
-            opacity: 0.18,
-          }}
-        />
         <div className="absolute inset-0 opacity-[0.03] md:opacity-[0.04]" style={{ backgroundImage: `url(${noiseDataUrl})` }} />
-        <div
-          className="hidden md:block absolute inset-0"
-          style={{
-            background:
-              'radial-gradient(1200px 700px at 50% 20%, rgba(0,0,0,0) 30%, rgba(0,0,0,0.06) 100%)',
-          }}
-        />
       </div>
 
       <div className="max-w-4xl mx-auto relative">
@@ -131,16 +89,16 @@ const FAQSection: React.FC = () => {
                     {faq.question}
                   </h3>
 
-                  <span className={`ml-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 transition-transform ${isOpen ? 'rotate-90' : ''}`}>
-                    {isOpen ? (
-                      <Minus size={18} className="text-gray-600" />
-                    ) : (
-                      <Plus size={18} className="text-gray-600" />
-                    )}
+                  {/* + → – transition */}
+                  <span className="ml-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 transition-transform duration-300">
+                    <Plus
+                      size={18}
+                      className={`text-gray-600 transition-transform duration-300 ${isOpen ? 'rotate-45' : ''}`}
+                    />
                   </span>
                 </button>
 
-                {/* Svar med auto-höjd */}
+                {/* Svar */}
                 <div
                   id={`faq-answer-${index}`}
                   ref={el => (panelsRef.current[index] = el)}
@@ -158,7 +116,7 @@ const FAQSection: React.FC = () => {
           })}
         </div>
 
-        {/* CTA Line (oförändrad) */}
+        {/* CTA Line */}
         <div className="text-center relative z-10">
           <p className="text-lg text-gray-600">
             Fortsatt fundering?{' '}
@@ -180,25 +138,6 @@ const FAQSection: React.FC = () => {
         </div>
       </div>
 
-      {/* JSON-LD Schema for FAQ (oförändrat) */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'FAQPage',
-            mainEntity: faqs.map(faq => ({
-              '@type': 'Question',
-              name: faq.question,
-              acceptedAnswer: {
-                '@type': 'Answer',
-                text: faq.answer
-              }
-            }))
-          })
-        }}
-      />
-
       <style>{`
         .faq-collapse {
           overflow: hidden;
@@ -214,12 +153,6 @@ const FAQSection: React.FC = () => {
           opacity: 1;
           transform: translateY(0);
         }
-
-        @media (prefers-reduced-motion: reduce) {
-          .faq-collapse { transition: none !important; }
-        }
-
-        @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+Antique:wght@500&display=swap');
       `}</style>
     </section>
   );
