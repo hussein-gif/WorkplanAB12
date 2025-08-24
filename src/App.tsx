@@ -28,13 +28,6 @@ function HomePage() {
           "url": "https://www.work-plan.se",
           "logo": "https://www.work-plan.se/logo.png",
           "description": "Workplan AB är din pålitliga partner för bemanning och rekrytering inom lager- och logistikbranschen i Sverige.",
-          "address": {
-            "@type": "PostalAddress",
-            "streetAddress": "Exempelgatan 10",
-            "addressLocality": "Örebro",
-            "postalCode": "702 10",
-            "addressCountry": "SE"
-          },
           "contactPoint": {
             "@type": "ContactPoint",
             "telephone": "+46-70-064 64 16",
