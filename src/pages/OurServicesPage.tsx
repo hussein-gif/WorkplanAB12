@@ -30,7 +30,7 @@ const OurServicesPage = () => {
       <SEO
         title="Bemanningstjänster & rekrytering för lager & logistik | Workplan"
         description="Upptäck Workplans tjänster för bemanning och rekrytering inom lager och logistik. Strukturerad process, hög kvalitet och snabb leverans – rätt personal i rätt tid."
-        canonical="https://www.workplan.se/tjanster"
+        canonical="https://www.work-plan.se/tjanster"
       />
 
       {/* ✅ Förhindrar horisontell scroll på denna sida */}
