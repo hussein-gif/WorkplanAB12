@@ -1,0 +1,14 @@
+{
+  "redirects": [
+    { "source": "/jobs", "destination": "/jobb", "permanent": true },
+    { "source": "/job/:jobId", "destination": "/jobb/:jobId", "permanent": true },
+    { "source": "/partner", "destination": "/foretag", "permanent": true },
+    { "source": "/for-candidates", "destination": "/for-kandidater", "permanent": true },
+    { "source": "/about", "destination": "/om-oss", "permanent": true },
+    { "source": "/contact", "destination": "/kontakt", "permanent": true },
+    { "source": "/services", "destination": "/tjanster", "permanent": true },
+    { "source": "/terms", "destination": "/villkor", "permanent": true },
+    { "source": "/privacy", "destination": "/integritetspolicy", "permanent": true },
+    { "source": "/cookies", "destination": "/cookiepolicy", "permanent": true }
+  ]
+}
