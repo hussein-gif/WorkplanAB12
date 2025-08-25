@@ -22,6 +22,20 @@ const FAQSection: React.FC = () => {
     { question: 'Hur kommer vi igång?', answer: 'Fyll i formuläret eller kontakta oss – vi bokar ett kort behovssamtal och tar det därifrån.' }
   ];
 
+  // ✅ JSON-LD för FAQPage (byggs direkt från faqs)
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(f => ({
+      "@type": "Question",
+      "name": f.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": f.answer
+      }
+    }))
+  };
+
   // Subtilt brus för vit bakgrund
   const noiseSvg = `<?xml version="1.0" encoding="UTF-8"?>
   <svg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'>
@@ -36,6 +50,13 @@ const FAQSection: React.FC = () => {
 
   return (
     <section className="relative py-16 md:py-24 px-5 md:px-8 bg-white overflow-hidden">
+      {/* 🔎 SEO: FAQPage JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        aria-hidden="true"
+      />
+
       {/* Dekorativ bakgrund */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
@@ -126,7 +147,8 @@ const FAQSection: React.FC = () => {
                 if (element) {
                   element.scrollIntoView({ behavior: 'smooth' });
                 } else {
-                  navigate('/contact');
+                  // ✅ svensk fallback-route
+                  navigate('/kontakt');
                 }
               }}
               className="font-bold text-blue-600 hover:text-blue-700 underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded transition-colors"
