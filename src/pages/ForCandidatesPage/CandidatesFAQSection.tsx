@@ -20,6 +20,20 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
     { question: 'Hur hanterar ni mina personuppgifter?', answer: 'Vi följer GDPR och behandlar allt konfidentiellt. Läs mer i vår integritetspolicy.' }
   ];
 
+  // ✅ JSON-LD för FAQPage (byggt direkt från listan ovan)
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(f => ({
+      "@type": "Question",
+      "name": f.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": f.answer
+      }
+    }))
+  };
+
   const noiseSvg = `<?xml version="1.0" encoding="UTF-8"?>
   <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
     <filter id="n">
@@ -42,6 +56,13 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
         }
       }}
     >
+      {/* 🔎 SEO: FAQPage JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        aria-hidden="true"
+      />
+
       {/* Dekorativ bakgrund */}
       <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
@@ -122,7 +143,7 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
             >
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full px-6 md:px-8 py-5 md:py-6 min-h-[56px] text-left flex items-center justify-between hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-xl"
+                className="w-full px-6 md:px-8 py-5 md:py-6 min-h[56px] text-left flex items-center justify-between hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 rounded-xl"
                 aria-expanded={openFAQ === index}
                 aria-controls={`faq-answer-${index}`}
                 id={`faq-question-${index}`}
@@ -160,7 +181,7 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
           >
             Hittar du inte svaret?{' '}
             <button
-              onClick={() => navigate('/contact')}
+              onClick={() => navigate('/kontakt')}
               className="font-bold text-blue-400 hover:text-blue-300 hover:underline transition-colors"
             >
               Kontakta oss här
