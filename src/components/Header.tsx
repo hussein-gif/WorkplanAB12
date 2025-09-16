@@ -83,23 +83,24 @@ const Header: React.FC = () => {
       <header
         className={`fixed top-0 left-0 right-0 z-[1000] pointer-events-none ${isMobileMenuOpen ? "hidden lg:block" : ""}`}
       >
-        {/* Wrapper – mjukare top-marg vid scroll */}
-        <div className={`${isScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""} transition-all duration-300 ease-in-out`}>
-          {/* Container – chip endast när scrolled. Färger styrs separat av isDarkTheme. */}
+        {/* Wrapper – liten top-marg när scrolled */}
+        <div className={`${isScrolled ? "mt-3 sm:mt-4" : ""} transition-all duration-300 ease-in-out`}>
+          {/* Container – ALLTID samma bredd, centrerad */}
           <div
-            className={`pointer-events-auto ${isScrolled ? "inline-block rounded-2xl" : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"} transition-all duration-300 ease-in-out`}
+            className={`pointer-events-auto max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full transition-all duration-300 ease-in-out`}
             style={{ willChange: "opacity, transform" }}
           >
-            {/* Bakgrund/ruta – visas endast när scrolled */}
+            {/* Bakgrund/ruta – visas endast när scrolled, men behåller samma container-bredd */}
             <div
               className={`${isScrolled
                   ? "bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg"
                   : "bg-transparent border border-transparent shadow-none"
                 } rounded-2xl transition-all duration-300 ease-in-out transform-gpu`}
             >
-              {/* Inre rad – mjuk höjd/padding */}
+              {/* Inre rad – liten höjdtransition */}
               <div
                 className={`flex items-center ${isScrolled ? "h-[72px] px-6" : "h-20"} transition-all duration-300 ease-in-out`}
+                style={{ willChange: "height" }}
               >
                 {/* Logo */}
                 <div
@@ -117,7 +118,7 @@ const Header: React.FC = () => {
                   />
                 </div>
 
-                {/* SPACER */}
+                {/* SPACER – används fortfarande för layoutbalans, men påverkar inte container-bredd */}
                 {isScrolled ? (
                   <div
                     style={{
