@@ -48,7 +48,7 @@ const Header: React.FC = () => {
 
   const isDarkTheme = forceDarkColors || isScrolled;
 
-  // --- Mät gap mellan logga och nav i toppläget ---
+  // --- Mät gap mellan logga och nav i toppläget (behålls, men används inte när vi scrollat) ---
   const logoRef = useRef<HTMLDivElement | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
   const [measuredGap, setMeasuredGap] = useState<number | null>(null);
@@ -118,18 +118,8 @@ const Header: React.FC = () => {
                   />
                 </div>
 
-                {/* SPACER – används fortfarande för layoutbalans, men påverkar inte container-bredd */}
-                {isScrolled ? (
-                  <div
-                    style={{
-                      width: measuredGap !== null ? `${measuredGap * 0.9}px` : "clamp(12rem, 24vw, 32rem)",
-                      transition: "width 300ms ease-in-out",
-                      willChange: "width",
-                    }}
-                  />
-                ) : (
-                  <div className="flex-1 transition-all duration-300 ease-in-out" />
-                )}
+                {/* SPACER – alltid flex-1 så nav ligger kvar till höger även i chip-läge */}
+                <div className="flex-1 transition-all duration-300 ease-in-out" />
 
                 {/* Desktop Navigation */}
                 <nav ref={navRef} className="hidden lg:flex items-center space-x-8">
