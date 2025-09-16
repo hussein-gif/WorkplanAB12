@@ -81,32 +81,25 @@ const Header: React.FC = () => {
     <>
       {/* NYTT: dölj hela headern på mobil när mobilmenyn är öppen */}
       <header
-        className={`fixed top-0 left-0 right-0 z-[1000] pointer-events-none ${
-          isMobileMenuOpen ? "hidden lg:block" : ""
-        }`}
+        className={`fixed top-0 left-0 right-0 z-[1000] pointer-events-none ${isMobileMenuOpen ? "hidden lg:block" : ""}`}
       >
-        {/* Wrapper – ingen width-anim, bara liten top-marg när scrolled */}
-        <div className={`${isScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""}`}>
+        {/* Wrapper – mjukare top-marg vid scroll */}
+        <div className={`${isScrolled ? "mt-3 sm:mt-4 flex justify-center" : ""} transition-all duration-300 ease-in-out`}>
           {/* Container – chip endast när scrolled. Färger styrs separat av isDarkTheme. */}
           <div
-            className={`pointer-events-auto ${
-              isScrolled ? "inline-block rounded-2xl" : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
-            }`}
+            className={`pointer-events-auto ${isScrolled ? "inline-block rounded-2xl" : "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"} transition-all duration-300 ease-in-out`}
             style={{ willChange: "opacity, transform" }}
           >
             {/* Bakgrund/ruta – visas endast när scrolled */}
             <div
-              className={`${
-                isScrolled
+              className={`${isScrolled
                   ? "bg-white/90 backdrop-blur-md border border-gray-200/60 shadow-lg"
                   : "bg-transparent border border-transparent shadow-none"
-              } rounded-2xl transition-[opacity,background-color,backdrop-filter,box-shadow,border-color] duration-200 ease-out`}
-              style={{ willChange: "opacity, filter" }}
+                } rounded-2xl transition-all duration-300 ease-in-out transform-gpu`}
             >
-              {/* Inre rad – liten höjdtransition */}
+              {/* Inre rad – mjuk höjd/padding */}
               <div
-                className={`flex items-center ${isScrolled ? "h-[72px] px-6" : "h-20"} transition-[height] duration-200 ease-out`}
-                style={{ willChange: "height" }}
+                className={`flex items-center ${isScrolled ? "h-[72px] px-6" : "h-20"} transition-all duration-300 ease-in-out`}
               >
                 {/* Logo */}
                 <div
@@ -119,7 +112,7 @@ const Header: React.FC = () => {
                       ? "https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
                       : "https://i.ibb.co/HfmhhtVt/Workplan-White-LG.png"}
                     alt="Workplan"
-                    className={`${isScrolled ? "h-14" : "h-16"} px-1 transition-[height] duration-200 ease-out`}
+                    className={`${isScrolled ? "h-14" : "h-16"} px-1 transition-all duration-300 ease-in-out`}
                     style={{ width: "auto", willChange: "height" }}
                   />
                 </div>
@@ -129,12 +122,12 @@ const Header: React.FC = () => {
                   <div
                     style={{
                       width: measuredGap !== null ? `${measuredGap * 0.9}px` : "clamp(12rem, 24vw, 32rem)",
-                      transition: "width 200ms ease-out",
+                      transition: "width 300ms ease-in-out",
                       willChange: "width",
                     }}
                   />
                 ) : (
-                  <div className="flex-1" />
+                  <div className="flex-1 transition-all duration-300 ease-in-out" />
                 )}
 
                 {/* Desktop Navigation */}
@@ -144,18 +137,17 @@ const Header: React.FC = () => {
                       key={item.href}
                       onClick={() => handleNavigation(item.href)}
                       className={`
-                        relative px-3 py-2 text-sm font-medium transition-transform duration-200 hover:scale-105
-                        ${
-                          location.pathname === item.href
-                            ? isDarkTheme ? "text-[#08132B]" : "text-white"
-                            : isDarkTheme ? "text-[#08132B]/80 hover:text-[#08132B]" : "text-white/80 hover:text-white"
+                        relative px-3 py-2 text-sm font-medium transition-all duration-300 ease-in-out hover:scale-105
+                        ${location.pathname === item.href
+                          ? isDarkTheme ? "text-[#08132B]" : "text-white"
+                          : isDarkTheme ? "text-[#08132B]/80 hover:text-[#08132B]" : "text-white/80 hover:text-white"
                         }
                       `}
                       style={{ fontFamily: "Inter, sans-serif" }}
                     >
                       {item.label}
                       {location.pathname === item.href && (
-                        <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full ${isDarkTheme ? "bg-[#08132B]" : "bg-white"}`} />
+                        <div className={`absolute bottom-0 left-0 right-0 h-0.5 rounded-full ${isDarkTheme ? "bg-[#08132B]" : "bg-white"} transition-all duration-300 ease-in-out`} />
                       )}
                     </button>
                   ))}
@@ -164,7 +156,7 @@ const Header: React.FC = () => {
                 {/* Mobile Menu Button */}
                 <button
                   onClick={() => setIsMobileMenuOpen((v) => !v)}
-                  className={`lg:hidden p-2 rounded-lg ${
+                  className={`lg:hidden p-2 rounded-lg transition-all duration-300 ease-in-out ${
                     isDarkTheme ? "text-[#08132B] hover:bg-gray-200/50" : "text-white hover:bg-white/10"
                   }`}
                 >
@@ -184,7 +176,7 @@ const Header: React.FC = () => {
             className="fixed inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setIsMobileMenuOpen(false)}
           />
-          <div className="fixed top-4 left-3 right-3 bg-white/95 backdrop-blur-md border border-gray-200/60 shadow-xl rounded-2xl overflow-hidden">
+          <div className="fixed top-4 left-3 right-3 bg-white/95 backdrop-blur-md border border-gray-200/60 shadow-xl rounded-2xl overflow-hidden transition-all duration-300 ease-in-out transform-gpu">
             <div className="px-4 py-4 flex items-center justify-between">
               <div className="flex items-center">
                 <img
@@ -195,7 +187,7 @@ const Header: React.FC = () => {
               </div>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="p-2 rounded-lg text-[#08132B] hover:bg-gray-200/50 transition-colors"
+                className="p-2 rounded-lg text-[#08132B] hover:bg-gray-200/50 transition-all duration-300 ease-in-out"
               >
                 <X size={22} />
               </button>
@@ -215,7 +207,7 @@ const Header: React.FC = () => {
                     setIsMobileMenuOpen(false);
                   }}
                   className={`
-                    block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-colors duration-200
+                    block w-full text-left px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 ease-in-out
                     ${
                       location.pathname === item.href
                         ? "text-[#08132B] bg-gray-200/70"
