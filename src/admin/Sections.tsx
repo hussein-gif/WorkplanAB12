@@ -1,9 +1,200 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { supabase } from '../supabaseClient';
-import { Application, ContactMessage, StaffingRequest, TopBar, EmptyState, formatDate, badgeClass } from './shared';
-import { Mail, Phone } from 'lucide-react';
+import {
+  Application,
+  ContactMessage,
+  StaffingRequest,
+  TopBar,
+  EmptyState as Empty,
+  formatDate,
+  badgeClass,
+} from './shared';
+import { Mail, Phone, Users, MessageSquare, Briefcase, Check } from 'lucide-react';
 
-/* ========== APPLICATIONS ========== */
+/* ========== DASHBOARD (NY) ========== */
+
+export function DashboardSection() {
+  const [q, setQ] = useState('');
+  const [appsTotal, setAppsTotal] = useState<number | null>(null);
+  const [appsHired, setAppsHired] = useState<number | null>(null);
+  const [msgsNew, setMsgsNew] = useState<number | null>(null);
+  const [reqsActive, setReqsActive] = useState<number | null>(null);
+  const [recentApps, setRecentApps] = useState<Array<Pick<Application, 'id' | 'full_name' | 'role_applied' | 'status' | 'created_at'>>>([]);
+  const [recentMsgs, setRecentMsgs] = useState<Array<Pick<ContactMessage, 'id' | 'full_name' | 'subject' | 'status' | 'created_at'>>>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      setLoading(true);
+
+      // Counts
+      const appsCount = supabase.from('applications').select('*', { count: 'exact', head: true });
+      const hiredCount = supabase.from('applications').select('*', { count: 'exact', head: true }).eq('status', 'hired');
+
+      // Dessa två tabeller kan ev. saknas i din DB; fall back till 0 vid fel
+      const newMsgsCount = supabase.from('contact_messages').select('*', { count: 'exact', head: true }).eq('status', 'new');
+      const activeReqsCount = supabase
+        .from('staffing_requests')
+        .select('*', { count: 'exact', head: true })
+        .neq('status', 'won')
+        .neq('status', 'lost');
+
+      // Lists
+      const lastApps = supabase
+        .from('applications')
+        .select('id, full_name, role_applied, status, created_at')
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      const lastMsgs = supabase
+        .from('contact_messages')
+        .select('id, full_name, subject, status, created_at')
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      const [
+        appsCountRes,
+        hiredCountRes,
+        newMsgsCountRes,
+        activeReqsCountRes,
+        lastAppsRes,
+        lastMsgsRes,
+      ] = await Promise.allSettled([
+        appsCount,
+        hiredCount,
+        newMsgsCount,
+        activeReqsCount,
+        lastApps,
+        lastMsgs,
+      ]);
+
+      // Safely extract counts
+      const getCount = (r: PromiseSettledResult<any>) =>
+        r.status === 'fulfilled' && r.value && typeof r.value.count === 'number' ? r.value.count : 0;
+
+      setAppsTotal(getCount(appsCountRes));
+      setAppsHired(getCount(hiredCountRes));
+      setMsgsNew(getCount(newMsgsCountRes));
+      setReqsActive(getCount(activeReqsCountRes));
+
+      // Safely extract lists
+      setRecentApps(
+        lastAppsRes.status === 'fulfilled' && Array.isArray(lastAppsRes.value.data) ? lastAppsRes.value.data : []
+      );
+      setRecentMsgs(
+        lastMsgsRes.status === 'fulfilled' && Array.isArray(lastMsgsRes.value.data) ? lastMsgsRes.value.data : []
+      );
+
+      setLoading(false);
+    }
+
+    load();
+  }, []);
+
+  return (
+    <div>
+      <TopBar title="Dashboard" q={q} setQ={setQ} />
+
+      {/* KPI-cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white border rounded-xl p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm text-gray-500">Total Applications</div>
+              <div className="text-2xl font-semibold">{appsTotal ?? (loading ? '…' : 0)}</div>
+            </div>
+            <div className="w-10 h-10 rounded-lg bg-gray-900 text-white grid place-items-center">
+              <Users className="w-5 h-5" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm text-gray-500">New Messages</div>
+              <div className="text-2xl font-semibold">{msgsNew ?? (loading ? '…' : 0)}</div>
+            </div>
+            <div className="w-10 h-10 rounded-lg bg-gray-900 text-white grid place-items-center">
+              <MessageSquare className="w-5 h-5" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm text-gray-500">Active Requests</div>
+              <div className="text-2xl font-semibold">{reqsActive ?? (loading ? '…' : 0)}</div>
+            </div>
+            <div className="w-10 h-10 rounded-lg bg-gray-900 text-white grid place-items-center">
+              <Briefcase className="w-5 h-5" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white border rounded-xl p-5">
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="text-sm text-gray-500">Placements (Hired)</div>
+              <div className="text-2xl font-semibold">{appsHired ?? (loading ? '…' : 0)}</div>
+            </div>
+            <div className="w-10 h-10 rounded-lg bg-gray-900 text-white grid place-items-center">
+              <Check className="w-5 h-5" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Lists */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white border rounded-xl p-6">
+          <div className="text-lg font-semibold mb-4">Recent Applications</div>
+          {loading ? (
+            <div className="text-gray-500">Laddar…</div>
+          ) : recentApps.length === 0 ? (
+            <Empty title="Inga ansökningar" hint="Kommer visas här när nya kommer in." />
+          ) : (
+            <div className="space-y-3">
+              {recentApps.map((a) => (
+                <div key={a.id} className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium">{a.full_name}</div>
+                    <div className="text-sm text-gray-500">{a.role_applied ?? '—'} • {formatDate(a.created_at)}</div>
+                  </div>
+                  <span className={`px-2 py-1 rounded-md text-xs ${badgeClass(a.status)}`}>{a.status}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="bg-white border rounded-xl p-6">
+          <div className="text-lg font-semibold mb-4">Recent Messages</div>
+          {loading ? (
+            <div className="text-gray-500">Laddar…</div>
+          ) : recentMsgs.length === 0 ? (
+            <Empty title="Inga meddelanden" hint="Kommer visas här när nya kommer in." />
+          ) : (
+            <div className="space-y-3">
+              {recentMsgs.map((m) => (
+                <div key={m.id} className="flex items-center justify-between">
+                  <div>
+                    <div className="font-medium">{m.full_name}</div>
+                    <div className="text-sm text-gray-500">{m.subject}</div>
+                  </div>
+                  <span className={`px-2 py-1 rounded-md text-xs ${badgeClass(m.status)}`}>{m.status}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ========== APPLICATIONS (oförändrad) ========== */
 
 const STATUSES: Application['status'][] = ['new','reviewed','interview','rejected','hired'];
 
@@ -62,7 +253,7 @@ export function ApplicationsSection() {
       {loading ? (
         <div className="p-8 text-gray-500">Laddar…</div>
       ) : filtered.length === 0 ? (
-        <EmptyState title="Inga ansökningar" hint="Prova att justera filtren." />
+        <Empty title="Inga ansökningar" hint="Prova att justera filtren." />
       ) : (
         <div className="overflow-x-auto border rounded-xl">
           <table className="min-w-full text-sm">
@@ -112,7 +303,7 @@ export function ApplicationsSection() {
   );
 }
 
-/* ========== MESSAGES ========== */
+/* ========== MESSAGES (oförändrad) ========== */
 
 const MSG_STATUSES: ContactMessage['status'][] = ['new', 'read', 'archived'];
 
@@ -172,7 +363,7 @@ export function MessagesSection() {
       {loading ? (
         <div className="p-8 text-gray-500">Laddar…</div>
       ) : filtered.length === 0 ? (
-        <EmptyState title="Inga meddelanden" hint="Prova att justera filtren." />
+        <Empty title="Inga meddelanden" hint="Prova att justera filtren." />
       ) : (
         <div className="overflow-x-auto border rounded-xl">
           <table className="min-w-full text-sm">
@@ -181,7 +372,6 @@ export function MessagesSection() {
                 <th className="px-4 py-3 text-left">Typ</th>
                 <th className="px-4 py-3 text-left">Avsändare</th>
                 <th className="px-4 py-3 text-left">E-post</th>
-                {/** Visa subject kort för tydlighet */}
                 <th className="px-4 py-3 text-left">Ämne</th>
                 <th className="px-4 py-3 text-left">Mottaget</th>
                 <th className="px-4 py-3 text-left">Status</th>
@@ -219,7 +409,7 @@ export function MessagesSection() {
   );
 }
 
-/* ========== STAFFING REQUESTS ========== */
+/* ========== STAFFING REQUESTS (oförändrad) ========== */
 
 const REQ_STATUSES: StaffingRequest['status'][] = ['new','qualified','contacted','won','lost'];
 
@@ -280,7 +470,7 @@ export function RequestsSection() {
       {loading ? (
         <div className="p-8 text-gray-500">Laddar…</div>
       ) : filtered.length === 0 ? (
-        <EmptyState title="Inga förfrågningar" hint="Prova att justera filtren." />
+        <Empty title="Inga förfrågningar" hint="Prova att justera filtren." />
       ) : (
         <div className="overflow-x-auto border rounded-xl">
           <table className="min-w-full text-sm">
