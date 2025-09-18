@@ -111,4 +111,4 @@ const KandidatFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =>
   );
 };
 
-export default KandidatFormContainer;
+export default CandidateFormContainer;
