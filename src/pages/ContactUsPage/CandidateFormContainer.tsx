@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import CandidateFormSection from "./CandidateFormSection";
 import { supabase } from "../../supabaseClient";
