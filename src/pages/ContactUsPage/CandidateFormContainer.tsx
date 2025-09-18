@@ -50,7 +50,7 @@ const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =
 
       const row = {
         from_type: "candidate" as const,
-        name: candidateForm.name,
+        full_name: candidateForm.name, // ändrat här 👈
         email: candidateForm.email,
         phone: candidateForm.phone || null,
         subject: "Kandidatfråga",
@@ -58,7 +58,6 @@ const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =
         status: "new" as const,
       };
 
-      // Viktigt: array till insert + select för att få tillbaka rad/ev. fel
       const { data, error, status } = await supabase
         .from("contact_messages")
         .insert([row])
