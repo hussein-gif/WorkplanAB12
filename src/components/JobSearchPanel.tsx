@@ -184,19 +184,11 @@ const JobSearchPanel: React.FC<JobSearchPanelProps> = ({ isVisible, onClose }) =
           </button>
         </form>
 
-        {/* Footer */}
+        {/* Footer (uppdaterad enligt önskemål) */}
         <div className="px-8 pb-8 pt-4 border-t border-gray-100">
-          <div className="flex items-center justify-center space-x-6 text-sm text-gray-500">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span>150+ Active Jobs</span>
-            </div>
-            <div className="w-px h-4 bg-gray-300" />
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-              <span>50+ Companies</span>
-            </div>
-          </div>
+          <p className="text-center text-sm text-gray-600">
+            Inga lediga jobb tillgängliga just nu.
+          </p>
         </div>
       </div>
     </div>
