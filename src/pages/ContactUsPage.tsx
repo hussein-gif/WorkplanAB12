@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ContactHeroSection from './ContactUsPage/ContactHeroSection';
-import CandidateFormSection from './ContactUsPage/CandidateFormSection';
+// ⬇️ BYTT: Vi använder containern istället för presentational-komponenten
+import CandidateFormContainer from './ContactUsPage/CandidateFormContainer';
 import CompanyFormSection from './ContactUsPage/CompanyFormSection';
 import AlternativeContactSection from './ContactUsPage/AlternativeContactSection';
 import SEO from '../components/SEO'; // ✅ FIXAD SÖKVÄG
@@ -9,13 +10,8 @@ const ContactUsPage = () => {
   const [userType, setUserType] = useState<'candidate' | 'company' | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [candidateForm, setCandidateForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
-    gdprConsent: false
-  });
+
+  // ⬇️ Behåller endast company-formens state/handlers
   const [companyForm, setCompanyForm] = useState({
     companyName: '',
     nameTitle: '',
@@ -28,7 +24,7 @@ const ContactUsPage = () => {
 
   useEffect(() => {
     setIsVisible(true);
-    
+
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: (e.clientX / window.innerWidth) * 100,
@@ -40,31 +36,20 @@ const ContactUsPage = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  const handleCandidateSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Candidate form submitted:', candidateForm);
-    // Handle form submission
-  };
-
+  // ⬇️ Kandidat-submit/-change tas bort – sköts av CandidateFormContainer
   const handleCompanySubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Company form submitted:', companyForm);
-    // Handle form submission
+    // TODO: Lägg in din Supabase insert för företag här om du vill spara även detta
   };
 
-  const handleCandidateChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleCompanyChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value, type } = e.target;
-    setCandidateForm(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
-    }));
-  };
-
-  const handleCompanyChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
     setCompanyForm(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
     }));
   };
 
@@ -78,24 +63,20 @@ const ContactUsPage = () => {
 
       <div className="min-h-screen bg-white">
         <div className="relative z-10">
-          <ContactHeroSection 
+          <ContactHeroSection
             isVisible={isVisible}
             mousePosition={mousePosition}
             userType={userType}
             setUserType={setUserType}
           />
 
+          {/* ⬇️ NYTT: använd containern – den sparar till Supabase */}
           {userType === 'candidate' && (
-            <CandidateFormSection 
-              candidateForm={candidateForm}
-              handleCandidateSubmit={handleCandidateSubmit}
-              handleCandidateChange={handleCandidateChange}
-              onClose={() => setUserType(null)}
-            />
+            <CandidateFormContainer onClose={() => setUserType(null)} />
           )}
 
           {userType === 'company' && (
-            <CompanyFormSection 
+            <CompanyFormSection
               companyForm={companyForm}
               handleCompanySubmit={handleCompanySubmit}
               handleCompanyChange={handleCompanyChange}
