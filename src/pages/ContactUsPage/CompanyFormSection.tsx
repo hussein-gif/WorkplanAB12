@@ -314,7 +314,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  GDPR
+                  Integritetspolicy
                 </a>
                 .
               </label>
