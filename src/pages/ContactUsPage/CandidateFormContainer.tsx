@@ -88,7 +88,7 @@ const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =
         <div className="w-20 h-20 flex items-center justify-center rounded-full bg-blue-600 shadow-lg">
           <Check size={40} className="text-white" strokeWidth={3} />
         </div>
-        <h2 className="mt-6 text-2xl font-semibold text-gray-900">
+        <h2 className="mt-6 text-2xl font-semibold text-gray-900 font-['Zen_Kaku_Gothic_Antique']">
           Tack! Ditt meddelande har skickats.
         </h2>
         <p className="mt-2 text-gray-600">Vi återkommer till dig så snart vi kan.</p>
