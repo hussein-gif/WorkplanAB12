@@ -50,14 +50,18 @@ const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =
 
       const row = {
         from_type: "candidate" as const,
-        full_name: candidateForm.name, // ändrat här 👈
+        full_name: candidateForm.name,             // matchar DB-kolumnen
         email: candidateForm.email,
         phone: candidateForm.phone || null,
         subject: "Kandidatfråga",
         message: candidateForm.message,
         status: "new" as const,
+        // GDPR – spara samtycke och tidpunkt
+        gdpr_consent: !!candidateForm.gdprConsent,
+        gdpr_consented_at: candidateForm.gdprConsent ? new Date().toISOString() : null,
       };
 
+      // Viktigt: skicka array till insert + .select() för tydlig respons
       const { data, error, status } = await supabase
         .from("contact_messages")
         .insert([row])
