@@ -42,14 +42,10 @@ const FeaturedJobs = () => {
     };
   }, []);
 
-  const jobs = [
-    { id:'1', title:'Senior Software Engineer', company:'TechFlow',     location:'Stockholm', type:'Heltid',  posted:'2 dagar sedan',  companyLogo:'T' },
-    { id:'2', title:'Marketing Manager',        company:'GrowthCo',     location:'Göteborg',  type:'Heltid',  posted:'1 dag sedan',    companyLogo:'G' },
-    { id:'3', title:'UX Designer',              company:'DesignStudio', location:'Remote',    type:'Konsult', posted:'3 timmar sedan', companyLogo:'D' },
-    { id:'4', title:'Data Analyst',             company:'DataInsights', location:'Malmö',     type:'Heltid',  posted:'1 dag sedan',    companyLogo:'D' },
-    { id:'5', title:'Project Manager',          company:'BuildCorp',    location:'Uppsala',   type:'Heltid',  posted:'4 dagar sedan',  companyLogo:'B' },
-    { id:'6', title:'DevOps Engineer',          company:'CloudTech',    location:'Stockholm', type:'Heltid',  posted:'6 timmar sedan', companyLogo:'C' },
-  ];
+  // ⬇️ ÄNDRING: töm jobblistan
+  const jobs: {
+    id: string; title: string; company: string; location: string; type: string; posted: string; companyLogo: string;
+  }[] = [];
 
   // Mobil: visa endast 4
   const mobileJobs = jobs.slice(0, 4);
@@ -123,53 +119,59 @@ const FeaturedJobs = () => {
 
           {/* ===== MOBIL: radad lista utan ”ansök senast”, med logo & company i meta-raden ===== */}
           <div className="sm:hidden">
-            <ul className="divide-y divide-white/10">
-              {mobileJobs.map((job) => (
-                <li
-                  key={job.id}
-                  className="py-4 active:bg-white/5 transition-colors"
-                  onClick={() => navigate(`/job/${job.id}`)}
-                >
-                  {/* Titelrad med logga till vänster */}
-                  <div className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-white/10 text-white flex items-center justify-center font-semibold shrink-0">
-                      {job.companyLogo}
-                    </div>
-                    <div className="min-w-0">
-                      <h3
-                        className="text-white text-base font-semibold leading-tight truncate"
-                        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                      >
-                        {job.title}
-                      </h3>
-                    </div>
-                  </div>
-
-                  {/* Meta: company • location • type */}
-                  <div
-                    className="mt-2 flex flex-wrap items-center gap-3 text-[13px] text-white/75"
-                    style={{ fontFamily: 'Inter, sans-serif' }}
+            {mobileJobs.length === 0 ? (
+              <div className="text-center py-10">
+                <h3 className="text-white/80 text-lg">Inga lediga jobb tillgängliga just nu.</h3>
+              </div>
+            ) : (
+              <ul className="divide-y divide-white/10">
+                {mobileJobs.map((job) => (
+                  <li
+                    key={job.id}
+                    className="py-4 active:bg-white/5 transition-colors"
+                    onClick={() => navigate(`/job/${job.id}`)}
                   >
-                    <span className="inline-flex items-center gap-1.5">
-                      <Briefcase size={14} /> {job.company}
-                    </span>
-                    <span className="w-1 h-1 rounded-full bg-white/30" />
-                    <span className="inline-flex items-center gap-1.5">
-                      <MapPin size={14} /> {job.location}
-                    </span>
-                    <span className="w-1 h-1 rounded-full bg-white/30" />
-                    <span className="inline-flex items-center gap-1.5">
-                      <Clock size={14} /> {job.type}
-                    </span>
-                  </div>
+                    {/* Titelrad med logga till vänster */}
+                    <div className="flex items-start gap-3">
+                      <div className="w-9 h-9 rounded-lg bg-white/10 text-white flex items-center justify-center font-semibold shrink-0">
+                        {job.companyLogo}
+                      </div>
+                      <div className="min-w-0">
+                        <h3
+                          className="text-white text-base font-semibold leading-tight truncate"
+                          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                        >
+                          {job.title}
+                        </h3>
+                      </div>
+                    </div>
 
-                  {/* Publicerad (kvar) */}
-                  <div className="mt-1 text-[12px] text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    {job.posted}
-                  </div>
-                </li>
-              ))}
-            </ul>
+                    {/* Meta: company • location • type */}
+                    <div
+                      className="mt-2 flex flex-wrap items-center gap-3 text-[13px] text-white/75"
+                      style={{ fontFamily: 'Inter, sans-serif' }}
+                    >
+                      <span className="inline-flex items-center gap-1.5">
+                        <Briefcase size={14} /> {job.company}
+                      </span>
+                      <span className="w-1 h-1 rounded-full bg-white/30" />
+                      <span className="inline-flex items-center gap-1.5">
+                        <MapPin size={14} /> {job.location}
+                      </span>
+                      <span className="w-1 h-1 rounded-full bg-white/30" />
+                      <span className="inline-flex items-center gap-1.5">
+                        <Clock size={14} /> {job.type}
+                      </span>
+                    </div>
+
+                    {/* Publicerad (kvar) */}
+                    <div className="mt-1 text-[12px] text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
+                      {job.posted}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
 
             {/* CTA */}
             <div
@@ -204,45 +206,51 @@ const FeaturedJobs = () => {
 
           {/* ===== DESKTOP/TABLET: original kortlayout (orörd) ===== */}
           <div className="hidden sm:block">
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
-              {jobs.map((job) => (
-                <SimpleHoverCard
-                  key={job.id}
-                  className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
-                >
-                  <div className="p-5 flex-1 flex flex-col" onClick={() => navigate(`/job/${job.id}`)}>
-                    <div className="flex items-start space-x-4 mb-4">
-                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
-                        {job.companyLogo}
+            {jobs.length === 0 ? (
+              <div className="mb-16 text-center py-10">
+                <h3 className="text-white/80 text-xl">Inga lediga jobb tillgängliga just nu.</h3>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
+                {jobs.map((job) => (
+                  <SimpleHoverCard
+                    key={job.id}
+                    className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
+                  >
+                    <div className="p-5 flex-1 flex flex-col" onClick={() => navigate(`/job/${job.id}`)}>
+                      <div className="flex items-start space-x-4 mb-4">
+                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
+                          {job.companyLogo}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg mb-1 leading-tight font-bold" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', color: '#111827' }}>
+                            {job.title}
+                          </h3>
+                          <div className="text-base" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400, color: '#374151' }}>
+                            {job.company}
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-lg mb-1 leading-tight font-bold" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', color: '#111827' }}>
-                          {job.title}
-                        </h3>
-                        <div className="text-base" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400, color: '#374151' }}>
-                          {job.company}
+                      <div className="flex items-center space-x-4 text-sm mb-4" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400, color: '#6B7280' }}>
+                        <div className="flex items-center space-x-2"><MapPin size={14} /><span>{job.location}</span></div>
+                        <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                        <div className="flex items-center space-x-2"><Clock size={14} /><span>{job.type}</span></div>
+                      </div>
+                    </div>
+                    {/* Desktop-footern (oförändrad, med ansök senast) */}
+                    <div className="relative z-10 p-5 pt-0 flex items-end justify-between" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
+                      <div className="text-sm text-gray-500">{job.posted}</div>
+                      <div className="text-right text-sm text-gray-500">
+                        <div>Ansök senast</div>
+                        <div className="text-gray-700">
+                          {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE')}
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center space-x-4 text-sm mb-4" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400, color: '#6B7280' }}>
-                      <div className="flex items-center space-x-2"><MapPin size={14} /><span>{job.location}</span></div>
-                      <span className="w-1 h-1 bg-gray-400 rounded-full" />
-                      <div className="flex items-center space-x-2"><Clock size={14} /><span>{job.type}</span></div>
-                    </div>
-                  </div>
-                  {/* Desktop-footern (oförändrad, med ansök senast) */}
-                  <div className="relative z-10 p-5 pt-0 flex items-end justify-between" style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
-                    <div className="text-sm text-gray-500">{job.posted}</div>
-                    <div className="text-right text-sm text-gray-500">
-                      <div>Ansök senast</div>
-                      <div className="text-gray-700">
-                        {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE')}
-                      </div>
-                    </div>
-                  </div>
-                </SimpleHoverCard>
-              ))}
-            </div>
+                  </SimpleHoverCard>
+                ))}
+              </div>
+            )}
 
             <div
               className={`
