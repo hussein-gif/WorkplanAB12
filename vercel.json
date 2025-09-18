@@ -1,4 +1,7 @@
 {
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ],
   "redirects": [
     { "source": "/jobs", "destination": "/jobb", "permanent": true },
     { "source": "/job/:jobId", "destination": "/jobb/:jobId", "permanent": true },
