@@ -1,6 +1,3 @@
-console.log("SB URL", import.meta.env.VITE_SUPABASE_URL?.slice(0, 30));
-console.log("SB KEY", import.meta.env.VITE_SUPABASE_ANON_KEY?.slice(0, 10));
-
 "use client";
 import React, { useState } from "react";
 import ContactFormSection from "./ContactFormSection";
