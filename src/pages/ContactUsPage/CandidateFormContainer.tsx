@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CandidateFormSection from './CandidateFormSection';
-import { supabase } from "../../supabaseClient";;
+import { supabase } from '../../supabaseClient';
 
 type CandidateFormState = {
   name: string;
@@ -10,6 +10,8 @@ type CandidateFormState = {
   gdprConsent: boolean;
 };
 
+type Feedback = { type: 'ok' | 'error'; text: string } | null;
+
 const INITIAL: CandidateFormState = {
   name: '',
   email: '',
@@ -18,10 +20,10 @@ const INITIAL: CandidateFormState = {
   gdprConsent: false,
 };
 
-const KandidatFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) => {
+const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) => {
   const [candidateForm, setCandidateForm] = useState<CandidateFormState>(INITIAL);
   const [loading, setLoading] = useState(false);
-  const [feedback, setFeedback] = useState<{ typ: 'ok' | 'error'; text: string } | null>(null);
+  const [feedback, setFeedback] = useState<Feedback>(null);
 
   // Hanterar både input, textarea och checkbox
   const handleCandidateChange = (
@@ -38,44 +40,51 @@ const KandidatFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =>
 
     // Enkel validering
     if (!candidateForm.name || !candidateForm.email || !candidateForm.message) {
-      setFeedback({ typ: 'error', text: 'Fyll i namn, e-post och meddelande.' });
+      setFeedback({ type: 'error', text: 'Fyll i namn, e-post och meddelande.' });
       return;
     }
     if (!candidateForm.gdprConsent) {
-      setFeedback({ typ: 'error', text: 'Du måste godkänna GDPR för att kunna skicka.' });
+      setFeedback({ type: 'error', text: 'Du måste godkänna GDPR för att kunna skicka.' });
       return;
     }
 
     setLoading(true);
 
-    // Förbered raden att spara i Supabase
-    const row = {
-      from_type: 'candidate' as const,
-      name: candidateForm.name,
-      email: candidateForm.email,
-      phone: candidateForm.phone || null,
-      // Om din kolumn subject är NOT NULL i databasen, använd en default:
-      subject: 'Kandidatfråga',
-      message: candidateForm.message,
-      status: 'new' as const,
-    };
+    try {
+      // Förbered raden att spara i Supabase
+      const row = {
+        from_type: 'candidate' as const,
+        name: candidateForm.name,
+        email: candidateForm.email,
+        phone: candidateForm.phone || null,
+        subject: 'Kandidatfråga',
+        message: candidateForm.message,
+        status: 'new' as const,
+      };
 
-    const { error } = await supabase.from('contact_messages').insert(row);
+      const { error } = await supabase.from('contact_messages').insert(row);
 
-    setLoading(false);
+      if (error) {
+        console.error(error);
+        setFeedback({
+          type: 'error',
+          text: 'Kunde inte skicka just nu. Försök igen om en stund.',
+        });
+        return;
+      }
 
-    if (error) {
-      console.error(error);
+      setFeedback({ type: 'ok', text: 'Tack! Ditt meddelande har skickats.' });
+      setCandidateForm(INITIAL);
+      onSent?.();
+    } catch (err) {
+      console.error(err);
       setFeedback({
-        typ: 'error',
-        text: 'Kunde inte skicka just nu. Försök igen om en stund.',
+        type: 'error',
+        text: 'Ett oväntat fel inträffade. Försök igen.',
       });
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    setFeedback({ typ: 'ok', text: 'Tack! Ditt meddelande har skickats.' });
-    setCandidateForm(INITIAL);
-    onSent?.();
   };
 
   return (
@@ -92,7 +101,7 @@ const KandidatFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =>
         <div
           className={
             'mt-4 rounded-2xl border px-4 py-3 ' +
-            (feedback.typ === 'ok'
+            (feedback.type === 'ok'
               ? 'border-green-300 bg-green-50 text-green-800'
               : 'border-red-300 bg-red-50 text-red-800')
           }
