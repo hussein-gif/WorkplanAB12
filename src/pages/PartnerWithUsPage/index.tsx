@@ -6,7 +6,8 @@ import ProcessSection from './ProcessSection';
 import IndustriesSection from './IndustriesSection';
 import PromiseBandSection from './PromiseBandSection';
 import TeamSection from './TeamSection';
-import ContactFormSection from './ContactFormSection';
+// ⬇️ Byt till containern
+import ContactFormContainer from './ContactFormContainer';
 import SEO from '../../components/SEO'; // ⬅️ Import SEO
 
 const PartnerWithUsPage = () => {
@@ -140,11 +141,8 @@ const PartnerWithUsPage = () => {
           
           <TeamSection isVisible={isVisible} />
           
-          <ContactFormSection 
-            formData={formData}
-            handleFormSubmit={handleFormSubmit}
-            handleInputChange={handleInputChange}
-          />
+          {/* ⬇️ Byt till containern (ingen prop behövs) */}
+          <ContactFormContainer />
         </div>
       </div>
     </>
