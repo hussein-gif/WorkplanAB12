@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { Send, ChevronDown } from "lucide-react";
 
@@ -106,7 +107,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
         />
       </div>
 
-      {/* Kortet – ingen intern scroll: hela formuläret visas */}
+      {/* Kortet */}
       <div
         className="
           relative w-[min(95vw,46rem)] mx-auto
@@ -114,7 +115,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
           transition-all duration-200
         "
       >
-        {/* Header (behålls för konsekvent look) */}
+        {/* Header */}
         <div
           className="
             bg-white/95 backdrop-blur supports-[backdrop-filter]:backdrop-blur
@@ -188,14 +189,20 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
                 <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
                   Telefon
                 </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={companyForm.phone}
-                  onChange={handleCompanyChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 transition-all duration-200"
-                  placeholder="+46 XX XXX XX XX"
-                />
+                <div className="flex items-center border border-gray-300 rounded-2xl focus-within:border-emerald-500 focus-within:ring-4 focus-within:ring-emerald-500/10 transition-all duration-200 px-4 py-3">
+                  <span className="text-gray-700 mr-2 select-none">+46</span>
+                  <span className="text-gray-300">|</span>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={companyForm.phone}
+                    onChange={handleCompanyChange}
+                    className="flex-1 ml-2 focus:outline-none"
+                    placeholder="7XXXXXXXX"
+                    pattern="7[0-9]{8}" // ser till att numret börjar med 7 och är 9 siffror totalt
+                    required={false}
+                  />
+                </div>
               </div>
             </div>
 
@@ -313,7 +320,7 @@ const CompanyFormSection: React.FC<CompanyFormSectionProps> = ({
               </label>
             </div>
 
-            {/* Mer levande knapp (gradient + shimmer) */}
+            {/* Knapp */}
             <button
               type="submit"
               className="
