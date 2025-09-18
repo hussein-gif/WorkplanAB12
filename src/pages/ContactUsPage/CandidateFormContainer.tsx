@@ -45,33 +45,40 @@ const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =
       return;
     }
 
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const row = {
-      from_type: "candidate" as const,
-      name: candidateForm.name,
-      email: candidateForm.email,
-      phone: candidateForm.phone || null,
-      subject: "Kandidatfråga",
-      message: candidateForm.message,
-      status: "new" as const,
-    };
+      const row = {
+        from_type: "candidate" as const,
+        name: candidateForm.name,
+        email: candidateForm.email,
+        phone: candidateForm.phone || null,
+        subject: "Kandidatfråga",
+        message: candidateForm.message,
+        status: "new" as const,
+      };
 
-    const { error } = await supabase.from("contact_messages").insert(row);
-    setLoading(false);
+      // Viktigt: skicka array till insert + ta med .select() så vi ser svar
+      const { data, error, status } = await supabase
+        .from("contact_messages")
+        .insert([row])
+        .select();
 
-    if (error) {
-      console.error(error);
-      setFeedback({
-        typ: "error",
-        text: "Kunde inte skicka just nu. Försök igen om en stund.",
-      });
-      return;
+      if (error) {
+        console.error("Supabase insert error:", error, "HTTP status:", status, "data:", data);
+        setFeedback({ typ: "error", text: `Kunde inte skicka (${error.message}).` });
+        return;
+      }
+
+      setFeedback({ typ: "ok", text: "Tack! Ditt meddelande har skickats." });
+      setCandidateForm(INITIAL);
+      onSent?.();
+    } catch (err: any) {
+      console.error("Unexpected submit error:", err);
+      setFeedback({ typ: "error", text: "Ett oväntat fel inträffade." });
+    } finally {
+      setLoading(false);
     }
-
-    setFeedback({ typ: "ok", text: "Tack! Ditt meddelande har skickats." });
-    setCandidateForm(INITIAL);
-    onSent?.();
   };
 
   return (
@@ -81,6 +88,8 @@ const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =
         candidateForm={candidateForm}
         handleCandidateChange={handleCandidateChange}
         handleCandidateSubmit={handleCandidateSubmit}
+        // NY:
+        loading={loading}
       />
 
       {feedback && (
