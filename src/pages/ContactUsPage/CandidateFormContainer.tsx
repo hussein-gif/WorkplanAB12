@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import CandidateFormSection from "./CandidateFormSection";
 import { supabase } from "../../supabaseClient";
+import { Check } from "lucide-react"; // ikon för bocken
 
 type CandidateFormState = {
   name: string;
@@ -22,6 +23,7 @@ const INITIAL: CandidateFormState = {
 const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) => {
   const [candidateForm, setCandidateForm] = useState<CandidateFormState>(INITIAL);
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false); // ny state för success
   const [feedback, setFeedback] = useState<{ typ: "ok" | "error"; text: string } | null>(null);
 
   const handleCandidateChange = (
@@ -50,30 +52,26 @@ const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =
 
       const row = {
         from_type: "candidate" as const,
-        full_name: candidateForm.name,             // matchar DB-kolumnen
+        full_name: candidateForm.name,
         email: candidateForm.email,
         phone: candidateForm.phone || null,
         subject: "Kandidatfråga",
         message: candidateForm.message,
         status: "new" as const,
-        // GDPR – spara samtycke och tidpunkt
         gdpr_consent: !!candidateForm.gdprConsent,
         gdpr_consented_at: candidateForm.gdprConsent ? new Date().toISOString() : null,
       };
 
-      // Viktigt: skicka array till insert + .select() för tydlig respons
-      const { data, error, status } = await supabase
-        .from("contact_messages")
-        .insert([row])
-        .select();
+      const { error } = await supabase.from("contact_messages").insert([row]).select();
 
       if (error) {
-        console.error("Supabase insert error:", error, "HTTP status:", status, "data:", data);
+        console.error("Supabase insert error:", error);
         setFeedback({ typ: "error", text: `Kunde inte skicka (${error.message}).` });
         return;
       }
 
-      setFeedback({ typ: "ok", text: "Tack! Ditt meddelande har skickats." });
+      // Visa success istället för formulär
+      setSuccess(true);
       setCandidateForm(INITIAL);
       onSent?.();
     } catch (err: any) {
@@ -83,6 +81,20 @@ const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =
       setLoading(false);
     }
   };
+
+  if (success) {
+    return (
+      <div className="flex flex-col items-center justify-center py-16">
+        <div className="w-20 h-20 flex items-center justify-center rounded-full bg-blue-600 shadow-lg">
+          <Check size={40} className="text-white" strokeWidth={3} />
+        </div>
+        <h2 className="mt-6 text-2xl font-semibold text-gray-900">
+          Tack! Ditt meddelande har skickats.
+        </h2>
+        <p className="mt-2 text-gray-600">Vi återkommer till dig så snart vi kan.</p>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -94,14 +106,9 @@ const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =
         loading={loading}
       />
 
-      {feedback && (
+      {feedback && feedback.typ === "error" && (
         <div
-          className={
-            "mt-4 rounded-2xl border px-4 py-3 " +
-            (feedback.typ === "ok"
-              ? "border-green-300 bg-green-50 text-green-800"
-              : "border-red-300 bg-red-50 text-red-800")
-          }
+          className="mt-4 rounded-2xl border px-4 py-3 border-red-300 bg-red-50 text-red-800"
           role="status"
         >
           {feedback.text}
