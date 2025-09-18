@@ -42,7 +42,10 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
     navigate(`/jobb/${encodeURIComponent(idOrSlug)}`);
   };
 
-  if (jobs.length === 0) {
+  // === ÄNDRING: Dölj alla jobb och visa endast meddelandet ===
+  const jobsToShow: Job[] = [];
+
+  if (jobsToShow.length === 0) {
     return (
       <div className="px-4 sm:px-8 pb-20">
         <div className="max-w-7xl mx-auto">
@@ -50,13 +53,9 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
             <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search size={24} className="text-white/40" />
             </div>
-            <h3 className="text-xl text-white/80 mb-2">Inga tjänster hittades</h3>
-            <p
-              className="text-white/60"
-              style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}
-            >
-              Prova att ändra dina sökkriterier
-            </p>
+            <h3 className="text-xl text-white/80 mb-2">
+              Inga lediga jobb tillgängliga just nu.
+            </h3>
           </div>
         </div>
       </div>
@@ -69,7 +68,7 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
         {/* ===== MOBIL: radad lista ===== */}
         <div className="sm:hidden">
           <ul className="divide-y divide-white/10">
-            {jobs.map((job) => (
+            {jobsToShow.map((job) => (
               <li
                 key={job.id ?? job.title}
                 className="py-4 active:bg-white/5 transition-colors cursor-pointer"
@@ -120,7 +119,7 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
         {/* ===== DESKTOP ===== */}
         <div className="hidden sm:block">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-center">
-            {jobs.map((job) => (
+            {jobsToShow.map((job) => (
               <SimpleHoverCard
                 key={job.id ?? job.title}
                 className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
