@@ -94,7 +94,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-gray-700 text-sm font-medium mb-2 font-['Zen_Kaku_Gothic_Antique']">
-                  Namn *
+                  För & Efternamn *
                 </label>
                 <input
                   ref={firstFieldRef}
