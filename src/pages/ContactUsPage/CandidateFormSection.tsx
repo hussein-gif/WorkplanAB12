@@ -169,7 +169,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  GDPR
+                  Integritetspolicy
                 </a>
                 .
               </label>
