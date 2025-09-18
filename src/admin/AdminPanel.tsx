@@ -7,7 +7,7 @@ import { Briefcase, MessageSquare, Users, LogOut, Home } from 'lucide-react';
 type Tab = 'dashboard' | 'applications' | 'messages' | 'requests';
 
 export default function AdminPanel() {
-  const [tab, setTab] = useState<Tab>('applications'); // behåller samma start som tidigare
+  const [tab, setTab] = useState<Tab>('applications'); // oförändrad startflik
   const navigate = useNavigate();
 
   async function signOut() {
@@ -18,8 +18,8 @@ export default function AdminPanel() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
       <div className="flex">
-        {/* Sidebar */}
-        <aside className="w-64 border-r h-screen sticky top-0 hidden md:block">
+        {/* Sidopanel */}
+        <aside className="w-64 border-r h-screen sticky top-0 hidden md:flex md:flex-col">
           <div className="p-5 border-b">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gray-900 text-white rounded-xl grid place-items-center">
@@ -27,66 +27,69 @@ export default function AdminPanel() {
               </div>
               <div>
                 <div className="text-lg font-semibold">Workplan Admin</div>
-                <div className="text-xs text-gray-500">Dashboard</div>
+                <div className="text-xs text-gray-500">Översikt</div>
               </div>
             </div>
           </div>
+
           <nav className="p-3 space-y-2">
             <button
               onClick={() => setTab('dashboard')}
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'dashboard' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
-              <Home className="w-4 h-4" /> Dashboard
+              <Home className="w-4 h-4" /> Översikt
             </button>
             <button
               onClick={() => setTab('applications')}
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'applications' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
-              <Users className="w-4 h-4" /> Applications
+              <Users className="w-4 h-4" /> Ansökningar
             </button>
             <button
               onClick={() => setTab('messages')}
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'messages' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
-              <MessageSquare className="w-4 h-4" /> Messages
+              <MessageSquare className="w-4 h-4" /> Meddelanden
             </button>
             <button
               onClick={() => setTab('requests')}
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'requests' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
-              <Briefcase className="w-4 h-4" /> Requests
+              <Briefcase className="w-4 h-4" /> Förfrågningar
             </button>
           </nav>
+
+          {/* Flytta logga ut längst ned */}
           <div className="mt-auto p-3">
             <button
               onClick={signOut}
               className="w-full px-3 py-2 rounded-lg flex items-center gap-2 text-red-600 hover:bg-red-50"
             >
-              <LogOut className="w-4 h-4" /> Log out
+              <LogOut className="w-4 h-4" /> Logga ut
             </button>
           </div>
         </aside>
 
-        {/* Content */}
+        {/* Innehåll */}
         <main className="flex-1 p-5 md:p-8">
-          {/* Mobile tabs */}
+          {/* Mobila flikar */}
           <div className="md:hidden mb-4 flex gap-2 flex-wrap">
             <button
               className={`px-3 py-2 rounded-lg border ${tab === 'dashboard' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('dashboard')}
-            >Dashboard</button>
+            >Översikt</button>
             <button
               className={`px-3 py-2 rounded-lg border ${tab === 'applications' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('applications')}
-            >Applications</button>
+            >Ansökningar</button>
             <button
               className={`px-3 py-2 rounded-lg border ${tab === 'messages' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('messages')}
-            >Messages</button>
+            >Meddelanden</button>
             <button
               className={`px-3 py-2 rounded-lg border ${tab === 'requests' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('requests')}
-            >Requests</button>
+            >Förfrågningar</button>
           </div>
 
           {tab === 'dashboard' && <DashboardSection />}
