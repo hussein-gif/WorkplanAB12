@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CandidateFormSection from './CandidateFormSection';
-import { supabase } from '@/supabaseClient';
+import { supabase } from "../../supabaseClient";;
 
 type CandidateFormState = {
   name: string;
