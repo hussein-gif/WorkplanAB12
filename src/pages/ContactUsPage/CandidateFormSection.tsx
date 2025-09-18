@@ -104,7 +104,7 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = ({
                   onChange={handleCandidateChange}
                   required
                   className="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all duration-200"
-                  placeholder="Ditt namn"
+                  placeholder="Anna Andersson"
                 />
               </div>
               <div>
