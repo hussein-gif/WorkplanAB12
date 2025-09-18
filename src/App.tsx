@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams, useLocation } from 'react-router-dom';
 
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -62,12 +62,16 @@ function LegacyJobRedirect() {
   return <Navigate to={`/jobb/${encodeURIComponent(jobId ?? '')}`} replace />;
 }
 
-function App() {
+// ⬇️ NYTT: Inre komponent som kan använda useLocation för att dölja header/footer på admin-sidor
+function AppContent() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   return (
-    <Router>
+    <>
       <ScrollToTop />
       <div className="min-h-screen bg-white">
-        <Header />
+        {!isAdminRoute && <Header />}
         <main>
           <Routes>
             {/* Startsida */}
@@ -103,8 +107,16 @@ function App() {
             />
           </Routes>
         </main>
-        <Footer />
+        {!isAdminRoute && <Footer />}
       </div>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
