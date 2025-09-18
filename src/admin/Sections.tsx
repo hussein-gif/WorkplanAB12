@@ -11,7 +11,40 @@ import {
 } from './shared';
 import { Mail, Phone, Users, MessageSquare, Briefcase, Check } from 'lucide-react';
 
-/* ========== DASHBOARD (NY) ========== */
+/* Hjälp: svenska etiketter för statusar */
+function statusLabel(
+  domän: 'application' | 'message' | 'request',
+  värde: string
+): string {
+  if (domän === 'application') {
+    const map: Record<string, string> = {
+      new: 'Ny',
+      reviewed: 'Granskad',
+      interview: 'Intervju',
+      rejected: 'Avslagen',
+      hired: 'Anställd',
+    };
+    return map[värde] ?? värde;
+  }
+  if (domän === 'message') {
+    const map: Record<string, string> = {
+      new: 'Ny',
+      read: 'Läst',
+      archived: 'Arkiverad',
+    };
+    return map[värde] ?? värde;
+  }
+  const map: Record<string, string> = {
+    new: 'Ny',
+    qualified: 'Kvalificerad',
+    contacted: 'Kontaktad',
+    won: 'Vunnen',
+    lost: 'Förlorad',
+  };
+  return map[värde] ?? värde;
+}
+
+/* ========== ÖVERSIKT (Dashboard) ========== */
 
 export function DashboardSection() {
   const [q, setQ] = useState('');
@@ -27,11 +60,11 @@ export function DashboardSection() {
     async function load() {
       setLoading(true);
 
-      // Counts
+      // Antal
       const appsCount = supabase.from('applications').select('*', { count: 'exact', head: true });
       const hiredCount = supabase.from('applications').select('*', { count: 'exact', head: true }).eq('status', 'hired');
 
-      // Dessa två tabeller kan ev. saknas i din DB; fall back till 0 vid fel
+      // Kan saknas – fall back till 0
       const newMsgsCount = supabase.from('contact_messages').select('*', { count: 'exact', head: true }).eq('status', 'new');
       const activeReqsCount = supabase
         .from('staffing_requests')
@@ -39,7 +72,7 @@ export function DashboardSection() {
         .neq('status', 'won')
         .neq('status', 'lost');
 
-      // Lists
+      // Listor
       const lastApps = supabase
         .from('applications')
         .select('id, full_name, role_applied, status, created_at')
@@ -68,7 +101,6 @@ export function DashboardSection() {
         lastMsgs,
       ]);
 
-      // Safely extract counts
       const getCount = (r: PromiseSettledResult<any>) =>
         r.status === 'fulfilled' && r.value && typeof r.value.count === 'number' ? r.value.count : 0;
 
@@ -77,7 +109,6 @@ export function DashboardSection() {
       setMsgsNew(getCount(newMsgsCountRes));
       setReqsActive(getCount(activeReqsCountRes));
 
-      // Safely extract lists
       setRecentApps(
         lastAppsRes.status === 'fulfilled' && Array.isArray(lastAppsRes.value.data) ? lastAppsRes.value.data : []
       );
@@ -93,14 +124,14 @@ export function DashboardSection() {
 
   return (
     <div>
-      <TopBar title="Dashboard" q={q} setQ={setQ} />
+      <TopBar title="Översikt" q={q} setQ={setQ} />
 
-      {/* KPI-cards */}
+      {/* KPI-kort */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white border rounded-xl p-5">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm text-gray-500">Total Applications</div>
+              <div className="text-sm text-gray-500">Antal ansökningar</div>
               <div className="text-2xl font-semibold">{appsTotal ?? (loading ? '…' : 0)}</div>
             </div>
             <div className="w-10 h-10 rounded-lg bg-gray-900 text-white grid place-items-center">
@@ -112,7 +143,7 @@ export function DashboardSection() {
         <div className="bg-white border rounded-xl p-5">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm text-gray-500">New Messages</div>
+              <div className="text-sm text-gray-500">Nya meddelanden</div>
               <div className="text-2xl font-semibold">{msgsNew ?? (loading ? '…' : 0)}</div>
             </div>
             <div className="w-10 h-10 rounded-lg bg-gray-900 text-white grid place-items-center">
@@ -124,7 +155,7 @@ export function DashboardSection() {
         <div className="bg-white border rounded-xl p-5">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm text-gray-500">Active Requests</div>
+              <div className="text-sm text-gray-500">Aktiva förfrågningar</div>
               <div className="text-2xl font-semibold">{reqsActive ?? (loading ? '…' : 0)}</div>
             </div>
             <div className="w-10 h-10 rounded-lg bg-gray-900 text-white grid place-items-center">
@@ -136,7 +167,7 @@ export function DashboardSection() {
         <div className="bg-white border rounded-xl p-5">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm text-gray-500">Placements (Hired)</div>
+              <div className="text-sm text-gray-500">Placeringar (anställda)</div>
               <div className="text-2xl font-semibold">{appsHired ?? (loading ? '…' : 0)}</div>
             </div>
             <div className="w-10 h-10 rounded-lg bg-gray-900 text-white grid place-items-center">
@@ -146,14 +177,14 @@ export function DashboardSection() {
         </div>
       </div>
 
-      {/* Lists */}
+      {/* Listor */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white border rounded-xl p-6">
-          <div className="text-lg font-semibold mb-4">Recent Applications</div>
+          <div className="text-lg font-semibold mb-4">Senaste ansökningar</div>
           {loading ? (
             <div className="text-gray-500">Laddar…</div>
           ) : recentApps.length === 0 ? (
-            <Empty title="Inga ansökningar" hint="Kommer visas här när nya kommer in." />
+            <Empty title="Inga ansökningar" hint="Visas här när nya kommer in." />
           ) : (
             <div className="space-y-3">
               {recentApps.map((a) => (
@@ -162,7 +193,9 @@ export function DashboardSection() {
                     <div className="font-medium">{a.full_name}</div>
                     <div className="text-sm text-gray-500">{a.role_applied ?? '—'} • {formatDate(a.created_at)}</div>
                   </div>
-                  <span className={`px-2 py-1 rounded-md text-xs ${badgeClass(a.status)}`}>{a.status}</span>
+                  <span className={`px-2 py-1 rounded-md text-xs ${badgeClass(a.status)}`}>
+                    {statusLabel('application', a.status)}
+                  </span>
                 </div>
               ))}
             </div>
@@ -170,11 +203,11 @@ export function DashboardSection() {
         </div>
 
         <div className="bg-white border rounded-xl p-6">
-          <div className="text-lg font-semibold mb-4">Recent Messages</div>
+          <div className="text-lg font-semibold mb-4">Senaste meddelanden</div>
           {loading ? (
             <div className="text-gray-500">Laddar…</div>
           ) : recentMsgs.length === 0 ? (
-            <Empty title="Inga meddelanden" hint="Kommer visas här när nya kommer in." />
+            <Empty title="Inga meddelanden" hint="Visas här när nya kommer in." />
           ) : (
             <div className="space-y-3">
               {recentMsgs.map((m) => (
@@ -183,7 +216,9 @@ export function DashboardSection() {
                     <div className="font-medium">{m.full_name}</div>
                     <div className="text-sm text-gray-500">{m.subject}</div>
                   </div>
-                  <span className={`px-2 py-1 rounded-md text-xs ${badgeClass(m.status)}`}>{m.status}</span>
+                  <span className={`px-2 py-1 rounded-md text-xs ${badgeClass(m.status)}`}>
+                    {statusLabel('message', m.status)}
+                  </span>
                 </div>
               ))}
             </div>
@@ -194,9 +229,15 @@ export function DashboardSection() {
   );
 }
 
-/* ========== APPLICATIONS (oförändrad) ========== */
+/* ========== ANSÖKNINGAR ========== */
 
-const STATUSES: Application['status'][] = ['new','reviewed','interview','rejected','hired'];
+const STATUSES: { value: Application['status']; label: string }[] = [
+  { value: 'new', label: 'Ny' },
+  { value: 'reviewed', label: 'Granskad' },
+  { value: 'interview', label: 'Intervju' },
+  { value: 'rejected', label: 'Avslagen' },
+  { value: 'hired', label: 'Anställd' },
+];
 
 export function ApplicationsSection() {
   const [apps, setApps] = useState<Application[]>([]);
@@ -236,14 +277,14 @@ export function ApplicationsSection() {
   return (
     <div>
       <TopBar
-        title="Applications"
+        title="Ansökningar"
         q={q}
         setQ={setQ}
         right={
           <>
             <select className="border rounded-lg px-3 py-2" value={status} onChange={e => setStatus(e.target.value as any)}>
               <option value="all">Alla statusar</option>
-              {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+              {STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
             </select>
             <button onClick={fetchApps} className="border rounded-lg px-3 py-2">Uppdatera</button>
           </>
@@ -285,7 +326,7 @@ export function ApplicationsSection() {
                       value={a.status}
                       onChange={e => updateStatus(a.id, e.target.value as Application['status'])}
                     >
-                      {STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+                      {STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                     </select>
                   </td>
                   <td className="px-4 py-3">
@@ -303,9 +344,13 @@ export function ApplicationsSection() {
   );
 }
 
-/* ========== MESSAGES (oförändrad) ========== */
+/* ========== MEDDELANDEN ========== */
 
-const MSG_STATUSES: ContactMessage['status'][] = ['new', 'read', 'archived'];
+const MSG_STATUSES: { value: ContactMessage['status']; label: string }[] = [
+  { value: 'new', label: 'Ny' },
+  { value: 'read', label: 'Läst' },
+  { value: 'archived', label: 'Arkiverad' },
+];
 
 export function MessagesSection() {
   const [items, setItems] = useState<ContactMessage[]>([]);
@@ -341,19 +386,19 @@ export function MessagesSection() {
   return (
     <div>
       <TopBar
-        title="Messages"
+        title="Meddelanden"
         q={q}
         setQ={setQ}
         right={
           <>
             <select className="border rounded-lg px-3 py-2" value={type} onChange={e => setType(e.target.value as any)}>
               <option value="all">Alla typer</option>
-              <option value="candidate">Candidate</option>
-              <option value="company">Company</option>
+              <option value="candidate">Kandidat</option>
+              <option value="company">Företag</option>
             </select>
             <select className="border rounded-lg px-3 py-2" value={status} onChange={e => setStatus(e.target.value as any)}>
               <option value="all">Alla statusar</option>
-              {MSG_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+              {MSG_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
             </select>
             <button onClick={fetchMessages} className="border rounded-lg px-3 py-2">Uppdatera</button>
           </>
@@ -381,7 +426,7 @@ export function MessagesSection() {
               {filtered.map(m => (
                 <tr key={m.id} className="border-t align-top">
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-1 rounded-md ${badgeClass(m.from_type)}`}>{m.from_type}</span>
+                    <span className={`px-2 py-1 rounded-md ${badgeClass(m.from_type)}`}>{m.from_type === 'candidate' ? 'Kandidat' : 'Företag'}</span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="font-medium">{m.full_name}</div>
@@ -396,7 +441,7 @@ export function MessagesSection() {
                       value={m.status}
                       onChange={e => updateStatus(m.id, e.target.value as ContactMessage['status'])}
                     >
-                      {MSG_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+                      {MSG_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                     </select>
                   </td>
                 </tr>
@@ -409,9 +454,15 @@ export function MessagesSection() {
   );
 }
 
-/* ========== STAFFING REQUESTS (oförändrad) ========== */
+/* ========== FÖRFRÅGNINGAR (Bemanning) ========== */
 
-const REQ_STATUSES: StaffingRequest['status'][] = ['new','qualified','contacted','won','lost'];
+const REQ_STATUSES: { value: StaffingRequest['status']; label: string }[] = [
+  { value: 'new', label: 'Ny' },
+  { value: 'qualified', label: 'Kvalificerad' },
+  { value: 'contacted', label: 'Kontaktad' },
+  { value: 'won', label: 'Vunnen' },
+  { value: 'lost', label: 'Förlorad' },
+];
 
 export function RequestsSection() {
   const [items, setItems] = useState<StaffingRequest[]>([]);
@@ -449,14 +500,14 @@ export function RequestsSection() {
   return (
     <div>
       <TopBar
-        title="Staffing Requests"
+        title="Förfrågningar"
         q={q}
         setQ={setQ}
         right={
           <>
             <select className="border rounded-lg px-3 py-2" value={status} onChange={e => setStatus(e.target.value as any)}>
               <option value="all">Alla statusar</option>
-              {REQ_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+              {REQ_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
             </select>
             <select className="border rounded-lg px-3 py-2" value={location} onChange={e => setLocation(e.target.value)}>
               <option value="all">Alla orter</option>
@@ -503,7 +554,7 @@ export function RequestsSection() {
                       value={r.status}
                       onChange={e => updateStatus(r.id, e.target.value as StaffingRequest['status'])}
                     >
-                      {REQ_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+                      {REQ_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                     </select>
                   </td>
                 </tr>
