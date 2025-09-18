@@ -14,6 +14,11 @@ import ScrollToTop from './components/ScrollToTop';
 import { routes } from './routes'; // ⬅️ Svenska routes
 import SEO from './components/SEO'; // ⬅️ SEO-komponenten
 
+// ⬇️ NYTT: Admin-importer
+import AdminRoute from './admin/AdminRoute';
+import AdminLogin from './admin/AdminLogin';
+import AdminPanel from './admin/AdminPanel';
+
 function HomePage() {
   return (
     <>
@@ -85,6 +90,17 @@ function App() {
             <Route path="/terms" element={<Navigate to="/villkor" replace />} />
             <Route path="/privacy" element={<Navigate to="/integritetspolicy" replace />} />
             <Route path="/cookies" element={<Navigate to="/cookiepolicy" replace />} />
+
+            {/* ⬇️ NYTT: Admin routes */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminPanel />
+                </AdminRoute>
+              }
+            />
           </Routes>
         </main>
         <Footer />
