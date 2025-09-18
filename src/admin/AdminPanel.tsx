@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { ApplicationsSection, MessagesSection, RequestsSection } from './Sections';
+import { ApplicationsSection, MessagesSection, RequestsSection, DashboardSection } from './Sections';
 import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
-import { Briefcase, MessageSquare, Users, LogOut } from 'lucide-react';
+import { Briefcase, MessageSquare, Users, LogOut, Home } from 'lucide-react';
 
-type Tab = 'applications' | 'messages' | 'requests';
+type Tab = 'dashboard' | 'applications' | 'messages' | 'requests';
 
 export default function AdminPanel() {
-  const [tab, setTab] = useState<Tab>('applications');
+  const [tab, setTab] = useState<Tab>('applications'); // behåller samma start som tidigare
   const navigate = useNavigate();
 
   async function signOut() {
@@ -32,6 +32,12 @@ export default function AdminPanel() {
             </div>
           </div>
           <nav className="p-3 space-y-2">
+            <button
+              onClick={() => setTab('dashboard')}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'dashboard' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
+            >
+              <Home className="w-4 h-4" /> Dashboard
+            </button>
             <button
               onClick={() => setTab('applications')}
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'applications' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
@@ -64,7 +70,11 @@ export default function AdminPanel() {
         {/* Content */}
         <main className="flex-1 p-5 md:p-8">
           {/* Mobile tabs */}
-          <div className="md:hidden mb-4 flex gap-2">
+          <div className="md:hidden mb-4 flex gap-2 flex-wrap">
+            <button
+              className={`px-3 py-2 rounded-lg border ${tab === 'dashboard' ? 'bg-gray-900 text-white' : ''}`}
+              onClick={() => setTab('dashboard')}
+            >Dashboard</button>
             <button
               className={`px-3 py-2 rounded-lg border ${tab === 'applications' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('applications')}
@@ -79,6 +89,7 @@ export default function AdminPanel() {
             >Requests</button>
           </div>
 
+          {tab === 'dashboard' && <DashboardSection />}
           {tab === 'applications' && <ApplicationsSection />}
           {tab === 'messages' && <MessagesSection />}
           {tab === 'requests' && <RequestsSection />}
