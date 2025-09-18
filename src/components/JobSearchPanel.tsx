@@ -84,105 +84,17 @@ const JobSearchPanel: React.FC<JobSearchPanelProps> = ({ isVisible, onClose }) =
           </p>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleJobSearch} className="px-8 pb-8 space-y-6">
-          {/* Location Field */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              Location
-            </label>
-            <div className="relative group">
-              <MapPin
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors"
-                size={18}
-              />
-              <input
-                type="text"
-                placeholder="Where do you want to work?"
-                className="
-                  w-full pl-12 pr-4 py-4
-                  bg-gray-50 border border-gray-200 rounded-xl
-                  focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
-                  transition-all duration-200
-                  placeholder-gray-400
-                  text-gray-900
-                "
-              />
+        {/* Innehåll – visar endast meddelande (inga jobb) */}
+        <div className="px-8 pb-8">
+          <div className="text-center py-8">
+            <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <Search size={20} className="text-gray-400" />
             </div>
+            <h4 className="text-gray-800 text-base text-center">
+              Inga lediga jobb tillgängliga just nu.
+            </h4>
           </div>
-
-          {/* Category Field */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              Industry
-            </label>
-            <div className="relative group">
-              <Building
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors"
-                size={18}
-              />
-              <select className="
-                w-full pl-12 pr-4 py-4
-                bg-gray-50 border border-gray-200 rounded-xl
-                focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
-                transition-all duration-200
-                text-gray-900
-                appearance-none cursor-pointer
-              ">
-                <option>All Industries</option>
-                <option>Technology</option>
-                <option>Healthcare</option>
-                <option>Finance</option>
-                <option>Marketing</option>
-                <option>Engineering</option>
-                <option>Design</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Search Field */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              Keywords
-            </label>
-            <div className="relative group">
-              <Search
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors"
-                size={18}
-              />
-              <input
-                type="text"
-                placeholder="Job title, skills, company..."
-                className="
-                  w-full pl-12 pr-4 py-4
-                  bg-gray-50 border border-gray-200 rounded-xl
-                  focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
-                  transition-all duration-200
-                  placeholder-gray-400
-                  text-gray-900
-                "
-              />
-            </div>
-          </div>
-
-          {/* Search Button */}
-          <button
-            type="submit"
-            className="
-              w-full py-4 px-6
-              bg-gradient-to-r from-blue-600 to-purple-600
-              text-white font-semibold rounded-xl
-              hover:from-blue-700 hover:to-purple-700
-              focus:ring-4 focus:ring-blue-500/20
-              transition-all duration-200
-              shadow-lg hover:shadow-xl
-              hover:scale-[1.02]
-              active:scale-[0.98]
-            "
-          >
-            Search Opportunities
-          </button>
-        </form>
+        </div>
 
         {/* Footer (uppdaterad enligt önskemål) */}
         <div className="px-8 pb-8 pt-4 border-t border-gray-100">
