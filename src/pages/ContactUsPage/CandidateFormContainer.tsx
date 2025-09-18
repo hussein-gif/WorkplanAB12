@@ -58,7 +58,7 @@ const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =
         status: "new" as const,
       };
 
-      // Viktigt: skicka array till insert + ta med .select() så vi ser svar
+      // Viktigt: array till insert + select för att få tillbaka rad/ev. fel
       const { data, error, status } = await supabase
         .from("contact_messages")
         .insert([row])
@@ -88,7 +88,6 @@ const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =
         candidateForm={candidateForm}
         handleCandidateChange={handleCandidateChange}
         handleCandidateSubmit={handleCandidateSubmit}
-        // NY:
         loading={loading}
       />
 
