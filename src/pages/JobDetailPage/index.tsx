@@ -152,14 +152,20 @@ const JobDetailPage = () => {
         return;
       }
 
-      const omfattning: 'Heltid' | 'Deltid' | 'OTHER' =
-        typeof data.employment_type === 'string'
-          ? data.employment_type.toLowerCase().includes('deltid')
-            ? 'Deltid'
-            : data.employment_type.toLowerCase().includes('heltid')
-            ? 'Heltid'
-            : 'OTHER'
-          : 'OTHER';
+      // Ny logik för att tolka omfattning
+const rawEmployment = (data.employment_type ?? '').toString().trim();
+const rawLower = rawEmployment.toLowerCase();
+
+let omfattning: 'Heltid' | 'Deltid' | 'OTHER' = 'OTHER';
+if (rawLower.includes('heltid') || rawLower.includes('full')) {
+  omfattning = 'Heltid';
+} else if (rawLower.includes('deltid') || rawLower.includes('part')) {
+  omfattning = 'Deltid';
+}
+
+// Spara också originaltexten så vi kan visa den om inget matchar
+const employmentDisplay = rawEmployment;
+
 
       const mapped: JobData = {
         id: data.id,
