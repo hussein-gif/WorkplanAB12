@@ -1,12 +1,13 @@
 // src/admin/AdminPanel.tsx
 import React, { useState } from 'react';
-import {
-  ApplicationsSection,
-  MessagesSection,
-  RequestsSection,
-  DashboardSection,
-} from './sections';
-import JobsSection from './sections/JobsSection'; // ✅ Direktimport av rätt komponent
+
+// ✅ Direktimportera alla sektioner från rätt sökväg (små bokstäver)
+import DashboardSection from './sections/DashboardSection';
+import ApplicationsSection from './sections/ApplicationsSection';
+import MessagesSection from './sections/MessagesSection';
+import RequestsSection from './sections/RequestsSection';
+import JobsSection from './sections/JobsSection';
+
 import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import { Briefcase, MessageSquare, Users, LogOut, Home, FileText } from 'lucide-react';
@@ -42,41 +43,31 @@ export default function AdminPanel() {
           <nav className="p-3 space-y-2">
             <button
               onClick={() => setTab('dashboard')}
-              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${
-                tab === 'dashboard' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'
-              }`}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'dashboard' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
               <Home className="w-4 h-4" /> Översikt
             </button>
             <button
               onClick={() => setTab('applications')}
-              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${
-                tab === 'applications' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'
-              }`}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'applications' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
               <Users className="w-4 h-4" /> Ansökningar
             </button>
             <button
               onClick={() => setTab('messages')}
-              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${
-                tab === 'messages' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'
-              }`}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'messages' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
               <MessageSquare className="w-4 h-4" /> Meddelanden
             </button>
             <button
               onClick={() => setTab('requests')}
-              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${
-                tab === 'requests' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'
-              }`}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'requests' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
               <Briefcase className="w-4 h-4" /> Förfrågningar
             </button>
             <button
               onClick={() => setTab('jobs')}
-              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${
-                tab === 'jobs' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'
-              }`}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'jobs' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
               <FileText className="w-4 h-4" /> Jobb
             </button>
@@ -98,45 +89,25 @@ export default function AdminPanel() {
           {/* Mobila flikar */}
           <div className="md:hidden mb-4 flex gap-2 flex-wrap">
             <button
-              className={`px-3 py-2 rounded-lg border ${
-                tab === 'dashboard' ? 'bg-gray-900 text-white' : ''
-              }`}
+              className={`px-3 py-2 rounded-lg border ${tab === 'dashboard' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('dashboard')}
-            >
-              Översikt
-            </button>
+            >Översikt</button>
             <button
-              className={`px-3 py-2 rounded-lg border ${
-                tab === 'applications' ? 'bg-gray-900 text-white' : ''
-              }`}
+              className={`px-3 py-2 rounded-lg border ${tab === 'applications' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('applications')}
-            >
-              Ansökningar
-            </button>
+            >Ansökningar</button>
             <button
-              className={`px-3 py-2 rounded-lg border ${
-                tab === 'messages' ? 'bg-gray-900 text-white' : ''
-              }`}
+              className={`px-3 py-2 rounded-lg border ${tab === 'messages' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('messages')}
-            >
-              Meddelanden
-            </button>
+            >Meddelanden</button>
             <button
-              className={`px-3 py-2 rounded-lg border ${
-                tab === 'requests' ? 'bg-gray-900 text-white' : ''
-              }`}
+              className={`px-3 py-2 rounded-lg border ${tab === 'requests' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('requests')}
-            >
-              Förfrågningar
-            </button>
+            >Förfrågningar</button>
             <button
-              className={`px-3 py-2 rounded-lg border ${
-                tab === 'jobs' ? 'bg-gray-900 text-white' : ''
-              }`}
+              className={`px-3 py-2 rounded-lg border ${tab === 'jobs' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('jobs')}
-            >
-              Jobb
-            </button>
+            >Jobb</button>
           </div>
 
           {tab === 'dashboard' && <DashboardSection />}
