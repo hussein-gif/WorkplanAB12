@@ -16,10 +16,11 @@ export default function JobsSection() {
 
   // Modal/form state
   const [open, setOpen] = useState(false);
-  const empty: Partial<Job> = {
+  const empty: Partial<Job> & any = {
+    // Befintliga fält
     title: '',
     location: '',
-    employment_type: '',
+    employment_type: '', // mappar till "omfattning" i publik sida
     description_md: '',
     salary_min: null,
     salary_max: null,
@@ -27,8 +28,21 @@ export default function JobsSection() {
     published: false,
     posted_at: new Date().toISOString(),
     expires_at: null,
+    // 🔽 Nya fält för att matcha JobDetailPage
+    company: '',
+    companyLogo: '',
+    summary: '',
+    aboutRole: '',
+    responsibilitiesText: '', // textarea som radbryts → responsibilities[]
+    requirementsText: '',     // textarea som radbryts → requirements[]
+    recruitmentProcess: '',
+    recruiterEmail: '',
+    recruiterPhone: '',
+    industry: '',
+    salary: '',               // fri text (ersätter min/max om du vill visa exakt text)
+    startDate: '',            // valfri (JobDetailPage fallback: "Enligt överenskommelse")
   };
-  const [form, setForm] = useState<Partial<Job>>(empty);
+  const [form, setForm] = useState<Partial<Job> & any>(empty);
   const [saving, setSaving] = useState(false);
 
   async function fetchJobs() {
@@ -45,7 +59,7 @@ export default function JobsSection() {
   const filtered = useMemo(() => {
     const ql = q.toLowerCase();
     return items.filter(j =>
-      [j.title, j.location ?? '', j.employment_type ?? '', j.slug ?? '']
+      [j.title, j.location ?? '', j.employment_type ?? '', (j as any).slug ?? '']
         .join(' ')
         .toLowerCase()
         .includes(ql)
@@ -57,18 +71,90 @@ export default function JobsSection() {
     setOpen(true);
   }
   function openEdit(j: Job) {
-    setForm({ ...j });
+    // Hydrera textarea-fälten från ev. lagrade arrays
+    const jAny: any = j || {};
+    setForm({
+      ...jAny,
+      responsibilitiesText: Array.isArray(jAny.responsibilities) ? jAny.responsibilities.join('\n') : (jAny.responsibilitiesText ?? ''),
+      requirementsText: Array.isArray(jAny.requirements) ? jAny.requirements.join('\n') : (jAny.requirementsText ?? ''),
+    });
     setOpen(true);
+  }
+
+  function requiredMissing() {
+    const must: Array<[string, string]> = [
+      ['title', 'Titel'],
+      ['company', 'Företag'],
+      ['location', 'Plats'],
+      ['employment_type', 'Omfattning'],
+      ['summary', 'Kort säljtext'],
+      ['aboutRole', 'Om rollen'],
+      ['responsibilitiesText', 'Arbetsuppgifter'],
+      ['requirementsText', 'Vem vi söker'],
+      ['recruitmentProcess', 'Vår rekryteringsprocess'],
+      ['recruiterEmail', 'Rekryterarens e-post'],
+      ['recruiterPhone', 'Rekryterarens telefon'],
+      ['industry', 'Bransch'],
+      ['salary', 'Lön (text)'],
+    ];
+    const missing = must.filter(([k]) => {
+      const v = (form as any)[k];
+      if (typeof v === 'string') return v.trim().length === 0;
+      return v === null || v === undefined;
+    });
+    return missing.map(([, label]) => label);
+  }
+
+  function toArrayLines(s: string): string[] {
+    return (s || '')
+      .split('\n')
+      .map(x => x.trim())
+      .filter(Boolean);
   }
 
   async function saveJob(e?: React.FormEvent) {
     e?.preventDefault?.();
-    if (!form.title || !form.posted_at) return;
+
+    // Hårdvalidera obligatoriska fält
+    const missing = requiredMissing();
+    if (missing.length) {
+      alert('Följande fält måste fyllas i:\n• ' + missing.join('\n• '));
+      return;
+    }
 
     setSaving(true);
-    const row = {
+
+    // Bygg rad – bibehåll befintliga kolumner + lägg till nya fält
+    const responsibilities = toArrayLines(form.responsibilitiesText);
+    const requirements = toArrayLines(form.requirementsText);
+
+    const row: any = {
       ...form,
+      // slug: generera om tom
       slug: (form.slug && form.slug.trim().length > 0) ? form.slug.trim() : slugify(form.title!),
+
+      // Säkerställ att dessa är strängar
+      title: String(form.title || '').trim(),
+      location: String(form.location || '').trim(),
+      employment_type: String(form.employment_type || '').trim(), // "Heltid", "Deltid", etc.
+
+      // Nya fält som JobDetailPage läser
+      company: String(form.company || '').trim(),
+      companyLogo: String(form.companyLogo || '').trim() || null,
+      summary: String(form.summary || '').trim(),
+      aboutRole: String(form.aboutRole || '').trim(),
+      responsibilities, // jsonb[]
+      requirements,     // jsonb[]
+      recruitmentProcess: String(form.recruitmentProcess || '').trim(),
+      recruiterEmail: String(form.recruiterEmail || '').trim(),
+      recruiterPhone: String(form.recruiterPhone || '').trim(),
+      industry: String(form.industry || '').trim(),
+      salary: String(form.salary || '').trim(),
+      startDate: String(form.startDate || '').trim() || null,
+
+      // Städning av textarea-proxy-fält (sparas ej som egna kolumner)
+      responsibilitiesText: undefined,
+      requirementsText: undefined,
     };
 
     const { error } = await supabase
@@ -188,95 +274,195 @@ export default function JobsSection() {
         </div>
       )}
 
-      {/* Enkel modal */}
+      {/* Modal: komplett formulär som matchar JobDetailPage */}
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
-          <div className="w-[min(95vw,720px)] bg-white border rounded-2xl shadow-xl">
+          <div className="w-[min(95vw,900px)] bg-white border rounded-2xl shadow-xl">
             <div className="px-5 py-4 border-b flex items-center justify-between">
               <div className="text-lg font-semibold">{form.id ? 'Redigera jobb' : 'Nytt jobb'}</div>
               <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-gray-700">Stäng</button>
             </div>
 
-            <form onSubmit={saveJob} className="p-5 space-y-4">
+            <form onSubmit={saveJob} className="p-5 space-y-6">
+              {/* Grundinfo */}
+              <div>
+                <h3 className="text-base font-semibold mb-3">Grundinformation</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">Titel *</label>
+                    <input
+                      className="w-full border rounded-lg px-3 py-2"
+                      value={form.title ?? ''}
+                      onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">Företag *</label>
+                    <input
+                      className="w-full border rounded-lg px-3 py-2"
+                      value={form.company ?? ''}
+                      onChange={e => setForm(f => ({ ...f, company: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">Plats *</label>
+                    <input
+                      className="w-full border rounded-lg px-3 py-2"
+                      value={form.location ?? ''}
+                      onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">Omfattning *</label>
+                    <input
+                      className="w-full border rounded-lg px-3 py-2"
+                      placeholder="Heltid, Deltid, Konsult…"
+                      value={form.employment_type ?? ''}
+                      onChange={e => setForm(f => ({ ...f, employment_type: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">Startdatum (valfritt)</label>
+                    <input
+                      className="w-full border rounded-lg px-3 py-2"
+                      placeholder="Enligt överenskommelse"
+                      value={form.startDate ?? ''}
+                      onChange={e => setForm(f => ({ ...f, startDate: e.target.value }))}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">Slug (valfri)</label>
+                    <input
+                      className="w-full border rounded-lg px-3 py-2"
+                      placeholder="automatisk om tomt"
+                      value={form.slug ?? ''}
+                      onChange={e => setForm(f => ({ ...f, slug: e.target.value }))}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Sälj / introduktion */}
+              <div>
+                <h3 className="text-base font-semibold mb-3">Kort säljtext *</h3>
+                <textarea
+                  className="w-full border rounded-lg px-3 py-2 min-h-[100px]"
+                  value={form.summary ?? ''}
+                  onChange={e => setForm(f => ({ ...f, summary: e.target.value }))}
+                  required
+                />
+              </div>
+
+              {/* Om rollen */}
+              <div>
+                <h3 className="text-base font-semibold mb-3">Om rollen *</h3>
+                <textarea
+                  className="w-full border rounded-lg px-3 py-2 min-h-[120px]"
+                  value={form.aboutRole ?? ''}
+                  onChange={e => setForm(f => ({ ...f, aboutRole: e.target.value }))}
+                  required
+                />
+              </div>
+
+              {/* Arbetsuppgifter / Vem vi söker */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1">Titel *</label>
-                  <input
-                    className="w-full border rounded-lg px-3 py-2"
-                    value={form.title ?? ''}
-                    onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                  <h3 className="text-base font-semibold mb-3">Arbetsuppgifter *</h3>
+                  <textarea
+                    className="w-full border rounded-lg px-3 py-2 min-h-[160px]"
+                    placeholder="En per rad…"
+                    value={form.responsibilitiesText ?? ''}
+                    onChange={e => setForm(f => ({ ...f, responsibilitiesText: e.target.value }))}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1">Ort</label>
-                  <input
-                    className="w-full border rounded-lg px-3 py-2"
-                    value={form.location ?? ''}
-                    onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
+                  <h3 className="text-base font-semibold mb-3">Vem vi söker *</h3>
+                  <textarea
+                    className="w-full border rounded-lg px-3 py-2 min-h-[160px]"
+                    placeholder="En per rad…"
+                    value={form.requirementsText ?? ''}
+                    onChange={e => setForm(f => ({ ...f, requirementsText: e.target.value }))}
+                    required
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Anställningstyp</label>
-                  <input
-                    className="w-full border rounded-lg px-3 py-2"
-                    placeholder="Heltid, Deltid, Konsult…"
-                    value={form.employment_type ?? ''}
-                    onChange={e => setForm(f => ({ ...f, employment_type: e.target.value }))}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-600 mb-1">Slug (valfri)</label>
-                  <input
-                    className="w-full border rounded-lg px-3 py-2"
-                    placeholder="automatisk om tomt"
-                    value={form.slug ?? ''}
-                    onChange={e => setForm(f => ({ ...f, slug: e.target.value }))}
-                  />
-                </div>
-              </div>
-
+              {/* Process */}
               <div>
-                <label className="block text-sm text-gray-600 mb-1">Beskrivning (Markdown/HTML)</label>
+                <h3 className="text-base font-semibold mb-3">Vår rekryteringsprocess *</h3>
                 <textarea
-                  className="w-full border rounded-lg px-3 py-2 min-h-[160px]"
-                  value={form.description_md ?? ''}
-                  onChange={e => setForm(f => ({ ...f, description_md: e.target.value }))}
+                  className="w-full border rounded-lg px-3 py-2 min-h-[100px]"
+                  value={form.recruitmentProcess ?? ''}
+                  onChange={e => setForm(f => ({ ...f, recruitmentProcess: e.target.value }))}
+                  required
                 />
               </div>
 
+              {/* Kontakt */}
+              <div>
+                <h3 className="text-base font-semibold mb-3">Kontaktperson</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">Rekryterarens e-post *</label>
+                    <input
+                      type="email"
+                      className="w-full border rounded-lg px-3 py-2"
+                      value={form.recruiterEmail ?? ''}
+                      onChange={e => setForm(f => ({ ...f, recruiterEmail: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-gray-600 mb-1">Rekryterarens telefon *</label>
+                    <input
+                      className="w-full border rounded-lg px-3 py-2"
+                      value={form.recruiterPhone ?? ''}
+                      onChange={e => setForm(f => ({ ...f, recruiterPhone: e.target.value }))}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Bransch, Lön, Logotyp */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1">Lön (min)</label>
+                  <label className="block text-sm text-gray-600 mb-1">Bransch *</label>
                   <input
-                    type="number"
                     className="w-full border rounded-lg px-3 py-2"
-                    value={form.salary_min ?? ''}
-                    onChange={e => setForm(f => ({ ...f, salary_min: e.target.value ? Number(e.target.value) : null }))}
+                    placeholder="Lager & Logistik…"
+                    value={form.industry ?? ''}
+                    onChange={e => setForm(f => ({ ...f, industry: e.target.value }))}
+                    required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm text-gray-600 mb-1">Lön (max)</label>
+                  <label className="block text-sm text-gray-600 mb-1">Lön (text) *</label>
                   <input
-                    type="number"
                     className="w-full border rounded-lg px-3 py-2"
-                    value={form.salary_max ?? ''}
-                    onChange={e => setForm(f => ({ ...f, salary_max: e.target.value ? Number(e.target.value) : null }))}
+                    placeholder="Ex: Enl. kollektivavtal / 30–34 000 kr/mån"
+                    value={form.salary ?? ''}
+                    onChange={e => setForm(f => ({ ...f, salary: e.target.value }))}
+                    required
                   />
                 </div>
-                <div className="flex items-center gap-3">
-                  <label className="text-sm text-gray-600">Publicerad</label>
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Företagslogotyp (URL, valfri)</label>
                   <input
-                    type="checkbox"
-                    checked={!!form.published}
-                    onChange={e => setForm(f => ({ ...f, published: e.target.checked }))}
+                    className="w-full border rounded-lg px-3 py-2"
+                    placeholder="https://…"
+                    value={form.companyLogo ?? ''}
+                    onChange={e => setForm(f => ({ ...f, companyLogo: e.target.value }))}
                   />
                 </div>
               </div>
 
+              {/* Publicering + datum */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-gray-600 mb-1">Publicerad datum *</label>
@@ -299,17 +485,29 @@ export default function JobsSection() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-2">
-                <button type="button" className="border rounded-lg px-4 py-2" onClick={() => setOpen(false)}>
-                  Avbryt
-                </button>
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="border rounded-lg px-4 py-2 bg-gray-900 text-white disabled:opacity-60"
-                >
-                  {saving ? 'Sparar…' : 'Spara'}
-                </button>
+              {/* Toggle publicerad + åtgärder */}
+              <div className="flex items-center justify-between gap-3 pt-2">
+                <label className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={!!form.published}
+                    onChange={e => setForm(f => ({ ...f, published: e.target.checked }))}
+                  />
+                  <span className="text-sm text-gray-700">Publicerad</span>
+                </label>
+
+                <div className="flex items-center gap-3">
+                  <button type="button" className="border rounded-lg px-4 py-2" onClick={() => setOpen(false)}>
+                    Avbryt
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    className="border rounded-lg px-4 py-2 bg-gray-900 text-white disabled:opacity-60"
+                  >
+                    {saving ? 'Sparar…' : 'Spara'}
+                  </button>
+                </div>
               </div>
             </form>
           </div>
