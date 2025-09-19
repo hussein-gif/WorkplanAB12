@@ -5,10 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { Job } from "./index";
 
 interface JobsListProps {
-  jobs: Job[]; // <-- ska komma från Supabase i JobsPage
+  jobs: Job[]; // <-- kommer från Supabase via JobsPage
 }
 
-const SimpleHoverCard: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
+const SimpleHoverCard: React.FC<{ children: React.ReactNode; className?: string }> = ({
+  children,
+  className,
+}) => (
   <div
     className={`relative z-0 rounded-2xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-2 hover:shadow-2xl hover:z-10 ${className ?? ""} group`}
     style={{ position: "relative" }}
@@ -29,14 +32,16 @@ const slugify = (s: string) =>
 const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
   const navigate = useNavigate();
 
-  // ✅ Använd alltid svensk route och en stabil identifierare (slug > id > slugifierad titel)
+  // Använd en stabil identifierare för navigering
   const goToJob = (job: Job) => {
-    const idOrSlug = (job as any).slug ?? (job.id != null ? String(job.id) : slugify(job.title));
+    const idOrSlug =
+      (job as any).slug ??
+      (job.id != null ? String(job.id) : slugify(job.title));
     navigate(`/jobb/${encodeURIComponent(idOrSlug)}`);
   };
 
-  // ✅ VIKTIGT: Visa exakt de jobb som kommer via props (dvs från Supabase)
-  const jobsToShow: Job[] = jobs ?? [];
+  // Visa exakt de jobb som kommer via props
+  const jobsToShow: Job[] = Array.isArray(jobs) ? jobs : [];
 
   if (jobsToShow.length === 0) {
     return (
@@ -46,12 +51,23 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
             <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Search size={24} className="text-white/40" />
             </div>
-            <h3 className="text-xl text-white/80 mb-2">Inga lediga jobb tillgängliga just nu.</h3>
+            <h3 className="text-xl text-white/80 mb-2">
+              Inga lediga jobb tillgängliga just nu.
+            </h3>
           </div>
         </div>
       </div>
     );
   }
+
+  const getLogoChar = (job: Job) =>
+    (job as any).companyLogo ??
+    (job.company ? job.company.charAt(0) : "");
+
+  const getOmfattning = (job: Job) =>
+    (job as any).omfattning ??
+    (job as any).employment_type ??
+    "";
 
   return (
     <div className="px-4 sm:px-8 pb-20">
@@ -61,22 +77,28 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
           <ul className="divide-y divide-white/10">
             {jobsToShow.map((job) => (
               <li
-                key={job.id ?? job.title}
+                key={(job as any).slug ?? job.id ?? job.title}
                 className="py-4 active:bg-white/5 transition-colors cursor-pointer"
                 onClick={() => goToJob(job)}
               >
                 <div className="flex items-start gap-3">
                   <div className="w-9 h-9 rounded-lg bg-white/10 text-white flex items-center justify-center font-semibold shrink-0">
-                    {(job as any).companyLogo ?? (job.company?.[0] ?? "")}
+                    {getLogoChar(job)}
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-white text-base font-semibold leading-tight truncate" style={{ fontFamily: "Zen Kaku Gothic Antique, sans-serif" }}>
+                    <h3
+                      className="text-white text-base font-semibold leading-tight truncate"
+                      style={{ fontFamily: "Zen Kaku Gothic Antique, sans-serif" }}
+                    >
                       {job.title}
                     </h3>
                   </div>
                 </div>
 
-                <div className="mt-2 flex flex-wrap items-center gap-3 text-[13px] text-white/75" style={{ fontFamily: "Inter, sans-serif" }}>
+                <div
+                  className="mt-2 flex flex-wrap items-center gap-3 text-[13px] text-white/75"
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
                   <span className="inline-flex items-center gap-1.5">
                     <Briefcase size={14} /> {job.company}
                   </span>
@@ -86,11 +108,14 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
                   </span>
                   <span className="w-1 h-1 rounded-full bg-white/30" />
                   <span className="inline-flex items-center gap-1.5">
-                    <Clock size={14} /> {(job as any).omfattning ?? (job as any).employment_type}
+                    <Clock size={14} /> {getOmfattning(job)}
                   </span>
                 </div>
 
-                <div className="mt-1 text-[12px] text-white/60" style={{ fontFamily: "Inter, sans-serif" }}>
+                <div
+                  className="mt-1 text-[12px] text-white/60"
+                  style={{ fontFamily: "Inter, sans-serif" }}
+                >
                   {(job as any).posted ?? ""}
                 </div>
               </li>
@@ -103,19 +128,25 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 justify-center">
             {jobsToShow.map((job) => (
               <SimpleHoverCard
-                key={job.id ?? job.title}
+                key={(job as any).slug ?? job.id ?? job.title}
                 className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
               >
                 <div className="p-5 flex-1 flex flex-col" onClick={() => goToJob(job)}>
                   <div className="flex items-start space-x-4 mb-4">
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
-                      {(job as any).companyLogo ?? (job.company?.[0] ?? "")}
+                      {getLogoChar(job)}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-lg text-gray-900 mb-2 leading-tight font-medium" style={{ fontFamily: "Zen Kaku Gothic Antique, sans-serif" }}>
+                      <h3
+                        className="text-lg text-gray-900 mb-2 leading-tight font-medium"
+                        style={{ fontFamily: "Zen Kaku Gothic Antique, sans-serif" }}
+                      >
                         {job.title}
                       </h3>
-                      <div className="text-base text-gray-700" style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}>
+                      <div
+                        className="text-base text-gray-700"
+                        style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}
+                      >
                         {job.company}
                       </div>
                     </div>
@@ -124,30 +155,42 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
                   <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
                     <div className="flex items-center space-x-2">
                       <MapPin size={14} className="text-gray-400" />
-                      <span style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}>{job.location}</span>
+                      <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
+                        {job.location}
+                      </span>
                     </div>
                     <span className="w-1 h-1 bg-gray-400 rounded-full" />
                     <div className="flex items-center space-x-2">
                       <Clock size={14} className="text-gray-400" />
-                      <span style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}>
-                        {(job as any).omfattning ?? (job as any).employment_type}
+                      <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
+                        {getOmfattning(job)}
                       </span>
                     </div>
                     <span className="w-1 h-1 bg-gray-400 rounded-full" />
                     <div className="flex items-center space-x-2">
                       <Building size={14} className="text-gray-400" />
-                      <span style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}>{(job as any).industry ?? ""}</span>
+                      <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
+                        {(job as any).industry ?? ""}
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 <div className="p-5 pt-0 flex items-end justify-between" onClick={() => goToJob(job)}>
-                  <div className="text-sm text-gray-500" style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}>
+                  <div
+                    className="text-sm text-gray-500"
+                    style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}
+                  >
                     {(job as any).posted ?? ""}
                   </div>
                   <div className="text-right text-sm text-gray-500">
-                    <div style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}>Ansök senast</div>
-                    <div className="text-gray-700" style={{ fontFamily: "Inter, sans-serif", fontWeight: "400" }}>
+                    <div style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
+                      Ansök senast
+                    </div>
+                    <div
+                      className="text-gray-700"
+                      style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}
+                    >
                       {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString("sv-SE")}
                     </div>
                   </div>
