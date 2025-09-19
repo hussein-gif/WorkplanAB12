@@ -5,7 +5,7 @@ import {
   MessagesSection,
   RequestsSection,
   DashboardSection,
-} from './Sections';
+} from './sections';
 import JobsSection from './sections/JobsSection'; // ✅ Direktimport av rätt komponent
 import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
