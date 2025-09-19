@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { ApplicationsSection, MessagesSection, RequestsSection, DashboardSection } from './Sections';
+import {
+  ApplicationsSection,
+  MessagesSection,
+  RequestsSection,
+  DashboardSection,
+  JobsSection,
+} from './Sections';
 import { supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
-import { Briefcase, MessageSquare, Users, LogOut, Home } from 'lucide-react';
+import { Briefcase, MessageSquare, Users, LogOut, Home, FileText } from 'lucide-react';
 
-type Tab = 'dashboard' | 'applications' | 'messages' | 'requests';
+type Tab = 'dashboard' | 'applications' | 'messages' | 'requests' | 'jobs';
 
 export default function AdminPanel() {
-  const [tab, setTab] = useState<Tab>('applications'); // oförändrad startflik
+  const [tab, setTab] = useState<Tab>('applications'); // startflik
   const navigate = useNavigate();
 
   async function signOut() {
@@ -57,6 +63,12 @@ export default function AdminPanel() {
             >
               <Briefcase className="w-4 h-4" /> Förfrågningar
             </button>
+            <button
+              onClick={() => setTab('jobs')}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'jobs' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
+            >
+              <FileText className="w-4 h-4" /> Jobb
+            </button>
           </nav>
 
           {/* Flytta logga ut längst ned */}
@@ -90,12 +102,17 @@ export default function AdminPanel() {
               className={`px-3 py-2 rounded-lg border ${tab === 'requests' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('requests')}
             >Förfrågningar</button>
+            <button
+              className={`px-3 py-2 rounded-lg border ${tab === 'jobs' ? 'bg-gray-900 text-white' : ''}`}
+              onClick={() => setTab('jobs')}
+            >Jobb</button>
           </div>
 
           {tab === 'dashboard' && <DashboardSection />}
           {tab === 'applications' && <ApplicationsSection />}
           {tab === 'messages' && <MessagesSection />}
           {tab === 'requests' && <RequestsSection />}
+          {tab === 'jobs' && <JobsSection />}
         </main>
       </div>
     </div>
