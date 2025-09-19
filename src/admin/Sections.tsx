@@ -64,13 +64,18 @@ export function DashboardSection() {
       const appsCount = supabase.from('applications').select('*', { count: 'exact', head: true });
       const hiredCount = supabase.from('applications').select('*', { count: 'exact', head: true }).eq('status', 'hired');
 
-      // Kan saknas – fall back till 0
-      const newMsgsCount = supabase.from('contact_messages').select('*', { count: 'exact', head: true }).eq('status', 'new');
-      const activeReqsCount = supabase
-        .from('staffing_requests')
+      // Nya meddelanden: ENBART candidate/company
+      const newMsgsCount = supabase
+        .from('contact_messages')
         .select('*', { count: 'exact', head: true })
-        .neq('status', 'won')
-        .neq('status', 'lost');
+        .in('from_type', ['candidate', 'company'])
+        .eq('status', 'new');
+
+      // Aktiva förfrågningar: från contact_messages där from_type='staffing_request'
+      const activeReqsCount = supabase
+        .from('contact_messages')
+        .select('*', { count: 'exact', head: true })
+        .eq('from_type', 'staffing_request');
 
       // Listor
       const lastApps = supabase
@@ -79,9 +84,11 @@ export function DashboardSection() {
         .order('created_at', { ascending: false })
         .limit(5);
 
+      // Senaste meddelanden: exkludera förfrågningar
       const lastMsgs = supabase
         .from('contact_messages')
         .select('id, full_name, subject, status, created_at')
+        .in('from_type', ['candidate', 'company'])
         .order('created_at', { ascending: false })
         .limit(5);
 
@@ -361,7 +368,12 @@ export function MessagesSection() {
 
   async function fetchMessages() {
     setLoading(true);
-    const { data, error } = await supabase.from('contact_messages').select('*').order('created_at', { ascending: false });
+    // ⬇️ Bara kandidat/företag – exkludera staffing_request
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .select('*')
+      .in('from_type', ['candidate', 'company'])
+      .order('created_at', { ascending: false });
     if (!error) setItems((data ?? []) as ContactMessage[]);
     setLoading(false);
   }
@@ -370,7 +382,7 @@ export function MessagesSection() {
   const filtered = useMemo(() => {
     const ql = q.toLowerCase();
     return items.filter(m => {
-      const blob = [m.full_name, m.email, m.company, m.subject, m.message].filter(Boolean).join(' ').toLowerCase();
+      const blob = [m.full_name, m.email, (m as any).company_name ?? (m as any).company, m.subject, m.message].filter(Boolean).join(' ').toLowerCase();
       const matchQ = blob.includes(ql);
       const matchT = type === 'all' ? true : m.from_type === type;
       const matchS = status === 'all' ? true : m.status === status;
@@ -430,7 +442,7 @@ export function MessagesSection() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="font-medium">{m.full_name}</div>
-                    {m.company && <div className="text-gray-500">{m.company}</div>}
+                    {(m as any).company_name && <div className="text-gray-500">{(m as any).company_name}</div>}
                   </td>
                   <td className="px-4 py-3">{m.email}</td>
                   <td className="px-4 py-3 max-w-[28ch] truncate" title={m.subject}>{m.subject}</td>
@@ -473,8 +485,13 @@ export function RequestsSection() {
 
   async function fetchRequests() {
     setLoading(true);
-    const { data, error } = await supabase.from('staffing_requests').select('*').order('created_at', { ascending: false });
-    if (!error) setItems((data ?? []) as StaffingRequest[]);
+    // ⬇️ Hämta från contact_messages där from_type=staffing_request
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .select('*')
+      .eq('from_type', 'staffing_request')
+      .order('created_at', { ascending: false });
+    if (!error) setItems((data ?? []) as unknown as StaffingRequest[]);
     setLoading(false);
   }
   useEffect(() => { fetchRequests(); }, []);
@@ -482,20 +499,24 @@ export function RequestsSection() {
   const filtered = useMemo(() => {
     const ql = q.toLowerCase();
     return items.filter(r => {
-      const blob = [r.company_name, r.contact_person, r.role_needed, r.location].join(' ').toLowerCase();
+      // contact_messages-fält: company_name, full_name (kontakt), email, phone, subject (roll), message (detaljer), ev. location i text
+      const blob = [ (r as any).company_name, (r as any).full_name, (r as any).subject, (r as any).message ].filter(Boolean).join(' ').toLowerCase();
       const matchQ = blob.includes(ql);
-      const matchS = status === 'all' ? true : r.status === status;
-      const matchL = location === 'all' ? true : r.location === location;
+      const matchS = status === 'all' ? true : (r as any).status === status;
+      // Vi har ev. inte separat location-kolumn – filtrera bara om den finns lika med value
+      const rowLocation = ((r as any).location ?? '').toString();
+      const matchL = location === 'all' ? true : rowLocation === location;
       return matchQ && matchS && matchL;
     });
   }, [items, q, status, location]);
 
   async function updateStatus(id: string, s: StaffingRequest['status']) {
-    const { error } = await supabase.from('staffing_requests').update({ status: s }).eq('id', id);
-    if (!error) setItems(prev => prev.map(r => r.id === id ? { ...r, status: s } : r));
+    const { error } = await supabase.from('contact_messages').update({ status: s }).eq('id', id);
+    if (!error) setItems(prev => prev.map(r => (r as any).id === id ? { ...(r as any), status: s } as any : r));
   }
 
-  const locations = Array.from(new Set(items.map(i => i.location))).filter(Boolean);
+  // location-lista (kan vara tom då location inte är egen kolumn)
+  const locations = Array.from(new Set((items as any[]).map(i => i.location).filter(Boolean)));
 
   return (
     <div>
@@ -511,7 +532,7 @@ export function RequestsSection() {
             </select>
             <select className="border rounded-lg px-3 py-2" value={location} onChange={e => setLocation(e.target.value)}>
               <option value="all">Alla orter</option>
-              {locations.map(l => <option key={l} value={l}>{l}</option>)}
+              {locations.map(l => <option key={l} value={l as any}>{l as any}</option>)}
             </select>
             <button onClick={fetchRequests} className="border rounded-lg px-3 py-2">Uppdatera</button>
           </>
@@ -538,21 +559,21 @@ export function RequestsSection() {
             </thead>
             <tbody>
               {filtered.map(r => (
-                <tr key={r.id} className="border-t">
-                  <td className="px-4 py-3 font-medium">{r.company_name}</td>
+                <tr key={(r as any).id} className="border-t">
+                  <td className="px-4 py-3 font-medium">{(r as any).company_name ?? '—'}</td>
                   <td className="px-4 py-3">
-                    <div>{r.contact_person}</div>
-                    <div className="text-gray-500">{r.email} • {r.phone}</div>
+                    <div>{(r as any).full_name ?? '—'}</div>
+                    <div className="text-gray-500">{(r as any).email ?? '—'}{(r as any).phone ? ` • ${(r as any).phone}` : ''}</div>
                   </td>
-                  <td className="px-4 py-3">{r.role_needed}</td>
-                  <td className="px-4 py-3">{r.headcount}</td>
-                  <td className="px-4 py-3">{r.location}</td>
-                  <td className="px-4 py-3">{formatDate(r.created_at)}</td>
+                  <td className="px-4 py-3">{(r as any).subject ?? '—'}</td>
+                  <td className="px-4 py-3">{(r as any).headcount ?? '—'}</td>
+                  <td className="px-4 py-3">{(r as any).location ?? '—'}</td>
+                  <td className="px-4 py-3">{formatDate((r as any).created_at)}</td>
                   <td className="px-4 py-3">
                     <select
-                      className={`border rounded-lg px-2 py-1 ${badgeClass(r.status)}`}
-                      value={r.status}
-                      onChange={e => updateStatus(r.id, e.target.value as StaffingRequest['status'])}
+                      className={`border rounded-lg px-2 py-1 ${badgeClass((r as any).status)}`}
+                      value={(r as any).status}
+                      onChange={e => updateStatus((r as any).id, e.target.value as StaffingRequest['status'])}
                     >
                       {REQ_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                     </select>
