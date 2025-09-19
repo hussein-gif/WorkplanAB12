@@ -51,7 +51,14 @@ const ContactFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) => 
     e.preventDefault();
     setFeedback(null);
 
-    if (!formData.fornamn || !formData.efternamn || !formData.foretag || !formData.epost || !formData.typAvBehov || !formData.meddelande) {
+    if (
+      !formData.fornamn ||
+      !formData.efternamn ||
+      !formData.foretag ||
+      !formData.epost ||
+      !formData.typAvBehov ||
+      !formData.meddelande
+    ) {
       setFeedback({ typ: "error", text: "Fyll i alla obligatoriska fält." });
       return;
     }
@@ -71,24 +78,23 @@ Plats: ${formData.plats || "-"}
 Meddelande: ${formData.meddelande}
       `.trim();
 
-      const row = {
-        from_type: "staffing_request" as const,
-        full_name: `${formData.fornamn} ${formData.efternamn}`,
-        company_name: formData.foretag,
-        title: formData.titel || null,
-        email: formData.epost,
-        phone: formData.telefon || null,
-        subject: formData.typAvBehov,
-        message: combinedMessage,
-        status: "new" as const,
-        gdpr_consent: !!formData.gdprAccept,
-        gdpr_consented_at: formData.gdprAccept ? new Date().toISOString() : null,
-      };
-
-      const { error } = await supabase.from("contact_messages").insert([row]).select();
+      // ⬇️ BYTT: använd RPC-funktionen create_contact_message
+      const { data, error } = await supabase.rpc("create_contact_message", {
+        _from_type: "staffing_request", // eller "company" om du föredrar det
+        _full_name: `${formData.fornamn} ${formData.efternamn}`,
+        _email: formData.epost,
+        _message: combinedMessage,
+        _status: "new",
+        _company_name: formData.foretag || null,
+        _title: formData.titel || null,
+        _phone: formData.telefon || null,
+        _subject: formData.typAvBehov || null,
+        _gdpr_consent: !!formData.gdprAccept,
+        _gdpr_consented_at: formData.gdprAccept ? new Date().toISOString() : null,
+      });
 
       if (error) {
-        console.error("Supabase insert error:", error);
+        console.error("Supabase RPC error:", error, "data:", data);
         setFeedback({ typ: "error", text: `Kunde inte skicka (${error.message}).` });
         return;
       }
