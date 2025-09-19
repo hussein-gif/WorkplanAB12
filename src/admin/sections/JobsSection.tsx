@@ -14,6 +14,24 @@ export default function JobsSection() {
   const [q, setQ] = useState('');
   const [loading, setLoading] = useState(true);
 
+  // Helpers för datetime-local (lokal tid utan tidszons-förskjutning)
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const toLocalInputValue = (iso?: string | null) => {
+    if (!iso) return '';
+    const d = new Date(iso);
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
+  const nowLocalInput = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
+  // Konvertera en lokal "YYYY-MM-DDTHH:mm" till ISO så att lagrat UTC matchar valt klockslag
+  const fromLocalInputPreserveWallTime = (localStr: string) => {
+    const d = new Date(localStr); // tolkas som lokal
+    const corrected = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+    return corrected.toISOString();
+  };
+
   // Modal/form state
   const [open, setOpen] = useState(false);
   const empty: Partial<Job> & any = {
@@ -24,11 +42,11 @@ export default function JobsSection() {
     description_md: '',
     salary_min: null,
     salary_max: null,
-    slug: '',
+    // slug: tas alltid fram automatiskt vid save
     published: false,
     posted_at: new Date().toISOString(),
     expires_at: null,
-    // 🔽 Nya fält för att matcha JobDetailPage
+    // 🔽 Fält som JobDetailPage nyttjar
     company: '',
     companyLogo: '',
     summary: '',
@@ -37,10 +55,10 @@ export default function JobsSection() {
     requirementsText: '',     // textarea som radbryts → requirements[]
     recruitmentProcess: '',
     recruiterEmail: '',
-    recruiterPhone: '',
+    // recruiterPhone: borttagen
     industry: '',
-    salary: '',               // fri text (ersätter min/max om du vill visa exakt text)
-    startDate: '',            // valfri (JobDetailPage fallback: "Enligt överenskommelse")
+    salary: '',               // fri text (ej obligatorisk längre)
+    startDate: '',            // valfri
   };
   const [form, setForm] = useState<Partial<Job> & any>(empty);
   const [saving, setSaving] = useState(false);
@@ -82,6 +100,7 @@ export default function JobsSection() {
   }
 
   function requiredMissing() {
+    // ❗ Justerad: slug tas alltid automatiskt, recruiterPhone borttagen, salary ej obligatorisk
     const must: Array<[string, string]> = [
       ['title', 'Titel'],
       ['company', 'Företag'],
@@ -93,9 +112,8 @@ export default function JobsSection() {
       ['requirementsText', 'Vem vi söker'],
       ['recruitmentProcess', 'Vår rekryteringsprocess'],
       ['recruiterEmail', 'Rekryterarens e-post'],
-      ['recruiterPhone', 'Rekryterarens telefon'],
       ['industry', 'Bransch'],
-      ['salary', 'Lön (text)'],
+      // ['salary', 'Lön (text)'], // inte längre obligatorisk
     ];
     const missing = must.filter(([k]) => {
       const v = (form as any)[k];
@@ -115,7 +133,6 @@ export default function JobsSection() {
   async function saveJob(e?: React.FormEvent) {
     e?.preventDefault?.();
 
-    // Hårdvalidera obligatoriska fält
     const missing = requiredMissing();
     if (missing.length) {
       alert('Följande fält måste fyllas i:\n• ' + missing.join('\n• '));
@@ -124,19 +141,18 @@ export default function JobsSection() {
 
     setSaving(true);
 
-    // Bygg rad – bibehåll befintliga kolumner + lägg till nya fält
     const responsibilities = toArrayLines(form.responsibilitiesText);
     const requirements = toArrayLines(form.requirementsText);
 
     const row: any = {
       ...form,
-      // slug: generera om tom
-      slug: (form.slug && form.slug.trim().length > 0) ? form.slug.trim() : slugify(form.title!),
+      // ✅ slug genereras ALLTID automatiskt från titel
+      slug: slugify(form.title!),
 
-      // Säkerställ att dessa är strängar
+      // Strings
       title: String(form.title || '').trim(),
       location: String(form.location || '').trim(),
-      employment_type: String(form.employment_type || '').trim(), // "Heltid", "Deltid", etc.
+      employment_type: String(form.employment_type || '').trim(),
 
       // Nya fält som JobDetailPage läser
       company: String(form.company || '').trim(),
@@ -147,12 +163,12 @@ export default function JobsSection() {
       requirements,     // jsonb[]
       recruitmentProcess: String(form.recruitmentProcess || '').trim(),
       recruiterEmail: String(form.recruiterEmail || '').trim(),
-      recruiterPhone: String(form.recruiterPhone || '').trim(),
+      // recruiterPhone: utelämnad
       industry: String(form.industry || '').trim(),
-      salary: String(form.salary || '').trim(),
+      salary: (form.salary ?? '') === '' ? null : String(form.salary).trim(), // inte required
       startDate: String(form.startDate || '').trim() || null,
 
-      // Städning av textarea-proxy-fält (sparas ej som egna kolumner)
+      // Städning av textarea-proxy-fält
       responsibilitiesText: undefined,
       requirementsText: undefined,
     };
@@ -184,6 +200,15 @@ export default function JobsSection() {
     if (error) return alert('Kunde inte ta bort: ' + error.message);
     setItems(prev => prev.filter(x => x.id !== j.id));
   }
+
+  // Hjälpare för min-värden & clamping
+  const minPostedLocal = nowLocalInput();
+  const minExpiresLocal = (() => {
+    const now = nowLocalInput();
+    const postedLocal = toLocalInputValue(form.posted_at);
+    // ta den som ligger senast i tiden
+    return postedLocal && postedLocal > now ? postedLocal : now;
+  })();
 
   return (
     <div>
@@ -274,17 +299,15 @@ export default function JobsSection() {
         </div>
       )}
 
-      {/* Modal: komplett formulär som matchar JobDetailPage */}
+      {/* Modal */}
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
-          {/* ⬇️ Scrollfix: flex-kolumn + max-h + body som overflow-y-auto */}
           <div className="w-[min(95vw,900px)] bg-white border rounded-2xl shadow-xl flex flex-col max-h-[90vh]">
             <div className="px-5 py-4 border-b flex items-center justify-between">
               <div className="text-lg font-semibold">{form.id ? 'Redigera jobb' : 'Nytt jobb'}</div>
               <button onClick={() => setOpen(false)} className="text-gray-500 hover:text-gray-700">Stäng</button>
             </div>
 
-            {/* Scrollande innehåll */}
             <div className="p-5 overflow-y-auto">
               <form onSubmit={saveJob} className="space-y-6">
                 {/* Grundinfo */}
@@ -337,15 +360,7 @@ export default function JobsSection() {
                         onChange={e => setForm(f => ({ ...f, startDate: e.target.value }))}
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm text-gray-600 mb-1">Slug (valfri)</label>
-                      <input
-                        className="w-full border rounded-lg px-3 py-2"
-                        placeholder="automatisk om tomt"
-                        value={form.slug ?? ''}
-                        onChange={e => setForm(f => ({ ...f, slug: e.target.value }))}
-                      />
-                    </div>
+                    {/* Slug-fältet borttaget */}
                   </div>
                 </div>
 
@@ -363,7 +378,7 @@ export default function JobsSection() {
                 {/* Om rollen */}
                 <div>
                   <h3 className="text-base font-semibold mb-3">Om rollen *</h3>
-                  <textarea
+                <textarea
                     className="w-full border rounded-lg px-3 py-2 min-h-[120px]"
                     value={form.aboutRole ?? ''}
                     onChange={e => setForm(f => ({ ...f, aboutRole: e.target.value }))}
@@ -420,15 +435,7 @@ export default function JobsSection() {
                         required
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm text-gray-600 mb-1">Rekryterarens telefon *</label>
-                      <input
-                        className="w-full border rounded-lg px-3 py-2"
-                        value={form.recruiterPhone ?? ''}
-                        onChange={e => setForm(f => ({ ...f, recruiterPhone: e.target.value }))}
-                        required
-                      />
-                    </div>
+                    {/* Rekryterarens telefon borttagen */}
                   </div>
                 </div>
 
@@ -445,13 +452,12 @@ export default function JobsSection() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm text-gray-600 mb-1">Lön (text) *</label>
+                    <label className="block text-sm text-gray-600 mb-1">Lön (text)</label>
                     <input
                       className="w-full border rounded-lg px-3 py-2"
                       placeholder="Ex: Enl. kollektivavtal / 30–34 000 kr/mån"
                       value={form.salary ?? ''}
                       onChange={e => setForm(f => ({ ...f, salary: e.target.value }))}
-                      required
                     />
                   </div>
                   <div>
@@ -472,8 +478,13 @@ export default function JobsSection() {
                     <input
                       type="datetime-local"
                       className="w-full border rounded-lg px-3 py-2"
-                      value={form.posted_at ? new Date(form.posted_at).toISOString().slice(0,16) : ''}
-                      onChange={e => setForm(f => ({ ...f, posted_at: new Date(e.target.value).toISOString() }))}
+                      value={toLocalInputValue(form.posted_at)}
+                      min={minPostedLocal}
+                      onChange={e => {
+                        const v = e.target.value;
+                        const clamped = v < minPostedLocal ? minPostedLocal : v;
+                        setForm(f => ({ ...f, posted_at: fromLocalInputPreserveWallTime(clamped) }));
+                      }}
                       required
                     />
                   </div>
@@ -482,8 +493,13 @@ export default function JobsSection() {
                     <input
                       type="datetime-local"
                       className="w-full border rounded-lg px-3 py-2"
-                      value={form.expires_at ? new Date(form.expires_at).toISOString().slice(0,16) : ''}
-                      onChange={e => setForm(f => ({ ...f, expires_at: e.target.value ? new Date(e.target.value).toISOString() : null }))}
+                      value={toLocalInputValue(form.expires_at)}
+                      min={minExpiresLocal}
+                      onChange={e => {
+                        const v = e.target.value;
+                        const clamped = v < minExpiresLocal ? minExpiresLocal : v;
+                        setForm(f => ({ ...f, expires_at: clamped ? fromLocalInputPreserveWallTime(clamped) : null }));
+                      }}
                     />
                   </div>
                 </div>
