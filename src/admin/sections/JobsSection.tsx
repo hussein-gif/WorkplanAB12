@@ -36,6 +36,7 @@ export default function JobsSection() {
   const [open, setOpen] = useState(false);
   const empty: Partial<Job> & any = {
     // Befintliga fält
+    id: undefined,
     title: '',
     location: '',
     employment_type: '', // mappar till "omfattning" i publik sida
@@ -48,7 +49,7 @@ export default function JobsSection() {
     expires_at: null,
     // 🔽 Fält som JobDetailPage nyttjar
     company: '',
-    companyLogo: '',
+    companyLogo: '',        // <- vi använder camelCase i formuläret, mappar till company_logo vid save
     summary: '',
     aboutRole: '',
     responsibilitiesText: '', // textarea som radbryts → responsibilities[]
@@ -57,8 +58,8 @@ export default function JobsSection() {
     recruiterEmail: '',
     // recruiterPhone: borttagen
     industry: '',
-    salary: '',               // fri text (ej obligatorisk längre)
-    startDate: '',            // valfri
+    // salary: BORTTAGET från formuläret och sparlogiken
+    startDate: '',            // valfri (mappar till start_date)
   };
   const [form, setForm] = useState<Partial<Job> & any>(empty);
   const [saving, setSaving] = useState(false);
@@ -88,19 +89,31 @@ export default function JobsSection() {
     setForm(empty);
     setOpen(true);
   }
+
   function openEdit(j: Job) {
-    // Hydrera textarea-fälten från ev. lagrade arrays
+    // Hydrera textarea-fälten från ev. lagrade arrays + mappa snake_case → camelCase
     const jAny: any = j || {};
     setForm({
+      ...empty,
       ...jAny,
-      responsibilitiesText: Array.isArray(jAny.responsibilities) ? jAny.responsibilities.join('\n') : (jAny.responsibilitiesText ?? ''),
-      requirementsText: Array.isArray(jAny.requirements) ? jAny.requirements.join('\n') : (jAny.requirementsText ?? ''),
+      // mappa snake_case till formfält vi använder i UI
+      companyLogo: jAny.companyLogo ?? jAny.company_logo ?? '',
+      aboutRole: jAny.aboutRole ?? jAny.about_role ?? '',
+      recruitmentProcess: jAny.recruitmentProcess ?? jAny.recruitment_process ?? '',
+      recruiterEmail: jAny.recruiterEmail ?? jAny.recruiter_email ?? '',
+      startDate: jAny.startDate ?? jAny.start_date ?? '',
+      responsibilitiesText: Array.isArray(jAny.responsibilities)
+        ? jAny.responsibilities.join('\n')
+        : (jAny.responsibilitiesText ?? ''),
+      requirementsText: Array.isArray(jAny.requirements)
+        ? jAny.requirements.join('\n')
+        : (jAny.requirementsText ?? ''),
     });
     setOpen(true);
   }
 
   function requiredMissing() {
-    // ❗ Justerad: slug tas alltid automatiskt, recruiterPhone borttagen, salary ej obligatorisk
+    // ❗ Justerad: slug tas alltid automatiskt, recruiterPhone borttagen, salary ej obligatorisk och BORTTAGEN
     const must: Array<[string, string]> = [
       ['title', 'Titel'],
       ['company', 'Företag'],
@@ -129,6 +142,14 @@ export default function JobsSection() {
       .filter(Boolean);
   }
 
+  // enkel URL-koll
+  const normalizeLogoUrl = (val?: string | null) => {
+    const v = (val ?? '').trim();
+    if (!v) return null;
+    if (/^https?:\/\//i.test(v)) return v;
+    return null; // spara som null om det inte ser ut som en riktig URL
+  };
+
   async function saveJob(e?: React.FormEvent) {
     e?.preventDefault?.();
 
@@ -144,13 +165,14 @@ export default function JobsSection() {
     const requirements = toArrayLines(form.requirementsText);
 
     // ✅ Mappa camelCase → snake_case innan upsert (matchar DB-kolumner)
+    // ⚠️ Salary helt borttagen – vi skriver inte över något salary-värde i DB.
     const row: any = {
       id: form.id,                                   // om redigering
       slug: slugify(form.title!),                    // slug alltid automatisk
 
       title: String(form.title || '').trim(),
       company: String(form.company || '').trim(),
-      company_logo: String(form.companyLogo || '').trim() || null, // ← snake_case
+      company_logo: normalizeLogoUrl(form.companyLogo), // ← spara som URL eller null
       location: String(form.location || '').trim(),
       industry: String(form.industry || '').trim(),
       employment_type: String(form.employment_type || '').trim(),
@@ -164,14 +186,12 @@ export default function JobsSection() {
       recruiter_email: String(form.recruiterEmail || '').trim(),         // ← snake_case
       // recruiter_phone: utelämnad (borttagen)
 
-      salary: (form.salary ?? '') === '' ? null : String(form.salary).trim(), // frivillig
-
       // Publicering
       published: !!form.published,
       posted_at: form.posted_at,
       expires_at: form.expires_at ?? null,
 
-      // Städa bort UI-hjälpfält
+      // Städa bort UI-hjälpfält (för säkerhets skull, men de ignoreras ändå av Supabase)
       responsibilitiesText: undefined,
       requirementsText: undefined,
       companyLogo: undefined,
@@ -447,9 +467,9 @@ export default function JobsSection() {
                   </div>
                 </div>
 
-                {/* Bransch, Lön, Logotyp */}
+                {/* Bransch, Logotyp (URL) – LÖN BORTTAGEN */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
+                  <div className="md:col-span-1">
                     <label className="block text-sm text-gray-600 mb-1">Bransch *</label>
                     <input
                       className="w-full border rounded-lg px-3 py-2"
@@ -459,16 +479,8 @@ export default function JobsSection() {
                       required
                     />
                   </div>
-                  <div>
-                    <label className="block text-sm text-gray-600 mb-1">Lön (text)</label>
-                    <input
-                      className="w-full border rounded-lg px-3 py-2"
-                      placeholder="Ex: Enl. kollektivavtal / 30–34 000 kr/mån"
-                      value={form.salary ?? ''}
-                      onChange={e => setForm(f => ({ ...f, salary: e.target.value }))}
-                    />
-                  </div>
-                  <div>
+                  {/* Lön-fältet borttaget */}
+                  <div className="md:col-span-2">
                     <label className="block text-sm text-gray-600 mb-1">Företagslogotyp (URL, valfri)</label>
                     <input
                       className="w-full border rounded-lg px-3 py-2"
@@ -476,6 +488,9 @@ export default function JobsSection() {
                       value={form.companyLogo ?? ''}
                       onChange={e => setForm(f => ({ ...f, companyLogo: e.target.value }))}
                     />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Klistra in en fullständig URL (börja med <code>http://</code> eller <code>https://</code>).
+                    </p>
                   </div>
                 </div>
 
