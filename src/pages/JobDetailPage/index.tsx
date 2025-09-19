@@ -15,7 +15,6 @@ type SharedFormData = {
   gdprConsent: boolean;
 };
 
-// Typ som matchar vad sidan använder
 type JobData = {
   id: string;
   slug: string | null;
@@ -35,7 +34,6 @@ type JobData = {
   startDate?: string | null;
 };
 
-// Hjälpare för att kunna matcha mot titel i URL (slug)
 const slugify = (s: string) =>
   s
     .toLowerCase()
@@ -54,7 +52,6 @@ const JobDetailPage = () => {
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // 🔹 Delad state mellan ark och sektion
   const [formData, setFormData] = useState<SharedFormData>({
     firstName: '',
     lastName: '',
@@ -66,7 +63,6 @@ const JobDetailPage = () => {
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [otherFile, setOtherFile] = useState<File | null>(null);
 
-  // 🔹 Tvinga mörk navbar
   useLayoutEffect(() => {
     document.documentElement.classList.add('force-nav-dark');
     return () => {
@@ -74,7 +70,6 @@ const JobDetailPage = () => {
     };
   }, []);
 
-  // ⬇️ Hämta jobb från Supabase via slug eller id
   useEffect(() => {
     setIsVisible(true);
     (async () => {
@@ -86,23 +81,59 @@ const JobDetailPage = () => {
 
       const key = decodeURIComponent(jobId);
 
-      // 1) försök med slug eller id direkt
+      // ⚠️ Använd snake_case-kolumnnamn från databasen
       let { data, error } = await supabase
         .from('jobs')
         .select(
-          'id, slug, title, company, companyLogo, location, industry, employment_type, salary, summary, about_role, responsibilities, requirements, recruitment_process, recruiter_email, start_date, published'
+          [
+            'id',
+            'slug',
+            'title',
+            'company',
+            'company_logo',          // <-- viktig ändring
+            'location',
+            'industry',
+            'employment_type',
+            'salary',
+            'summary',
+            'about_role',
+            'responsibilities',
+            'requirements',
+            'recruitment_process',
+            'recruiter_email',
+            'start_date',
+            'published',
+          ].join(', ')
         )
         .or(`slug.eq.${key},id.eq.${key}`)
         .eq('published', true)
         .limit(1)
         .maybeSingle();
 
-      // 2) fallback: matcha slugifierad titel om inget hittades
+      // Fallback: slugifierad titel
       if (!data) {
         const { data: list } = await supabase
           .from('jobs')
           .select(
-            'id, slug, title, company, companyLogo, location, industry, employment_type, salary, summary, about_role, responsibilities, requirements, recruitment_process, recruiter_email, start_date, published'
+            [
+              'id',
+              'slug',
+              'title',
+              'company',
+              'company_logo',
+              'location',
+              'industry',
+              'employment_type',
+              'salary',
+              'summary',
+              'about_role',
+              'responsibilities',
+              'requirements',
+              'recruitment_process',
+              'recruiter_email',
+              'start_date',
+              'published',
+            ].join(', ')
           )
           .eq('published', true);
 
@@ -135,8 +166,7 @@ const JobDetailPage = () => {
         slug: data.slug,
         title: data.title ?? '',
         company: data.company ?? 'Workplan',
-        // companyLogo kan vara sparad som text eller URL – vi visar bild nedan om det är URL
-        companyLogo: data.companyLogo ?? (data.company ? data.company[0] : '•'),
+        companyLogo: data.company_logo ?? (data.company ? data.company[0] : '•'), // <-- mappa rätt
         location: data.location ?? '',
         industry: data.industry ?? 'Lager & Logistik',
         omfattning,
@@ -182,33 +212,19 @@ const JobDetailPage = () => {
     );
   }
 
-  const handleBack = () => navigate('/jobb'); // ✅ svenska route
+  const handleBack = () => navigate('/jobb');
 
-  const handleApply = () => {
-    setIsApplicationFormOpen(true);
-  };
-
-  const handleCloseForm = () => {
-    setIsApplicationFormOpen(false);
-  };
-
+  const handleApply = () => setIsApplicationFormOpen(true);
+  const handleCloseForm = () => setIsApplicationFormOpen(false);
   const handleMinimizeForm = () => {
-    const applicationSection = document.getElementById('application-form');
-    if (applicationSection) {
-      applicationSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    const el = document.getElementById('application-form');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
     setIsApplicationFormOpen(false);
   };
 
   const startDate = job.startDate || 'Enligt överenskommelse';
+  const industry = job.industry || '';
 
-  // 🔹 Bransch (industry)
-  const industry =
-    job.industry || '';
-
-  // =========================
-  // ✅ SEO: JobPosting + BreadcrumbList (work-plan.se)
-  // =========================
   const employmentType =
     job.omfattning === 'Heltid' ? 'FULL_TIME' :
     job.omfattning === 'Deltid' ? 'PART_TIME' : 'OTHER';
@@ -242,10 +258,7 @@ const JobDetailPage = () => {
         "addressCountry": "SE"
       }
     },
-    "applicantLocationRequirements": {
-      "@type": "Country",
-      "name": "SE"
-    },
+    "applicantLocationRequirements": { "@type": "Country", "name": "SE" },
     "industry": industry || "Lager & Logistik",
     "incentiveCompensation": job.salary || undefined,
     "validThrough": undefined,
@@ -264,7 +277,6 @@ const JobDetailPage = () => {
 
   return (
     <>
-      {/* ✅ SEO med dynamiska värden + JSON-LD */}
       <SEO
         title={`${job.title} – ${job.location} | Workplan`}
         description={`Workplan söker ${job.title} för ${job.company} i ${job.location}. Start: ${startDate}. Ansök idag och bli en del av framtidens lager & logistik.`}
@@ -273,7 +285,6 @@ const JobDetailPage = () => {
       />
 
       <div className="relative min-h-screen bg-[#F7FAFF] overflow-hidden">
-        {/* Subtil blå design i #08132B */}
         <div className="pointer-events-none absolute inset-0">
           <div
             className="absolute -top-24 -left-24 w-[40rem] h-[40rem] rounded-full opacity-20 blur-3xl"
@@ -295,9 +306,7 @@ const JobDetailPage = () => {
           />
         </div>
 
-        {/* Content */}
         <div className="relative max-w-4xl mx-auto px-6 py-8 pt-28 md:pt-32">
-          {/* Tillbaka (diskret) */}
           <button
             onClick={handleBack}
             className={`
@@ -314,7 +323,6 @@ const JobDetailPage = () => {
             <span className="text-sm">Tillbaka</span>
           </button>
 
-          {/* Titel + logga */}
           <div
             className={`
               flex items-start justify-between gap-4 mb-4
@@ -351,7 +359,6 @@ const JobDetailPage = () => {
             </div>
           </div>
 
-          {/* Kort säljtext */}
           <p
             className={`
               text-[#08132B]/80 leading-relaxed mb-5 max-w-3xl
@@ -363,7 +370,6 @@ const JobDetailPage = () => {
             {job.summary}
           </p>
 
-          {/* Primär CTA */}
           <div className="mb-8">
             <button
               onClick={handleApply}
@@ -380,7 +386,6 @@ const JobDetailPage = () => {
             </button>
           </div>
 
-          {/* Fakta-ruta */}
           <div
             className={`
               bg-white border border-[#08132B]/10 rounded-xl p-6 mb-14
@@ -430,9 +435,7 @@ const JobDetailPage = () => {
             </div>
           </div>
 
-          {/* Sektioner */}
           <div className="space-y-16">
-            {/* Om rollen */}
             <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
               <h2
                 className="text-3xl md:text-4xl text-[#08132B] mb-4 md:mb-6"
@@ -445,7 +448,6 @@ const JobDetailPage = () => {
               </p>
             </section>
 
-            {/* Arbetsuppgifter */}
             <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
               <h2
                 className="text-3xl md:text-4xl text-[#08132B] mb-4 md:mb-6"
@@ -465,7 +467,6 @@ const JobDetailPage = () => {
               </ul>
             </section>
 
-            {/* Vem vi söker */}
             <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
               <h2
                 className="text-3xl md:text-4xl text-[#08132B] mb-4 md:mb-6"
@@ -485,7 +486,6 @@ const JobDetailPage = () => {
               </ul>
             </section>
 
-            {/* Vår rekryteringsprocess */}
             <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
               <h2
                 className="text-3xl md:text-4xl text-[#08132B] mb-4 md:mb-6"
@@ -498,7 +498,6 @@ const JobDetailPage = () => {
               </p>
             </section>
 
-            {/* Har du frågor? – telefon borttagen */}
             <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
               <div className="bg-white border border-[#08132B]/10 rounded-xl p-6">
                 <h3
@@ -525,7 +524,6 @@ const JobDetailPage = () => {
             </section>
           </div>
 
-          {/* Slut-CTA */}
           <div className="mt-14 flex">
             <button
               onClick={handleApply}
@@ -543,7 +541,6 @@ const JobDetailPage = () => {
           </div>
         </div>
 
-        {/* Application Form Section at Bottom — får bransch & ort + delad state */}
         <JobApplicationSection
           jobTitle={job.title}
           companyName={job.company}
@@ -557,7 +554,6 @@ const JobDetailPage = () => {
           setOtherFile={setOtherFile}
         />
 
-        {/* Popup Application Form — använder samma delade state */}
         <JobApplicationForm
           jobTitle={job.title}
           companyName={job.company}
