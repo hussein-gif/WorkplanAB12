@@ -113,7 +113,6 @@ export default function JobsSection() {
       ['recruitmentProcess', 'Vår rekryteringsprocess'],
       ['recruiterEmail', 'Rekryterarens e-post'],
       ['industry', 'Bransch'],
-      // ['salary', 'Lön (text)'], // inte längre obligatorisk
     ];
     const missing = must.filter(([k]) => {
       const v = (form as any)[k];
@@ -144,33 +143,42 @@ export default function JobsSection() {
     const responsibilities = toArrayLines(form.responsibilitiesText);
     const requirements = toArrayLines(form.requirementsText);
 
+    // ✅ Mappa camelCase → snake_case innan upsert (matchar DB-kolumner)
     const row: any = {
-      ...form,
-      // ✅ slug genereras ALLTID automatiskt från titel
-      slug: slugify(form.title!),
+      id: form.id,                                   // om redigering
+      slug: slugify(form.title!),                    // slug alltid automatisk
 
-      // Strings
       title: String(form.title || '').trim(),
-      location: String(form.location || '').trim(),
-      employment_type: String(form.employment_type || '').trim(),
-
-      // Nya fält som JobDetailPage läser
       company: String(form.company || '').trim(),
-      companyLogo: String(form.companyLogo || '').trim() || null,
-      summary: String(form.summary || '').trim(),
-      aboutRole: String(form.aboutRole || '').trim(),
-      responsibilities, // jsonb[]
-      requirements,     // jsonb[]
-      recruitmentProcess: String(form.recruitmentProcess || '').trim(),
-      recruiterEmail: String(form.recruiterEmail || '').trim(),
-      // recruiterPhone: utelämnad
+      company_logo: String(form.companyLogo || '').trim() || null, // ← snake_case
+      location: String(form.location || '').trim(),
       industry: String(form.industry || '').trim(),
-      salary: (form.salary ?? '') === '' ? null : String(form.salary).trim(), // inte required
-      startDate: String(form.startDate || '').trim() || null,
+      employment_type: String(form.employment_type || '').trim(),
+      start_date: String(form.startDate || '').trim() || null,     // ← snake_case
 
-      // Städning av textarea-proxy-fält
+      summary: String(form.summary || '').trim(),
+      about_role: String(form.aboutRole || '').trim(),             // ← snake_case
+      responsibilities,                                            // jsonb[]
+      requirements,                                                // jsonb[]
+      recruitment_process: String(form.recruitmentProcess || '').trim(), // ← snake_case
+      recruiter_email: String(form.recruiterEmail || '').trim(),         // ← snake_case
+      // recruiter_phone: utelämnad (borttagen)
+
+      salary: (form.salary ?? '') === '' ? null : String(form.salary).trim(), // frivillig
+
+      // Publicering
+      published: !!form.published,
+      posted_at: form.posted_at,
+      expires_at: form.expires_at ?? null,
+
+      // Städa bort UI-hjälpfält
       responsibilitiesText: undefined,
       requirementsText: undefined,
+      companyLogo: undefined,
+      aboutRole: undefined,
+      recruitmentProcess: undefined,
+      recruiterEmail: undefined,
+      startDate: undefined,
     };
 
     const { error } = await supabase
@@ -378,7 +386,7 @@ export default function JobsSection() {
                 {/* Om rollen */}
                 <div>
                   <h3 className="text-base font-semibold mb-3">Om rollen *</h3>
-                <textarea
+                  <textarea
                     className="w-full border rounded-lg px-3 py-2 min-h-[120px]"
                     value={form.aboutRole ?? ''}
                     onChange={e => setForm(f => ({ ...f, aboutRole: e.target.value }))}
