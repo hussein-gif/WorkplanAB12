@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Clock, MapPin, Building, Mail, Phone } from 'lucide-react';
-import { mockJobData, JobData } from './jobData';
+import { ArrowLeft, ArrowRight, Clock, MapPin, Building, Mail } from 'lucide-react';
 import JobApplicationForm from './JobApplicationForm';
 import JobApplicationSection from './JobApplicationSection';
-import SEO from '../../components/SEO'; // ✅ SEO-komponenten
+import SEO from '../../components/SEO';
+import { supabase } from '../../supabaseClient';
 
 type SharedFormData = {
   firstName: string;
@@ -13,6 +13,26 @@ type SharedFormData = {
   phone: string;
   coverLetter: string;
   gdprConsent: boolean;
+};
+
+// Typ som matchar vad sidan använder
+type JobData = {
+  id: string;
+  slug: string | null;
+  title: string;
+  company: string;
+  companyLogo?: string | null;
+  location: string;
+  industry?: string | null;
+  omfattning: 'Heltid' | 'Deltid' | 'OTHER';
+  salary?: string | null;
+  summary?: string | null;
+  aboutRole?: string | null;
+  responsibilities: string[];
+  requirements: string[];
+  recruitmentProcess?: string | null;
+  recruiterEmail?: string | null;
+  startDate?: string | null;
 };
 
 // Hjälpare för att kunna matcha mot titel i URL (slug)
@@ -30,8 +50,9 @@ const JobDetailPage = () => {
   const [job, setJob] = useState<JobData | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // 🔹 Delad state mellan ark och sektion (så fält speglas båda vägar)
+  // 🔹 Delad state mellan ark och sektion
   const [formData, setFormData] = useState<SharedFormData>({
     firstName: '',
     lastName: '',
@@ -43,7 +64,7 @@ const JobDetailPage = () => {
   const [cvFile, setCvFile] = useState<File | null>(null);
   const [otherFile, setOtherFile] = useState<File | null>(null);
 
-  // 🔹 Tvinga mörk navbar på denna sida (innan första paint för att undvika blink)
+  // 🔹 Tvinga mörk navbar
   useLayoutEffect(() => {
     document.documentElement.classList.add('force-nav-dark');
     return () => {
@@ -51,53 +72,87 @@ const JobDetailPage = () => {
     };
   }, []);
 
+  // ⬇️ Hämta jobb från Supabase via slug eller id
   useEffect(() => {
     setIsVisible(true);
-
-    if (!jobId) {
-      setJob(null);
-      return;
-    }
-
-    const key = decodeURIComponent(jobId);
-
-    let found: JobData | null = null;
-
-    // Stöd både objekt (map) och array
-    if (Array.isArray(mockJobData)) {
-      const keyNum = Number.isNaN(Number(key)) ? null : Number(key);
-      found =
-        (mockJobData as any[]).find(
-          (j: any) =>
-            String(j.id) === key || // id i string
-            (keyNum !== null && j.id === keyNum) || // id i number
-            (j.slug && j.slug === key) || // slugfält
-            (j.title && slugify(j.title) === key) // slugifierad titel
-        ) || null;
-    } else {
-      // Objekt: direkt nyckel
-      const asObj: Record<string, any> = mockJobData as any;
-      found = (asObj[key] as JobData) ?? null;
-
-      // Om inte direktträff, sök bland värden (som om det vore en lista)
-      if (!found) {
-        const values: any[] = Object.values(asObj);
-        const keyNum = Number.isNaN(Number(key)) ? null : Number(key);
-        found =
-          values.find(
-            (j: any) =>
-              String(j.id) === key ||
-              (keyNum !== null && j.id === keyNum) ||
-              (j.slug && j.slug === key) ||
-              (j.title && slugify(j.title) === key)
-          ) || null;
+    (async () => {
+      if (!jobId) {
+        setJob(null);
+        setLoading(false);
+        return;
       }
-    }
 
-    setJob(found);
+      const key = decodeURIComponent(jobId);
+
+      // 1) försök med slug eller id direkt
+      let { data, error } = await supabase
+        .from('jobs')
+        .select(
+          'id, slug, title, company, companyLogo, location, industry, employment_type, salary, summary, about_role, responsibilities, requirements, recruitment_process, recruiter_email, start_date, published'
+        )
+        .or(`slug.eq.${key},id.eq.${key}`)
+        .eq('published', true)
+        .limit(1)
+        .maybeSingle();
+
+      // 2) fallback: matcha slugifierad titel om inget hittades
+      if (!data) {
+        const { data: list } = await supabase
+          .from('jobs')
+          .select(
+            'id, slug, title, company, companyLogo, location, industry, employment_type, salary, summary, about_role, responsibilities, requirements, recruitment_process, recruiter_email, start_date, published'
+          )
+          .eq('published', true);
+
+        const found =
+          (list ?? []).find((j: any) => j.title && slugify(j.title) === key) ?? null;
+        data = found || null;
+      }
+
+      if (error) {
+        console.error(error);
+      }
+
+      if (!data) {
+        setJob(null);
+        setLoading(false);
+        return;
+      }
+
+      const omfattning: 'Heltid' | 'Deltid' | 'OTHER' =
+        typeof data.employment_type === 'string'
+          ? data.employment_type.toLowerCase().includes('deltid')
+            ? 'Deltid'
+            : data.employment_type.toLowerCase().includes('heltid')
+            ? 'Heltid'
+            : 'OTHER'
+          : 'OTHER';
+
+      const mapped: JobData = {
+        id: data.id,
+        slug: data.slug,
+        title: data.title ?? '',
+        company: data.company ?? 'Workplan',
+        companyLogo: data.companyLogo ?? (data.company ? data.company[0] : '•'),
+        location: data.location ?? '',
+        industry: data.industry ?? 'Lager & Logistik',
+        omfattning,
+        salary: data.salary ?? '',
+        summary: data.summary ?? '',
+        aboutRole: data.about_role ?? '',
+        responsibilities: Array.isArray(data.responsibilities) ? data.responsibilities : [],
+        requirements: Array.isArray(data.requirements) ? data.requirements : [],
+        recruitmentProcess: data.recruitment_process ?? '',
+        recruiterEmail: data.recruiter_email ?? '',
+        startDate: data.start_date ?? null,
+      };
+
+      setJob(mapped);
+      setLoading(false);
+    })();
   }, [jobId]);
 
-  if (!job) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-[#F7FAFF] flex items-center justify-center relative overflow-hidden">
         <div className="text-center">
@@ -116,6 +171,14 @@ const JobDetailPage = () => {
     );
   }
 
+  if (!job) {
+    return (
+      <div className="min-h-screen bg-[#F7FAFF] flex items-center justify-center">
+        <p className="text-[#08132B]/70 text-lg">Kunde inte hitta tjänsten.</p>
+      </div>
+    );
+  }
+
   const handleBack = () => navigate('/jobb'); // ✅ svenska route
 
   const handleApply = () => {
@@ -127,7 +190,6 @@ const JobDetailPage = () => {
   };
 
   const handleMinimizeForm = () => {
-    // Scrolla till sektionen om man väljer att minimera via annan trigger
     const applicationSection = document.getElementById('application-form');
     if (applicationSection) {
       applicationSection.scrollIntoView({ behavior: 'smooth' });
@@ -135,14 +197,11 @@ const JobDetailPage = () => {
     setIsApplicationFormOpen(false);
   };
 
-  const startDate = (job as any).startDate || 'Enligt överenskommelse';
+  const startDate = job.startDate || 'Enligt överenskommelse';
 
-  // 🔹 Bransch (industry) som i din kod
+  // 🔹 Bransch (industry)
   const industry =
-    (job as any).industry ||
-    (job as any).category ||
-    (job as any).department ||
-    '';
+    job.industry || '';
 
   // =========================
   // ✅ SEO: JobPosting + BreadcrumbList (work-plan.se)
@@ -151,13 +210,9 @@ const JobDetailPage = () => {
     job.omfattning === 'Heltid' ? 'FULL_TIME' :
     job.omfattning === 'Deltid' ? 'PART_TIME' : 'OTHER';
 
-  // Byt till din riktiga logotyp-URL om du har en annan placering/fil
   const hiringOrgLogo = 'https://www.work-plan.se/logo.png';
-
-  // Kanonisk URL till denna annons (svensk route)
   const canonicalUrl = `https://www.work-plan.se/jobb/${encodeURIComponent(jobId ?? '')}`;
 
-  // Enkelt HTML-innehåll för beskrivning
   const jobDescription = `
     <p>${job.summary || ''}</p>
     ${job.aboutRole ? `<p>${job.aboutRole}</p>` : ''}
@@ -190,7 +245,7 @@ const JobDetailPage = () => {
     },
     "industry": industry || "Lager & Logistik",
     "incentiveCompensation": job.salary || undefined,
-    "validThrough": undefined, // sätt "YYYY-MM-DD" om sista ansökningsdag finns
+    "validThrough": undefined,
     "directApply": true,
     "url": canonicalUrl
   };
@@ -431,7 +486,7 @@ const JobDetailPage = () => {
               </p>
             </section>
 
-            {/* Har du frågor? */}
+            {/* Har du frågor? – telefon borttagen */}
             <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
               <div className="bg-white border border-[#08132B]/10 rounded-xl p-6">
                 <h3
@@ -450,18 +505,6 @@ const JobDetailPage = () => {
                       <div className="text-[#08132B]/60 text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>E-post</div>
                       <div className="text-[#08132B] font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
                         {job.recruiterEmail}
-                      </div>
-                    </div>
-                  </a>
-                  <a
-                    href={`tel:${job.recruiterPhone}`}
-                    className="flex items-center gap-3 p-4 bg-[#0B274D]/5 rounded-lg hover:bg-[#0B274D]/10 transition-colors"
-                  >
-                    <Phone size={20} className="text-[#0B274D]" />
-                    <div>
-                      <div className="text-[#08132B]/60 text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>Telefon</div>
-                      <div className="text-[#08132B] font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {job.recruiterPhone}
                       </div>
                     </div>
                   </a>
