@@ -15,7 +15,7 @@ export type Application = {
 
 export type ContactMessage = {
   id: string;
-  from_type: 'candidate' | 'company';
+  from_type: 'candidate' | 'company' | 'staffing_request';
   full_name: string;
   company: string | null;
   email: string;
@@ -41,6 +41,23 @@ export type StaffingRequest = {
   status: 'new' | 'qualified' | 'contacted' | 'won' | 'lost';
 };
 
+/* 🔥 Ny typ för jobbannonser */
+export type Job = {
+  id: string;
+  title: string;
+  location: string | null;
+  employment_type: string | null; // ex: heltid, deltid
+  description_md: string | null; // markdown-text
+  salary_min: number | null;
+  salary_max: number | null;
+  slug: string | null; // för URL:er
+  published: boolean;
+  posted_at: string;
+  expires_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
 export const formatDate = (iso: string) =>
   new Date(iso).toLocaleString('sv-SE', { year: 'numeric', month: 'short', day: 'numeric' });
 
@@ -59,6 +76,8 @@ export const badgeClass = (kind: string) => {
     contacted: 'bg-indigo-100 text-indigo-800',
     won: 'bg-green-100 text-green-800',
     lost: 'bg-red-100 text-red-800',
+    published: 'bg-green-100 text-green-800',
+    draft: 'bg-gray-100 text-gray-800',
   };
   return map[kind] ?? 'bg-gray-100 text-gray-800';
 };
