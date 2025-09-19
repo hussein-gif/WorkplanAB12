@@ -1,5 +1,7 @@
+// src/admin/shared.tsx
 import React from 'react';
 
+/* ========== Typer ========== */
 export type Application = {
   id: string;
   full_name: string;
@@ -58,6 +60,7 @@ export type Job = {
   updated_at: string;
 };
 
+/* ========== Utils ========== */
 export const formatDate = (iso: string) =>
   new Date(iso).toLocaleString('sv-SE', { year: 'numeric', month: 'short', day: 'numeric' });
 
@@ -82,6 +85,72 @@ export const badgeClass = (kind: string) => {
   return map[kind] ?? 'bg-gray-100 text-gray-800';
 };
 
+/* Hjälp: svenska etiketter för statusar */
+export function statusLabel(
+  domän: 'application' | 'message' | 'request',
+  värde: string
+): string {
+  if (domän === 'application') {
+    const map: Record<string, string> = {
+      new: 'Ny',
+      reviewed: 'Granskad',
+      interview: 'Intervju',
+      rejected: 'Avslagen',
+      hired: 'Anställd',
+    };
+    return map[värde] ?? värde;
+  }
+  if (domän === 'message') {
+    const map: Record<string, string> = {
+      new: 'Ny',
+      read: 'Läst',
+      archived: 'Arkiverad',
+    };
+    return map[värde] ?? värde;
+  }
+  const map: Record<string, string> = {
+    new: 'Ny',
+    qualified: 'Kvalificerad',
+    contacted: 'Kontaktad',
+    won: 'Vunnen',
+    lost: 'Förlorad',
+  };
+  return map[värde] ?? värde;
+}
+
+/* Statuslistor (för select-fält) */
+export const APP_STATUSES: { value: Application['status']; label: string }[] = [
+  { value: 'new', label: 'Ny' },
+  { value: 'reviewed', label: 'Granskad' },
+  { value: 'interview', label: 'Intervju' },
+  { value: 'rejected', label: 'Avslagen' },
+  { value: 'hired', label: 'Anställd' },
+];
+
+export const MSG_STATUSES: { value: ContactMessage['status']; label: string }[] = [
+  { value: 'new', label: 'Ny' },
+  { value: 'read', label: 'Läst' },
+  { value: 'archived', label: 'Arkiverad' },
+];
+
+export const REQ_STATUSES: { value: StaffingRequest['status']; label: string }[] = [
+  { value: 'new', label: 'Ny' },
+  { value: 'qualified', label: 'Kvalificerad' },
+  { value: 'contacted', label: 'Kontaktad' },
+  { value: 'won', label: 'Vunnen' },
+  { value: 'lost', label: 'Förlorad' },
+];
+
+/* Slugify */
+export const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+
+/* ========== Delade UI-komponenter ========== */
 export function TopBar({
   title, q, setQ, right,
 }: { title: string; q: string; setQ: (v: string) => void; right?: React.ReactNode }) {
