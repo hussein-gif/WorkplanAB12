@@ -42,8 +42,8 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
     navigate(`/jobb/${encodeURIComponent(idOrSlug)}`);
   };
 
-  // === ÄNDRING: Dölj alla jobb och visa endast meddelandet ===
-  const jobsToShow: Job[] = [];
+  // ✅ VISA JOBBEN (filtrera ev. bort opublicerade om fältet finns)
+  const jobsToShow: Job[] = jobs.filter((j: any) => j?.published !== false);
 
   if (jobsToShow.length === 0) {
     return (
