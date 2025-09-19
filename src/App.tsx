@@ -19,6 +19,10 @@ import AdminRoute from './admin/AdminRoute';
 import AdminLogin from './admin/AdminLogin';
 import AdminPanel from './admin/AdminPanel';
 
+// ⬇️ TILLAGT: explicita jobb-sidor (säkerställer att /jobb/:jobId fungerar)
+import JobsPage from './pages/JobsPage';
+import JobDetailPage from './pages/JobDetailPage';
+
 function HomePage() {
   return (
     <>
@@ -76,6 +80,10 @@ function AppContent() {
           <Routes>
             {/* Startsida */}
             <Route path="/" element={<HomePage />} />
+
+            {/* ⬇️ TILLAGT: explicita jobb-routes (tas innan map:routes för att säkert matcha) */}
+            <Route path="/jobb" element={<JobsPage />} />
+            <Route path="/jobb/:jobId" element={<JobDetailPage />} />
 
             {/* Svenska routes från routes.tsx */}
             {routes.map((r) => (
