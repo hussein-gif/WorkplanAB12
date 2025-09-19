@@ -1,4 +1,3 @@
-// src/pages/JobsPage/JobDetailPage.tsx
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Clock, MapPin, Building, Mail } from 'lucide-react';
@@ -16,6 +15,7 @@ type SharedFormData = {
   gdprConsent: boolean;
 };
 
+// Typ som matchar vad sidan använder
 type JobData = {
   id: string;
   slug: string | null;
@@ -43,6 +43,8 @@ const slugify = (s: string) =>
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
+
+const isUrl = (v?: string | null) => !!v && /^https?:\/\//i.test(v);
 
 const JobDetailPage = () => {
   const navigate = useNavigate();
@@ -72,10 +74,9 @@ const JobDetailPage = () => {
     };
   }, []);
 
-  // ⬇️ Hämta jobb från Supabase – slug → id → slugifierad titel (alla kräver published = true)
+  // ⬇️ Hämta jobb från Supabase via slug eller id
   useEffect(() => {
     setIsVisible(true);
-
     (async () => {
       if (!jobId) {
         setJob(null);
@@ -85,42 +86,33 @@ const JobDetailPage = () => {
 
       const key = decodeURIComponent(jobId);
 
-      // 1) försök med slug
+      // 1) försök med slug eller id direkt
       let { data, error } = await supabase
         .from('jobs')
-        .select('*')
+        .select(
+          'id, slug, title, company, companyLogo, location, industry, employment_type, salary, summary, about_role, responsibilities, requirements, recruitment_process, recruiter_email, start_date, published'
+        )
+        .or(`slug.eq.${key},id.eq.${key}`)
         .eq('published', true)
-        .eq('slug', key)
+        .limit(1)
         .maybeSingle();
 
-      // 2) försök med id
+      // 2) fallback: matcha slugifierad titel om inget hittades
       if (!data) {
-        const byId = await supabase
+        const { data: list } = await supabase
           .from('jobs')
-          .select('*')
-          .eq('published', true)
-          .eq('id', key)
-          .maybeSingle();
-        data = byId.data ?? null;
-        error = error || byId.error;
-      }
-
-      // 3) fallback: matcha slugifierad titel
-      if (!data) {
-        const list = await supabase
-          .from('jobs')
-          .select('*')
+          .select(
+            'id, slug, title, company, companyLogo, location, industry, employment_type, salary, summary, about_role, responsibilities, requirements, recruitment_process, recruiter_email, start_date, published'
+          )
           .eq('published', true);
-        if (!list.error && list.data) {
-          const found =
-            list.data.find((j: any) => j?.title && slugify(String(j.title)) === key) ?? null;
-          data = found;
-        }
+
+        const found =
+          (list ?? []).find((j: any) => j.title && slugify(j.title) === key) ?? null;
+        data = found || null;
       }
 
       if (error) {
-        // Konsol-logg för felsökning – påverkar inte UI
-        console.error('Supabase error (JobDetailPage):', error.message);
+        console.error(error);
       }
 
       if (!data) {
@@ -129,52 +121,33 @@ const JobDetailPage = () => {
         return;
       }
 
-      // 🔁 Hämta värden robust (snake_case eller camelCase)
-      const companyLogo = (data as any).companyLogo ?? (data as any).company_logo ?? null;
-      const aboutRole = (data as any).aboutRole ?? (data as any).about_role ?? '';
-      const recruitmentProcess =
-        (data as any).recruitmentProcess ?? (data as any).recruitment_process ?? '';
-      const recruiterEmail =
-        (data as any).recruiterEmail ?? (data as any).recruiter_email ?? '';
-      const startDate = (data as any).startDate ?? (data as any).start_date ?? null;
-      const industry = (data as any).industry ?? '';
-      const employmentRaw =
-        (data as any).employment_type ?? (data as any).omfattning ?? '';
-
       const omfattning: 'Heltid' | 'Deltid' | 'OTHER' =
-        typeof employmentRaw === 'string'
-          ? employmentRaw.toLowerCase().includes('deltid')
+        typeof data.employment_type === 'string'
+          ? data.employment_type.toLowerCase().includes('deltid')
             ? 'Deltid'
-            : employmentRaw.toLowerCase().includes('heltid')
+            : data.employment_type.toLowerCase().includes('heltid')
             ? 'Heltid'
             : 'OTHER'
           : 'OTHER';
 
-      // responsibilities/requirements kan vara JSONB eller saknas
-      const responsibilities = Array.isArray((data as any).responsibilities)
-        ? (data as any).responsibilities
-        : [];
-      const requirements = Array.isArray((data as any).requirements)
-        ? (data as any).requirements
-        : [];
-
       const mapped: JobData = {
-        id: String((data as any).id),
-        slug: (data as any).slug ?? null,
-        title: String((data as any).title ?? ''),
-        company: String((data as any).company ?? 'Workplan'),
-        companyLogo: companyLogo ?? ((data as any).company ? String((data as any).company)[0] : '•'),
-        location: String((data as any).location ?? ''),
-        industry,
+        id: data.id,
+        slug: data.slug,
+        title: data.title ?? '',
+        company: data.company ?? 'Workplan',
+        // companyLogo kan vara sparad som text eller URL – vi visar bild nedan om det är URL
+        companyLogo: data.companyLogo ?? (data.company ? data.company[0] : '•'),
+        location: data.location ?? '',
+        industry: data.industry ?? 'Lager & Logistik',
         omfattning,
-        salary: (data as any).salary ?? '',
-        summary: (data as any).summary ?? '',
-        aboutRole: aboutRole ?? '',
-        responsibilities,
-        requirements,
-        recruitmentProcess,
-        recruiterEmail,
-        startDate,
+        salary: data.salary ?? '',
+        summary: data.summary ?? '',
+        aboutRole: data.about_role ?? '',
+        responsibilities: Array.isArray(data.responsibilities) ? data.responsibilities : [],
+        requirements: Array.isArray(data.requirements) ? data.requirements : [],
+        recruitmentProcess: data.recruitment_process ?? '',
+        recruiterEmail: data.recruiter_email ?? '',
+        startDate: data.start_date ?? null,
       };
 
       setJob(mapped);
@@ -228,10 +201,13 @@ const JobDetailPage = () => {
   };
 
   const startDate = job.startDate || 'Enligt överenskommelse';
-  const industry = job.industry || '';
+
+  // 🔹 Bransch (industry)
+  const industry =
+    job.industry || '';
 
   // =========================
-  // ✅ SEO: JobPosting + BreadcrumbList
+  // ✅ SEO: JobPosting + BreadcrumbList (work-plan.se)
   // =========================
   const employmentType =
     job.omfattning === 'Heltid' ? 'FULL_TIME' :
@@ -355,13 +331,22 @@ const JobDetailPage = () => {
             </h1>
 
             <div className="shrink-0">
-              <div className="w-16 h-16 rounded-xl bg-[#0B274D]/5 border border-[#0B274D]/20 flex items-center justify-center">
-                <span
-                  className="text-2xl font-bold select-none text-[#0B274D]"
-                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                >
-                  {job.companyLogo || (job.company?.[0] ?? '•')}
-                </span>
+              <div className="w-16 h-16 rounded-xl bg-[#0B274D]/5 border border-[#0B274D]/20 flex items-center justify-center overflow-hidden">
+                {isUrl(job.companyLogo) ? (
+                  <img
+                    src={job.companyLogo as string}
+                    alt={`${job.company} logotyp`}
+                    className="w-full h-full object-contain p-1"
+                    loading="lazy"
+                  />
+                ) : (
+                  <span
+                    className="text-2xl font-bold select-none text-[#0B274D]"
+                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                  >
+                    {job.companyLogo || (job.company?.[0] ?? '•')}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -514,32 +499,30 @@ const JobDetailPage = () => {
             </section>
 
             {/* Har du frågor? – telefon borttagen */}
-            {job.recruiterEmail && (
-              <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
-                <div className="bg-white border border-[#08132B]/10 rounded-xl p-6">
-                  <h3
-                    className="text-2xl md:text-3xl text-[#08132B] mb-4"
-                    style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
+            <section className={`${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'} transition-all duration-700 transform`}>
+              <div className="bg-white border border-[#08132B]/10 rounded-xl p-6">
+                <h3
+                  className="text-2xl md:text-3xl text-[#08132B] mb-4"
+                  style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
+                >
+                  Har du frågor?
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <a
+                    href={`mailto:${job.recruiterEmail}`}
+                    className="flex items-center gap-3 p-4 bg-[#0B274D]/5 rounded-lg hover:bg-[#0B274D]/10 transition-colors"
                   >
-                    Har du frågor?
-                  </h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <a
-                      href={`mailto:${job.recruiterEmail}`}
-                      className="flex items-center gap-3 p-4 bg-[#0B274D]/5 rounded-lg hover:bg-[#0B274D]/10 transition-colors"
-                    >
-                      <Mail size={20} className="text-[#0B274D]" />
-                      <div>
-                        <div className="text-[#08132B]/60 text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>E-post</div>
-                        <div className="text-[#08132B] font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          {job.recruiterEmail}
-                        </div>
+                    <Mail size={20} className="text-[#0B274D]" />
+                    <div>
+                      <div className="text-[#08132B]/60 text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>E-post</div>
+                      <div className="text-[#08132B] font-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        {job.recruiterEmail}
                       </div>
-                    </a>
-                  </div>
+                    </div>
+                  </a>
                 </div>
-              </section>
-            )}
+              </div>
+            </section>
           </div>
 
           {/* Slut-CTA */}
