@@ -436,8 +436,11 @@ const employmentDisplay = rawEmployment;
                 Omfattning
               </div>
               <div className="text-[#08132B] font-bold" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
-                {job.omfattning}
-              </div>
+  {job.omfattning === 'OTHER'
+    ? (job as any).employmentDisplay || 'OTHER'
+    : job.omfattning}
+</div>
+
             </div>
           </div>
 
