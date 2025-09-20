@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Send, Upload, User, Mail, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../../supabaseClient'; // ⬅️ Supabase
+import { supabase } from '../../supabaseClient'; // Supabase-klienten
 
 export type JobApplicationFormData = {
   firstName: string;
@@ -64,7 +64,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
   const otherFileInputRef = useRef<HTMLInputElement>(null);
 
   const [submitting, setSubmitting] = useState(false); // lås knappen vid submit
-  const [showSuccess, setShowSuccess] = useState(false); // ⬅️ NYTT: visa tack-overlay
+  const [showSuccess, setShowSuccess] = useState(false); // visa tack-overlay
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -80,7 +80,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
     else setOtherFile(file);
   };
 
-  // ⬇️ Spara ansökan i Supabase (applications) – fixad payload + tack-overlay
+  // Spara ansökan i Supabase (applications) – fixad payload + tydligt fel + tack-overlay
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -105,8 +105,13 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
         cover_letter: formData.coverLetter?.trim() || null,
       };
 
-      // INSERT
-      const { error } = await supabase.from('applications').insert([payload]);
+      // INSERT och hämta tillbaka raden (bra för debugging/adminlänk senare)
+      const { data, error } = await supabase
+        .from('applications')
+        .insert([payload])
+        .select()
+        .single();
+
       if (error) throw error;
 
       // (Valfritt) Töm formuläret lokalt
@@ -124,8 +129,8 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
       // Visa tack-overlay
       setShowSuccess(true);
     } catch (err: any) {
-      console.error(err);
-      alert('Något gick fel när ansökan skulle sparas. Försök igen.');
+      console.error('Supabase insert error:', err);
+      alert(`Kunde inte spara ansökan:\n${err?.message ?? 'Okänt fel'}`);
     } finally {
       setSubmitting(false);
     }
@@ -370,7 +375,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
         </div>
       </div>
 
-      {/* ⬇️ Tack-overlay med cirkel + vit bock */}
+      {/* Tack-overlay med cirkel + vit bock */}
       {showSuccess && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60">
           <div className="relative w-[90%] max-w-md rounded-2xl bg-white px-8 py-10 text-center shadow-2xl">
