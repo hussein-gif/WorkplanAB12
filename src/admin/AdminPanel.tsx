@@ -8,7 +8,8 @@ import MessagesSection from './sections/MessagesSection';
 import RequestsSection from './sections/RequestsSection';
 import JobsSection from './sections/JobsSection';
 
-import { supabase } from '../supabaseClient';
+// ⬇️ ÄNDRAT: använd admin-klienten i adminpanelen
+import { adminSupabase as supabase } from '../supabaseClient';
 import { useNavigate } from 'react-router-dom';
 import { Briefcase, MessageSquare, Users, LogOut, Home, FileText } from 'lucide-react';
 
