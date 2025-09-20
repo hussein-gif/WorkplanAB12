@@ -66,6 +66,10 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
   const [submitting, setSubmitting] = useState(false); // lås knappen vid submit
   const [showSuccess, setShowSuccess] = useState(false); // visa tack-overlay
 
+  // ⬇️ NYTT: konfigurerbar maxgräns (ändra bara denna om du vill höja/sänka)
+  const MAX_MB = 25;
+  const MAX_BYTES = MAX_MB * 1024 * 1024;
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
@@ -122,10 +126,8 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
       let other_path: string | null = null;
       let other_name: string | null = null;
 
-      const MAX_BYTES = 10 * 1024 * 1024; // 10MB
-
       if (cvFile) {
-        if (cvFile.size > MAX_BYTES) throw new Error('CV är större än 10MB.');
+        if (cvFile.size > MAX_BYTES) throw new Error(`CV är större än ${MAX_MB}MB.`);
         cv_name = cvFile.name;
         cv_path = `cv/${appId}/${Date.now()}_${cvFile.name}`;
         const { error: upCvErr } = await supabase
@@ -136,7 +138,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
       }
 
       if (otherFile) {
-        if (otherFile.size > MAX_BYTES) throw new Error('Bifogad fil är större än 10MB.');
+        if (otherFile.size > MAX_BYTES) throw new Error(`Bifogad fil är större än ${MAX_MB}MB.`);
         other_name = otherFile.name;
         other_path = `other/${appId}/${Date.now()}_${otherFile.name}`;
         const { error: upOtherErr } = await supabase
@@ -322,7 +324,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                   <p className="mt-2 text-sm text-[#08132B]">
                     {cvFile ? cvFile.name : 'Klicka för att ladda upp ditt CV'}
                   </p>
-                  <p className="text-xs text-gray-600 mt-1">PDF, DOC eller DOCX (max 10MB)</p>
+                  <p className="text-xs text-gray-600 mt-1">PDF, DOC eller DOCX (max {MAX_MB}MB)</p>
                 </div>
               </div>
             </div>
@@ -348,7 +350,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                   <p className="mt-2 text-sm text-[#08132B]">
                     {otherFile ? otherFile.name : 'Klicka för att bifoga fler filer (valfritt)'}
                   </p>
-                  <p className="text-xs text-gray-600 mt-1">PDF, DOC, DOCX, PNG, JPG (max 10MB)</p>
+                  <p className="text-xs text-gray-600 mt-1">PDF, DOC, DOCX, PNG, JPG (max {MAX_MB}MB)</p>
                 </div>
               </div>
             </div>
