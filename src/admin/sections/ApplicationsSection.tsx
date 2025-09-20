@@ -17,8 +17,11 @@ export default function ApplicationsSection() {
   const [status, setStatus] = useState<'all' | Application['status']>('all');
   const [loading, setLoading] = useState(true);
 
-  // NYTT: enkel modal-state för att visa personligt brev
+  // NYTT: enkel modal-state för att visa personligt brev (befintlig)
   const [openLetter, setOpenLetter] = useState<string | null>(null);
+
+  // NYTT: detaljmodal för en hel ansökan
+  const [selected, setSelected] = useState<any | null>(null);
 
   async function fetchApps() {
     setLoading(true);
@@ -46,10 +49,14 @@ export default function ApplicationsSection() {
 
   async function updateStatus(id: string, s: Application['status']) {
     const { error } = await supabase.from('applications').update({ status: s }).eq('id', id);
-    if (!error) setApps(prev => prev.map(a => a.id === id ? { ...a, status: s } : a));
+    if (!error) {
+      setApps(prev => prev.map(a => a.id === id ? { ...a, status: s } : a));
+      // uppdatera även i detaljmodalen om den är öppen
+      setSelected(prev => (prev && prev.id === id ? { ...prev, status: s } : prev));
+    }
   }
 
-  // NYTT: generisk öppnare för signerad fil-URL i privata bucketen "applications"
+  // Generisk öppnare för signerad fil-URL i privata bucketen "applications"
   async function openFile(path: string | null) {
     if (!path) return;
     const { data, error } = await supabase.storage.from('applications').createSignedUrl(path, 60);
@@ -59,6 +66,12 @@ export default function ApplicationsSection() {
     }
     if (data?.signedUrl) window.open(data.signedUrl, '_blank');
   }
+
+  // Hjälp för namn i detaljmodalen
+  const getFullName = (a: any) =>
+    a?.full_name ||
+    [a?.first_name, a?.last_name].filter(Boolean).join(' ') ||
+    '—';
 
   return (
     <div>
@@ -92,14 +105,11 @@ export default function ApplicationsSection() {
               <tr>
                 <th className="px-4 py-3 text-left">Sökande</th>
                 <th className="px-4 py-3 text-left">Kontakt</th>
-                <th className="px-4 py-3 text-left">Ort</th>
-                <th className="px-4 py-3 text-left">Roll</th>
+                {/* Kolumnerna Ort och Roll borttagna */}
                 <th className="px-4 py-3 text-left">Skickad</th>
                 <th className="px-4 py-3 text-left">Status</th>
                 <th className="px-4 py-3 text-left">CV</th>
-                {/* NYTT: kolumn för övrig fil */}
                 <th className="px-4 py-3 text-left">Övrigt</th>
-                {/* NYTT: kolumn för personligt brev */}
                 <th className="px-4 py-3 text-left">Brev</th>
               </tr>
             </thead>
@@ -110,7 +120,11 @@ export default function ApplicationsSection() {
                 const coverLetter = (a as any).cover_letter as string | null | undefined;
 
                 return (
-                  <tr key={a.id} className="border-t">
+                  <tr
+                    key={a.id}
+                    className="border-t hover:bg-gray-50 cursor-pointer"
+                    onClick={() => setSelected(a)} // NYTT: öppna detaljmodal
+                  >
                     <td className="px-4 py-3 font-medium">{a.full_name}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2"><Mail className="w-4 h-4" /> {a.email}</div>
@@ -120,10 +134,8 @@ export default function ApplicationsSection() {
                         </div>
                       )}
                     </td>
-                    <td className="px-4 py-3">{(a as any).city ?? '—'}</td>
-                    <td className="px-4 py-3">{(a as any).role_applied ?? '—'}</td>
                     <td className="px-4 py-3">{formatDate(a.created_at)}</td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
                       <select
                         className={`border rounded-lg px-2 py-1 ${badgeClass(a.status)}`}
                         value={a.status}
@@ -132,23 +144,21 @@ export default function ApplicationsSection() {
                         {APP_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                       </select>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
                       {a.cv_path ? (
                         <button className="underline" onClick={() => openFile(a.cv_path! as any)}>
                           Visa CV{(a as any).cv_name ? ` (${(a as any).cv_name})` : ''}
                         </button>
                       ) : '—'}
                     </td>
-                    {/* NYTT: övrig fil */}
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
                       {otherPath ? (
                         <button className="underline" onClick={() => openFile(otherPath)}>
                           Visa{otherName ? ` (${otherName})` : ' fil'}
                         </button>
                       ) : '—'}
                     </td>
-                    {/* NYTT: personligt brev */}
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
                       {coverLetter ? (
                         <button className="underline" onClick={() => setOpenLetter(coverLetter!)}>
                           Visa
@@ -163,7 +173,97 @@ export default function ApplicationsSection() {
         </div>
       )}
 
-      {/* NYTT: modal för att visa personligt brev */}
+      {/* NYTT: detaljmodal för hel ansökan */}
+      {selected && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
+          <div className="w-[min(95vw,800px)] bg-white border rounded-2xl shadow-xl">
+            <div className="px-5 py-4 border-b flex items-center justify-between">
+              <div className="text-lg font-semibold">Ansökan</div>
+              <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-gray-700">Stäng</button>
+            </div>
+            <div className="p-5 space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <div className="text-xs text-gray-500">Sökande</div>
+                  <div className="font-medium">{getFullName(selected)}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">Skickad</div>
+                  <div>{formatDate(selected.created_at)}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">E-post</div>
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4" />
+                    <a className="underline" href={`mailto:${selected.email}`}>{selected.email}</a>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">Telefon</div>
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4" />
+                    {selected.phone ? <a className="underline" href={`tel:${selected.phone}`}>{selected.phone}</a> : '—'}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="text-xs text-gray-500">Jobbtitel</div>
+                  <div>{selected.job_title ?? '—'}</div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">Företag</div>
+                  <div>{selected.company ?? '—'}</div>
+                </div>
+
+                <div className="md:col-span-2">
+                  <div className="text-xs text-gray-500 mb-1">Status</div>
+                  <select
+                    className={`border rounded-lg px-2 py-1 ${badgeClass(selected.status)}`}
+                    value={selected.status}
+                    onChange={e => updateStatus(selected.id, e.target.value as Application['status'])}
+                  >
+                    {APP_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <div className="text-xs text-gray-500 mb-1">CV</div>
+                  {selected.cv_path ? (
+                    <button
+                      className="underline"
+                      onClick={() => openFile(selected.cv_path)}
+                    >
+                      Visa CV{selected.cv_name ? ` (${selected.cv_name})` : ''}
+                    </button>
+                  ) : '—'}
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500 mb-1">Övrig fil</div>
+                  {selected.other_path ? (
+                    <button
+                      className="underline"
+                      onClick={() => openFile(selected.other_path)}
+                    >
+                      Visa{selected.other_name ? ` (${selected.other_name})` : ' fil'}
+                    </button>
+                  ) : '—'}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-xs text-gray-500 mb-1">Personligt brev</div>
+                <div className="whitespace-pre-wrap text-sm text-gray-800 border rounded-lg p-3 bg-gray-50">
+                  {selected.cover_letter ?? '—'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Befintlig modal för att visa personligt brev (lämnad kvar) */}
       {openLetter && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-[min(95vw,700px)] bg-white border rounded-2xl shadow-xl">
