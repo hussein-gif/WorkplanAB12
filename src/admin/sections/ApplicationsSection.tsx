@@ -16,6 +16,9 @@ export default function ApplicationsSection() {
   const [status, setStatus] = useState<'all' | Application['status']>('all');
   const [loading, setLoading] = useState(true);
 
+  // NYTT: enkel modal-state för att visa personligt brev
+  const [openLetter, setOpenLetter] = useState<string | null>(null);
+
   async function fetchApps() {
     setLoading(true);
     const { data, error } = await supabase
@@ -30,7 +33,7 @@ export default function ApplicationsSection() {
   const filtered = useMemo(() => {
     const ql = q.toLowerCase();
     return apps.filter(a => {
-      const blob = [a.full_name, a.email, a.city, a.role_applied]
+      const blob = [a.full_name, a.email, (a as any).city, (a as any).role_applied]
         .filter(Boolean)
         .join(' ')
         .toLowerCase();
@@ -45,9 +48,14 @@ export default function ApplicationsSection() {
     if (!error) setApps(prev => prev.map(a => a.id === id ? { ...a, status: s } : a));
   }
 
-  async function openCv(path: string | null) {
+  // NYTT: generisk öppnare för signerad fil-URL i privata bucketen "applications"
+  async function openFile(path: string | null) {
     if (!path) return;
-    const { data } = await supabase.storage.from('cv').createSignedUrl(path, 60);
+    const { data, error } = await supabase.storage.from('applications').createSignedUrl(path, 60);
+    if (error) {
+      alert('Kunde inte öppna filen: ' + error.message);
+      return;
+    }
     if (data?.signedUrl) window.open(data.signedUrl, '_blank');
   }
 
@@ -88,41 +96,86 @@ export default function ApplicationsSection() {
                 <th className="px-4 py-3 text-left">Skickad</th>
                 <th className="px-4 py-3 text-left">Status</th>
                 <th className="px-4 py-3 text-left">CV</th>
+                {/* NYTT: kolumn för övrig fil */}
+                <th className="px-4 py-3 text-left">Övrigt</th>
+                {/* NYTT: kolumn för personligt brev */}
+                <th className="px-4 py-3 text-left">Brev</th>
               </tr>
             </thead>
             <tbody>
-              {filtered.map(a => (
-                <tr key={a.id} className="border-t">
-                  <td className="px-4 py-3 font-medium">{a.full_name}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2"><Mail className="w-4 h-4" /> {a.email}</div>
-                    {a.phone && (
-                      <div className="flex items-center gap-2 text-gray-500">
-                        <Phone className="w-4 h-4" /> {a.phone}
-                      </div>
-                    )}
-                  </td>
-                  <td className="px-4 py-3">{a.city ?? '—'}</td>
-                  <td className="px-4 py-3">{a.role_applied ?? '—'}</td>
-                  <td className="px-4 py-3">{formatDate(a.created_at)}</td>
-                  <td className="px-4 py-3">
-                    <select
-                      className={`border rounded-lg px-2 py-1 ${badgeClass(a.status)}`}
-                      value={a.status}
-                      onChange={e => updateStatus(a.id, e.target.value as Application['status'])}
-                    >
-                      {APP_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-                    </select>
-                  </td>
-                  <td className="px-4 py-3">
-                    {a.cv_path ? (
-                      <button className="underline" onClick={() => openCv(a.cv_path!)}>Visa CV</button>
-                    ) : '—'}
-                  </td>
-                </tr>
-              ))}
+              {filtered.map(a => {
+                const otherPath = (a as any).other_path as string | null | undefined;
+                const otherName = (a as any).other_name as string | null | undefined;
+                const coverLetter = (a as any).cover_letter as string | null | undefined;
+
+                return (
+                  <tr key={a.id} className="border-t">
+                    <td className="px-4 py-3 font-medium">{a.full_name}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2"><Mail className="w-4 h-4" /> {a.email}</div>
+                      {a.phone && (
+                        <div className="flex items-center gap-2 text-gray-500">
+                          <Phone className="w-4 h-4" /> {a.phone}
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">{(a as any).city ?? '—'}</td>
+                    <td className="px-4 py-3">{(a as any).role_applied ?? '—'}</td>
+                    <td className="px-4 py-3">{formatDate(a.created_at)}</td>
+                    <td className="px-4 py-3">
+                      <select
+                        className={`border rounded-lg px-2 py-1 ${badgeClass(a.status)}`}
+                        value={a.status}
+                        onChange={e => updateStatus(a.id, e.target.value as Application['status'])}
+                      >
+                        {APP_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                      </select>
+                    </td>
+                    <td className="px-4 py-3">
+                      {a.cv_path ? (
+                        <button className="underline" onClick={() => openFile(a.cv_path! as any)}>
+                          Visa CV{(a as any).cv_name ? ` (${(a as any).cv_name})` : ''}
+                        </button>
+                      ) : '—'}
+                    </td>
+                    {/* NYTT: övrig fil */}
+                    <td className="px-4 py-3">
+                      {otherPath ? (
+                        <button className="underline" onClick={() => openFile(otherPath)}>
+                          Visa{otherName ? ` (${otherName})` : ' fil'}
+                        </button>
+                      ) : '—'}
+                    </td>
+                    {/* NYTT: personligt brev */}
+                    <td className="px-4 py-3">
+                      {coverLetter ? (
+                        <button className="underline" onClick={() => setOpenLetter(coverLetter!)}>
+                          Visa
+                        </button>
+                      ) : '—'}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* NYTT: modal för att visa personligt brev */}
+      {openLetter && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
+          <div className="w-[min(95vw,700px)] bg-white border rounded-2xl shadow-xl">
+            <div className="px-5 py-4 border-b flex items-center justify-between">
+              <div className="text-lg font-semibold">Personligt brev</div>
+              <button onClick={() => setOpenLetter(null)} className="text-gray-500 hover:text-gray-700">Stäng</button>
+            </div>
+            <div className="p-5">
+              <div className="whitespace-pre-wrap text-sm text-gray-800">
+                {openLetter}
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
