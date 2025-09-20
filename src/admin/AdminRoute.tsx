@@ -1,7 +1,8 @@
 // src/admin/AdminRoute.tsx
 import React, { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { supabase } from '../supabaseClient';
+import { adminSupabase as supabase } from '../supabaseClient';
+
 
 const MAX_IDLE_MS = 2 * 60 * 60 * 1000; // 2 timmar
 
