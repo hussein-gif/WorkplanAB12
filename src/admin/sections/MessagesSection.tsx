@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { supabase } from '../../supabaseClient';
+import { adminSupabase as supabase } from '../../supabaseClient';
+
 import {
   ContactMessage,
   TopBar,
