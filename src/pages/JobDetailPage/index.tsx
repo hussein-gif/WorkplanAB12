@@ -79,7 +79,6 @@ const JobDetailPage = () => {
 
       const key = decodeURIComponent(jobId);
 
-      // ⚠️ Använd snake_case-kolumnnamn från databasen
       let { data, error } = await supabase
         .from('jobs')
         .select(
@@ -108,7 +107,6 @@ const JobDetailPage = () => {
         .limit(1)
         .maybeSingle();
 
-      // Fallback: slugifierad titel
       if (!data) {
         const { data: list } = await supabase
           .from('jobs')
@@ -150,7 +148,6 @@ const JobDetailPage = () => {
         return;
       }
 
-      // Ny logik för att tolka omfattning
       const rawEmployment = (data.employment_type ?? '').toString().trim();
       const rawLower = rawEmployment.toLowerCase();
 
@@ -161,7 +158,6 @@ const JobDetailPage = () => {
         omfattning = 'Deltid';
       }
 
-      // Spara också originaltexten så vi kan visa den om inget matchar
       const employmentDisplay = rawEmployment;
 
       const mapped: JobData = {
@@ -183,7 +179,7 @@ const JobDetailPage = () => {
         startDate: data.start_date ?? null,
       };
 
-      // @ts-expect-error – lägg med för visning om OTHER
+      // @ts-expect-error – behåll för visning om OTHER
       (mapped as any).employmentDisplay = employmentDisplay;
 
       setJob(mapped);
@@ -220,9 +216,14 @@ const JobDetailPage = () => {
 
   const handleBack = () => navigate('/jobb');
 
+  // ⭐️ ÄNDRING: scrolla med fast offset i stället för scrollIntoView
   const handleApply = () => {
     const el = document.getElementById('application-form');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (!el) return;
+    const HEADER_OFFSET = 120; // ~höjd för header + sticky tillbaka-knapp
+    const rect = el.getBoundingClientRect();
+    const y = window.scrollY + rect.top - HEADER_OFFSET;
+    window.scrollTo({ top: y, behavior: 'smooth' });
   };
 
   const startDate = job.startDate || 'Enligt överenskommelse';
@@ -310,7 +311,7 @@ const JobDetailPage = () => {
         </div>
 
         <div className="relative max-w-4xl mx-auto px-6 py-8 pt-28 md:pt-32">
-          {/* STICKY container för Tillbaka-knappen — håller samma position */}
+          {/* Sticky “Tillbaka” – oförändrat från förra steget */}
           <div className="sticky top-24 md:top-28 z-20">
             <button
               onClick={handleBack}
