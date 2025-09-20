@@ -80,7 +80,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
     else setOtherFile(file);
   };
 
-  // Spara ansökan i Supabase (applications) – fixad payload + tydligt fel + tack-overlay
+  // Spara ansökan + ladda upp filer till Storage + spara filvägar i tabellen
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -92,29 +92,75 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
     try {
       setSubmitting(true);
 
-      // Minimal payload – endast kolumner som säkert finns i `applications`
-      const payload: any = {
+      // 1) Skapa raden först – få tillbaka id
+      const basePayload: any = {
         job_title: jobTitle,
         company: companyName,
-        industry: industry ?? null,
-        location: location ?? null,
         first_name: formData.firstName.trim(),
         last_name: formData.lastName.trim(),
         email: formData.email.trim(),
         phone: formData.phone.trim(),
         cover_letter: formData.coverLetter?.trim() || null,
+        // Skicka INTE industry/location om kolumner saknas i DB
+        // industry: industry ?? null,
+        // location: location ?? null,
       };
 
-      // INSERT och hämta tillbaka raden (bra för debugging/adminlänk senare)
-      const { data, error } = await supabase
+      const { data: created, error: insertErr } = await supabase
         .from('applications')
-        .insert([payload])
-        .select()
+        .insert([basePayload])
+        .select('id')
         .single();
 
-      if (error) throw error;
+      if (insertErr) throw insertErr;
 
-      // (Valfritt) Töm formuläret lokalt
+      const appId = created.id as number;
+
+      // 2) Ladda upp filer till privat bucket "applications"
+      let cv_path: string | null = null;
+      let cv_name: string | null = null;
+      let other_path: string | null = null;
+      let other_name: string | null = null;
+
+      const MAX_BYTES = 10 * 1024 * 1024; // 10MB
+
+      if (cvFile) {
+        if (cvFile.size > MAX_BYTES) throw new Error('CV är större än 10MB.');
+        cv_name = cvFile.name;
+        cv_path = `cv/${appId}/${Date.now()}_${cvFile.name}`;
+        const { error: upCvErr } = await supabase
+          .storage
+          .from('applications')
+          .upload(cv_path, cvFile, { upsert: false });
+        if (upCvErr) throw upCvErr;
+      }
+
+      if (otherFile) {
+        if (otherFile.size > MAX_BYTES) throw new Error('Bifogad fil är större än 10MB.');
+        other_name = otherFile.name;
+        other_path = `other/${appId}/${Date.now()}_${otherFile.name}`;
+        const { error: upOtherErr } = await supabase
+          .storage
+          .from('applications')
+          .upload(other_path, otherFile, { upsert: false });
+        if (upOtherErr) throw upOtherErr;
+      }
+
+      // 3) Uppdatera raden med filvägar/namn (om något laddats upp)
+      if (cv_path || other_path) {
+        const { error: updErr } = await supabase
+          .from('applications')
+          .update({
+            cv_path,
+            cv_name,
+            other_path,
+            other_name,
+          })
+          .eq('id', appId);
+        if (updErr) throw updErr;
+      }
+
+      // 4) Töm formulär + tack-overlay
       setFormData({
         firstName: '',
         lastName: '',
@@ -125,11 +171,9 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
       });
       setCvFile(null);
       setOtherFile(null);
-
-      // Visa tack-overlay
       setShowSuccess(true);
     } catch (err: any) {
-      console.error('Supabase insert error:', err);
+      console.error('Submit error:', err);
       alert(`Kunde inte spara ansökan:\n${err?.message ?? 'Okänt fel'}`);
     } finally {
       setSubmitting(false);
@@ -285,7 +329,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
 
             {/* Övriga dokument – VIT (valfritt) */}
             <div>
-              <label className="block text-sm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <label className="block textsm font-medium text-white/90 mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Övriga dokument
               </label>
               <div
