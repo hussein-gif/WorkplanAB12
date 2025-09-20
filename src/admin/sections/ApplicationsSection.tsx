@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { adminSupabase as supabase } from '../../supabaseClient';
 
 import {
@@ -17,11 +17,28 @@ export default function ApplicationsSection() {
   const [status, setStatus] = useState<'all' | Application['status']>('all');
   const [loading, setLoading] = useState(true);
 
-  // NYTT: enkel modal-state för att visa personligt brev (befintlig)
+  // Enkel modal-state för att visa personligt brev (befintlig)
   const [openLetter, setOpenLetter] = useState<string | null>(null);
 
-  // NYTT: detaljmodal för en hel ansökan
+  // Detaljmodal för en hel ansökan
   const [selected, setSelected] = useState<any | null>(null);
+
+  // 🆕 Lås body-scroll när någon modal är öppen
+  const originalOverflow = useRef<string>('');
+  useEffect(() => {
+    const hasModal = !!openLetter || !!selected;
+    if (typeof document !== 'undefined') {
+      if (!originalOverflow.current) {
+        originalOverflow.current = document.body.style.overflow || '';
+      }
+      document.body.style.overflow = hasModal ? 'hidden' : originalOverflow.current;
+    }
+    return () => {
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = originalOverflow.current;
+      }
+    };
+  }, [openLetter, selected]);
 
   async function fetchApps() {
     setLoading(true);
@@ -51,7 +68,6 @@ export default function ApplicationsSection() {
     const { error } = await supabase.from('applications').update({ status: s }).eq('id', id);
     if (!error) {
       setApps(prev => prev.map(a => a.id === id ? { ...a, status: s } : a));
-      // uppdatera även i detaljmodalen om den är öppen
       setSelected(prev => (prev && prev.id === id ? { ...prev, status: s } : prev));
     }
   }
@@ -123,7 +139,7 @@ export default function ApplicationsSection() {
                   <tr
                     key={a.id}
                     className="border-t hover:bg-gray-50 cursor-pointer"
-                    onClick={() => setSelected(a)} // NYTT: öppna detaljmodal
+                    onClick={() => setSelected(a)} // Klick var som helst på raden öppnar modalen
                   >
                     <td className="px-4 py-3 font-medium">{a.full_name}</td>
                     <td className="px-4 py-3">
@@ -135,32 +151,48 @@ export default function ApplicationsSection() {
                       )}
                     </td>
                     <td className="px-4 py-3">{formatDate(a.created_at)}</td>
-                    <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
+
+                    {/* Flytta stopPropagation till själva kontrollerna (inte TD)
+                        så att klick på tom yta i cellen också öppnar modalen */}
+                    <td className="px-4 py-3">
                       <select
                         className={`border rounded-lg px-2 py-1 ${badgeClass(a.status)}`}
                         value={a.status}
+                        onClick={e => e.stopPropagation()}
                         onChange={e => updateStatus(a.id, e.target.value as Application['status'])}
                       >
                         {APP_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                       </select>
                     </td>
-                    <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
+
+                    <td className="px-4 py-3">
                       {a.cv_path ? (
-                        <button className="underline" onClick={() => openFile(a.cv_path! as any)}>
+                        <button
+                          className="underline"
+                          onClick={e => { e.stopPropagation(); openFile(a.cv_path! as any); }}
+                        >
                           Visa CV{(a as any).cv_name ? ` (${(a as any).cv_name})` : ''}
                         </button>
                       ) : '—'}
                     </td>
-                    <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
+
+                    <td className="px-4 py-3">
                       {otherPath ? (
-                        <button className="underline" onClick={() => openFile(otherPath)}>
+                        <button
+                          className="underline"
+                          onClick={e => { e.stopPropagation(); openFile(otherPath); }}
+                        >
                           Visa{otherName ? ` (${otherName})` : ' fil'}
                         </button>
                       ) : '—'}
                     </td>
-                    <td className="px-4 py-3" onClick={e => e.stopPropagation()}>
+
+                    <td className="px-4 py-3">
                       {coverLetter ? (
-                        <button className="underline" onClick={() => setOpenLetter(coverLetter!)}>
+                        <button
+                          className="underline"
+                          onClick={e => { e.stopPropagation(); setOpenLetter(coverLetter!); }}
+                        >
                           Visa
                         </button>
                       ) : '—'}
@@ -173,7 +205,7 @@ export default function ApplicationsSection() {
         </div>
       )}
 
-      {/* NYTT: detaljmodal för hel ansökan */}
+      {/* Detaljmodal för hel ansökan */}
       {selected && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-[min(95vw,800px)] bg-white border rounded-2xl shadow-xl">
@@ -263,7 +295,7 @@ export default function ApplicationsSection() {
         </div>
       )}
 
-      {/* Befintlig modal för att visa personligt brev (lämnad kvar) */}
+      {/* Befintlig modal för att visa personligt brev */}
       {openLetter && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-[min(95vw,700px)] bg-white border rounded-2xl shadow-xl">
