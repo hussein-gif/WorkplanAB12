@@ -4,17 +4,34 @@ import { createClient } from '@supabase/supabase-js';
 const url = import.meta.env.VITE_SUPABASE_URL!;
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY!;
 
-// OBS: sessionStorage = sessionen försvinner när webbläsarfönstret stängs.
-// Vi aktiverar även PKCE-flödet (säkrare i produktion).
+/* ------------------------------------------------------------
+   PUBLIK KLIENT (webbplatsen): alltid 'anon' – ingen session.
+   Används av publika sidor som t.ex. JobApplicationSection.
+------------------------------------------------------------- */
 export const supabase = createClient(url, anonKey, {
   auth: {
-    persistSession: true,            // behåll sessionen under pågående besök
-    autoRefreshToken: true,          // förläng access token medan användaren är aktiv
+    persistSession: false,          // ingen session = alltid anon
+    autoRefreshToken: false,
+    detectSessionInUrl: false,
+    flowType: 'pkce',
+    storage: undefined,             // viktig: ingen storage kopplas
+  },
+});
+
+/* ------------------------------------------------------------
+   ADMIN KLIENT: PKCE + sessionStorage (som tidigare).
+   Använd i adminpanelen: import { adminSupabase } from '...'
+   eller: import { adminSupabase as supabase } from '...'
+------------------------------------------------------------- */
+export const adminSupabase = createClient(url, anonKey, {
+  auth: {
+    persistSession: true,            // behåll session under besöket
+    autoRefreshToken: true,          // förläng access token
     detectSessionInUrl: true,
-    flowType: 'pkce',                // rekommenderat flöde
+    flowType: 'pkce',
     storage: typeof window !== 'undefined' ? window.sessionStorage : undefined,
-    storageKey: 'sb-admin-session'   // eget nyckelnamn (kan ändras fritt)
-  }
+    storageKey: 'sb-admin-session',  // nyckelnamn för admin
+  },
 });
 
 /* ------------------------------------------------------------
@@ -22,12 +39,11 @@ export const supabase = createClient(url, anonKey, {
    - Styrs via env: VITE_ADMIN_MAX_SESSION_MINUTES (t.ex. 120)
    - När tiden passerats sker automatisk signOut.
 ------------------------------------------------------------- */
-const MAX_MINUTES =
-  Number(import.meta.env.VITE_ADMIN_MAX_SESSION_MINUTES ?? 120);
+const MAX_MINUTES = Number(import.meta.env.VITE_ADMIN_MAX_SESSION_MINUTES ?? 120);
 
 if (typeof window !== 'undefined') {
-  // Sätt starttid när man loggar in, rensa när man loggar ut
-  supabase.auth.onAuthStateChange((_event, session) => {
+  // Sätt starttid när man loggar in, rensa när man loggar ut (ADMIN-klienten)
+  adminSupabase.auth.onAuthStateChange((_event, session) => {
     if (session) {
       sessionStorage.setItem('sb-admin-session-start', String(Date.now()));
     } else {
@@ -39,10 +55,9 @@ if (typeof window !== 'undefined') {
   const checkHardLimit = async () => {
     const startedAt = Number(sessionStorage.getItem('sb-admin-session-start') ?? '0');
     if (!startedAt) return;
-
     const ageMinutes = (Date.now() - startedAt) / 60000;
     if (ageMinutes > MAX_MINUTES) {
-      await supabase.auth.signOut(); // logga ut när gränsen passerats
+      await adminSupabase.auth.signOut(); // logga ut när gränsen passerats
     }
   };
 
