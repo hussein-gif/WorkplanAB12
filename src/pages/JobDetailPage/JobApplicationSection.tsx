@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Send, Upload, User, Mail, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { supabase } from '../../supabaseClient'; // ⬅️ NYTT: Supabase
+import { supabase } from '../../supabaseClient'; // ⬅️ Supabase
 
 export type JobApplicationFormData = {
   firstName: string;
@@ -63,7 +63,8 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const otherFileInputRef = useRef<HTMLInputElement>(null);
 
-  const [submitting, setSubmitting] = useState(false); // ⬅️ NYTT: lås knappen vid submit
+  const [submitting, setSubmitting] = useState(false); // lås knappen vid submit
+  const [showSuccess, setShowSuccess] = useState(false); // ⬅️ NYTT: visa tack-overlay
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -79,7 +80,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
     else setOtherFile(file);
   };
 
-  // ⬇️ NYTT: Spara ansökan i Supabase (applications)
+  // ⬇️ Spara ansökan i Supabase (applications) – fixad payload + tack-overlay
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -91,7 +92,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
     try {
       setSubmitting(true);
 
-      // Minimal payload – matchar vanliga kolumner i `applications`
+      // Minimal payload – endast kolumner som säkert finns i `applications`
       const payload: any = {
         job_title: jobTitle,
         company: companyName,
@@ -102,12 +103,10 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
         email: formData.email.trim(),
         phone: formData.phone.trim(),
         cover_letter: formData.coverLetter?.trim() || null,
-        status: 'new',
-        source: 'site',
       };
 
       // INSERT
-      const { error } = await supabase.from('applications').insert(payload);
+      const { error } = await supabase.from('applications').insert([payload]);
       if (error) throw error;
 
       // (Valfritt) Töm formuläret lokalt
@@ -122,7 +121,8 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
       setCvFile(null);
       setOtherFile(null);
 
-      alert('Tack för din ansökan! Vi återkommer så snart vi kan.');
+      // Visa tack-overlay
+      setShowSuccess(true);
     } catch (err: any) {
       console.error(err);
       alert('Något gick fel när ansökan skulle sparas. Försök igen.');
@@ -369,6 +369,47 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
           </form>
         </div>
       </div>
+
+      {/* ⬇️ Tack-overlay med cirkel + vit bock */}
+      {showSuccess && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60">
+          <div className="relative w-[90%] max-w-md rounded-2xl bg-white px-8 py-10 text-center shadow-2xl">
+            {/* Cirkeln med vit bock */}
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-[#16A34A]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-10 w-10 text-white"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M20 6L9 17l-5-5" />
+              </svg>
+            </div>
+
+            <h3
+              className="mb-2 text-2xl font-semibold text-[#08132B]"
+              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+            >
+              Tack för din ansökan!
+            </h3>
+            <p className="mb-6 text-sm text-[#08132B]/80" style={{ fontFamily: 'Inter, sans-serif' }}>
+              Vi återkommer så snart vi kan.
+            </p>
+
+            <button
+              onClick={() => setShowSuccess(false)}
+              className="inline-flex items-center justify-center rounded-2xl bg-[#08132B] px-6 py-3 font-semibold text-white shadow-md hover:opacity-90 transition"
+              style={{ fontFamily: 'Inter, sans-serif' }}
+            >
+              Stäng
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
