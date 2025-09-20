@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Clock, MapPin, Building, Mail } from 'lucide-react';
-import JobApplicationForm from './JobApplicationForm';
 import JobApplicationSection from './JobApplicationSection';
 import SEO from '../../components/SEO';
 import { supabase } from '../../supabaseClient';
@@ -49,7 +48,6 @@ const JobDetailPage = () => {
   const { jobId } = useParams<{ jobId: string }>();
   const [job, setJob] = useState<JobData | null>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [isApplicationFormOpen, setIsApplicationFormOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const [formData, setFormData] = useState<SharedFormData>({
@@ -220,12 +218,9 @@ const employmentDisplay = rawEmployment;
 
   const handleBack = () => navigate('/jobb');
 
-  const handleApply = () => setIsApplicationFormOpen(true);
-  const handleCloseForm = () => setIsApplicationFormOpen(false);
-  const handleMinimizeForm = () => {
+  const handleApply = () => {
     const el = document.getElementById('application-form');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
-    setIsApplicationFormOpen(false);
   };
 
   const startDate = job.startDate || 'Enligt överenskommelse';
@@ -563,21 +558,6 @@ const employmentDisplay = rawEmployment;
           setOtherFile={setOtherFile}
         />
 
-        <JobApplicationForm
-          jobTitle={job.title}
-          companyName={job.company}
-          industry={industry}
-          location={job.location}
-          isPopupOpen={isApplicationFormOpen}
-          onClosePopup={handleCloseForm}
-          onMinimize={handleMinimizeForm}
-          formData={formData}
-          setFormData={setFormData}
-          cvFile={cvFile}
-          setCvFile={setCvFile}
-          otherFile={otherFile}
-          setOtherFile={setOtherFile}
-        />
       </div>
     </>
   );
