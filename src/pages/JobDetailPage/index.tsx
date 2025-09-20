@@ -88,7 +88,7 @@ const JobDetailPage = () => {
             'slug',
             'title',
             'company',
-            'company_logo',          // <-- viktig ändring
+            'company_logo',
             'location',
             'industry',
             'employment_type',
@@ -151,26 +151,25 @@ const JobDetailPage = () => {
       }
 
       // Ny logik för att tolka omfattning
-const rawEmployment = (data.employment_type ?? '').toString().trim();
-const rawLower = rawEmployment.toLowerCase();
+      const rawEmployment = (data.employment_type ?? '').toString().trim();
+      const rawLower = rawEmployment.toLowerCase();
 
-let omfattning: 'Heltid' | 'Deltid' | 'OTHER' = 'OTHER';
-if (rawLower.includes('heltid') || rawLower.includes('full')) {
-  omfattning = 'Heltid';
-} else if (rawLower.includes('deltid') || rawLower.includes('part')) {
-  omfattning = 'Deltid';
-}
+      let omfattning: 'Heltid' | 'Deltid' | 'OTHER' = 'OTHER';
+      if (rawLower.includes('heltid') || rawLower.includes('full')) {
+        omfattning = 'Heltid';
+      } else if (rawLower.includes('deltid') || rawLower.includes('part')) {
+        omfattning = 'Deltid';
+      }
 
-// Spara också originaltexten så vi kan visa den om inget matchar
-const employmentDisplay = rawEmployment;
-
+      // Spara också originaltexten så vi kan visa den om inget matchar
+      const employmentDisplay = rawEmployment;
 
       const mapped: JobData = {
         id: data.id,
         slug: data.slug,
         title: data.title ?? '',
         company: data.company ?? 'Workplan',
-        companyLogo: data.company_logo ?? (data.company ? data.company[0] : '•'), // <-- mappa rätt
+        companyLogo: data.company_logo ?? (data.company ? data.company[0] : '•'),
         location: data.location ?? '',
         industry: data.industry ?? 'Lager & Logistik',
         omfattning,
@@ -183,6 +182,9 @@ const employmentDisplay = rawEmployment;
         recruiterEmail: data.recruiter_email ?? '',
         startDate: data.start_date ?? null,
       };
+
+      // @ts-expect-error – lägg med för visning om OTHER
+      (mapped as any).employmentDisplay = employmentDisplay;
 
       setJob(mapped);
       setLoading(false);
@@ -308,21 +310,23 @@ const employmentDisplay = rawEmployment;
         </div>
 
         <div className="relative max-w-4xl mx-auto px-6 py-8 pt-28 md:pt-32">
-          <button
-            onClick={handleBack}
-            className={`
-              group flex items-center space-x-2 px-4 py-2 mb-6
-              rounded-lg border bg-transparent
-              text-[#08132B]/60 border-[#08132B]/10
-              hover:bg-[#08132B]/5 hover:text-[#08132B]
-              transition-all duration-200
-              ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
-            `}
-            style={{ transitionDelay: '80ms', fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
-          >
-            <ArrowLeft size={16} className="transition-transform duration-200 group-hover:-translate-x-0.5" />
-            <span className="text-sm">Tillbaka</span>
-          </button>
+          {/* STICKY container för Tillbaka-knappen — håller samma position */}
+          <div className="sticky top-24 md:top-28 z-20">
+            <button
+              onClick={handleBack}
+              className="
+                group flex items-center space-x-2 px-4 py-2 mb-6
+                rounded-lg border bg-transparent
+                text-[#08132B]/60 border-[#08132B]/10
+                hover:bg-[#08132B]/5 hover:text-[#08132B]
+                transition-all duration-200
+              "
+              style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
+            >
+              <ArrowLeft size={16} className="transition-transform duration-200 group-hover:-translate-x-0.5" />
+              <span className="text-sm">Tillbaka</span>
+            </button>
+          </div>
 
           <div
             className={`
@@ -431,11 +435,10 @@ const employmentDisplay = rawEmployment;
                 Omfattning
               </div>
               <div className="text-[#08132B] font-bold" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}>
-  {job.omfattning === 'OTHER'
-    ? (job as any).employmentDisplay || 'OTHER'
-    : job.omfattning}
-</div>
-
+                {job.omfattning === 'OTHER'
+                  ? (job as any).employmentDisplay || 'OTHER'
+                  : job.omfattning}
+              </div>
             </div>
           </div>
 
@@ -557,7 +560,6 @@ const employmentDisplay = rawEmployment;
           otherFile={otherFile}
           setOtherFile={setOtherFile}
         />
-
       </div>
     </>
   );
