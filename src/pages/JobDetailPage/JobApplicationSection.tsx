@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { Send, Upload, User, Mail, Phone } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { supabase } from '../../supabaseClient'; // ⬅️ NYTT: Supabase
 
 export type JobApplicationFormData = {
   firstName: string;
@@ -62,6 +63,8 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const otherFileInputRef = useRef<HTMLInputElement>(null);
 
+  const [submitting, setSubmitting] = useState(false); // ⬅️ NYTT: lås knappen vid submit
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     setFormData(prev => ({
@@ -76,10 +79,56 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
     else setOtherFile(file);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // ⬇️ NYTT: Spara ansökan i Supabase (applications)
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Application submitted:', { ...formData, cvFile, otherFile });
-    alert('Tack för din ansökan! Vi återkommer så snart vi kan.');
+
+    if (!formData.gdprConsent) {
+      alert('Du måste godkänna integritetspolicyn för att skicka ansökan.');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      // Minimal payload – matchar vanliga kolumner i `applications`
+      const payload: any = {
+        job_title: jobTitle,
+        company: companyName,
+        industry: industry ?? null,
+        location: location ?? null,
+        first_name: formData.firstName.trim(),
+        last_name: formData.lastName.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        cover_letter: formData.coverLetter?.trim() || null,
+        status: 'new',
+        source: 'site',
+      };
+
+      // INSERT
+      const { error } = await supabase.from('applications').insert(payload);
+      if (error) throw error;
+
+      // (Valfritt) Töm formuläret lokalt
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        coverLetter: '',
+        gdprConsent: false,
+      });
+      setCvFile(null);
+      setOtherFile(null);
+
+      alert('Tack för din ansökan! Vi återkommer så snart vi kan.');
+    } catch (err: any) {
+      console.error(err);
+      alert('Något gick fel när ansökan skulle sparas. Försök igen.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -105,7 +154,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
       />
 
       <div className="relative px-5 sm:px-8">
-        {/* Rubrikblock – med "bransch • ort" exakt som i JobApplicationForm */}
+        {/* Rubrikblock */}
         <div className="pt-10 sm:pt-12 pb-8">
           {industry && location && (
             <div
@@ -123,7 +172,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
           </h2>
         </div>
 
-        {/* Formulär – identiskt UI, ingen pil här */}
+        {/* Formulär */}
         <div className="relative pb-16">
           <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto">
             {/* Namn */}
@@ -296,13 +345,14 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
             <div className="pt-2 flex justify-center">
               <button
                 type="submit"
+                disabled={submitting}
                 className="
                   relative inline-flex items-center gap-2 px-8 py-3
                   rounded-2xl bg-white text-[#08132B] font-semibold
                   shadow-[0_10px_30px_rgba(255,255,255,0.15),0_8px_20px_rgba(0,0,0,0.25)]
                   transition-transform duration-300
                   hover:-translate-y-0.5 active:translate-y-0
-                  focus:outline-none
+                  focus:outline-none disabled:opacity-60
                 "
                 style={{ fontFamily: 'Inter, sans-serif' }}
               >
@@ -313,7 +363,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                   }}
                 />
                 <Send size={18} />
-                <span className="relative">Skicka ansökan</span>
+                <span className="relative">{submitting ? 'Skickar…' : 'Skicka ansökan'}</span>
               </button>
             </div>
           </form>
