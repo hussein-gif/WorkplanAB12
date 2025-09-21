@@ -29,9 +29,15 @@ export default function AdminPanel() {
 
     async function fetchCounts() {
       const [apps, msgs, reqs] = await Promise.all([
-        supabase.from('applications').select('id', { count: 'exact', head: true }).eq('status', 'new'),
-        supabase.from('contact_messages').select('id', { count: 'exact', head: true }).eq('status', 'new'),
-        supabase.from('staffing_requests').select('id', { count: 'exact', head: true }).eq('status', 'new'),
+        supabase.from('applications')
+          .select('id', { count: 'exact', head: true })
+          .eq('status', 'new'),
+        supabase.from('contact_messages')
+          .select('id', { count: 'exact', head: true })
+          .eq('status', 'new'),
+        supabase.from('staffing_requests')
+          .select('id', { count: 'exact', head: true })
+          .eq('status', 'new'),
       ]);
 
       if (!alive) return;
@@ -61,6 +67,14 @@ export default function AdminPanel() {
     await supabase.auth.signOut();
     navigate('/admin/login', { replace: true });
   }
+
+  // 🔹 Mild badge-komponent (blå, inte röd)
+  const Badge = ({ count }: { count: number }) =>
+    count > 0 ? (
+      <span className="ml-auto inline-flex items-center justify-center rounded-full text-xs w-5 h-5 bg-blue-100 text-blue-800 ring-1 ring-blue-200">
+        {count > 99 ? '99+' : count}
+      </span>
+    ) : null;
 
   return (
     <div className="min-h-screen bg-white text-gray-900">
@@ -92,11 +106,7 @@ export default function AdminPanel() {
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'applications' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
               <Users className="w-4 h-4" /> Ansökningar
-              {newAppCount > 0 && (
-                <span className="ml-auto inline-flex items-center justify-center rounded-full text-xs w-5 h-5 bg-red-600 text-white">
-                  {newAppCount > 99 ? '99+' : newAppCount}
-                </span>
-              )}
+              <Badge count={newAppCount} />
             </button>
 
             <button
@@ -104,11 +114,7 @@ export default function AdminPanel() {
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'messages' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
               <MessageSquare className="w-4 h-4" /> Meddelanden
-              {newMsgCount > 0 && (
-                <span className="ml-auto inline-flex items-center justify-center rounded-full text-xs w-5 h-5 bg-red-600 text-white">
-                  {newMsgCount > 99 ? '99+' : newMsgCount}
-                </span>
-              )}
+              <Badge count={newMsgCount} />
             </button>
 
             <button
@@ -116,11 +122,7 @@ export default function AdminPanel() {
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'requests' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
               <Briefcase className="w-4 h-4" /> Förfrågningar
-              {newReqCount > 0 && (
-                <span className="ml-auto inline-flex items-center justify-center rounded-full text-xs w-5 h-5 bg-red-600 text-white">
-                  {newReqCount > 99 ? '99+' : newReqCount}
-                </span>
-              )}
+              <Badge count={newReqCount} />
             </button>
 
             <button
