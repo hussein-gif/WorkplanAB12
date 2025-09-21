@@ -267,27 +267,15 @@ export default function ApplicationsSection() {
                   <div>{selected.company ?? '—'}</div>
                 </div>
 
-                <div className="md:col-span-2 flex items-center gap-3">
-                  <div>
-                    <div className="text-xs text-gray-500 mb-1">Status</div>
-                    <select
-                      className={`border rounded-lg px-2 py-1 ${badgeClass(selected.status)}`}
-                      value={selected.status}
-                      onChange={e => updateStatus(selected.id, e.target.value as Application['status'])}
-                    >
-                      {APP_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-                    </select>
-                  </div>
-
-                  {/* 🆕 Snabb ångra-knapp om du vill markera som Ny igen */}
-                  {selected.status !== NEW_VALUE && (
-                    <button
-                      className="border rounded-lg px-3 py-2 hover:bg-gray-50"
-                      onClick={() => updateStatus(selected.id, NEW_VALUE)}
-                    >
-                      Markera som Ny
-                    </button>
-                  )}
+                <div className="md:col-span-2">
+                  <div className="text-xs text-gray-500 mb-1">Status</div>
+                  <select
+                    className={`border rounded-lg px-2 py-1 ${badgeClass(selected.status)}`}
+                    value={selected.status}
+                    onChange={e => updateStatus(selected.id, e.target.value as Application['status'])}
+                  >
+                    {APP_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                  </select>
                 </div>
               </div>
 
