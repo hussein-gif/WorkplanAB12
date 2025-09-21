@@ -29,18 +29,18 @@ export default function AdminPanel() {
 
     async function fetchCounts() {
       const [apps, msgsNonReq, msgsReq] = await Promise.all([
-        // Ansökningar med status 'new'
+        // Ansökningar
         supabase.from('applications')
           .select('id', { count: 'exact', head: true })
           .eq('status', 'new'),
 
-        // Meddelanden: contact_messages med status 'new' OCH from_type != 'staffing_request'
+        // Meddelanden = contact_messages där from_type IN ('candidate','company')
         supabase.from('contact_messages')
           .select('id', { count: 'exact', head: true })
           .eq('status', 'new')
-          .neq('from_type', 'staffing_request'),
+          .in('from_type', ['candidate', 'company']),
 
-        // Förfrågningar: contact_messages med status 'new' OCH from_type = 'staffing_request'
+        // Förfrågningar = contact_messages där from_type = 'staffing_request'
         supabase.from('contact_messages')
           .select('id', { count: 'exact', head: true })
           .eq('status', 'new')
@@ -53,90 +53,91 @@ export default function AdminPanel() {
       if (!msgsReq.error && typeof msgsReq.count === 'number') setNewReqCount(msgsReq.count);
     }
 
-    // 1) Hämta initiala värden
+    // 1) Hämta initialt
     fetchCounts();
 
-    // Hjälpfunktioner för inkrementell uppdatering
+    // 1b) Fallback: tyst uppdatering var 30s om något event missas
+    const fallback = setInterval(fetchCounts, 30_000);
+
+    // Hjälpare
     const dec = (setter: React.Dispatch<React.SetStateAction<number>>) =>
       setter((c) => (c > 0 ? c - 1 : 0));
     const inc = (setter: React.Dispatch<React.SetStateAction<number>>) =>
       setter((c) => c + 1);
 
-    // Små helpers för att avgöra vilket counter som ska påverkas i contact_messages
     const isReq = (row: any) => row?.from_type === 'staffing_request';
     const isNew = (row: any) => row?.status === 'new';
 
-    // 2) Realtime-lyssnare som uppdaterar badges direkt (utan reload)
+    // 2) Realtime-lyssnare
     const ch = supabase
       .channel('admin-leftpanel-counts')
 
       // ---- applications ----
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'applications' }, (p: any) => {
+        console.log('[RT] applications INSERT', p);
         if (isNew(p.new)) inc(setNewAppCount);
       })
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'applications' }, (p: any) => {
+        console.log('[RT] applications UPDATE', p);
         if (isNew(p.old) && !isNew(p.new)) dec(setNewAppCount);
         else if (!isNew(p.old) && isNew(p.new)) inc(setNewAppCount);
       })
       .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'applications' }, (p: any) => {
+        console.log('[RT] applications DELETE', p);
         if (isNew(p.old)) dec(setNewAppCount);
       })
 
-      // ---- contact_messages (både Meddelanden & Förfrågningar) ----
+      // ---- contact_messages ----
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'contact_messages' }, (p: any) => {
+        console.log('[RT] contact_messages INSERT', p);
         if (isNew(p.new)) {
           if (isReq(p.new)) inc(setNewReqCount);
           else inc(setNewMsgCount);
         }
       })
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'contact_messages' }, (p: any) => {
-        // Hantera alla övergångar mellan new/ej-new och mellan req/ej-req
+        console.log('[RT] contact_messages UPDATE', p);
         const oldWasNew = isNew(p.old);
         const newIsNew = isNew(p.new);
         const oldWasReq = isReq(p.old);
         const newIsReq = isReq(p.new);
 
         if (oldWasNew && !newIsNew) {
-          // Gick från new -> ej-new
+          // new -> ej-new
           if (oldWasReq) dec(setNewReqCount);
           else dec(setNewMsgCount);
         } else if (!oldWasNew && newIsNew) {
-          // Gick från ej-new -> new
+          // ej-new -> new
           if (newIsReq) inc(setNewReqCount);
           else inc(setNewMsgCount);
         } else if (oldWasNew && newIsNew && oldWasReq !== newIsReq) {
-          // Fortfarande 'new' men flyttad mellan req/ej-req (ovanligt)
-          if (oldWasReq) {
-            dec(setNewReqCount);
-            inc(setNewMsgCount);
-          } else {
-            dec(setNewMsgCount);
-            inc(setNewReqCount);
-          }
+          // fortfarande 'new' men bytt kategori
+          if (oldWasReq) { dec(setNewReqCount); inc(setNewMsgCount); }
+          else { dec(setNewMsgCount); inc(setNewReqCount); }
         }
       })
       .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'contact_messages' }, (p: any) => {
+        console.log('[RT] contact_messages DELETE', p);
         if (isNew(p.old)) {
           if (isReq(p.old)) dec(setNewReqCount);
           else dec(setNewMsgCount);
         }
       })
+      .subscribe((status) => {
+        console.log('[RT] channel status:', status);
+      });
 
-      .subscribe();
-
-    // (Valfritt) Optimistiska UI-events från sektionerna — om du vill kalla dessa
+    // (Valfritt) Optimistiska events från sektionerna
     const msgReadHandler = (e: any) => { if (e.detail?.wasNew) dec(setNewMsgCount); };
     const reqHandledHandler = (e: any) => { if (e.detail?.wasNew) dec(setNewReqCount); };
-    const appReviewedHandler = (e: any) => { if (e.detail?.wasNew) dec(setNewAppCount); };
     window.addEventListener('msg:read', msgReadHandler);
     window.addEventListener('req:handled', reqHandledHandler);
-    window.addEventListener('app:reviewed', appReviewedHandler);
 
     return () => {
       alive = false;
+      clearInterval(fallback);
       window.removeEventListener('msg:read', msgReadHandler);
       window.removeEventListener('req:handled', reqHandledHandler);
-      window.removeEventListener('app:reviewed', appReviewedHandler);
       supabase.removeChannel(ch);
     };
   }, []);
