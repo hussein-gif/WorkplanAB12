@@ -17,28 +17,33 @@ export default function ApplicationsSection() {
   const [status, setStatus] = useState<'all' | Application['status']>('all');
   const [loading, setLoading] = useState(true);
 
-  // Enkel modal-state för att visa personligt brev (befintlig)
+  // Enkel modal-state för att visa personligt brev
   const [openLetter, setOpenLetter] = useState<string | null>(null);
 
   // Detaljmodal för en hel ansökan
   const [selected, setSelected] = useState<any | null>(null);
 
-  // 🆕 Lås body-scroll när någon modal är öppen
-  const originalOverflow = useRef<string>('');
+  // 🔎 Hitta rätt value för “Ny” och “Granskad” från APP_STATUSES (fallbacks om labels skiljer sig)
+  const NEW_VALUE = useMemo(() => {
+    return (APP_STATUSES.find(s => s.label.toLowerCase().includes('ny'))?.value ??
+      ('new' as Application['status']));
+  }, []);
+  const REVIEWED_VALUE = useMemo(() => {
+    return (APP_STATUSES.find(s => s.label.toLowerCase().includes('gransk'))?.value ??
+      ('reviewed' as Application['status']));
+  }, []);
+
+  // 🆕 Auto-markera som Granskad efter 1.5s om status är Ny när detaljmodal öppnas
   useEffect(() => {
-    const hasModal = !!openLetter || !!selected;
-    if (typeof document !== 'undefined') {
-      if (!originalOverflow.current) {
-        originalOverflow.current = document.body.style.overflow || '';
-      }
-      document.body.style.overflow = hasModal ? 'hidden' : originalOverflow.current;
-    }
-    return () => {
-      if (typeof document !== 'undefined') {
-        document.body.style.overflow = originalOverflow.current;
-      }
-    };
-  }, [openLetter, selected]);
+    if (!selected) return;
+    if (selected.status !== NEW_VALUE) return;
+
+    const t = setTimeout(() => {
+      updateStatus(selected.id, REVIEWED_VALUE);
+    }, 1500); // 1.5s “grace period”
+
+    return () => clearTimeout(t);
+  }, [selected, NEW_VALUE, REVIEWED_VALUE]);
 
   async function fetchApps() {
     setLoading(true);
@@ -89,6 +94,23 @@ export default function ApplicationsSection() {
     [a?.first_name, a?.last_name].filter(Boolean).join(' ') ||
     '—';
 
+  // 🧷 Lås body-scroll när någon modal är öppen
+  const originalOverflow = useRef<string>('');
+  useEffect(() => {
+    const hasModal = !!openLetter || !!selected;
+    if (typeof document !== 'undefined') {
+      if (!originalOverflow.current) {
+        originalOverflow.current = document.body.style.overflow || '';
+      }
+      document.body.style.overflow = hasModal ? 'hidden' : originalOverflow.current;
+    }
+    return () => {
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = originalOverflow.current;
+      }
+    };
+  }, [openLetter, selected]);
+
   return (
     <div>
       <TopBar
@@ -121,7 +143,7 @@ export default function ApplicationsSection() {
               <tr>
                 <th className="px-4 py-3 text-left">Sökande</th>
                 <th className="px-4 py-3 text-left">Kontakt</th>
-                {/* Kolumnerna Ort och Roll borttagna */}
+                {/* Ort och Roll borttagna */}
                 <th className="px-4 py-3 text-left">Skickad</th>
                 <th className="px-4 py-3 text-left">Status</th>
                 <th className="px-4 py-3 text-left">CV</th>
@@ -139,7 +161,7 @@ export default function ApplicationsSection() {
                   <tr
                     key={a.id}
                     className="border-t hover:bg-gray-50 cursor-pointer"
-                    onClick={() => setSelected(a)} // Klick var som helst på raden öppnar modalen
+                    onClick={() => setSelected(a)}
                   >
                     <td className="px-4 py-3 font-medium">{a.full_name}</td>
                     <td className="px-4 py-3">
@@ -152,8 +174,6 @@ export default function ApplicationsSection() {
                     </td>
                     <td className="px-4 py-3">{formatDate(a.created_at)}</td>
 
-                    {/* Flytta stopPropagation till själva kontrollerna (inte TD)
-                        så att klick på tom yta i cellen också öppnar modalen */}
                     <td className="px-4 py-3">
                       <select
                         className={`border rounded-lg px-2 py-1 ${badgeClass(a.status)}`}
@@ -247,15 +267,27 @@ export default function ApplicationsSection() {
                   <div>{selected.company ?? '—'}</div>
                 </div>
 
-                <div className="md:col-span-2">
-                  <div className="text-xs text-gray-500 mb-1">Status</div>
-                  <select
-                    className={`border rounded-lg px-2 py-1 ${badgeClass(selected.status)}`}
-                    value={selected.status}
-                    onChange={e => updateStatus(selected.id, e.target.value as Application['status'])}
-                  >
-                    {APP_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
-                  </select>
+                <div className="md:col-span-2 flex items-center gap-3">
+                  <div>
+                    <div className="text-xs text-gray-500 mb-1">Status</div>
+                    <select
+                      className={`border rounded-lg px-2 py-1 ${badgeClass(selected.status)}`}
+                      value={selected.status}
+                      onChange={e => updateStatus(selected.id, e.target.value as Application['status'])}
+                    >
+                      {APP_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                    </select>
+                  </div>
+
+                  {/* 🆕 Snabb ångra-knapp om du vill markera som Ny igen */}
+                  {selected.status !== NEW_VALUE && (
+                    <button
+                      className="border rounded-lg px-3 py-2 hover:bg-gray-50"
+                      onClick={() => updateStatus(selected.id, NEW_VALUE)}
+                    >
+                      Markera som Ny
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -295,7 +327,7 @@ export default function ApplicationsSection() {
         </div>
       )}
 
-      {/* Befintlig modal för att visa personligt brev */}
+      {/* Modal för att visa personligt brev */}
       {openLetter && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-[min(95vw,700px)] bg-white border rounded-2xl shadow-xl">
