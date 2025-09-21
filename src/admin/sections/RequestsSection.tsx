@@ -51,7 +51,12 @@ export default function RequestsSection() {
     });
   }, [items, q, status, location]);
 
+  // ⬇️ ÄNDRAT: skicka "req:handled" när ett 'new' blir något annat
   async function updateStatus(id: string, s: any) {
+    const prevRow = (items as any[]).find(r => r.id === id) || (selected?.id === id ? selected : undefined);
+    const NEW_VALUE = MSG_STATUSES.find(x => /ny/i.test(x.label))?.value ?? 'new';
+    const wasNew = prevRow?.status === NEW_VALUE;
+
     const { error } = await supabase.from('contact_messages').update({ status: s }).eq('id', id);
     if (error) {
       alert('Kunde inte uppdatera status: ' + error.message);
@@ -61,6 +66,11 @@ export default function RequestsSection() {
       prev.map(r => ((r as any).id === id ? ({ ...(r as any), status: s } as any) : r))
     );
     setSelected(prev => (prev && prev.id === id ? { ...prev, status: s } : prev));
+
+    // 🔔 Optimistisk badge-minskning i sidomenyn
+    if (wasNew && s !== NEW_VALUE) {
+      window.dispatchEvent(new CustomEvent('req:handled', { detail: { wasNew: true } }));
+    }
   }
 
   // Använd samma statusvärden som contact_messages (MSG_STATUSES)
