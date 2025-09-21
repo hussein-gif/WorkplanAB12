@@ -19,47 +19,125 @@ export default function AdminPanel() {
   const [tab, setTab] = useState<Tab>('applications'); // startflik
   const navigate = useNavigate();
 
-  // ⬇️ NYTT: räknare för "new" i varje relevant sektion
+  // 🔢 Räknare
   const [newAppCount, setNewAppCount] = useState<number>(0);
   const [newMsgCount, setNewMsgCount] = useState<number>(0);
-  const [newReqCount, setNewReqCount] = useState<number>(0);
+  const [newReqCount, setNewReqCount] = useState<number>(0); // staffing requests (från contact_messages)
 
   useEffect(() => {
     let alive = true;
 
     async function fetchCounts() {
-      const [apps, msgs, reqs] = await Promise.all([
+      const [apps, msgsNonReq, msgsReq] = await Promise.all([
+        // Ansökningar med status 'new'
         supabase.from('applications')
           .select('id', { count: 'exact', head: true })
           .eq('status', 'new'),
+
+        // Meddelanden: contact_messages med status 'new' OCH from_type != 'staffing_request'
         supabase.from('contact_messages')
           .select('id', { count: 'exact', head: true })
-          .eq('status', 'new'),
-        supabase.from('staffing_requests')
+          .eq('status', 'new')
+          .neq('from_type', 'staffing_request'),
+
+        // Förfrågningar: contact_messages med status 'new' OCH from_type = 'staffing_request'
+        supabase.from('contact_messages')
           .select('id', { count: 'exact', head: true })
-          .eq('status', 'new'),
+          .eq('status', 'new')
+          .eq('from_type', 'staffing_request'),
       ]);
 
       if (!alive) return;
       if (!apps.error && typeof apps.count === 'number') setNewAppCount(apps.count);
-      if (!msgs.error && typeof msgs.count === 'number') setNewMsgCount(msgs.count);
-      if (!reqs.error && typeof reqs.count === 'number') setNewReqCount(reqs.count);
+      if (!msgsNonReq.error && typeof msgsNonReq.count === 'number') setNewMsgCount(msgsNonReq.count);
+      if (!msgsReq.error && typeof msgsReq.count === 'number') setNewReqCount(msgsReq.count);
     }
 
-    // initial hämtning
+    // 1) Hämta initiala värden
     fetchCounts();
 
-    // realtime-uppdatering vid förändringar i tabellerna
-    const channel = supabase
+    // Hjälpfunktioner för inkrementell uppdatering
+    const dec = (setter: React.Dispatch<React.SetStateAction<number>>) =>
+      setter((c) => (c > 0 ? c - 1 : 0));
+    const inc = (setter: React.Dispatch<React.SetStateAction<number>>) =>
+      setter((c) => c + 1);
+
+    // Små helpers för att avgöra vilket counter som ska påverkas i contact_messages
+    const isReq = (row: any) => row?.from_type === 'staffing_request';
+    const isNew = (row: any) => row?.status === 'new';
+
+    // 2) Realtime-lyssnare som uppdaterar badges direkt (utan reload)
+    const ch = supabase
       .channel('admin-leftpanel-counts')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'applications' }, fetchCounts)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'contact_messages' }, fetchCounts)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'staffing_requests' }, fetchCounts)
+
+      // ---- applications ----
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'applications' }, (p: any) => {
+        if (isNew(p.new)) inc(setNewAppCount);
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'applications' }, (p: any) => {
+        if (isNew(p.old) && !isNew(p.new)) dec(setNewAppCount);
+        else if (!isNew(p.old) && isNew(p.new)) inc(setNewAppCount);
+      })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'applications' }, (p: any) => {
+        if (isNew(p.old)) dec(setNewAppCount);
+      })
+
+      // ---- contact_messages (både Meddelanden & Förfrågningar) ----
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'contact_messages' }, (p: any) => {
+        if (isNew(p.new)) {
+          if (isReq(p.new)) inc(setNewReqCount);
+          else inc(setNewMsgCount);
+        }
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'contact_messages' }, (p: any) => {
+        // Hantera alla övergångar mellan new/ej-new och mellan req/ej-req
+        const oldWasNew = isNew(p.old);
+        const newIsNew = isNew(p.new);
+        const oldWasReq = isReq(p.old);
+        const newIsReq = isReq(p.new);
+
+        if (oldWasNew && !newIsNew) {
+          // Gick från new -> ej-new
+          if (oldWasReq) dec(setNewReqCount);
+          else dec(setNewMsgCount);
+        } else if (!oldWasNew && newIsNew) {
+          // Gick från ej-new -> new
+          if (newIsReq) inc(setNewReqCount);
+          else inc(setNewMsgCount);
+        } else if (oldWasNew && newIsNew && oldWasReq !== newIsReq) {
+          // Fortfarande 'new' men flyttad mellan req/ej-req (ovanligt)
+          if (oldWasReq) {
+            dec(setNewReqCount);
+            inc(setNewMsgCount);
+          } else {
+            dec(setNewMsgCount);
+            inc(setNewReqCount);
+          }
+        }
+      })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'contact_messages' }, (p: any) => {
+        if (isNew(p.old)) {
+          if (isReq(p.old)) dec(setNewReqCount);
+          else dec(setNewMsgCount);
+        }
+      })
+
       .subscribe();
+
+    // (Valfritt) Optimistiska UI-events från sektionerna — om du vill kalla dessa
+    const msgReadHandler = (e: any) => { if (e.detail?.wasNew) dec(setNewMsgCount); };
+    const reqHandledHandler = (e: any) => { if (e.detail?.wasNew) dec(setNewReqCount); };
+    const appReviewedHandler = (e: any) => { if (e.detail?.wasNew) dec(setNewAppCount); };
+    window.addEventListener('msg:read', msgReadHandler);
+    window.addEventListener('req:handled', reqHandledHandler);
+    window.addEventListener('app:reviewed', appReviewedHandler);
 
     return () => {
       alive = false;
-      supabase.removeChannel(channel);
+      window.removeEventListener('msg:read', msgReadHandler);
+      window.removeEventListener('req:handled', reqHandledHandler);
+      window.removeEventListener('app:reviewed', appReviewedHandler);
+      supabase.removeChannel(ch);
     };
   }, []);
 
@@ -68,7 +146,7 @@ export default function AdminPanel() {
     navigate('/admin/login', { replace: true });
   }
 
-  // 🔹 Mild badge-komponent (blå, inte röd)
+  // 🔹 Mild badge (blå)
   const Badge = ({ count }: { count: number }) =>
     count > 0 ? (
       <span className="ml-auto inline-flex items-center justify-center rounded-full text-xs w-5 h-5 bg-blue-100 text-blue-800 ring-1 ring-blue-200">
