@@ -51,12 +51,12 @@ const Hero: React.FC = () => {
       window.addEventListener('mousemove', onMove);
     }
 
-    // Preload desktop VIDEO (lägg i <head>)
+    // Preload Cloudinary video (lägg i <head>)
     if (typeof document !== 'undefined' && !isMobile && !prefersReduced) {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'video';
-      link.href = '/videos/hero-1080p.mp4';
+      link.href = 'https://res.cloudinary.com/dsm0pbs0s/video/upload/v1758488517/hero-1080p_gzycpu.mp4';
       link.type = 'video/mp4';
       document.head.appendChild(link);
     }
@@ -154,9 +154,10 @@ const Hero: React.FC = () => {
                 muted
                 loop
                 playsInline
+                preload="auto"
                 poster="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg"
               >
-                <source src="/videos/hero-1080p.mp4" type="video/mp4" />
+                <source src="https://res.cloudinary.com/dsm0pbs0s/video/upload/v1758488517/hero-1080p_gzycpu.mp4" type="video/mp4" />
               </video>
             </div>
           )}
