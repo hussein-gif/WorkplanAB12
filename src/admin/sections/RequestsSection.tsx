@@ -7,8 +7,7 @@ import {
   EmptyState as Empty,
   formatDate,
   badgeClass,
-  // REQ_STATUSES,  // ⬅️ inte använd längre (status sitter på contact_messages)
-  MSG_STATUSES,      // ⬅️ använd samma enum som för meddelanden
+  MSG_STATUSES,
 } from '../shared';
 
 export default function RequestsSection() {
@@ -18,12 +17,10 @@ export default function RequestsSection() {
   const [location, setLocation] = useState<'all' | string>('all');
   const [loading, setLoading] = useState(true);
 
-  // NYTT: detaljmodal
   const [selected, setSelected] = useState<any | null>(null);
 
   async function fetchRequests() {
     setLoading(true);
-    // Hämta från contact_messages där from_type=staffing_request
     const { data, error } = await supabase
       .from('contact_messages')
       .select('*')
@@ -51,11 +48,12 @@ export default function RequestsSection() {
     });
   }, [items, q, status, location]);
 
-  // ⬇️ ÄNDRAT: skicka "req:handled" när ett 'new' blir något annat
+  // ⬇️ ÄNDRAD: badge går ner OCH upp
   async function updateStatus(id: string, s: any) {
     const prevRow = (items as any[]).find(r => r.id === id) || (selected?.id === id ? selected : undefined);
     const NEW_VALUE = MSG_STATUSES.find(x => /ny/i.test(x.label))?.value ?? 'new';
     const wasNew = prevRow?.status === NEW_VALUE;
+    const becomesNew = s === NEW_VALUE;
 
     const { error } = await supabase.from('contact_messages').update({ status: s }).eq('id', id);
     if (error) {
@@ -67,23 +65,21 @@ export default function RequestsSection() {
     );
     setSelected(prev => (prev && prev.id === id ? { ...prev, status: s } : prev));
 
-    // 🔔 Optimistisk badge-minskning i sidomenyn
-    if (wasNew && s !== NEW_VALUE) {
-      window.dispatchEvent(new CustomEvent('req:handled', { detail: { wasNew: true } }));
+    if (wasNew && !becomesNew) {
+      window.dispatchEvent(new CustomEvent('req:handled', { detail: { wasNew: true } })); // −1
+    } else if (!wasNew && becomesNew) {
+      window.dispatchEvent(new CustomEvent('req:new')); // +1
     }
   }
 
-  // Använd samma statusvärden som contact_messages (MSG_STATUSES)
   const NEW_VALUE = useMemo(() => {
     return (MSG_STATUSES.find(s => /ny/i.test(s.label))?.value ?? 'new');
   }, []);
   const REVIEWED_VALUE = useMemo(() => {
-    // motsvarighet till granskad/pågående/behandlas/read/reviewed
     const found = MSG_STATUSES.find(s => /(läst|last|read|review)/i.test(s.label))?.value;
     return found ?? 'read';
   }, []);
 
-  // Auto-markera efter 1.5s när modalen öppnas
   useEffect(() => {
     if (!selected) return;
     if (selected.status !== NEW_VALUE) return;
@@ -93,7 +89,6 @@ export default function RequestsSection() {
     return () => clearTimeout(t);
   }, [selected, NEW_VALUE, REVIEWED_VALUE]);
 
-  // lås body-scroll när modal är öppen
   const originalOverflow = useRef<string>('');
   useEffect(() => {
     const hasModal = !!selected;
@@ -108,7 +103,6 @@ export default function RequestsSection() {
     };
   }, [selected]);
 
-  // location-lista (kan vara tom då location inte är egen kolumn)
   const locations = Array.from(new Set((items as any[]).map(i => i.location).filter(Boolean)));
 
   return (
@@ -193,7 +187,6 @@ export default function RequestsSection() {
         </div>
       )}
 
-      {/* Detaljmodal */}
       {selected && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-[min(95vw,900px)] bg-white border rounded-2xl shadow-xl">
