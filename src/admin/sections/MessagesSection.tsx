@@ -17,22 +17,18 @@ export default function MessagesSection() {
   const [status, setStatus] = useState<'all' | ContactMessage['status']>('all');
   const [loading, setLoading] = useState(true);
 
-  // NYTT: detaljmodal
   const [selected, setSelected] = useState<ContactMessage | null>(null);
 
-  // NYTT: mappa värden för “Ny” och “Läst” från MSG_STATUSES (fallback om labels skiljer sig)
   const NEW_VALUE = useMemo(() => {
     return (MSG_STATUSES.find(s => s.label.toLowerCase().includes('ny'))?.value ??
       ('new' as ContactMessage['status']));
   }, []);
   const READ_VALUE = useMemo(() => {
-    // fångar “läst” (sv), “last” (om prickar saknas) eller engelska “read”
     const found =
       MSG_STATUSES.find(s => /läst|last|read/i.test(s.label))?.value;
     return (found ?? ('read' as ContactMessage['status']));
   }, []);
 
-  // NYTT: auto-markera som Läst efter 1.5s när detaljmodalen öppnas
   useEffect(() => {
     if (!selected) return;
     if (selected.status !== NEW_VALUE) return;
@@ -42,7 +38,6 @@ export default function MessagesSection() {
     return () => clearTimeout(t);
   }, [selected, NEW_VALUE, READ_VALUE]);
 
-  // NYTT: lås body-scroll när modal är öppen
   const originalOverflow = useRef<string>('');
   useEffect(() => {
     const hasModal = !!selected;
@@ -61,7 +56,6 @@ export default function MessagesSection() {
 
   async function fetchMessages() {
     setLoading(true);
-    // Bara kandidat/företag – exkludera staffing_request
     const { data, error } = await supabase
       .from('contact_messages')
       .select('*')
@@ -100,7 +94,6 @@ export default function MessagesSection() {
     }
   }
 
-  // Särskild badge-stil för företag (lila), kandidat kan fortsätta via badgeClass
   const typeBadgeClass = (from_type: 'candidate' | 'company') =>
     from_type === 'company'
       ? 'bg-purple-100 text-purple-800 border border-purple-200'
@@ -189,7 +182,6 @@ export default function MessagesSection() {
         </div>
       )}
 
-      {/* NYTT: detaljmodal med hela meddelandet */}
       {selected && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-[min(95vw,800px)] bg-white border rounded-2xl shadow-xl">
@@ -203,7 +195,7 @@ export default function MessagesSection() {
                 <div>
                   <div className="text-xs text-gray-500">Typ</div>
                   <div>
-                    <span className={`px-2 py-1 rounded-md ${typeBadgeClass(selected.from_type)}`}>
+                    <span className={`mt-1 inline-block px-2 py-1 rounded-md ${typeBadgeClass(selected.from_type)}`}>
                       {selected.from_type === 'candidate' ? 'Kandidat' : 'Företag'}
                     </span>
                   </div>
