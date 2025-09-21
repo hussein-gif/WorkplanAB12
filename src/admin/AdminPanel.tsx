@@ -16,7 +16,7 @@ import { Briefcase, MessageSquare, Users, LogOut, Home, FileText } from 'lucide-
 type Tab = 'dashboard' | 'applications' | 'messages' | 'requests' | 'jobs';
 
 export default function AdminPanel() {
-  const [tab, setTab] = useState<Tab>('dashboard'); // startflik
+  const [tab, setTab] = useState<Tab>('dashboard'); // ⬅️ ÄNDRAT: startflik är nu "dashboard"
   const navigate = useNavigate();
   const location = useLocation(); // ⬅️ NYTT
 
