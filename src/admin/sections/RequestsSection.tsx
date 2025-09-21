@@ -7,13 +7,14 @@ import {
   EmptyState as Empty,
   formatDate,
   badgeClass,
-  REQ_STATUSES,
+  // REQ_STATUSES,  // ⬅️ inte använd längre (status sitter på contact_messages)
+  MSG_STATUSES,      // ⬅️ använd samma enum som för meddelanden
 } from '../shared';
 
 export default function RequestsSection() {
   const [items, setItems] = useState<StaffingRequest[]>([]);
   const [q, setQ] = useState('');
-  const [status, setStatus] = useState<'all' | StaffingRequest['status']>('all');
+  const [status, setStatus] = useState<'all' | any>('all');
   const [location, setLocation] = useState<'all' | string>('all');
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +37,6 @@ export default function RequestsSection() {
   const filtered = useMemo(() => {
     const ql = q.toLowerCase();
     return items.filter(r => {
-      // contact_messages-fält: company_name, full_name, subject (roll), message (detaljer), ev. location
       const blob = [
         (r as any).company_name,
         (r as any).full_name,
@@ -51,30 +51,29 @@ export default function RequestsSection() {
     });
   }, [items, q, status, location]);
 
-  async function updateStatus(id: string, s: StaffingRequest['status']) {
+  async function updateStatus(id: string, s: any) {
     const { error } = await supabase.from('contact_messages').update({ status: s }).eq('id', id);
-    if (!error) {
-      setItems(prev =>
-        prev.map(r => ((r as any).id === id ? ({ ...(r as any), status: s } as any) : r))
-      );
-      setSelected(prev => (prev && prev.id === id ? { ...prev, status: s } : prev));
+    if (error) {
+      alert('Kunde inte uppdatera status: ' + error.message);
+      return;
     }
+    setItems(prev =>
+      prev.map(r => ((r as any).id === id ? ({ ...(r as any), status: s } as any) : r))
+    );
+    setSelected(prev => (prev && prev.id === id ? { ...prev, status: s } : prev));
   }
 
-  // NYTT: dynamiska värden för "Ny" och "Granskad/Pågående"
+  // Använd samma statusvärden som contact_messages (MSG_STATUSES)
   const NEW_VALUE = useMemo(() => {
-    return (REQ_STATUSES.find(s => /ny/i.test(s.label))?.value ??
-      ('new' as StaffingRequest['status']));
+    return (MSG_STATUSES.find(s => /ny/i.test(s.label))?.value ?? 'new');
   }, []);
   const REVIEWED_VALUE = useMemo(() => {
-    // plocka något som motsvarar granskad/pågående/behandlas/reviewed
-    const found = REQ_STATUSES.find(s =>
-      /(gransk|pågå|behand|review)/i.test(s.label)
-    )?.value;
-    return (found ?? ('reviewed' as StaffingRequest['status']));
+    // motsvarighet till granskad/pågående/behandlas/read/reviewed
+    const found = MSG_STATUSES.find(s => /(läst|last|read|review)/i.test(s.label))?.value;
+    return found ?? 'read';
   }, []);
 
-  // NYTT: auto-markera efter 1.5s när modalen öppnas
+  // Auto-markera efter 1.5s när modalen öppnas
   useEffect(() => {
     if (!selected) return;
     if (selected.status !== NEW_VALUE) return;
@@ -84,7 +83,7 @@ export default function RequestsSection() {
     return () => clearTimeout(t);
   }, [selected, NEW_VALUE, REVIEWED_VALUE]);
 
-  // NYTT: lås body-scroll när modal är öppen
+  // lås body-scroll när modal är öppen
   const originalOverflow = useRef<string>('');
   useEffect(() => {
     const hasModal = !!selected;
@@ -116,7 +115,7 @@ export default function RequestsSection() {
               onChange={e => setStatus(e.target.value as any)}
             >
               <option value="all">Alla statusar</option>
-              {REQ_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+              {MSG_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
             </select>
             <select
               className="border rounded-lg px-3 py-2"
@@ -171,10 +170,10 @@ export default function RequestsSection() {
                     <select
                       className={`border rounded-lg px-2 py-1 ${badgeClass((r as any).status)}`}
                       value={(r as any).status}
-                      onClick={e => e.stopPropagation()} // gör select klickbar även när raden är klickbar
-                      onChange={e => updateStatus((r as any).id, e.target.value as StaffingRequest['status'])}
+                      onClick={e => e.stopPropagation()}
+                      onChange={e => updateStatus((r as any).id, e.target.value)}
                     >
-                      {REQ_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                      {MSG_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                     </select>
                   </td>
                 </tr>
@@ -184,7 +183,7 @@ export default function RequestsSection() {
         </div>
       )}
 
-      {/* NYTT: detaljmodal */}
+      {/* Detaljmodal */}
       {selected && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
           <div className="w-[min(95vw,900px)] bg-white border rounded-2xl shadow-xl">
@@ -208,9 +207,9 @@ export default function RequestsSection() {
                   <select
                     className={`border rounded-lg px-2 py-1 ${badgeClass(selected.status)}`}
                     value={selected.status}
-                    onChange={e => updateStatus(selected.id, e.target.value as StaffingRequest['status'])}
+                    onChange={e => updateStatus(selected.id, e.target.value)}
                   >
-                    {REQ_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                    {MSG_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
                   </select>
                 </div>
 
