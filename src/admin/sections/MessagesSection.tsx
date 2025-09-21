@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom'; // ⬅️ NYTT
 import { adminSupabase as supabase } from '../../supabaseClient';
 
 import {
@@ -19,16 +20,21 @@ export default function MessagesSection() {
 
   const [selected, setSelected] = useState<ContactMessage | null>(null);
 
+  const location = useLocation();   // ⬅️ NYTT
+  const navigate = useNavigate();   // ⬅️ NYTT
+
   const NEW_VALUE = useMemo(() => {
-    return (MSG_STATUSES.find(s => s.label.toLowerCase().includes('ny'))?.value ??
-      ('new' as ContactMessage['status']));
+    return (
+      MSG_STATUSES.find((s) => s.label.toLowerCase().includes('ny'))?.value ??
+      ('new' as ContactMessage['status'])
+    );
   }, []);
   const READ_VALUE = useMemo(() => {
-    const found =
-      MSG_STATUSES.find(s => /läst|last|read/i.test(s.label))?.value;
-    return (found ?? ('read' as ContactMessage['status']));
+    const found = MSG_STATUSES.find((s) => /läst|last|read/i.test(s.label))?.value;
+    return found ?? ('read' as ContactMessage['status']);
   }, []);
 
+  // Markera "ny" → "läst" automatiskt en liten stund efter öppning
   useEffect(() => {
     if (!selected) return;
     if (selected.status !== NEW_VALUE) return;
@@ -38,6 +44,7 @@ export default function MessagesSection() {
     return () => clearTimeout(t);
   }, [selected, NEW_VALUE, READ_VALUE]);
 
+  // Lås body-scroll när modal är öppen
   const originalOverflow = useRef<string>('');
   useEffect(() => {
     const hasModal = !!selected;
@@ -64,11 +71,34 @@ export default function MessagesSection() {
     if (!error) setItems((data ?? []) as ContactMessage[]);
     setLoading(false);
   }
-  useEffect(() => { fetchMessages(); }, []);
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
+  // ⬅️ NYTT: Öppna modal om URL innehåller ?open=message:<id> (eller sessionStorage fallback)
+  useEffect(() => {
+    if (!items || items.length === 0) return;
+    const sp = new URLSearchParams(location.search);
+    let open = sp.get('open');
+    if (!open) {
+      open = sessionStorage.getItem('admin_next_open') || '';
+      sessionStorage.removeItem('admin_next_open');
+    }
+    if (!open?.startsWith('message:')) return;
+
+    const id = open.split(':')[1];
+    const found = items.find((m: any) => String(m.id) === String(id));
+    if (found) {
+      setSelected(found);
+      // Rensa "open" ur URL för att undvika åter-öppning vid refresh
+      sp.delete('open');
+      navigate({ search: sp.toString() }, { replace: true });
+    }
+  }, [items, location.search, navigate]);
 
   const filtered = useMemo(() => {
     const ql = q.toLowerCase();
-    return items.filter(m => {
+    return items.filter((m) => {
       const blob = [
         m.full_name,
         m.email,
@@ -86,16 +116,17 @@ export default function MessagesSection() {
     });
   }, [items, q, type, status]);
 
-  // ⬇️ ÄNDRAD: badge går ner OCH upp
+  // Badge-uppdatering (går både ner och upp)
   async function updateStatus(id: string, s: ContactMessage['status']) {
-    const prevRow = items.find(m => m.id === id) || (selected?.id === id ? selected : undefined);
+    const prevRow =
+      items.find((m) => m.id === id) || (selected?.id === id ? selected : undefined);
     const wasNew = prevRow?.status === NEW_VALUE;
     const becomesNew = s === NEW_VALUE;
 
     const { error } = await supabase.from('contact_messages').update({ status: s }).eq('id', id);
     if (!error) {
-      setItems(prev => prev.map(m => (m.id === id ? { ...m, status: s } : m)));
-      setSelected(prev => (prev && prev.id === id ? { ...prev, status: s } : prev));
+      setItems((prev) => prev.map((m) => (m.id === id ? { ...m, status: s } : m)));
+      setSelected((prev) => (prev && prev.id === id ? { ...prev, status: s } : prev));
 
       if (wasNew && !becomesNew) {
         window.dispatchEvent(new CustomEvent('msg:read', { detail: { wasNew: true } })); // −1
@@ -105,6 +136,7 @@ export default function MessagesSection() {
     }
   }
 
+  // Färg på typ-badge: company = lila, candidate = blå (som tidigare)
   const typeBadgeClass = (from_type: 'candidate' | 'company') =>
     from_type === 'company'
       ? 'bg-purple-100 text-purple-800 border border-purple-200'
@@ -121,7 +153,7 @@ export default function MessagesSection() {
             <select
               className="border rounded-lg px-3 py-2"
               value={type}
-              onChange={e => setType(e.target.value as any)}
+              onChange={(e) => setType(e.target.value as any)}
             >
               <option value="all">Alla typer</option>
               <option value="candidate">Kandidat</option>
@@ -130,12 +162,18 @@ export default function MessagesSection() {
             <select
               className="border rounded-lg px-3 py-2"
               value={status}
-              onChange={e => setStatus(e.target.value as any)}
+              onChange={(e) => setStatus(e.target.value as any)}
             >
               <option value="all">Alla statusar</option>
-              {MSG_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+              {MSG_STATUSES.map((s) => (
+                <option key={s.value} value={s.value}>
+                  {s.label}
+                </option>
+              ))}
             </select>
-            <button onClick={fetchMessages} className="border rounded-lg px-3 py-2">Uppdatera</button>
+            <button onClick={fetchMessages} className="border rounded-lg px-3 py-2">
+              Uppdatera
+            </button>
           </>
         }
       />
@@ -158,7 +196,7 @@ export default function MessagesSection() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map(m => (
+              {filtered.map((m) => (
                 <tr
                   key={m.id}
                   className="border-t hover:bg-gray-50 cursor-pointer align-top"
@@ -171,19 +209,29 @@ export default function MessagesSection() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="font-medium">{m.full_name}</div>
-                    {(m as any).company_name && <div className="text-gray-500">{(m as any).company_name}</div>}
+                    {(m as any).company_name && (
+                      <div className="text-gray-500">{(m as any).company_name}</div>
+                    )}
                   </td>
                   <td className="px-4 py-3">{m.email}</td>
-                  <td className="px-4 py-3 max-w-[28ch] truncate" title={m.subject}>{m.subject}</td>
+                  <td className="px-4 py-3 max-w-[28ch] truncate" title={m.subject}>
+                    {m.subject}
+                  </td>
                   <td className="px-4 py-3">{formatDate(m.created_at)}</td>
                   <td className="px-4 py-3">
                     <select
                       className={`border rounded-lg px-2 py-1 ${badgeClass(m.status)}`}
                       value={m.status}
-                      onClick={e => e.stopPropagation()}
-                      onChange={e => updateStatus(m.id, e.target.value as ContactMessage['status'])}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={(e) =>
+                        updateStatus(m.id, e.target.value as ContactMessage['status'])
+                      }
                     >
-                      {MSG_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                      {MSG_STATUSES.map((s) => (
+                        <option key={s.value} value={s.value}>
+                          {s.label}
+                        </option>
+                      ))}
                     </select>
                   </td>
                 </tr>
@@ -198,7 +246,9 @@ export default function MessagesSection() {
           <div className="w-[min(95vw,800px)] bg-white border rounded-2xl shadow-xl">
             <div className="px-5 py-4 border-b flex items-center justify-between">
               <div className="text-lg font-semibold">Meddelande</div>
-              <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-gray-700">Stäng</button>
+              <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-gray-700">
+                Stäng
+              </button>
             </div>
 
             <div className="p-5 space-y-5">
@@ -206,7 +256,11 @@ export default function MessagesSection() {
                 <div>
                   <div className="text-xs text-gray-500">Typ</div>
                   <div>
-                    <span className={`mt-1 inline-block px-2 py-1 rounded-md ${typeBadgeClass(selected.from_type)}`}>
+                    <span
+                      className={`mt-1 inline-block px-2 py-1 rounded-md ${typeBadgeClass(
+                        selected.from_type
+                      )}`}
+                    >
                       {selected.from_type === 'candidate' ? 'Kandidat' : 'Företag'}
                     </span>
                   </div>
@@ -233,9 +287,15 @@ export default function MessagesSection() {
                   <select
                     className={`border rounded-lg px-2 py-1 ${badgeClass(selected.status)}`}
                     value={selected.status}
-                    onChange={e => updateStatus(selected.id, e.target.value as ContactMessage['status'])}
+                    onChange={(e) =>
+                      updateStatus(selected.id, e.target.value as ContactMessage['status'])
+                    }
                   >
-                    {MSG_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                    {MSG_STATUSES.map((s) => (
+                      <option key={s.value} value={s.value}>
+                        {s.label}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
