@@ -56,7 +56,7 @@ const Hero: React.FC = () => {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'video';
-      link.href = 'https://res.cloudinary.com/dsm0pbs0s/video/upload/v1758488517/hero-1080p_gzycpu.mp4';
+      link.href = 'https://res.cloudinary.com/dsm0pbs0s/video/upload/q_auto,f_auto/hero-1080p_gzycpu.mp4';
       link.type = 'video/mp4';
       document.head.appendChild(link);
     }
@@ -156,7 +156,7 @@ const Hero: React.FC = () => {
                 playsInline
                 preload="auto"
               >
-                <source src="https://res.cloudinary.com/dsm0pbs0s/video/upload/v1758488517/hero-1080p_gzycpu.mp4" type="video/mp4" />
+                <source src="https://res.cloudinary.com/dsm0pbs0s/video/upload/q_auto,f_auto/hero-1080p_gzycpu.mp4" type="video/mp4" />
               </video>
             </div>
           )}
