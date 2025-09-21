@@ -1,5 +1,5 @@
 // src/admin/AdminPanel.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // ✅ Direktimportera alla sektioner från rätt sökväg (små bokstäver)
 import DashboardSection from './sections/DashboardSection';
@@ -18,6 +18,42 @@ type Tab = 'dashboard' | 'applications' | 'messages' | 'requests' | 'jobs';
 export default function AdminPanel() {
   const [tab, setTab] = useState<Tab>('applications'); // startflik
   const navigate = useNavigate();
+
+  // ⬇️ NYTT: räknare för "Ny"-meddelanden
+  const [newMsgCount, setNewMsgCount] = useState<number>(0);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchNewMsgCount() {
+      const { count, error } = await supabase
+        .from('messages')
+        .select('id', { count: 'exact', head: true })
+        .eq('status', 'Ny');
+
+      if (!error && typeof count === 'number' && isMounted) {
+        setNewMsgCount(count);
+      }
+    }
+
+    // initial hämtning
+    fetchNewMsgCount();
+
+    // realtime-uppdatering (valfritt men lätt)
+    const channel = supabase
+      .channel('messages-status-ny')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'messages' },
+        () => fetchNewMsgCount()
+      )
+      .subscribe();
+
+    return () => {
+      isMounted = false;
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   async function signOut() {
     await supabase.auth.signOut();
@@ -59,6 +95,12 @@ export default function AdminPanel() {
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'messages' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
               <MessageSquare className="w-4 h-4" /> Meddelanden
+              {/* ⬇️ ENDA SYNLIGA ÄNDRINGEN I UI: badge med antal "Ny" */}
+              {newMsgCount > 0 && (
+                <span className="ml-auto inline-flex items-center justify-center rounded-full text-xs w-5 h-5 bg-red-600 text-white">
+                  {newMsgCount > 99 ? '99+' : newMsgCount}
+                </span>
+              )}
             </button>
             <button
               onClick={() => setTab('requests')}
