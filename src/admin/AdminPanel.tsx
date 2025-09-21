@@ -19,38 +19,40 @@ export default function AdminPanel() {
   const [tab, setTab] = useState<Tab>('applications'); // startflik
   const navigate = useNavigate();
 
-  // ⬇️ NYTT: räknare för "Ny"-meddelanden
+  // ⬇️ NYTT: räknare för "new" i varje relevant sektion
+  const [newAppCount, setNewAppCount] = useState<number>(0);
   const [newMsgCount, setNewMsgCount] = useState<number>(0);
+  const [newReqCount, setNewReqCount] = useState<number>(0);
 
   useEffect(() => {
-    let isMounted = true;
+    let alive = true;
 
-    async function fetchNewMsgCount() {
-      const { count, error } = await supabase
-        .from('messages')
-        .select('id', { count: 'exact', head: true })
-        .eq('status', 'Ny');
+    async function fetchCounts() {
+      const [apps, msgs, reqs] = await Promise.all([
+        supabase.from('applications').select('id', { count: 'exact', head: true }).eq('status', 'new'),
+        supabase.from('contact_messages').select('id', { count: 'exact', head: true }).eq('status', 'new'),
+        supabase.from('staffing_requests').select('id', { count: 'exact', head: true }).eq('status', 'new'),
+      ]);
 
-      if (!error && typeof count === 'number' && isMounted) {
-        setNewMsgCount(count);
-      }
+      if (!alive) return;
+      if (!apps.error && typeof apps.count === 'number') setNewAppCount(apps.count);
+      if (!msgs.error && typeof msgs.count === 'number') setNewMsgCount(msgs.count);
+      if (!reqs.error && typeof reqs.count === 'number') setNewReqCount(reqs.count);
     }
 
     // initial hämtning
-    fetchNewMsgCount();
+    fetchCounts();
 
-    // realtime-uppdatering (valfritt men lätt)
+    // realtime-uppdatering vid förändringar i tabellerna
     const channel = supabase
-      .channel('messages-status-ny')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'messages' },
-        () => fetchNewMsgCount()
-      )
+      .channel('admin-leftpanel-counts')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'applications' }, fetchCounts)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'contact_messages' }, fetchCounts)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'staffing_requests' }, fetchCounts)
       .subscribe();
 
     return () => {
-      isMounted = false;
+      alive = false;
       supabase.removeChannel(channel);
     };
   }, []);
@@ -84,30 +86,43 @@ export default function AdminPanel() {
             >
               <Home className="w-4 h-4" /> Översikt
             </button>
+
             <button
               onClick={() => setTab('applications')}
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'applications' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
               <Users className="w-4 h-4" /> Ansökningar
+              {newAppCount > 0 && (
+                <span className="ml-auto inline-flex items-center justify-center rounded-full text-xs w-5 h-5 bg-red-600 text-white">
+                  {newAppCount > 99 ? '99+' : newAppCount}
+                </span>
+              )}
             </button>
+
             <button
               onClick={() => setTab('messages')}
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'messages' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
               <MessageSquare className="w-4 h-4" /> Meddelanden
-              {/* ⬇️ ENDA SYNLIGA ÄNDRINGEN I UI: badge med antal "Ny" */}
               {newMsgCount > 0 && (
                 <span className="ml-auto inline-flex items-center justify-center rounded-full text-xs w-5 h-5 bg-red-600 text-white">
                   {newMsgCount > 99 ? '99+' : newMsgCount}
                 </span>
               )}
             </button>
+
             <button
               onClick={() => setTab('requests')}
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'requests' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
             >
               <Briefcase className="w-4 h-4" /> Förfrågningar
+              {newReqCount > 0 && (
+                <span className="ml-auto inline-flex items-center justify-center rounded-full text-xs w-5 h-5 bg-red-600 text-white">
+                  {newReqCount > 99 ? '99+' : newReqCount}
+                </span>
+              )}
             </button>
+
             <button
               onClick={() => setTab('jobs')}
               className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'jobs' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
