@@ -155,7 +155,6 @@ const Hero: React.FC = () => {
                 loop
                 playsInline
                 preload="auto"
-                poster="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg"
               >
                 <source src="https://res.cloudinary.com/dsm0pbs0s/video/upload/v1758488517/hero-1080p_gzycpu.mp4" type="video/mp4" />
               </video>
