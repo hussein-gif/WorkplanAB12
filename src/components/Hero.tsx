@@ -56,7 +56,7 @@ const Hero: React.FC = () => {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'video';
-      link.href = '/videos/IMG_0764.mp4';
+      link.href = '/videos/hero-1080p.mp4';
       link.type = 'video/mp4';
       document.head.appendChild(link);
     }
@@ -156,7 +156,7 @@ const Hero: React.FC = () => {
                 playsInline
                 poster="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg"
               >
-                <source src="/videos/IMG_0764.mp4" type="video/mp4" />
+                <source src="/videos/hero-1080p.mp4" type="video/mp4" />
               </video>
             </div>
           )}
@@ -343,14 +343,6 @@ const Hero: React.FC = () => {
                 <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 sm:duration-300" />
               </button>
             </div>
-
-            {/* Mobil info-rad under knappar – **BORTTAGEN** */}
-            {/* <div className="mt-1 text-xs text-white/70 sm:hidden">
-              Svar inom 24h • +240 tillsättningar i år
-            </div> */}
-
-            {/* Sekundär länk – **BORTTAGEN PÅ DESKTOP** */}
-            {/* <div className="hidden md:block mt-3"> ... </div> */}
           </div>
         </div>
       </div>
