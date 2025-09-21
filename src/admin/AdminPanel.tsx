@@ -19,47 +19,31 @@ export default function AdminPanel() {
   const [tab, setTab] = useState<Tab>('applications'); // startflik
   const navigate = useNavigate();
 
-  // 🔢 Räknare
+  // 🔢 Räknare för "new" i varje relevant sektion
   const [newAppCount, setNewAppCount] = useState<number>(0);
   const [newMsgCount, setNewMsgCount] = useState<number>(0);
-  const [newReqCount, setNewReqCount] = useState<number>(0); // staffing requests (från contact_messages)
+  const [newReqCount, setNewReqCount] = useState<number>(0);
 
   useEffect(() => {
     let alive = true;
 
     async function fetchCounts() {
-      const [apps, msgsNonReq, msgsReq] = await Promise.all([
-        // Ansökningar
-        supabase.from('applications')
-          .select('id', { count: 'exact', head: true })
-          .eq('status', 'new'),
-
-        // Meddelanden = contact_messages där from_type IN ('candidate','company')
-        supabase.from('contact_messages')
-          .select('id', { count: 'exact', head: true })
-          .eq('status', 'new')
-          .in('from_type', ['candidate', 'company']),
-
-        // Förfrågningar = contact_messages där from_type = 'staffing_request'
-        supabase.from('contact_messages')
-          .select('id', { count: 'exact', head: true })
-          .eq('status', 'new')
-          .eq('from_type', 'staffing_request'),
+      const [apps, msgs, reqs] = await Promise.all([
+        supabase.from('applications').select('id', { count: 'exact', head: true }).eq('status', 'new'),
+        supabase.from('contact_messages').select('id', { count: 'exact', head: true }).eq('status', 'new').in('from_type', ['candidate', 'company']),
+        supabase.from('contact_messages').select('id', { count: 'exact', head: true }).eq('status', 'new').eq('from_type', 'staffing_request'),
       ]);
 
       if (!alive) return;
       if (!apps.error && typeof apps.count === 'number') setNewAppCount(apps.count);
-      if (!msgsNonReq.error && typeof msgsNonReq.count === 'number') setNewMsgCount(msgsNonReq.count);
-      if (!msgsReq.error && typeof msgsReq.count === 'number') setNewReqCount(msgsReq.count);
+      if (!msgs.error && typeof msgs.count === 'number') setNewMsgCount(msgs.count);
+      if (!reqs.error && typeof reqs.count === 'number') setNewReqCount(reqs.count);
     }
 
-    // 1) Hämta initialt
+    // initial hämtning
     fetchCounts();
 
-    // 1b) Fallback: tyst uppdatering var 30s om något event missas
-    const fallback = setInterval(fetchCounts, 30_000);
-
-    // Hjälpare
+    // Hjälpfunktioner för inkrementell uppdatering
     const dec = (setter: React.Dispatch<React.SetStateAction<number>>) =>
       setter((c) => (c > 0 ? c - 1 : 0));
     const inc = (setter: React.Dispatch<React.SetStateAction<number>>) =>
@@ -68,76 +52,51 @@ export default function AdminPanel() {
     const isReq = (row: any) => row?.from_type === 'staffing_request';
     const isNew = (row: any) => row?.status === 'new';
 
-    // 2) Realtime-lyssnare
+    // Realtime-lyssnare (behåll som tidigare)
     const ch = supabase
       .channel('admin-leftpanel-counts')
-
-      // ---- applications ----
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'applications' }, (p: any) => {
-        console.log('[RT] applications INSERT', p);
-        if (isNew(p.new)) inc(setNewAppCount);
-      })
+      // applications
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'applications' }, (p: any) => { if (isNew(p.new)) inc(setNewAppCount); })
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'applications' }, (p: any) => {
-        console.log('[RT] applications UPDATE', p);
         if (isNew(p.old) && !isNew(p.new)) dec(setNewAppCount);
         else if (!isNew(p.old) && isNew(p.new)) inc(setNewAppCount);
       })
-      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'applications' }, (p: any) => {
-        console.log('[RT] applications DELETE', p);
-        if (isNew(p.old)) dec(setNewAppCount);
-      })
-
-      // ---- contact_messages ----
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'applications' }, (p: any) => { if (isNew(p.old)) dec(setNewAppCount); })
+      // contact_messages
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'contact_messages' }, (p: any) => {
-        console.log('[RT] contact_messages INSERT', p);
-        if (isNew(p.new)) {
-          if (isReq(p.new)) inc(setNewReqCount);
-          else inc(setNewMsgCount);
-        }
+        if (isNew(p.new)) { if (isReq(p.new)) inc(setNewReqCount); else inc(setNewMsgCount); }
       })
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'contact_messages' }, (p: any) => {
-        console.log('[RT] contact_messages UPDATE', p);
-        const oldWasNew = isNew(p.old);
-        const newIsNew = isNew(p.new);
-        const oldWasReq = isReq(p.old);
-        const newIsReq = isReq(p.new);
-
-        if (oldWasNew && !newIsNew) {
-          // new -> ej-new
-          if (oldWasReq) dec(setNewReqCount);
-          else dec(setNewMsgCount);
-        } else if (!oldWasNew && newIsNew) {
-          // ej-new -> new
-          if (newIsReq) inc(setNewReqCount);
-          else inc(setNewMsgCount);
-        } else if (oldWasNew && newIsNew && oldWasReq !== newIsReq) {
-          // fortfarande 'new' men bytt kategori
-          if (oldWasReq) { dec(setNewReqCount); inc(setNewMsgCount); }
-          else { dec(setNewMsgCount); inc(setNewReqCount); }
+        const oldWasNew = isNew(p.old), newIsNew = isNew(p.new);
+        const oldWasReq = isReq(p.old), newIsReq = isReq(p.new);
+        if (oldWasNew && !newIsNew) { if (oldWasReq) dec(setNewReqCount); else dec(setNewMsgCount); }
+        else if (!oldWasNew && newIsNew) { if (newIsReq) inc(setNewReqCount); else inc(setNewMsgCount); }
+        else if (oldWasNew && newIsNew && oldWasReq !== newIsReq) {
+          if (oldWasReq) { dec(setNewReqCount); inc(setNewMsgCount); } else { dec(setNewMsgCount); inc(setNewReqCount); }
         }
       })
       .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'contact_messages' }, (p: any) => {
-        console.log('[RT] contact_messages DELETE', p);
-        if (isNew(p.old)) {
-          if (isReq(p.old)) dec(setNewReqCount);
-          else dec(setNewMsgCount);
-        }
+        if (isNew(p.old)) { if (isReq(p.old)) dec(setNewReqCount); else dec(setNewMsgCount); }
       })
-      .subscribe((status) => {
-        console.log('[RT] channel status:', status);
-      });
+      .subscribe();
 
-    // (Valfritt) Optimistiska events från sektionerna
+    // 🔔 Optimistiska UI-events (NYTT: lägg till +lyssnare)
     const msgReadHandler = (e: any) => { if (e.detail?.wasNew) dec(setNewMsgCount); };
     const reqHandledHandler = (e: any) => { if (e.detail?.wasNew) dec(setNewReqCount); };
+    const msgNewHandler = () => inc(setNewMsgCount);      // ⬅️ NYTT: öka när något sätts till 'new'
+    const reqNewHandler = () => inc(setNewReqCount);      // ⬅️ NYTT: öka när något sätts till 'new'
+
     window.addEventListener('msg:read', msgReadHandler);
     window.addEventListener('req:handled', reqHandledHandler);
+    window.addEventListener('msg:new', msgNewHandler);     // ⬅️
+    window.addEventListener('req:new', reqNewHandler);     // ⬅️
 
     return () => {
       alive = false;
-      clearInterval(fallback);
       window.removeEventListener('msg:read', msgReadHandler);
       window.removeEventListener('req:handled', reqHandledHandler);
+      window.removeEventListener('msg:new', msgNewHandler);  // ⬅️
+      window.removeEventListener('req:new', reqNewHandler);  // ⬅️
       supabase.removeChannel(ch);
     };
   }, []);
@@ -147,7 +106,7 @@ export default function AdminPanel() {
     navigate('/admin/login', { replace: true });
   }
 
-  // 🔹 Mild badge (blå)
+  // 🔹 Mild badge-komponent (blå)
   const Badge = ({ count }: { count: number }) =>
     count > 0 ? (
       <span className="ml-auto inline-flex items-center justify-center rounded-full text-xs w-5 h-5 bg-blue-100 text-blue-800 ring-1 ring-blue-200">
