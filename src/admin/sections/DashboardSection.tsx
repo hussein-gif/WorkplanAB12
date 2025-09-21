@@ -11,14 +11,10 @@ import {
   badgeClass,
   statusLabel,
 } from '../shared';
-import { Users, MessageSquare, Briefcase, Check } from 'lucide-react';
+import { Users, MessageSquare, Briefcase } from 'lucide-react';
 
 export default function DashboardSection() {
-  // Sökfältet tas bort – behåll state lokalt ifall TopBar kräver det i andra views
-  const [q, setQ] = useState('');
-
   const [appsTotal, setAppsTotal] = useState<number | null>(null);   // visar nu "Nya ansökningar"
-  const [appsHired, setAppsHired] = useState<number | null>(null);
   const [msgsNew, setMsgsNew] = useState<number | null>(null);
   const [reqsActive, setReqsActive] = useState<number | null>(null);
   const [recentApps, setRecentApps] = useState<
@@ -35,16 +31,11 @@ export default function DashboardSection() {
     async function load() {
       setLoading(true);
 
-      // ❗ NYTT: "Nya ansökningar" = status 'new'
+      // ❗ "Nya ansökningar" = status 'new'
       const appsCountNew = supabase
         .from('applications')
         .select('*', { count: 'exact', head: true })
         .eq('status', 'new');
-
-      const hiredCount = supabase
-        .from('applications')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'hired');
 
       // Nya meddelanden: ENBART candidate/company
       const newMsgsCount = supabase
@@ -76,14 +67,12 @@ export default function DashboardSection() {
 
       const [
         appsCountRes,
-        hiredCountRes,
         newMsgsCountRes,
         activeReqsCountRes,
         lastAppsRes,
         lastMsgsRes,
       ] = await Promise.allSettled([
         appsCountNew,
-        hiredCount,
         newMsgsCount,
         activeReqsCount,
         lastApps,
@@ -93,8 +82,7 @@ export default function DashboardSection() {
       const getCount = (r: PromiseSettledResult<any>) =>
         r.status === 'fulfilled' && r.value && typeof r.value.count === 'number' ? r.value.count : 0;
 
-      setAppsTotal(getCount(appsCountRes));      // ← visar "Nya ansökningar"
-      setAppsHired(getCount(hiredCountRes));
+      setAppsTotal(getCount(appsCountRes));      // ← "Nya ansökningar"
       setMsgsNew(getCount(newMsgsCountRes));
       setReqsActive(getCount(activeReqsCountRes));
 
@@ -111,21 +99,29 @@ export default function DashboardSection() {
     load();
   }, []);
 
-  // Klick-handlers för att hoppa till rätt flik + öppna modal via query-param
+  // Hjälpare: signalera vilken flik & objekt som ska öppnas efter navigation
+  const goWithOpen = (tab: 'applications' | 'messages', open: string) => {
+    try {
+      sessionStorage.setItem('admin_next_tab', tab);
+      sessionStorage.setItem('admin_next_open', open); // t.ex. "application:<id>" eller "message:<id>"
+    } catch {}
+    navigate(`/admin?tab=${tab}&open=${encodeURIComponent(open)}`);
+  };
+
   const openApplicationFromDashboard = (id: string) => {
-    navigate(`/admin?tab=applications&open=application:${id}`);
+    goWithOpen('applications', `application:${id}`);
   };
   const openMessageFromDashboard = (id: string) => {
-    navigate(`/admin?tab=messages&open=message:${id}`);
+    goWithOpen('messages', `message:${id}`);
   };
 
   return (
     <div>
-      {/* Sökfält borttaget – skicka bara title */}
-      <TopBar title="Översikt" />
+      {/* Sökfält borttaget */}
+      <TopBar title="Översikt" showSearch={false} />
 
       {/* KPI-kort */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
         <div className="bg-white border rounded-xl p-5">
           <div className="flex items-center justify-between">
             <div>
@@ -159,18 +155,6 @@ export default function DashboardSection() {
             </div>
             <div className="w-10 h-10 rounded-lg bg-gray-900 text-white grid place-items-center">
               <Briefcase className="w-5 h-5" />
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-white border rounded-xl p-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-sm text-gray-500">Placeringar (anställda)</div>
-              <div className="text-2xl font-semibold">{appsHired ?? (loading ? '…' : 0)}</div>
-            </div>
-            <div className="w-10 h-10 rounded-lg bg-gray-900 text-white grid place-items-center">
-              <Check className="w-5 h-5" />
             </div>
           </div>
         </div>
