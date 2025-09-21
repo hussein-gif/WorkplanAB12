@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { adminSupabase as supabase } from '../../supabaseClient';
 
 import {
@@ -16,6 +16,48 @@ export default function MessagesSection() {
   const [type, setType] = useState<'all' | 'candidate' | 'company'>('all');
   const [status, setStatus] = useState<'all' | ContactMessage['status']>('all');
   const [loading, setLoading] = useState(true);
+
+  // NYTT: detaljmodal
+  const [selected, setSelected] = useState<ContactMessage | null>(null);
+
+  // NYTT: mappa värden för “Ny” och “Läst” från MSG_STATUSES (fallback om labels skiljer sig)
+  const NEW_VALUE = useMemo(() => {
+    return (MSG_STATUSES.find(s => s.label.toLowerCase().includes('ny'))?.value ??
+      ('new' as ContactMessage['status']));
+  }, []);
+  const READ_VALUE = useMemo(() => {
+    // fångar “läst” (sv), “last” (om prickar saknas) eller engelska “read”
+    const found =
+      MSG_STATUSES.find(s => /läst|last|read/i.test(s.label))?.value;
+    return (found ?? ('read' as ContactMessage['status']));
+  }, []);
+
+  // NYTT: auto-markera som Läst efter 1.5s när detaljmodalen öppnas
+  useEffect(() => {
+    if (!selected) return;
+    if (selected.status !== NEW_VALUE) return;
+    const t = setTimeout(() => {
+      updateStatus(selected.id, READ_VALUE);
+    }, 1500);
+    return () => clearTimeout(t);
+  }, [selected, NEW_VALUE, READ_VALUE]);
+
+  // NYTT: lås body-scroll när modal är öppen
+  const originalOverflow = useRef<string>('');
+  useEffect(() => {
+    const hasModal = !!selected;
+    if (typeof document !== 'undefined') {
+      if (!originalOverflow.current) {
+        originalOverflow.current = document.body.style.overflow || '';
+      }
+      document.body.style.overflow = hasModal ? 'hidden' : originalOverflow.current;
+    }
+    return () => {
+      if (typeof document !== 'undefined') {
+        document.body.style.overflow = originalOverflow.current;
+      }
+    };
+  }, [selected]);
 
   async function fetchMessages() {
     setLoading(true);
@@ -52,8 +94,17 @@ export default function MessagesSection() {
 
   async function updateStatus(id: string, s: ContactMessage['status']) {
     const { error } = await supabase.from('contact_messages').update({ status: s }).eq('id', id);
-    if (!error) setItems(prev => prev.map(m => (m.id === id ? { ...m, status: s } : m)));
+    if (!error) {
+      setItems(prev => prev.map(m => (m.id === id ? { ...m, status: s } : m)));
+      setSelected(prev => (prev && prev.id === id ? { ...prev, status: s } : prev));
+    }
   }
+
+  // Särskild badge-stil för företag (lila), kandidat kan fortsätta via badgeClass
+  const typeBadgeClass = (from_type: 'candidate' | 'company') =>
+    from_type === 'company'
+      ? 'bg-purple-100 text-purple-800 border border-purple-200'
+      : 'bg-blue-100 text-blue-800 border border-blue-200';
 
   return (
     <div>
@@ -104,9 +155,13 @@ export default function MessagesSection() {
             </thead>
             <tbody>
               {filtered.map(m => (
-                <tr key={m.id} className="border-t align-top">
+                <tr
+                  key={m.id}
+                  className="border-t hover:bg-gray-50 cursor-pointer align-top"
+                  onClick={() => setSelected(m)}
+                >
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-1 rounded-md ${badgeClass(m.from_type)}`}>
+                    <span className={`px-2 py-1 rounded-md ${typeBadgeClass(m.from_type)}`}>
                       {m.from_type === 'candidate' ? 'Kandidat' : 'Företag'}
                     </span>
                   </td>
@@ -121,6 +176,7 @@ export default function MessagesSection() {
                     <select
                       className={`border rounded-lg px-2 py-1 ${badgeClass(m.status)}`}
                       value={m.status}
+                      onClick={e => e.stopPropagation()}
                       onChange={e => updateStatus(m.id, e.target.value as ContactMessage['status'])}
                     >
                       {MSG_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
@@ -130,6 +186,70 @@ export default function MessagesSection() {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* NYTT: detaljmodal med hela meddelandet */}
+      {selected && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
+          <div className="w-[min(95vw,800px)] bg-white border rounded-2xl shadow-xl">
+            <div className="px-5 py-4 border-b flex items-center justify-between">
+              <div className="text-lg font-semibold">Meddelande</div>
+              <button onClick={() => setSelected(null)} className="text-gray-500 hover:text-gray-700">Stäng</button>
+            </div>
+
+            <div className="p-5 space-y-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <div className="text-xs text-gray-500">Typ</div>
+                  <div>
+                    <span className={`px-2 py-1 rounded-md ${typeBadgeClass(selected.from_type)}`}>
+                      {selected.from_type === 'candidate' ? 'Kandidat' : 'Företag'}
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">Mottaget</div>
+                  <div>{formatDate(selected.created_at)}</div>
+                </div>
+
+                <div>
+                  <div className="text-xs text-gray-500">Avsändare</div>
+                  <div className="font-medium">{selected.full_name}</div>
+                  {(selected as any).company_name && (
+                    <div className="text-gray-500">{(selected as any).company_name}</div>
+                  )}
+                </div>
+                <div>
+                  <div className="text-xs text-gray-500">E-post</div>
+                  <div>{selected.email}</div>
+                </div>
+
+                <div className="md:col-span-2">
+                  <div className="text-xs text-gray-500 mb-1">Status</div>
+                  <select
+                    className={`border rounded-lg px-2 py-1 ${badgeClass(selected.status)}`}
+                    value={selected.status}
+                    onChange={e => updateStatus(selected.id, e.target.value as ContactMessage['status'])}
+                  >
+                    {MSG_STATUSES.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <div className="text-xs text-gray-500 mb-1">Ämne</div>
+                <div className="font-medium">{selected.subject}</div>
+              </div>
+
+              <div>
+                <div className="text-xs text-gray-500 mb-1">Meddelande</div>
+                <div className="whitespace-pre-wrap text-sm text-gray-800 border rounded-lg p-3 bg-gray-50">
+                  {selected.message}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
