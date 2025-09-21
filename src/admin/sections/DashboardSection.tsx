@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { adminSupabase as supabase } from '../../supabaseClient';
 
 import {
@@ -13,22 +14,37 @@ import {
 import { Users, MessageSquare, Briefcase, Check } from 'lucide-react';
 
 export default function DashboardSection() {
+  // Sökfältet tas bort – behåll state lokalt ifall TopBar kräver det i andra views
   const [q, setQ] = useState('');
-  const [appsTotal, setAppsTotal] = useState<number | null>(null);
+
+  const [appsTotal, setAppsTotal] = useState<number | null>(null);   // visar nu "Nya ansökningar"
   const [appsHired, setAppsHired] = useState<number | null>(null);
   const [msgsNew, setMsgsNew] = useState<number | null>(null);
   const [reqsActive, setReqsActive] = useState<number | null>(null);
-  const [recentApps, setRecentApps] = useState<Array<Pick<Application, 'id' | 'full_name' | 'role_applied' | 'status' | 'created_at'>>>([]);
-  const [recentMsgs, setRecentMsgs] = useState<Array<Pick<ContactMessage, 'id' | 'full_name' | 'subject' | 'status' | 'created_at'>>>([]);
+  const [recentApps, setRecentApps] = useState<
+    Array<Pick<Application, 'id' | 'full_name' | 'role_applied' | 'status' | 'created_at'>>
+  >([]);
+  const [recentMsgs, setRecentMsgs] = useState<
+    Array<Pick<ContactMessage, 'id' | 'full_name' | 'subject' | 'status' | 'created_at'>>
+  >([]);
   const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function load() {
       setLoading(true);
 
-      // Antal
-      const appsCount = supabase.from('applications').select('*', { count: 'exact', head: true });
-      const hiredCount = supabase.from('applications').select('*', { count: 'exact', head: true }).eq('status', 'hired');
+      // ❗ NYTT: "Nya ansökningar" = status 'new'
+      const appsCountNew = supabase
+        .from('applications')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'new');
+
+      const hiredCount = supabase
+        .from('applications')
+        .select('*', { count: 'exact', head: true })
+        .eq('status', 'hired');
 
       // Nya meddelanden: ENBART candidate/company
       const newMsgsCount = supabase
@@ -66,7 +82,7 @@ export default function DashboardSection() {
         lastAppsRes,
         lastMsgsRes,
       ] = await Promise.allSettled([
-        appsCount,
+        appsCountNew,
         hiredCount,
         newMsgsCount,
         activeReqsCount,
@@ -77,7 +93,7 @@ export default function DashboardSection() {
       const getCount = (r: PromiseSettledResult<any>) =>
         r.status === 'fulfilled' && r.value && typeof r.value.count === 'number' ? r.value.count : 0;
 
-      setAppsTotal(getCount(appsCountRes));
+      setAppsTotal(getCount(appsCountRes));      // ← visar "Nya ansökningar"
       setAppsHired(getCount(hiredCountRes));
       setMsgsNew(getCount(newMsgsCountRes));
       setReqsActive(getCount(activeReqsCountRes));
@@ -95,16 +111,26 @@ export default function DashboardSection() {
     load();
   }, []);
 
+  // Klick-handlers för att hoppa till rätt flik + öppna modal via query-param
+  const openApplicationFromDashboard = (id: string) => {
+    navigate(`/admin?tab=applications&open=application:${id}`);
+  };
+  const openMessageFromDashboard = (id: string) => {
+    navigate(`/admin?tab=messages&open=message:${id}`);
+  };
+
   return (
     <div>
-      <TopBar title="Översikt" q={q} setQ={setQ} />
+      {/* Sökfält borttaget – skicka bara title */}
+      <TopBar title="Översikt" />
 
       {/* KPI-kort */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white border rounded-xl p-5">
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-sm text-gray-500">Antal ansökningar</div>
+              {/* ❗ Ändrad rubrik */}
+              <div className="text-sm text-gray-500">Nya ansökningar</div>
               <div className="text-2xl font-semibold">{appsTotal ?? (loading ? '…' : 0)}</div>
             </div>
             <div className="w-10 h-10 rounded-lg bg-gray-900 text-white grid place-items-center">
@@ -161,15 +187,21 @@ export default function DashboardSection() {
           ) : (
             <div className="space-y-3">
               {recentApps.map((a) => (
-                <div key={a.id} className="flex items-center justify-between">
+                <button
+                  key={a.id}
+                  onClick={() => openApplicationFromDashboard(a.id)}
+                  className="w-full text-left flex items-center justify-between hover:bg-gray-50 rounded-lg px-3 py-2 transition"
+                >
                   <div>
                     <div className="font-medium">{a.full_name}</div>
-                    <div className="text-sm text-gray-500">{a.role_applied ?? '—'} • {formatDate(a.created_at)}</div>
+                    <div className="text-sm text-gray-500">
+                      {a.role_applied ?? '—'} • {formatDate(a.created_at)}
+                    </div>
                   </div>
                   <span className={`px-2 py-1 rounded-md text-xs ${badgeClass(a.status)}`}>
                     {statusLabel('application', a.status)}
                   </span>
-                </div>
+                </button>
               ))}
             </div>
           )}
@@ -184,7 +216,11 @@ export default function DashboardSection() {
           ) : (
             <div className="space-y-3">
               {recentMsgs.map((m) => (
-                <div key={m.id} className="flex items-center justify-between">
+                <button
+                  key={m.id}
+                  onClick={() => openMessageFromDashboard(m.id)}
+                  className="w-full text-left flex items-center justify-between hover:bg-gray-50 rounded-lg px-3 py-2 transition"
+                >
                   <div>
                     <div className="font-medium">{m.full_name}</div>
                     <div className="text-sm text-gray-500">{m.subject}</div>
@@ -192,7 +228,7 @@ export default function DashboardSection() {
                   <span className={`px-2 py-1 rounded-md text-xs ${badgeClass(m.status)}`}>
                     {statusLabel('message', m.status)}
                   </span>
-                </div>
+                </button>
               ))}
             </div>
           )}
