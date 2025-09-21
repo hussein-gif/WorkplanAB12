@@ -10,7 +10,7 @@ import JobsSection from './sections/JobsSection';
 
 // ⬇️ ÄNDRAT: använd admin-klienten i adminpanelen
 import { adminSupabase as supabase } from '../supabaseClient';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom'; // ⬅️ NYTT: useLocation
 import { Briefcase, MessageSquare, Users, LogOut, Home, FileText } from 'lucide-react';
 
 type Tab = 'dashboard' | 'applications' | 'messages' | 'requests' | 'jobs';
@@ -18,11 +18,29 @@ type Tab = 'dashboard' | 'applications' | 'messages' | 'requests' | 'jobs';
 export default function AdminPanel() {
   const [tab, setTab] = useState<Tab>('applications'); // startflik
   const navigate = useNavigate();
+  const location = useLocation(); // ⬅️ NYTT
 
   // 🔢 Räknare för "new" i varje relevant sektion
   const [newAppCount, setNewAppCount] = useState<number>(0);
   const [newMsgCount, setNewMsgCount] = useState<number>(0);
   const [newReqCount, setNewReqCount] = useState<number>(0);
+
+  // ⬅️ NYTT: Växla flik när ?tab= finns (med sessionStorage-fallback)
+  useEffect(() => {
+    const sp = new URLSearchParams(location.search);
+    const fromUrl = sp.get('tab') as Tab | null;
+    const validTabs: Tab[] = ['dashboard', 'applications', 'messages', 'requests', 'jobs'];
+
+    if (fromUrl && validTabs.includes(fromUrl)) {
+      setTab(fromUrl);
+    } else {
+      const stored = sessionStorage.getItem('admin_next_tab') as Tab | null;
+      if (stored && validTabs.includes(stored)) {
+        setTab(stored);
+        sessionStorage.removeItem('admin_next_tab');
+      }
+    }
+  }, [location.search]);
 
   useEffect(() => {
     let alive = true;
@@ -30,8 +48,16 @@ export default function AdminPanel() {
     async function fetchCounts() {
       const [apps, msgs, reqs] = await Promise.all([
         supabase.from('applications').select('id', { count: 'exact', head: true }).eq('status', 'new'),
-        supabase.from('contact_messages').select('id', { count: 'exact', head: true }).eq('status', 'new').in('from_type', ['candidate', 'company']),
-        supabase.from('contact_messages').select('id', { count: 'exact', head: true }).eq('status', 'new').eq('from_type', 'staffing_request'),
+        supabase
+          .from('contact_messages')
+          .select('id', { count: 'exact', head: true })
+          .eq('status', 'new')
+          .in('from_type', ['candidate', 'company']),
+        supabase
+          .from('contact_messages')
+          .select('id', { count: 'exact', head: true })
+          .eq('status', 'new')
+          .eq('from_type', 'staffing_request'),
       ]);
 
       if (!alive) return;
@@ -56,47 +82,73 @@ export default function AdminPanel() {
     const ch = supabase
       .channel('admin-leftpanel-counts')
       // applications
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'applications' }, (p: any) => { if (isNew(p.new)) inc(setNewAppCount); })
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'applications' }, (p: any) => {
+        if (isNew(p.new)) inc(setNewAppCount);
+      })
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'applications' }, (p: any) => {
         if (isNew(p.old) && !isNew(p.new)) dec(setNewAppCount);
         else if (!isNew(p.old) && isNew(p.new)) inc(setNewAppCount);
       })
-      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'applications' }, (p: any) => { if (isNew(p.old)) dec(setNewAppCount); })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'applications' }, (p: any) => {
+        if (isNew(p.old)) dec(setNewAppCount);
+      })
       // contact_messages
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'contact_messages' }, (p: any) => {
-        if (isNew(p.new)) { if (isReq(p.new)) inc(setNewReqCount); else inc(setNewMsgCount); }
+        if (isNew(p.new)) {
+          if (isReq(p.new)) inc(setNewReqCount);
+          else inc(setNewMsgCount);
+        }
       })
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'contact_messages' }, (p: any) => {
-        const oldWasNew = isNew(p.old), newIsNew = isNew(p.new);
-        const oldWasReq = isReq(p.old), newIsReq = isReq(p.new);
-        if (oldWasNew && !newIsNew) { if (oldWasReq) dec(setNewReqCount); else dec(setNewMsgCount); }
-        else if (!oldWasNew && newIsNew) { if (newIsReq) inc(setNewReqCount); else inc(setNewMsgCount); }
-        else if (oldWasNew && newIsNew && oldWasReq !== newIsReq) {
-          if (oldWasReq) { dec(setNewReqCount); inc(setNewMsgCount); } else { dec(setNewMsgCount); inc(setNewReqCount); }
+        const oldWasNew = isNew(p.old),
+          newIsNew = isNew(p.new);
+        const oldWasReq = isReq(p.old),
+          newIsReq = isReq(p.new);
+        if (oldWasNew && !newIsNew) {
+          if (oldWasReq) dec(setNewReqCount);
+          else dec(setNewMsgCount);
+        } else if (!oldWasNew && newIsNew) {
+          if (newIsReq) inc(setNewReqCount);
+          else inc(setNewMsgCount);
+        } else if (oldWasNew && newIsNew && oldWasReq !== newIsReq) {
+          if (oldWasReq) {
+            dec(setNewReqCount);
+            inc(setNewMsgCount);
+          } else {
+            dec(setNewMsgCount);
+            inc(setNewReqCount);
+          }
         }
       })
       .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'contact_messages' }, (p: any) => {
-        if (isNew(p.old)) { if (isReq(p.old)) dec(setNewReqCount); else dec(setNewMsgCount); }
+        if (isNew(p.old)) {
+          if (isReq(p.old)) dec(setNewReqCount);
+          else dec(setNewMsgCount);
+        }
       })
       .subscribe();
 
     // 🔔 Optimistiska UI-events (NYTT: lägg till +lyssnare)
-    const msgReadHandler = (e: any) => { if (e.detail?.wasNew) dec(setNewMsgCount); };
-    const reqHandledHandler = (e: any) => { if (e.detail?.wasNew) dec(setNewReqCount); };
-    const msgNewHandler = () => inc(setNewMsgCount);      // ⬅️ NYTT: öka när något sätts till 'new'
-    const reqNewHandler = () => inc(setNewReqCount);      // ⬅️ NYTT: öka när något sätts till 'new'
+    const msgReadHandler = (e: any) => {
+      if (e.detail?.wasNew) dec(setNewMsgCount);
+    };
+    const reqHandledHandler = (e: any) => {
+      if (e.detail?.wasNew) dec(setNewReqCount);
+    };
+    const msgNewHandler = () => inc(setNewMsgCount); // ⬅️
+    const reqNewHandler = () => inc(setNewReqCount); // ⬅️
 
     window.addEventListener('msg:read', msgReadHandler);
     window.addEventListener('req:handled', reqHandledHandler);
-    window.addEventListener('msg:new', msgNewHandler);     // ⬅️
-    window.addEventListener('req:new', reqNewHandler);     // ⬅️
+    window.addEventListener('msg:new', msgNewHandler); // ⬅️
+    window.addEventListener('req:new', reqNewHandler); // ⬅️
 
     return () => {
       alive = false;
       window.removeEventListener('msg:read', msgReadHandler);
       window.removeEventListener('req:handled', reqHandledHandler);
-      window.removeEventListener('msg:new', msgNewHandler);  // ⬅️
-      window.removeEventListener('req:new', reqNewHandler);  // ⬅️
+      window.removeEventListener('msg:new', msgNewHandler); // ⬅️
+      window.removeEventListener('req:new', reqNewHandler); // ⬅️
       supabase.removeChannel(ch);
     };
   }, []);
@@ -134,14 +186,18 @@ export default function AdminPanel() {
           <nav className="p-3 space-y-2">
             <button
               onClick={() => setTab('dashboard')}
-              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'dashboard' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${
+                tab === 'dashboard' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'
+              }`}
             >
               <Home className="w-4 h-4" /> Översikt
             </button>
 
             <button
               onClick={() => setTab('applications')}
-              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'applications' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${
+                tab === 'applications' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'
+              }`}
             >
               <Users className="w-4 h-4" /> Ansökningar
               <Badge count={newAppCount} />
@@ -149,7 +205,9 @@ export default function AdminPanel() {
 
             <button
               onClick={() => setTab('messages')}
-              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'messages' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${
+                tab === 'messages' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'
+              }`}
             >
               <MessageSquare className="w-4 h-4" /> Meddelanden
               <Badge count={newMsgCount} />
@@ -157,7 +215,9 @@ export default function AdminPanel() {
 
             <button
               onClick={() => setTab('requests')}
-              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'requests' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${
+                tab === 'requests' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'
+              }`}
             >
               <Briefcase className="w-4 h-4" /> Förfrågningar
               <Badge count={newReqCount} />
@@ -165,7 +225,9 @@ export default function AdminPanel() {
 
             <button
               onClick={() => setTab('jobs')}
-              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${tab === 'jobs' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'}`}
+              className={`w-full text-left px-3 py-2 rounded-lg flex items-center gap-2 ${
+                tab === 'jobs' ? 'bg-gray-900 text-white' : 'hover:bg-gray-100'
+              }`}
             >
               <FileText className="w-4 h-4" /> Jobb
             </button>
@@ -189,23 +251,33 @@ export default function AdminPanel() {
             <button
               className={`px-3 py-2 rounded-lg border ${tab === 'dashboard' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('dashboard')}
-            >Översikt</button>
+            >
+              Översikt
+            </button>
             <button
               className={`px-3 py-2 rounded-lg border ${tab === 'applications' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('applications')}
-            >Ansökningar</button>
+            >
+              Ansökningar
+            </button>
             <button
               className={`px-3 py-2 rounded-lg border ${tab === 'messages' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('messages')}
-            >Meddelanden</button>
+            >
+              Meddelanden
+            </button>
             <button
               className={`px-3 py-2 rounded-lg border ${tab === 'requests' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('requests')}
-            >Förfrågningar</button>
+            >
+              Förfrågningar
+            </button>
             <button
               className={`px-3 py-2 rounded-lg border ${tab === 'jobs' ? 'bg-gray-900 text-white' : ''}`}
               onClick={() => setTab('jobs')}
-            >Jobb</button>
+            >
+              Jobb
+            </button>
           </div>
 
           {tab === 'dashboard' && <DashboardSection />}
