@@ -86,19 +86,21 @@ export default function MessagesSection() {
     });
   }, [items, q, type, status]);
 
-  // ⬇️ ENDA ÄNDRINGEN: skicka "msg:read" när ett 'new' blir något annat
+  // ⬇️ ÄNDRAD: badge går ner OCH upp
   async function updateStatus(id: string, s: ContactMessage['status']) {
     const prevRow = items.find(m => m.id === id) || (selected?.id === id ? selected : undefined);
     const wasNew = prevRow?.status === NEW_VALUE;
+    const becomesNew = s === NEW_VALUE;
 
     const { error } = await supabase.from('contact_messages').update({ status: s }).eq('id', id);
     if (!error) {
       setItems(prev => prev.map(m => (m.id === id ? { ...m, status: s } : m)));
       setSelected(prev => (prev && prev.id === id ? { ...prev, status: s } : prev));
 
-      // 🔔 Optimistisk badge-minskning i sidomenyn
-      if (wasNew && s !== NEW_VALUE) {
-        window.dispatchEvent(new CustomEvent('msg:read', { detail: { wasNew: true } }));
+      if (wasNew && !becomesNew) {
+        window.dispatchEvent(new CustomEvent('msg:read', { detail: { wasNew: true } })); // −1
+      } else if (!wasNew && becomesNew) {
+        window.dispatchEvent(new CustomEvent('msg:new')); // +1
       }
     }
   }
