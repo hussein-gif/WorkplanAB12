@@ -50,7 +50,7 @@ const PillarCard = React.memo(function PillarCard({
         >
           <div className="flex items-center space-x-4">
             <span
-              className="text-6xl font-normal text-gray-200 leading-none"
+              className="text-6xl font-normal text-gray-400 leading-none" {/* <-- ändrad från text-gray-200 */}
               style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
             >
               {pillar.number}
@@ -222,7 +222,6 @@ const WhyChoose = () => {
     []
   );
 
-  // ======= ORIGINALLIK LOGIK (beprövad) =======
   const updateScrollIndex = () => {
     if (!pillarRefs.current.length) return;
     const centerY = window.innerHeight / 2;
@@ -265,7 +264,6 @@ const WhyChoose = () => {
       updateScrollIndex();
     };
 
-    // VIKTIGT: direktkopplat scroll-event (ingen rAF), + initial körning
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', updateScrollIndex);
     handleScroll();
@@ -283,7 +281,6 @@ const WhyChoose = () => {
     <section
       ref={sectionRef}
       className="relative py-16 sm:py-28 overflow-hidden"
-      // OBS: inget content-visibility här (det kunde stoppa uppdateringar)
     >
       {/* CSS-animationer */}
       <style>{`
