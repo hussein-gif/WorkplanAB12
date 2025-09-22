@@ -5,32 +5,49 @@ interface CandidatesHeroSectionProps {
   handleBrowseRoles: () => void;
 }
 
-const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
+const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = React.memo(({
   isVisible,
   handleBrowseRoles,
 }) => {
   return (
     <section
       className="relative min-h-[calc(100svh+3px)] md:min-h-screen flex items-center justify-center overflow-hidden md:mb-0"
-      style={{ paddingTop: 'env(safe-area-inset-top)' }}
+      style={{
+        paddingTop: 'env(safe-area-inset-top)',
+        contentVisibility: 'auto',
+        containIntrinsicSize: '1px 900px',
+      }}
     >
       {/* Bakgrundsbild */}
       <div className="absolute inset-0">
         <img
           src="https://i.ibb.co/ZzdGcXm1/2e9d69c0-7749-414b-bc27-fefb6a4061e7.png"
+          srcSet="
+            https://i.ibb.co/ZzdGcXm1/2e9d69c0-7749-414b-bc27-fefb6a4061e7.png 1280w,
+            https://i.ibb.co/ZzdGcXm1/2e9d69c0-7749-414b-bc27-fefb6a4061e7.png 1920w
+          "
+          sizes="100vw"
           alt="Professionell arbetsmiljö"
-          className="w-full h-full object-cover md:object-center"
-          style={{ objectPosition: 'center 35%' }}
+          className="w-full h-full object-cover md:object-center select-none"
+          style={{ objectPosition: 'center 35%', transform: 'translateZ(0)', willChange: 'transform' }}
+          decoding="async"
+          fetchpriority="high"
+          draggable={false}
+          width={1920}
+          height={1080}
         />
 
         {/* MOBIL overlay – ljusare & vertikal gradient */}
-        <div className="absolute inset-0 md:hidden pointer-events-none">
+        <div className="absolute inset-0 md:hidden pointer-events-none" aria-hidden="true">
           <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/30 to-black/15" />
           <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_50%_40%,rgba(0,0,0,0.10)_0%,rgba(0,0,0,0.00)_60%)]" />
         </div>
 
         {/* DESKTOP overlay */}
-        <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/10" />
+        <div
+          className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/10 pointer-events-none"
+          aria-hidden="true"
+        />
       </div>
 
       {/* Centralt innehåll */}
@@ -45,7 +62,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
             transition-all duration-1000 transform
             ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-6 opacity-0'}
           `}
-          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 200 }}
+          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 200, transform: 'translateZ(0)' }}
         >
           <span className="block">Hitta Jobbet</span>
           <span className="block font-medium">Som Passar Dig</span>
@@ -59,7 +76,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
             transition-all duration-1000 delay-200 transform
             ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0'}
           `}
-          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300 }}
+          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, transform: 'translateZ(0)' }}
         >
           Vi matchar dig med rätt jobb – snabbt och utan krångel.
         </p>
@@ -78,7 +95,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
             ${isVisible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0'}
             md:hover:scale-[1.03] md:active:scale-[0.99]
           `}
-          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
+          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, willChange: 'transform' }}
         >
           <span className="btn-hero-bg absolute inset-0 rounded-2xl" />
           <span className="relative z-10 inline-flex items-center gap-2">
@@ -104,6 +121,7 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
           box-shadow: 0 10px 24px rgba(11,39,77,0.32);
           border: 1px solid rgba(255,255,255,0.18);
           transition: all .2s ease;
+          will-change: transform, box-shadow, background;
         }
         button:hover > .btn-hero-bg { 
           background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.14)), #123B7A; 
@@ -115,6 +133,6 @@ const CandidatesHeroSection: React.FC<CandidatesHeroSectionProps> = ({
       `}</style>
     </section>
   );
-};
+});
 
 export default CandidatesHeroSection;
