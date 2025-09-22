@@ -1,29 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ContactHeroSection from './ContactUsPage/ContactHeroSection';
-// ✅ Kandidat använder containern
 import CandidateFormContainer from './ContactUsPage/CandidateFormContainer';
-// ✅ Företag använder containern (bytt från Section)
 import CompanyFormContainer from './ContactUsPage/CompanyFormContainer';
 import AlternativeContactSection from './ContactUsPage/AlternativeContactSection';
-import SEO from '../components/SEO'; // ✅ FIXAD SÖKVÄG
+import SEO from '../components/SEO';
 
 const ContactUsPage = () => {
   const [userType, setUserType] = useState<'candidate' | 'company' | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
+  // För throttling av musrörelser
+  const frameRef = useRef<number | null>(null);
+
   useEffect(() => {
     setIsVisible(true);
 
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100,
+      if (frameRef.current) return; // throttle
+      frameRef.current = requestAnimationFrame(() => {
+        setMousePosition({
+          x: (e.clientX / window.innerWidth) * 100,
+          y: (e.clientY / window.innerHeight) * 100,
+        });
+        frameRef.current = null;
       });
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
   }, []);
 
   return (
@@ -34,7 +42,13 @@ const ContactUsPage = () => {
         canonical="https://www.work-plan.se/kontakt"
       />
 
-      <div className="min-h-screen bg-white">
+      <div
+        className="min-h-screen bg-white"
+        style={{
+          contentVisibility: 'auto',
+          containIntrinsicSize: '1200px',
+        }}
+      >
         <div className="relative z-10">
           <ContactHeroSection
             isVisible={isVisible}
@@ -43,12 +57,12 @@ const ContactUsPage = () => {
             setUserType={setUserType}
           />
 
-          {/* ✅ Kandidatformulär */}
+          {/* Kandidatformulär */}
           {userType === 'candidate' && (
             <CandidateFormContainer onClose={() => setUserType(null)} />
           )}
 
-          {/* ✅ Företagsformulär */}
+          {/* Företagsformulär */}
           {userType === 'company' && (
             <CompanyFormContainer onClose={() => setUserType(null)} />
           )}
