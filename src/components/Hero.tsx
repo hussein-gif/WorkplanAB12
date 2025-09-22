@@ -52,12 +52,17 @@ const Hero: React.FC = () => {
     }
 
     // Preload Cloudinary video (lägg i <head>)
-    if (typeof document !== 'undefined' && !isMobile && !prefersReduced) {
+    if (typeof document !== 'undefined' && !prefersReduced) {
       const link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'video';
-      link.href = 'https://res.cloudinary.com/dsm0pbs0s/video/upload/q_auto,f_auto/hero-1080p_gzycpu.mp4';
       link.type = 'video/mp4';
+
+      // Desktop-video när inte mobil, annars mobil-video
+      link.href = isMobile
+        ? 'https://res.cloudinary.com/dsm0pbs0s/video/upload/v1758578798/hero-720p_qhqevv.mp4'
+        : 'https://res.cloudinary.com/dsm0pbs0s/video/upload/q_auto,f_auto/hero-1080p_gzycpu.mp4';
+
       document.head.appendChild(link);
     }
 
@@ -94,29 +99,47 @@ const Hero: React.FC = () => {
           }}
         >
           {/* Mobil */}
-          <picture className="block sm:hidden w-full h-full">
-            <source
-              type="image/avif"
-              srcSet="
+          {prefersReduced ? (
+            <picture className="block sm:hidden w-full h-full">
+              <source
+                type="image/avif"
+                srcSet="
                 https://i.ibb.co/LdnVsvf2/IMAGE-2025-08-22-23-02-16.jpg 1000w
               "
-              sizes="100vw"
-            />
-            <source
-              type="image/webp"
-              srcSet="
+                sizes="100vw"
+              />
+              <source
+                type="image/webp"
+                srcSet="
                 https://i.ibb.co/LdnVsvf2/IMAGE-2025-08-22-23-02-16.jpg 1000w
               "
-              sizes="100vw"
-            />
-            <img
-              src="https://i.ibb.co/LdnVsvf2/IMAGE-2025-08-22-23-02-16.jpg"
-              alt="Professional staffing and teamwork"
-              className="w-full h-full object-cover object-[center_65%]"
-              loading="lazy"
-              decoding="async"
-            />
-          </picture>
+                sizes="100vw"
+              />
+              <img
+                src="https://i.ibb.co/LdnVsvf2/IMAGE-2025-08-22-23-02-16.jpg"
+                alt="Professional staffing and teamwork"
+                className="w-full h-full object-cover object-[center_65%]"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
+          ) : (
+            <div className="block sm:hidden w-full h-full">
+              <video
+                className="w-full h-full object-cover object-[center_65%]"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+              >
+                <source
+                  src="https://res.cloudinary.com/dsm0pbs0s/video/upload/v1758578798/hero-720p_qhqevv.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </div>
+          )}
 
           {/* Desktop: VIDEO med reduced-motion fallback till bild */}
           {prefersReduced ? (
@@ -209,12 +232,11 @@ const Hero: React.FC = () => {
         <div
           className="w-full sm:px-8"
           style={{
-            paddingLeft: 'max(env(safe-area-inset-left), 1.25rem)',
+            paddingLeft: 'max(env(safe-area-inset-left), 2.25rem)',
             paddingRight: 'max(env(safe-area-inset-right), 1.25rem)',
           }}
         >
-          {/* 🔧 Flyttat lite mer åt vänster för professionellt avstånd */}
-          <div className="max-w-[40ch] sm:max-w-3xl text-left md:-mt-8 sm:ml-2 md:ml-6 lg:ml-8 xl:ml-10 2xl:ml-12">
+          <div className="max-w-[40ch] sm:max-w-3xl text-left md:-mt-8">
             <div
               className={`
                 space-y-3 transition-all duration-700
