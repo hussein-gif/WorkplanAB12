@@ -181,6 +181,17 @@ const PillarCard = React.memo(function PillarCard({
   );
 });
 
+function getScrollContainer(el: HTMLElement | null): Window | HTMLElement {
+  let node: HTMLElement | null = el?.parentElement ?? null;
+  while (node && node !== document.body) {
+    const style = window.getComputedStyle(node);
+    const oy = style.overflowY;
+    if (oy === 'auto' || oy === 'scroll') return node;
+    node = node.parentElement;
+  }
+  return window;
+}
+
 const WhyChoose = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [scrollIndex, setScrollIndex] = useState<number | null>(null);
@@ -189,6 +200,7 @@ const WhyChoose = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const pillarRefs = useRef<Array<HTMLDivElement | null>>([]);
   const rafId = useRef<number | null>(null);
+  const scrollerRef = useRef<Window | HTMLElement | null>(null);
 
   const pillars = useMemo<Pillar[]>(
     () => [
@@ -223,47 +235,68 @@ const WhyChoose = () => {
     []
   );
 
-  // --- Återställd, beprövad progress-beräkning + rAF-throttle ---
-  const updateScrollIndex = () => {
-    const centerY = window.innerHeight / 2;
-    let bestIdx: number | null = null;
-    let smallestDist = Infinity;
-    for (let i = 0; i < pillarRefs.current.length; i++) {
-      const el = pillarRefs.current[i];
-      if (!el) continue;
-      const rect = el.getBoundingClientRect();
-      const pillarCenter = rect.top + rect.height / 2;
-      const dist = Math.abs(pillarCenter - centerY);
-      if (dist < smallestDist) {
-        smallestDist = dist;
-        bestIdx = i;
-      }
-    }
-    if (bestIdx !== null) setScrollIndex(bestIdx);
-  };
-
   const handleScrollRaf = () => {
     rafId.current = null;
     const section = sectionRef.current;
-    if (!section) return;
+    const scroller = scrollerRef.current;
+    if (!section || !scroller) return;
 
-    const rect = section.getBoundingClientRect();
-    const visibleTop = Math.max(0, -rect.top);
-    const sectionHeight = rect.height;
-    const windowHeight = window.innerHeight;
+    // Mätningar baserat på rätt scrollcontainer
+    let viewportH: number, scrollTop: number, sectionTopAbs: number;
 
-    // Samma formel som i din första fungerande version
+    if (scroller === window) {
+      viewportH = window.innerHeight;
+      scrollTop = window.scrollY;
+      const rect = section.getBoundingClientRect();
+      sectionTopAbs = rect.top + window.scrollY;
+    } else {
+      const container = scroller as HTMLElement;
+      viewportH = container.clientHeight;
+      scrollTop = container.scrollTop;
+      const sectionRect = section.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      sectionTopAbs = sectionRect.top - containerRect.top + container.scrollTop;
+    }
+
+    const sectionHeight = Math.max(1, section.offsetHeight);
+    const viewportCenterAbs = scrollTop + viewportH * 0.5;
+
+    // Progress: 0 när viewportens mitt når sektionens topp, 1 vid sektionens botten
     const nextProgress = clamp(
-      visibleTop / (Math.max(1, sectionHeight - windowHeight + 200)),
+      (viewportCenterAbs - sectionTopAbs) / sectionHeight,
       0,
       1
     );
-
     setScrollProgress(nextProgress);
-    updateScrollIndex();
+
+    // Aktivt kort: mät relativt samma container
+    let centerY = viewportH / 2;
+    let bestIdx = 0;
+    let smallest = Infinity;
+    for (let i = 0; i < pillarRefs.current.length; i++) {
+      const el = pillarRefs.current[i];
+      if (!el) continue;
+      const r = el.getBoundingClientRect();
+      let elementCenter: number;
+      if (scroller === window) {
+        elementCenter = r.top + r.height / 2;
+      } else {
+        const containerRect = (scroller as HTMLElement).getBoundingClientRect();
+        elementCenter = (r.top - containerRect.top) + r.height / 2;
+      }
+      const dist = Math.abs(elementCenter - centerY);
+      if (dist < smallest) {
+        smallest = dist;
+        bestIdx = i;
+      }
+    }
+    setScrollIndex(bestIdx);
   };
 
   useEffect(() => {
+    // Hitta rätt scrollcontainer efter mount
+    scrollerRef.current = getScrollContainer(sectionRef.current as HTMLElement | null);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) setIsVisible(true);
@@ -278,16 +311,29 @@ const WhyChoose = () => {
       }
     };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    // Lyssna på scroll på rätt target
+    const scroller = scrollerRef.current;
+    if (scroller === window) {
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll);
+    } else if (scroller) {
+      (scroller as HTMLElement).addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll); // storleksändring påverkar layout ändå
+    }
 
-    // Viktigt: kör en första mätning direkt
+    // Init-mätning
     onScroll();
 
     return () => {
       if (sectionRef.current) observer.unobserve(sectionRef.current);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
+      const scroller2 = scrollerRef.current;
+      if (scroller2 === window) {
+        window.removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onScroll);
+      } else if (scroller2) {
+        (scroller2 as HTMLElement).removeEventListener('scroll', onScroll);
+        window.removeEventListener('resize', onScroll);
+      }
       if (rafId.current) cancelAnimationFrame(rafId.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -299,7 +345,7 @@ const WhyChoose = () => {
     <section
       ref={sectionRef}
       className="relative py-16 sm:py-28 overflow-hidden"
-      // Viktigt: INGEN content-visibility här (den kunde stoppa uppdateringar)
+      // OBS: ingen content-visibility här (kan fördröja measurements)
     >
       {/* CSS-animationer */}
       <style>{`
@@ -382,7 +428,7 @@ const WhyChoose = () => {
               style={{ bottom: 0, background: 'rgba(107,114,128,0.4)' }}
             />
             <div
-              className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full shadow-lg transition-all duration-200 ease-out will-change-transform"
+              className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full shadow-lg transition-all duration-150 ease-out will-change-transform"
               style={{
                 backgroundColor: '#1e3a8a',
                 top: `${scrollProgress * 100}%`,
