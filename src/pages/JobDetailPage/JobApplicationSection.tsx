@@ -1,7 +1,16 @@
-import React, { useState, useRef } from 'react';
-import { Send, Upload, User, Mail, Phone } from 'lucide-react';
+import React, { useState, useRef, useCallback, Suspense, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../../supabaseClient'; // Supabase-klienten
+
+// ⬇️ Lazy-loada ikoner (minskar initial bundle)
+const SendIcon = React.lazy(() => import('lucide-react').then(m => ({ default: m.Send })));
+const UploadIcon = React.lazy(() => import('lucide-react').then(m => ({ default: m.Upload })));
+const UserIcon   = React.lazy(() => import('lucide-react').then(m => ({ default: m.User })));
+const MailIcon   = React.lazy(() => import('lucide-react').then(m => ({ default: m.Mail })));
+const PhoneIcon  = React.lazy(() => import('lucide-react').then(m => ({ default: m.Phone })));
+
+// Liten, osynlig fallback så layouten inte hoppar
+const IconFallback = () => <span aria-hidden className="inline-block align-middle" style={{ width: 0, height: 0 }} />;
 
 export type JobApplicationFormData = {
   firstName: string;
@@ -66,27 +75,36 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
   const [submitting, setSubmitting] = useState(false); // lås knappen vid submit
   const [showSuccess, setShowSuccess] = useState(false); // visa tack-overlay
 
-  // ⬇️ NYTT: konfigurerbar maxgräns (ändra bara denna om du vill höja/sänka)
-  const MAX_MB = 25;
-  const MAX_BYTES = MAX_MB * 1024 * 1024;
+  // ⬇️ Konfigurerbar maxgräns – memoisera så värdet är stabilt
+  const { MAX_MB, MAX_BYTES } = useMemo(() => {
+    const mb = 25;
+    return { MAX_MB: mb, MAX_BYTES: mb * 1024 * 1024 };
+  }, []);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
-    }));
-  };
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value, type } = e.target;
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      }));
+    },
+    [setFormData]
+  );
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, kind: 'cv' | 'other') => {
-    const file = e.target.files?.[0] || null;
-    if (kind === 'cv') setCvFile(file);
-    else setOtherFile(file);
-  };
+  const handleFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>, kind: 'cv' | 'other') => {
+      const file = e.target.files?.[0] || null;
+      if (kind === 'cv') setCvFile(file);
+      else setOtherFile(file);
+    },
+    [setCvFile, setOtherFile]
+  );
 
   // Spara ansökan + ladda upp filer till Storage + spara filvägar i tabellen
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return; // skydda mot dubbelklick
 
     if (!formData.gdprConsent) {
       alert('Du måste godkänna integritetspolicyn för att skicka ansökan.');
@@ -105,9 +123,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
         email: formData.email.trim(),
         phone: formData.phone.trim(),
         cover_letter: formData.coverLetter?.trim() || null,
-        // Skicka INTE industry/location om kolumner saknas i DB
-        // industry: industry ?? null,
-        // location: location ?? null,
+        // industry/location utelämnas här om kolumner saknas i DB
       };
 
       const { data: created, error: insertErr } = await supabase
@@ -119,45 +135,43 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
       if (insertErr) throw insertErr;
 
       const appId = created.id as number;
+      const nowStamp = Date.now();
 
-      // 2) Ladda upp filer till privat bucket "applications"
+      // 2) Ladda upp filer (parallellt om båda finns)
       let cv_path: string | null = null;
       let cv_name: string | null = null;
       let other_path: string | null = null;
       let other_name: string | null = null;
 
+      const uploads: Promise<any>[] = [];
+
       if (cvFile) {
         if (cvFile.size > MAX_BYTES) throw new Error(`CV är större än ${MAX_MB}MB.`);
         cv_name = cvFile.name;
-        cv_path = `cv/${appId}/${Date.now()}_${cvFile.name}`;
-        const { error: upCvErr } = await supabase
-          .storage
-          .from('applications')
-          .upload(cv_path, cvFile, { upsert: false });
-        if (upCvErr) throw upCvErr;
+        cv_path = `cv/${appId}/${nowStamp}_${cvFile.name}`;
+        uploads.push(
+          supabase.storage.from('applications').upload(cv_path, cvFile, { upsert: false })
+        );
       }
 
       if (otherFile) {
         if (otherFile.size > MAX_BYTES) throw new Error(`Bifogad fil är större än ${MAX_MB}MB.`);
         other_name = otherFile.name;
-        other_path = `other/${appId}/${Date.now()}_${otherFile.name}`;
-        const { error: upOtherErr } = await supabase
-          .storage
-          .from('applications')
-          .upload(other_path, otherFile, { upsert: false });
-        if (upOtherErr) throw upOtherErr;
+        other_path = `other/${appId}/${nowStamp}_${otherFile.name}`;
+        uploads.push(
+          supabase.storage.from('applications').upload(other_path, otherFile, { upsert: false })
+        );
       }
 
-      // 3) Uppdatera raden med filvägar/namn (om något laddats upp)
-      if (cv_path || other_path) {
+      if (uploads.length) {
+        const results = await Promise.all(uploads);
+        const anyErr = results.find(r => r?.error);
+        if (anyErr?.error) throw anyErr.error;
+
+        // 3) Uppdatera raden med filvägar/namn (om något laddats upp)
         const { error: updErr } = await supabase
           .from('applications')
-          .update({
-            cv_path,
-            cv_name,
-            other_path,
-            other_name,
-          })
+          .update({ cv_path, cv_name, other_path, other_name })
           .eq('id', appId);
         if (updErr) throw updErr;
       }
@@ -180,10 +194,14 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
     } finally {
       setSubmitting(false);
     }
-  };
+  }, [submitting, formData, jobTitle, companyName, cvFile, otherFile, MAX_BYTES, MAX_MB, setFormData, setCvFile, setOtherFile]);
 
   return (
-    <section id="application-form" className="relative bg-[#08132B] text-white">
+    <section
+      id="application-form"
+      className="relative bg-[#08132B] text-white"
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 1400px' }}
+    >
       {/* Subtil bakgrund – samma som i arket */}
       <div
         aria-hidden
@@ -225,7 +243,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
 
         {/* Formulär */}
         <div className="relative pb-16">
-          <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto">
+          <form onSubmit={handleSubmit} className="space-y-6 max-w-5xl mx-auto" noValidate>
             {/* Namn */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -233,7 +251,11 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                   Förnamn *
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#0B274D]/50" size={18} />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#0B274D]/50">
+                    <Suspense fallback={<IconFallback />}>
+                      <UserIcon size={18} />
+                    </Suspense>
+                  </span>
                   <input
                     type="text"
                     name="firstName"
@@ -242,6 +264,8 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                     onChange={handleInputChange}
                     className="w-full bg-white text-[#08132B] pl-10 pr-4 py-3 rounded-xl border border-white/0 focus:border-white/30 focus:ring-4 focus:ring-white/10 transition"
                     placeholder="Ditt förnamn"
+                    autoComplete="given-name"
+                    inputMode="text"
                   />
                 </div>
               </div>
@@ -250,7 +274,11 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                   Efternamn *
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#0B274D]/50" size={18} />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#0B274D]/50">
+                    <Suspense fallback={<IconFallback />}>
+                      <UserIcon size={18} />
+                    </Suspense>
+                  </span>
                   <input
                     type="text"
                     name="lastName"
@@ -259,6 +287,8 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                     onChange={handleInputChange}
                     className="w-full bg-white text-[#08132B] pl-10 pr-4 py-3 rounded-xl border border-white/0 focus:border-white/30 focus:ring-4 focus:ring-white/10 transition"
                     placeholder="Ditt efternamn"
+                    autoComplete="family-name"
+                    inputMode="text"
                   />
                 </div>
               </div>
@@ -271,7 +301,11 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                   E-post *
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#0B274D]/50" size={18} />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#0B274D]/50">
+                    <Suspense fallback={<IconFallback />}>
+                      <MailIcon size={18} />
+                    </Suspense>
+                  </span>
                   <input
                     type="email"
                     name="email"
@@ -280,6 +314,8 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                     onChange={handleInputChange}
                     className="w-full bg-white text-[#08132B] pl-10 pr-4 py-3 rounded-xl border border-white/0 focus:border-white/30 focus:ring-4 focus:ring-white/10 transition"
                     placeholder="din@email.com"
+                    autoComplete="email"
+                    inputMode="email"
                   />
                 </div>
               </div>
@@ -288,7 +324,11 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                   Telefon *
                 </label>
                 <div className="relative">
-                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 text-[#0B274D]/50" size={18} />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#0B274D]/50">
+                    <Suspense fallback={<IconFallback />}>
+                      <PhoneIcon size={18} />
+                    </Suspense>
+                  </span>
                   <input
                     type="tel"
                     name="phone"
@@ -297,6 +337,8 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                     onChange={handleInputChange}
                     className="w-full bg-white text-[#08132B] pl-10 pr-4 py-3 rounded-xl border border-white/0 focus:border-white/30 focus:ring-4 focus:ring-white/10 transition"
                     placeholder="+46 XX XXX XX XX"
+                    autoComplete="tel"
+                    inputMode="tel"
                   />
                 </div>
               </div>
@@ -320,7 +362,11 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                   required
                 />
                 <div className="text-center">
-                  <Upload className="mx-auto h-8 w-8 text-gray-500 group-hover:text-gray-700 transition" />
+                  <div className="mx-auto h-8 w-8 text-gray-500 group-hover:text-gray-700 transition">
+                    <Suspense fallback={<IconFallback />}>
+                      <UploadIcon className="h-8 w-8" />
+                    </Suspense>
+                  </div>
                   <p className="mt-2 text-sm text-[#08132B]">
                     {cvFile ? cvFile.name : 'Klicka för att ladda upp ditt CV'}
                   </p>
@@ -346,7 +392,11 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                   className="hidden"
                 />
                 <div className="text-center">
-                  <Upload className="mx-auto h-8 w-8 text-gray-500 group-hover:text-gray-700 transition" />
+                  <div className="mx-auto h-8 w-8 text-gray-500 group-hover:text-gray-700 transition">
+                    <Suspense fallback={<IconFallback />}>
+                      <UploadIcon className="h-8 w-8" />
+                    </Suspense>
+                  </div>
                   <p className="mt-2 text-sm text-[#08132B]">
                     {otherFile ? otherFile.name : 'Klicka för att bifoga fler filer (valfritt)'}
                   </p>
@@ -406,14 +456,11 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                   focus:outline-none disabled:opacity-60
                 "
                 style={{ fontFamily: 'Inter, sans-serif' }}
+                aria-busy={submitting}
               >
-                <span
-                  className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 hover:opacity-100 transition-opacity"
-                  style={{
-                    background: 'linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 40%)',
-                  }}
-                />
-                <Send size={18} />
+                <Suspense fallback={<IconFallback />}>
+                  <SendIcon size={18} />
+                </Suspense>
                 <span className="relative">{submitting ? 'Skickar…' : 'Skicka ansökan'}</span>
               </button>
             </div>
@@ -436,6 +483,7 @@ const JobApplicationSection: React.FC<JobApplicationSectionProps> = ({
                 strokeWidth="3"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                aria-hidden="true"
               >
                 <path d="M20 6L9 17l-5-5" />
               </svg>
