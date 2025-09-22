@@ -36,65 +36,28 @@ const getLogoChar = (job: Job) =>
 const getOmfattning = (job: Job) =>
   (job as any).omfattning ?? (job as any).employment_type ?? "";
 
-/** Försök hitta en bild-URL på så många rimliga fältnamn som möjligt. */
+/** Samma URL-kontroll som på JobDetailPage */
+const isUrl = (v?: string | null) => !!v && /^https?:\/\//i.test(v || "");
+
+/** Hämta bild-URL så som den används på JobDetailPage (company_logo som primär källa). */
 const getJobImageUrl = (job: Job): string | undefined => {
   const j: any = job;
 
-  // Platta fält
-  const flat =
-    j.image_url ||
-    j.imageUrl ||
-    j.image ||
-    j.cover_url ||
-    j.coverUrl ||
-    j.cover ||
-    j.banner_url ||
-    j.bannerUrl ||
-    j.banner ||
-    j.logo_url ||
-    j.logoUrl ||
-    j.companyLogoUrl;
+  // Viktigt: detta är fältet du redan använder på detaljsidan
+  if (isUrl(j.company_logo)) return j.company_logo as string;
 
-  if (typeof flat === "string" && flat.trim()) return flat;
+  // Vanliga alternativ (om mappningen skiljer sig i listan)
+  if (isUrl(j.companyLogo)) return j.companyLogo as string;
+  if (isUrl(j.logo_url)) return j.logo_url as string;
+  if (isUrl(j.logoUrl)) return j.logoUrl as string;
+  if (isUrl(j.image_url)) return j.image_url as string;
+  if (isUrl(j.imageUrl)) return j.imageUrl as string;
+  if (isUrl(j.image)) return j.image as string;
 
-  // Vanliga nästlade strukturer
-  const nestedCandidates: any[] = [
-    j.media,
-    j.images,
-    j.attachments,
-    j.assets,
-    j.photos,
-    j.files,
-  ].filter(Boolean);
-
-  for (const c of nestedCandidates) {
-    if (Array.isArray(c) && c.length) {
-      const first = c[0];
-      const url =
-        first?.url ||
-        first?.publicUrl ||
-        first?.src ||
-        first?.href ||
-        first?.path ||
-        first?.signedUrl;
-      if (typeof url === "string" && url.trim()) return url;
-    } else if (typeof c === "object") {
-      const url =
-        c?.image?.url ||
-        c?.banner?.url ||
-        c?.cover?.url ||
-        c?.logo?.url ||
-        c?.url ||
-        c?.publicUrl ||
-        c?.src;
-      if (typeof url === "string" && url.trim()) return url;
-    }
-  }
-
-  // Om companyLogo råkar vara en URL (inte en bokstav), använd den
-  if (typeof j.companyLogo === "string" && /^https?:|^\/|\.(png|jpe?g|webp|gif)$/i.test(j.companyLogo)) {
-    return j.companyLogo;
-  }
+  // Om companyLogo råkar vara en URL eller filväg i andra format
+  const maybeUrl: string | undefined =
+    typeof j.companyLogo === "string" ? j.companyLogo : undefined;
+  if (isUrl(maybeUrl)) return maybeUrl;
 
   return undefined;
 };
@@ -155,7 +118,6 @@ const getPostedLabel = (job: Job): string => {
 
   // Fallback: om "posted" redan är en färdig text men råkar vara negativ, ta bort minustecken
   if (typeof j.posted === "string" && j.posted.trim()) {
-    // Hantera minus och u+2212 (långt minus)
     return j.posted.replace(/^[\s]*[-\u2212]\s*/, "");
   }
 
