@@ -1,18 +1,21 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const CallToActionSection: React.FC = () => {
+const CallToActionSection: React.FC = React.memo(() => {
   const navigate = useNavigate();
 
   return (
     <section
-      className="
-        relative py-12 md:py-24 px-8 overflow-hidden rounded-3xl
-      "
-      style={{ backgroundColor: '#08132B' }}
+      className="relative py-12 md:py-24 px-8 overflow-hidden rounded-3xl"
+      style={{
+        backgroundColor: '#08132B',
+        contentVisibility: 'auto',
+        containIntrinsicSize: '720px',
+      }}
+      aria-label="Call To Action"
     >
       {/* Kreativ bakgrund – aurora, grid, konstellationer, glow & vignette */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true" inert>
         {/* Aurora-mesh toningar */}
         <div
           className="absolute inset-0"
@@ -129,7 +132,12 @@ const CallToActionSection: React.FC = () => {
             border border-white/15
             bg-white/5 hover:bg-white/10
           "
-          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
+          style={{
+            fontFamily: 'Inter, sans-serif',
+            fontWeight: 500,
+            transform: 'translateZ(0)',
+            willChange: 'transform',
+          }}
         >
           {/* Inre gradientglow */}
           <span
@@ -144,8 +152,16 @@ const CallToActionSection: React.FC = () => {
           <span className="relative z-10">Kontakta oss</span>
         </button>
       </div>
+
+      <style>{`
+        @media (prefers-reduced-motion: reduce) {
+          * { transition: none !important; animation: none !important; }
+        }
+      `}</style>
     </section>
   );
-};
+});
+
+CallToActionSection.displayName = 'CallToActionSection';
 
 export default CallToActionSection;
