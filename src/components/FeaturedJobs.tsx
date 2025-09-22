@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback, memo } from "react";
-import { MapPin, Clock, ArrowRight, Briefcase } from "lucide-react";
+import { MapPin, Clock, ArrowRight, Briefcase, Building } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../supabaseClient"; // ✅ lägg till supabase
+import { supabase } from "../../supabaseClient";
 
 // Desktop-kort, memoisering för att undvika re-renders
 const SimpleHoverCard = memo(function SimpleHoverCard({
@@ -25,7 +25,7 @@ const SimpleHoverCard = memo(function SimpleHoverCard({
   );
 });
 
-// --- helpers kopierade från JobsList (trim made for this section) ---
+// --- Helpers (identiska med JobsList) ---
 const slugify = (s: string) =>
   s
     .toLowerCase()
@@ -36,31 +36,32 @@ const slugify = (s: string) =>
 
 const isUrl = (v?: string | null) => !!v && /^https?:\/\//i.test(v || "");
 
-const getOmfattning = (j: any) => j.omfattning ?? j.employment_type ?? "";
+const getOmfattning = (job: any) =>
+  job.omfattning ?? job.employment_type ?? "";
 
-const getJobImageUrl = (j: any): string | undefined => {
-  if (isUrl(j.company_logo)) return j.company_logo as string;
-  if (isUrl(j.companyLogo)) return j.companyLogo as string;
-  if (isUrl(j.logo_url)) return j.logo_url as string;
-  if (isUrl(j.logoUrl)) return j.logoUrl as string;
-  if (isUrl(j.image_url)) return j.image_url as string;
-  if (isUrl(j.imageUrl)) return j.imageUrl as string;
-  if (isUrl(j.image)) return j.image as string;
+const getJobImageUrl = (job: any): string | undefined => {
+  if (isUrl(job.company_logo)) return job.company_logo as string;
+  if (isUrl(job.companyLogo)) return job.companyLogo as string;
+  if (isUrl(job.logo_url)) return job.logo_url as string;
+  if (isUrl(job.logoUrl)) return job.logoUrl as string;
+  if (isUrl(job.image_url)) return job.image_url as string;
+  if (isUrl(job.imageUrl)) return job.imageUrl as string;
+  if (isUrl(job.image)) return job.image as string;
   const maybeUrl: string | undefined =
-    typeof j.companyLogo === "string" ? j.companyLogo : undefined;
+    typeof job.companyLogo === "string" ? job.companyLogo : undefined;
   if (isUrl(maybeUrl)) return maybeUrl;
   return undefined;
 };
 
-const getPostedLabel = (j: any): string => {
+const getPostedLabel = (job: any): string => {
   const candidates = [
-    j.posted_at,
-    j.published_at,
-    j.created_at,
-    j.createdAt,
-    j.inserted_at,
-    j.updated_at,
-    j.posted,
+    job.posted_at,
+    job.published_at,
+    job.created_at,
+    job.createdAt,
+    job.inserted_at,
+    job.updated_at,
+    job.posted,
   ].filter(Boolean);
 
   let postedDate: Date | null = null;
@@ -83,12 +84,12 @@ const getPostedLabel = (j: any): string => {
 
     if (diffMs < 30 * 1000) return "nyss";
     if (diffMs < minute) return "mindre än 1 minut sedan";
-    if (diffMs < hour) {
-      const mins = Math.floor(diffMs / minute);
-      return `${mins} minut${mins === 1 ? "" : "er"} sedan`;
-    }
     if (diffMs < day) {
       const hrs = Math.floor(diffMs / hour);
+      if (diffMs < hour) {
+        const mins = Math.floor(diffMs / minute);
+        return `${mins} minut${mins === 1 ? "" : "er"} sedan`;
+      }
       return `${hrs} timme${hrs === 1 ? "" : "r"} sedan`;
     }
     const days = Math.floor(diffMs / day);
@@ -100,12 +101,12 @@ const getPostedLabel = (j: any): string => {
     }
   }
 
-  if (typeof j.posted === "string" && j.posted.trim()) {
-    return j.posted.replace(/^[\s]*[-\u2212]\s*/, "");
-  }
+  if (typeof job.posted === "string" && job.posted.trim()) {
+    return job.posted.replace(/^[\s]*[-\u2212]\s*/, "");
+    }
   return "";
 };
-// -------------------------------------------------------------------
+// ---------------------------------------
 
 const FeaturedJobs = () => {
   const navigate = useNavigate();
@@ -113,20 +114,8 @@ const FeaturedJobs = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   const rafRef = useRef<number | null>(null);
 
-  // ✅ NYTT: hämta publicerade jobb (max 3)
-  const [jobs, setJobs] = useState<
-    {
-      id: string | number;
-      slug?: string | null;
-      title: string;
-      company: string;
-      location: string;
-      type: string;
-      posted: string;
-      companyLogo: string | undefined; // URL om finns
-      raw: any; // behåll originalet för helpers
-    }[]
-  >([]);
+  // ✅ Hämta publicerade jobb (max 3)
+  const [jobs, setJobs] = useState<any[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -135,28 +124,14 @@ const FeaturedJobs = () => {
         .select("*")
         .eq("published", true)
         .order("posted_at", { ascending: false })
-        .limit(3); // max tre kort
+        .limit(3);
 
       if (error) {
         console.error("Featured jobs error:", error);
         setJobs([]);
         return;
       }
-
-      const mapped =
-        (data ?? []).map((j: any) => ({
-          id: j.id,
-          slug: j.slug,
-          title: j.title ?? "",
-          company: j.company ?? "—",
-          location: j.location ?? "—",
-          type: getOmfattning(j),
-          posted: getPostedLabel(j),
-          companyLogo: getJobImageUrl(j),
-          raw: j,
-        })) ?? [];
-
-      setJobs(mapped);
+      setJobs(data ?? []);
     })();
   }, []);
 
@@ -201,13 +176,13 @@ const FeaturedJobs = () => {
     };
   }, []);
 
-  const mobileJobs = jobs.slice(0, 3); // max 3 även på mobil
-
   // samma navigering som JobsList
-  const goToJob = (j: { id: string | number; slug?: string | null; title: string }) => {
-    const idOrSlug = j.slug ?? (j.id != null ? String(j.id) : slugify(j.title));
+  const goToJob = (job: any) => {
+    const idOrSlug = job.slug ?? (job.id != null ? String(job.id) : slugify(job.title ?? ""));
     navigate(`/jobb/${encodeURIComponent(idOrSlug)}`);
   };
+
+  const mobileJobs = jobs.slice(0, 3);
 
   return (
     <>
@@ -233,7 +208,7 @@ const FeaturedJobs = () => {
             ["--mx" as any]: 0,
             ["--my" as any]: 0,
             contentVisibility: "auto",
-            containIntrinsicSize: "1px 900px", // reservhöjd för layout innan render
+            containIntrinsicSize: "1px 900px",
           } as React.CSSProperties
         }
       >
@@ -299,7 +274,7 @@ const FeaturedJobs = () => {
             </p>
           </div>
 
-          {/* MOBIL */}
+          {/* MOBIL – identisk layout som i JobsList */}
           <div className="sm:hidden">
             {mobileJobs.length === 0 ? (
               <div className="text-center py-10">
@@ -311,31 +286,28 @@ const FeaturedJobs = () => {
               <ul className="divide-y divide-white/10">
                 {mobileJobs.map((job) => (
                   <li
-                    key={String(job.id)}
-                    className="py-4 active:bg-white/5 transition-colors"
+                    key={job.slug ?? job.id ?? job.title}
+                    className="py-4 active:bg-white/5 transition-colors cursor-pointer"
                     onClick={() => goToJob(job)}
                   >
                     <div className="flex items-start gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-white/10 text-white flex items-center justify-center font-semibold shrink-0 overflow-hidden">
-                        {job.companyLogo ? (
-                          <img
-                            src={job.companyLogo}
-                            alt={job.company}
-                            loading="lazy"
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <span className="text-base font-semibold">
-                            {job.company?.[0] ?? "•"}
-                          </span>
-                        )}
-                      </div>
+                      {/* Samma bildrender som JobsList (ingen mörk bakgrund) */}
+                      {getJobImageUrl(job) ? (
+                        <img
+                          src={getJobImageUrl(job)}
+                          alt={job.title}
+                          loading="lazy"
+                          className="w-9 h-9 rounded-lg object-cover shrink-0"
+                        />
+                      ) : (
+                        <div className="w-9 h-9 rounded-lg bg-white/10 text-white flex items-center justify-center font-semibold shrink-0">
+                          {(job.company ?? "•").charAt(0)}
+                        </div>
+                      )}
                       <div className="min-w-0">
                         <h3
                           className="text-white text-base font-semibold leading-tight truncate"
-                          style={{
-                            fontFamily: "Zen Kaku Gothic Antique, sans-serif",
-                          }}
+                          style={{ fontFamily: "Zen Kaku Gothic Antique, sans-serif" }}
                         >
                           {job.title}
                         </h3>
@@ -355,7 +327,7 @@ const FeaturedJobs = () => {
                       </span>
                       <span className="w-1 h-1 rounded-full bg-white/30" />
                       <span className="inline-flex items-center gap-1.5">
-                        <Clock size={14} /> {job.type}
+                        <Clock size={14} /> {getOmfattning(job)}
                       </span>
                     </div>
 
@@ -363,7 +335,7 @@ const FeaturedJobs = () => {
                       className="mt-1 text-[12px] text-white/60"
                       style={{ fontFamily: "Inter, sans-serif" }}
                     >
-                      {job.posted}
+                      {getPostedLabel(job)}
                     </div>
                   </li>
                 ))}
@@ -401,7 +373,7 @@ const FeaturedJobs = () => {
             </div>
           </div>
 
-          {/* DESKTOP */}
+          {/* DESKTOP – identiska kort som i JobsList, och centrerar vid 1 kort */}
           <div className="hidden sm:block">
             {jobs.length === 0 ? (
               <div className="mb-16 text-center py-10">
@@ -409,84 +381,168 @@ const FeaturedJobs = () => {
                   Inga lediga jobb tillgängliga just nu.
                 </h3>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
-                {jobs.map((job) => (
-                  <SimpleHoverCard
-                    key={String(job.id)}
-                    className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
-                  >
-                    <div
-                      className="p-5 flex-1 flex flex-col"
-                      onClick={() => goToJob(job)}
-                    >
-                      <div className="flex items-start space-x-4 mb-4">
-                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0 overflow-hidden">
-                          {job.companyLogo ? (
+            ) : jobs.length === 1 ? (
+              // Centrera ett enda kort
+              <div className="mb-16 flex justify-center">
+                {(() => {
+                  const job = jobs[0];
+                  return (
+                    <SimpleHoverCard className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer">
+                      <div className="p-5 flex-1 flex flex-col" onClick={() => goToJob(job)}>
+                        <div className="flex items-start space-x-4 mb-4">
+                          {/* EXAKT som JobsList: rendera <img> direkt */}
+                          {getJobImageUrl(job) ? (
                             <img
-                              src={job.companyLogo}
-                              alt={job.company}
+                              src={getJobImageUrl(job)}
+                              alt={job.title}
                               loading="lazy"
-                              className="w-full h-full object-cover"
+                              className="w-14 h-14 rounded-xl object-cover shadow-lg flex-shrink-0"
                             />
                           ) : (
-                            <span className="text-lg font-bold">
-                              {job.company?.[0] ?? "•"}
-                            </span>
+                            <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
+                              {(job.company ?? "•").charAt(0)}
+                            </div>
                           )}
+                          <div className="flex-1 min-w-0">
+                            <h3
+                              className="text-lg text-gray-900 mb-2 leading-tight font-medium"
+                              style={{ fontFamily: "Zen Kaku Gothic Antique, sans-serif" }}
+                            >
+                              {job.title}
+                            </h3>
+                            <div
+                              className="text-base text-gray-700"
+                              style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}
+                            >
+                              {job.company}
+                            </div>
+                          </div>
                         </div>
+
+                        <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
+                          <div className="flex items-center space-x-2">
+                            <MapPin size={14} className="text-gray-400" />
+                            <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
+                              {job.location}
+                            </span>
+                          </div>
+                          <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                          <div className="flex items-center space-x-2">
+                            <Clock size={14} className="text-gray-400" />
+                            <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
+                              {getOmfattning(job)}
+                            </span>
+                          </div>
+                          <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                          <div className="flex items-center space-x-2">
+                            <Building size={14} className="text-gray-400" />
+                            <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
+                              {job.industry ?? ""}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="p-5 pt-0 flex items-end justify-between" onClick={() => goToJob(job)}>
+                        <div
+                          className="text-sm text-gray-500"
+                          style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}
+                        >
+                          {getPostedLabel(job)}
+                        </div>
+                        <div className="text-right text-sm text-gray-500">
+                          <div style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
+                            Ansök senast
+                          </div>
+                          <div
+                            className="text-gray-700"
+                            style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}
+                          >
+                            {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString("sv-SE")}
+                          </div>
+                        </div>
+                      </div>
+                    </SimpleHoverCard>
+                  );
+                })()}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16 justify-center">
+                {jobs.map((job) => (
+                  <SimpleHoverCard
+                    key={job.slug ?? job.id ?? job.title}
+                    className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
+                  >
+                    <div className="p-5 flex-1 flex flex-col" onClick={() => goToJob(job)}>
+                      <div className="flex items-start space-x-4 mb-4">
+                        {getJobImageUrl(job) ? (
+                          <img
+                            src={getJobImageUrl(job)}
+                            alt={job.title}
+                            loading="lazy"
+                            className="w-14 h-14 rounded-xl object-cover shadow-lg flex-shrink-0"
+                          />
+                        ) : (
+                          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
+                            {(job.company ?? "•").charAt(0)}
+                          </div>
+                        )}
                         <div className="flex-1 min-w-0">
                           <h3
-                            className="text-lg mb-1 leading-tight font-bold"
-                            style={{
-                              fontFamily: "Zen Kaku Gothic Antique, sans-serif",
-                              color: "#111827",
-                            }}
+                            className="text-lg text-gray-900 mb-2 leading-tight font-medium"
+                            style={{ fontFamily: "Zen Kaku Gothic Antique, sans-serif" }}
                           >
                             {job.title}
                           </h3>
                           <div
-                            className="text-base"
-                            style={{
-                              fontFamily: "Zen Kaku Gothic Antique, sans-serif",
-                              fontWeight: 400,
-                              color: "#374151",
-                            }}
+                            className="text-base text-gray-700"
+                            style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}
                           >
                             {job.company}
                           </div>
                         </div>
                       </div>
-                      <div
-                        className="flex items-center space-x-4 text-sm mb-4"
-                        style={{
-                          fontFamily: "Inter, sans-serif",
-                          fontWeight: 400,
-                          color: "#6B7280",
-                        }}
-                      >
+
+                      <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
                         <div className="flex items-center space-x-2">
-                          <MapPin size={14} />
-                          <span>{job.location}</span>
+                          <MapPin size={14} className="text-gray-400" />
+                          <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
+                            {job.location}
+                          </span>
                         </div>
                         <span className="w-1 h-1 bg-gray-400 rounded-full" />
                         <div className="flex items-center space-x-2">
-                          <Clock size={14} />
-                          <span>{job.type}</span>
+                          <Clock size={14} className="text-gray-400" />
+                          <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
+                            {getOmfattning(job)}
+                          </span>
+                        </div>
+                        <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                        <div className="flex items-center space-x-2">
+                          <Building size={14} className="text-gray-400" />
+                          <span style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
+                            {job.industry ?? ""}
+                          </span>
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="relative z-10 p-5 pt-0 flex items-end justify-between"
-                      style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}
-                    >
-                      <div className="text-sm text-gray-500">{job.posted}</div>
+
+                    <div className="p-5 pt-0 flex items-end justify-between" onClick={() => goToJob(job)}>
+                      <div
+                        className="text-sm text-gray-500"
+                        style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}
+                      >
+                        {getPostedLabel(job)}
+                      </div>
                       <div className="text-right text-sm text-gray-500">
-                        <div>Ansök senast</div>
-                        <div className="text-gray-700">
-                          {new Date(
-                            Date.now() + 14 * 24 * 60 * 60 * 1000
-                          ).toLocaleDateString("sv-SE")}
+                        <div style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
+                          Ansök senast
+                        </div>
+                        <div
+                          className="text-gray-700"
+                          style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}
+                        >
+                          {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString("sv-SE")}
                         </div>
                       </div>
                     </div>
@@ -495,6 +551,7 @@ const FeaturedJobs = () => {
               </div>
             )}
 
+            {/* CTA */}
             <div
               className={`
                 text-center
