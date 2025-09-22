@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface TeamSectionProps {
   isVisible: boolean;
@@ -6,7 +6,15 @@ interface TeamSectionProps {
 
 const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
   return (
-    <section className="team-section">
+    <section
+      className="team-section"
+      style={{
+        // Rendera först när sektionen behövs + reservera plats för stabil layout
+        contentVisibility: 'auto',
+        containIntrinsicSize: '1px 720px',
+      }}
+      aria-label="Teamet Bakom Workplan"
+    >
       <div className="content max-w-6xl mx-auto py-12 md:py-24 px-6 sm:px-8">
         <div className="text-center mb-10 md:mb-16">
           <h2
@@ -24,12 +32,25 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
-          <div className="card p-6 md:p-8 text-center">
+          <div
+            className="card p-6 md:p-8 text-center"
+            style={{
+              // Förbättra rendering när korten kommer in i bild
+              contentVisibility: 'auto',
+              containIntrinsicSize: '1px 260px',
+              willChange: 'opacity, transform',
+            }}
+          >
             <div className="avatar bg-gradient-to-br from-blue-500 to-purple-600 mb-4 mx-auto">
               <img
                 src="https://i.ibb.co/WNwzR4vM/Black-and-White-Modern-Linkedln-Profile-Picture-4.png"
                 alt="Jawad Abbas"
                 className="w-full h-full rounded-full object-cover"
+                loading="lazy"
+                decoding="async"
+                width={96}
+                height={96}
+                fetchPriority="low"
               />
             </div>
             <h3
@@ -43,12 +64,24 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
             </p>
           </div>
 
-          <div className="card p-6 md:p-8 text-center">
+          <div
+            className="card p-6 md:p-8 text-center"
+            style={{
+              contentVisibility: 'auto',
+              containIntrinsicSize: '1px 260px',
+              willChange: 'opacity, transform',
+            }}
+          >
             <div className="avatar bg-gradient-to-br from-blue-500 to-purple-600 mb-4 mx-auto">
               <img
                 src="https://i.ibb.co/cpq3pkZ/Black-and-White-Modern-Linkedln-Profile-Picture-3.png"
                 alt="Arvin Mahmoudi"
                 className="w-full h-full rounded-full object-cover"
+                loading="lazy"
+                decoding="async"
+                width={96}
+                height={96}
+                fetchPriority="low"
               />
             </div>
             <h3
@@ -75,7 +108,7 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
           content: '';
           position: absolute;
           inset: 0;
-          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><g fill='none' stroke='rgba(255,255,255,0.1)' stroke-width='2'><path d='M0 200 Q200 100 400 200 T800 200' /><path d='M0 300 Q200 200 400 300 T800 300' /></g></svg>");
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600' aria-hidden='true'><g fill='none' stroke='rgba(255,255,255,0.1)' stroke-width='2'><path d='M0 200 Q200 100 400 200 T800 200' /><path d='M0 300 Q200 200 400 300 T800 300' /></g></svg>");
           background-size: cover;
           opacity: 0.4;
           z-index: 0;
@@ -97,10 +130,11 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
           display: flex;
           align-items: center;
           justify-content: center;
+          will-change: transform, opacity;
         }
       `}</style>
     </section>
   );
 };
 
-export default TeamSection;
+export default memo(TeamSection);
