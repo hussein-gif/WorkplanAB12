@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 
-const Header: React.FC = () => {
+const Header: React.FC = React.memo(() => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -52,30 +52,55 @@ const Header: React.FC = () => {
   const logoRef = useRef<HTMLDivElement | null>(null);
   const navRef = useRef<HTMLElement | null>(null);
   const [measuredGap, setMeasuredGap] = useState<number | null>(null);
+  const gapRef = useRef<number | null>(null);
 
   useEffect(() => {
+    let rafId: number | null = null;
     const measureGap = () => {
       if (isScrolled) return;
       const l = logoRef.current?.getBoundingClientRect();
       const n = navRef.current?.getBoundingClientRect();
-      if (l && n) setMeasuredGap(Math.max(0, n.left - l.right));
+      if (l && n) {
+        const next = Math.max(0, n.left - l.right);
+        if (gapRef.current !== next) {
+          gapRef.current = next;
+          setMeasuredGap(next);
+        }
+      }
+    };
+    const onResize = () => {
+      if (rafId == null) {
+        rafId = requestAnimationFrame(() => {
+          rafId = null;
+          measureGap();
+        });
+      }
     };
     measureGap();
-    window.addEventListener("resize", measureGap);
-    return () => window.removeEventListener("resize", measureGap);
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => {
+      window.removeEventListener("resize", onResize);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, [isScrolled]);
 
-  const navigationItems = [
-    { label: "Jobb", href: "/jobs" },
-    { label: "Företag", href: "/partner" },
-    { label: "Om Oss", href: "/about" },
-    { label: "Kontakt", href: "/contact" },
-  ];
+  const navigationItems = useMemo(
+    () => [
+      { label: "Jobb", href: "/jobs" },
+      { label: "Företag", href: "/partner" },
+      { label: "Om Oss", href: "/about" },
+      { label: "Kontakt", href: "/contact" },
+    ],
+    []
+  );
 
-  const handleNavigation = (href: string) => {
-    navigate(href);
-    setIsMobileMenuOpen(false);
-  };
+  const handleNavigation = useCallback(
+    (href: string) => {
+      navigate(href);
+      setIsMobileMenuOpen(false);
+    },
+    [navigate]
+  );
 
   return (
     <>
@@ -115,6 +140,10 @@ const Header: React.FC = () => {
                     alt="Workplan"
                     className={`${isScrolled ? "h-14" : "h-16"} px-1 transition-all duration-300 ease-in-out`}
                     style={{ width: "auto", willChange: "height" }}
+                    decoding="async"
+                    width={224}  /* hint för layout; påverkar inte den responsiva höjden */
+                    height={56}
+                    draggable={false}
                   />
                 </div>
 
@@ -150,6 +179,8 @@ const Header: React.FC = () => {
                   className={`lg:hidden p-2 rounded-lg transition-all duration-300 ease-in-out ${
                     isDarkTheme ? "text-[#08132B] hover:bg-gray-200/50" : "text-white hover:bg-white/10"
                   }`}
+                  aria-expanded={isMobileMenuOpen}
+                  aria-label="Meny"
                 >
                   {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                 </button>
@@ -174,11 +205,16 @@ const Header: React.FC = () => {
                   src="https://i.ibb.co/twSFVXyn/Workplan-Blue-LG.png"
                   alt="Workplan"
                   className="h-14 w-auto px-1"
+                  decoding="async"
+                  width={224}
+                  height={56}
+                  draggable={false}
                 />
               </div>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="p-2 rounded-lg text-[#08132B] hover:bg-gray-200/50 transition-all duration-300 ease-in-out"
+                aria-label="Stäng meny"
               >
                 <X size={22} />
               </button>
@@ -216,6 +252,6 @@ const Header: React.FC = () => {
       )}
     </>
   );
-};
+});
 
 export default Header;
