@@ -223,25 +223,22 @@ const WhyChoose = () => {
     []
   );
 
+  // NY: robust progress-beräkning baserad på viewportens mitt och sektionens absoluta position
   const handleScrollRaf = () => {
     rafId.current = null;
-    if (!sectionRef.current || !pillarRefs.current.length) return;
+    const section = sectionRef.current;
+    if (!section) return;
 
-    const rect = sectionRef.current.getBoundingClientRect();
-    const visibleTop = Math.max(0, -rect.top);
-    const sectionHeight = rect.height;
-    const windowHeight = window.innerHeight;
+    const rect = section.getBoundingClientRect();
+    const sectionTopAbs = rect.top + window.scrollY;
+    const sectionHeight = Math.max(1, rect.height);
+    const viewportCenter = window.scrollY + window.innerHeight * 0.5;
 
-    const nextProgress = clamp(
-      visibleTop / Math.max(1, sectionHeight - windowHeight + 200),
-      0,
-      1
-    );
-
-    // bollen ska alltid uppdatera
+    // progress 0 när mitten är vid sektionens topp, 1 när mitten är vid sektionens botten
+    const nextProgress = clamp((viewportCenter - sectionTopAbs) / sectionHeight, 0, 1);
     setScrollProgress(nextProgress);
 
-    // hitta kort närmast mitten
+    // hitta kort närmast viewportens mitt
     const centerY = window.innerHeight / 2;
     let bestIdx = 0;
     let smallest = Infinity;
@@ -275,6 +272,7 @@ const WhyChoose = () => {
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
+    // initiera position direkt vid mount
     onScroll();
 
     return () => {
@@ -283,6 +281,7 @@ const WhyChoose = () => {
       window.removeEventListener('resize', onScroll);
       if (rafId.current) cancelAnimationFrame(rafId.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const effectiveActive = scrollIndex;
@@ -350,7 +349,7 @@ const WhyChoose = () => {
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-8">
-        {/* Progress-line */}
+        {/* Progress-line (desktop) */}
         <div
           className={`absolute left-1/2 -translate-x-1/2 z-0 hidden lg:flex flex-col items-center transition-all duration-1000 ease-out ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -377,7 +376,7 @@ const WhyChoose = () => {
               style={{ bottom: 0, background: 'rgba(107,114,128,0.4)' }}
             />
             <div
-              className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full shadow-lg transition-all duration-500 ease-out will-change-transform"
+              className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full shadow-lg transition-all duration-200 ease-out will-change-transform"
               style={{
                 backgroundColor: '#1e3a8a',
                 top: `${scrollProgress * 100}%`,
