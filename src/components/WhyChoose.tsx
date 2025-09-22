@@ -10,19 +10,41 @@ const clamp = (val: number, min: number, max: number) =>
 
 const WhyChoose = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
 
+  // Visibility + scroll-progress (för den blå bollen)
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
-      { threshold: 0.2 }
-    );
+    const onIntersect: IntersectionObserverCallback = ([entry]) => {
+      if (entry.isIntersecting) setIsVisible(true);
+    };
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0.2 });
     if (sectionRef.current) observer.observe(sectionRef.current);
+
+    const onScroll = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const visibleTop = Math.max(0, -rect.top);
+      const sectionHeight = rect.height;
+      const windowHeight = window.innerHeight;
+
+      // progress 0 -> 1 genom sektionen
+      const progress = clamp(
+        visibleTop / Math.max(1, sectionHeight - windowHeight),
+        0,
+        1
+      );
+      setScrollProgress(progress);
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
 
     return () => {
       if (sectionRef.current) observer.unobserve(sectionRef.current);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
   }, []);
 
@@ -58,24 +80,71 @@ const WhyChoose = () => {
 
   return (
     <section ref={sectionRef} className="relative py-20 sm:py-28 bg-white">
-      <div className="max-w-6xl mx-auto px-6 lg:px-8">
+      {/* Vertikal progress-linje + blå boll (endast desktop) */}
+      <div
+        className={`pointer-events-none absolute left-1/2 -translate-x-1/2 z-0 hidden lg:flex flex-col items-center transition-all duration-700 ease-out ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        }`}
+        style={{ top: '12rem', bottom: '18rem' }}
+        aria-hidden="true"
+      >
+        <div className="relative w-px flex-1">
+          {/* själva linjen med diskret gradient */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 w-px rounded"
+            style={{
+              top: 0,
+              bottom: 0,
+              background:
+                'linear-gradient(to bottom, transparent 0%, rgba(107,114,128,0.6) 20%, rgba(107,114,128,0.6) 80%, transparent 100%)',
+              filter: 'blur(0.4px)',
+            }}
+          />
+          {/* ändpunkter */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full"
+            style={{ top: 0, background: 'rgba(107,114,128,0.35)' }}
+          />
+          <div
+            className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full"
+            style={{ bottom: 0, background: 'rgba(107,114,128,0.35)' }}
+          />
+          {/* blå boll som följer scroll */}
+          <div
+            className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full shadow-lg transition-transform duration-200 will-change-transform"
+            style={{
+              backgroundColor: '#1e3a8a',
+              top: `${scrollProgress * 100}%`,
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            <div className="absolute inset-0 bg-white/25 rounded-full" />
+            <div className="absolute -inset-1 border-2 border-[#1e3a8a]/30 rounded-full" />
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10">
         {/* Rubrik */}
         <div className="text-center mb-16">
           <h2
-            className={`text-4xl sm:text-5xl font-semibold tracking-tight text-gray-900 transition-all duration-1000 ${
+            className={`text-4xl sm:text-5xl font-bold tracking-tight text-black transition-all duration-1000 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
             }`}
             style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
           >
-            Vår Metod För <span className="text-[#1e3a8a]">Framgång</span>
+            Vår Metod För Framgång
           </h2>
+
+          {/* Elegant gradient-streck som innan */}
           <div
-            className={`w-20 h-1 mx-auto bg-[#1e3a8a] rounded-full mt-4 transition-all duration-1000 delay-200 ${
+            className={`w-16 h-px mx-auto mb-4 bg-gradient-to-r from-transparent via-gray-300 to-transparent transition-all duration-1000 delay-200 ${
               isVisible ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
             }`}
           />
+
           <p
-            className={`mt-6 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed transition-all duration-1000 delay-300 ${
+            className={`mt-2 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed transition-all duration-1000 delay-300 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
             style={{ fontFamily: 'Inter, sans-serif' }}
