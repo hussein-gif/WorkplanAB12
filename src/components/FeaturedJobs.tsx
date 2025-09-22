@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback, memo } from "react";
 import { MapPin, Clock, ArrowRight, Briefcase } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../supabaseClient"; // ✅ lägg till supabase
 
 // Desktop-kort, memoisering för att undvika re-renders
 const SimpleHoverCard = memo(function SimpleHoverCard({
@@ -24,11 +25,140 @@ const SimpleHoverCard = memo(function SimpleHoverCard({
   );
 });
 
+// --- helpers kopierade från JobsList (trim made for this section) ---
+const slugify = (s: string) =>
+  s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+const isUrl = (v?: string | null) => !!v && /^https?:\/\//i.test(v || "");
+
+const getOmfattning = (j: any) => j.omfattning ?? j.employment_type ?? "";
+
+const getJobImageUrl = (j: any): string | undefined => {
+  if (isUrl(j.company_logo)) return j.company_logo as string;
+  if (isUrl(j.companyLogo)) return j.companyLogo as string;
+  if (isUrl(j.logo_url)) return j.logo_url as string;
+  if (isUrl(j.logoUrl)) return j.logoUrl as string;
+  if (isUrl(j.image_url)) return j.image_url as string;
+  if (isUrl(j.imageUrl)) return j.imageUrl as string;
+  if (isUrl(j.image)) return j.image as string;
+  const maybeUrl: string | undefined =
+    typeof j.companyLogo === "string" ? j.companyLogo : undefined;
+  if (isUrl(maybeUrl)) return maybeUrl;
+  return undefined;
+};
+
+const getPostedLabel = (j: any): string => {
+  const candidates = [
+    j.posted_at,
+    j.published_at,
+    j.created_at,
+    j.createdAt,
+    j.inserted_at,
+    j.updated_at,
+    j.posted,
+  ].filter(Boolean);
+
+  let postedDate: Date | null = null;
+  for (const c of candidates) {
+    const d = new Date(c);
+    if (!isNaN(d.getTime())) {
+      postedDate = d;
+      break;
+    }
+  }
+
+  if (postedDate) {
+    const now = new Date();
+    let diffMs = now.getTime() - postedDate.getTime();
+    if (diffMs < 0) diffMs = 0;
+
+    const minute = 60 * 1000;
+    const hour = 60 * minute;
+    const day = 24 * hour;
+
+    if (diffMs < 30 * 1000) return "nyss";
+    if (diffMs < minute) return "mindre än 1 minut sedan";
+    if (diffMs < hour) {
+      const mins = Math.floor(diffMs / minute);
+      return `${mins} minut${mins === 1 ? "" : "er"} sedan`;
+    }
+    if (diffMs < day) {
+      const hrs = Math.floor(diffMs / hour);
+      return `${hrs} timme${hrs === 1 ? "" : "r"} sedan`;
+    }
+    const days = Math.floor(diffMs / day);
+    if (days <= 30) return `${days} dag${days === 1 ? "" : "ar"} sedan`;
+    try {
+      return postedDate.toLocaleDateString("sv-SE");
+    } catch {
+      return "";
+    }
+  }
+
+  if (typeof j.posted === "string" && j.posted.trim()) {
+    return j.posted.replace(/^[\s]*[-\u2212]\s*/, "");
+  }
+  return "";
+};
+// -------------------------------------------------------------------
+
 const FeaturedJobs = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement | null>(null);
   const rafRef = useRef<number | null>(null);
+
+  // ✅ NYTT: hämta publicerade jobb (max 3)
+  const [jobs, setJobs] = useState<
+    {
+      id: string | number;
+      slug?: string | null;
+      title: string;
+      company: string;
+      location: string;
+      type: string;
+      posted: string;
+      companyLogo: string | undefined; // URL om finns
+      raw: any; // behåll originalet för helpers
+    }[]
+  >([]);
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase
+        .from("jobs")
+        .select("*")
+        .eq("published", true)
+        .order("posted_at", { ascending: false })
+        .limit(3); // max tre kort
+
+      if (error) {
+        console.error("Featured jobs error:", error);
+        setJobs([]);
+        return;
+      }
+
+      const mapped =
+        (data ?? []).map((j: any) => ({
+          id: j.id,
+          slug: j.slug,
+          title: j.title ?? "",
+          company: j.company ?? "—",
+          location: j.location ?? "—",
+          type: getOmfattning(j),
+          posted: getPostedLabel(j),
+          companyLogo: getJobImageUrl(j),
+          raw: j,
+        })) ?? [];
+
+      setJobs(mapped);
+    })();
+  }, []);
 
   // Observer för intro + pausa animationer när offscreen
   useEffect(() => {
@@ -71,18 +201,13 @@ const FeaturedJobs = () => {
     };
   }, []);
 
-  // Din jobblista (just nu tom – fyll med riktiga data)
-  const jobs: {
-    id: string;
-    title: string;
-    company: string;
-    location: string;
-    type: string;
-    posted: string;
-    companyLogo: string;
-  }[] = [];
+  const mobileJobs = jobs.slice(0, 3); // max 3 även på mobil
 
-  const mobileJobs = jobs.slice(0, 4);
+  // samma navigering som JobsList
+  const goToJob = (j: { id: string | number; slug?: string | null; title: string }) => {
+    const idOrSlug = j.slug ?? (j.id != null ? String(j.id) : slugify(j.title));
+    navigate(`/jobb/${encodeURIComponent(idOrSlug)}`);
+  };
 
   return (
     <>
@@ -186,19 +311,24 @@ const FeaturedJobs = () => {
               <ul className="divide-y divide-white/10">
                 {mobileJobs.map((job) => (
                   <li
-                    key={job.id}
+                    key={String(job.id)}
                     className="py-4 active:bg-white/5 transition-colors"
-                    onClick={() => navigate(`/job/${job.id}`)}
+                    onClick={() => goToJob(job)}
                   >
                     <div className="flex items-start gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-white/10 text-white flex items-center justify-center font-semibold shrink-0">
-                        {/* companyLogo borde vara <img> med lazy */}
-                        <img
-                          src={job.companyLogo}
-                          alt={job.company}
-                          loading="lazy"
-                          className="w-6 h-6 object-contain"
-                        />
+                      <div className="w-9 h-9 rounded-lg bg-white/10 text-white flex items-center justify-center font-semibold shrink-0 overflow-hidden">
+                        {job.companyLogo ? (
+                          <img
+                            src={job.companyLogo}
+                            alt={job.company}
+                            loading="lazy"
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-base font-semibold">
+                            {job.company?.[0] ?? "•"}
+                          </span>
+                        )}
                       </div>
                       <div className="min-w-0">
                         <h3
@@ -283,21 +413,27 @@ const FeaturedJobs = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
                 {jobs.map((job) => (
                   <SimpleHoverCard
-                    key={job.id}
+                    key={String(job.id)}
                     className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
                   >
                     <div
                       className="p-5 flex-1 flex flex-col"
-                      onClick={() => navigate(`/job/${job.id}`)}
+                      onClick={() => goToJob(job)}
                     >
                       <div className="flex items-start space-x-4 mb-4">
-                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
-                          <img
-                            src={job.companyLogo}
-                            alt={job.company}
-                            loading="lazy"
-                            className="w-8 h-8 object-contain"
-                          />
+                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0 overflow-hidden">
+                          {job.companyLogo ? (
+                            <img
+                              src={job.companyLogo}
+                              alt={job.company}
+                              loading="lazy"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-lg font-bold">
+                              {job.company?.[0] ?? "•"}
+                            </span>
+                          )}
                         </div>
                         <div className="flex-1 min-w-0">
                           <h3
