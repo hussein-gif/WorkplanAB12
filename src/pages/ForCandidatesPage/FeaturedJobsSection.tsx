@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapPin, Clock, Briefcase } from 'lucide-react';
 
@@ -14,35 +14,48 @@ const SimpleHoverCard: React.FC<{ children: React.ReactNode; className?: string 
   </div>
 );
 
-const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({ isVisible }) => {
+const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = React.memo(({ isVisible }) => {
   const navigate = useNavigate();
 
-  const noiseSvg = `<?xml version="1.0" encoding="UTF-8"?>
-  <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
-    <filter id="n">
-      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch" />
-      <feColorMatrix type="saturate" values="0" />
-      <feComponentTransfer>
-        <feFuncA type="table" tableValues="0 1" />
-      </feComponentTransfer>
-    </filter>
-    <rect width="100%" height="100%" filter="url(#n)" opacity="0.3" />
-  </svg>`;
-  const noiseDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(noiseSvg)}`;
+  // Memoisera brus-bakgrunden så den inte skapas om varje render
+  const noiseDataUrl = useMemo(() => {
+    const noiseSvg = `<?xml version="1.0" encoding="UTF-8"?>
+    <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+      <filter id="n">
+        <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch" />
+        <feColorMatrix type="saturate" values="0" />
+        <feComponentTransfer>
+          <feFuncA type="table" tableValues="0 1" />
+        </feComponentTransfer>
+      </filter>
+      <rect width="100%" height="100%" filter="url(#n)" opacity="0.3" />
+    </svg>`;
+    return `data:image/svg+xml;utf8,${encodeURIComponent(noiseSvg)}`;
+  }, []);
 
-  const featuredJobs = [
-    { id: '1', title: 'Senior Software Engineer', company: 'TechFlow', location: 'Stockholm', type: 'Heltid', posted: '2 dagar sedan', companyLogo: 'T' },
-    { id: '2', title: 'Marketing Manager', company: 'GrowthCo', location: 'Göteborg', type: 'Heltid', posted: '1 dag sedan', companyLogo: 'G' },
-    { id: '3', title: 'UX Designer', company: 'DesignStudio', location: 'Remote', type: 'Konsult', posted: '3 timmar sedan', companyLogo: 'D' },
-    { id: '4', title: 'Data Analyst', company: 'DataInsights', location: 'Malmö', type: 'Heltid', posted: '1 dag sedan', companyLogo: 'D' },
-    { id: '5', title: 'Project Manager', company: 'BuildCorp', location: 'Uppsala', type: 'Heltid', posted: '4 dagar sedan', companyLogo: 'B' },
-    { id: '6', title: 'DevOps Engineer', company: 'CloudTech', location: 'Stockholm', type: 'Heltid', posted: '6 timmar sedan', companyLogo: 'C' },
-  ];
+  // Inga jobb ute just nu (tomma listor)
+  const featuredJobs: Array<{
+    id: string;
+    title: string;
+    company: string;
+    location: string;
+    type: string;
+    posted: string;
+    companyLogo: string;
+  }> = useMemo(() => [], []);
 
   return (
-    <section id="featured-jobs" className="relative py-16 md:py-24 px-6 md:px-8" style={{ backgroundColor: '#08132B' }}>
+    <section
+      id="featured-jobs"
+      className="relative py-16 md:py-24 px-6 md:px-8"
+      style={{
+        backgroundColor: '#08132B',
+        contentVisibility: 'auto',
+        containIntrinsicSize: '1px 1200px',
+      }}
+    >
       {/* Artistic background */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden will-change-transform" style={{ transform: 'translateZ(0)' }}>
         <div
           className="absolute inset-0"
           style={{
@@ -249,6 +262,6 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = ({ isVisible }) 
       </div>
     </section>
   );
-};
+});
 
 export default FeaturedJobsSection;
