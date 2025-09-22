@@ -19,9 +19,16 @@ const TeamTrustSection: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative overflow-hidden" style={{ backgroundColor: '#08132B' }}>
+    <div
+      className="relative overflow-hidden"
+      style={{
+        backgroundColor: '#08132B',
+        contentVisibility: 'auto',
+        containIntrinsicSize: '1200px',
+      }}
+    >
       {/* Unified Background */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {/* Orbs */}
         <div
           className="absolute w-[1200px] h-[1200px] rounded-full opacity-[0.12] blur-3xl"
@@ -84,6 +91,7 @@ const TeamTrustSection: React.FC = () => {
           viewBox="0 0 1600 900"
           preserveAspectRatio="none"
           xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
         >
           <defs>
             <radialGradient id="complexGrad1" cx="30%" cy="20%" r="60%">
@@ -238,11 +246,14 @@ const TeamTrustSection: React.FC = () => {
       </div>
 
       {/* Team Section */}
-      <section className="relative py-24 px-8">
+      <section
+        className="relative py-24 px-8"
+        style={{ contentVisibility: 'auto', containIntrinsicSize: '800px' }}
+      >
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <h2
-              className="text-4xl md:text-5xl font-medium text-white mb-6"
+              className="text-3xl md:text-4xl font-medium text-white mb-6" /* ↓ professionell storlek */
               style={{ fontFamily: '"Zen Kaku Gothic Antique", sans-serif' }}
             >
               Vårt Dedikerade Team
@@ -262,6 +273,10 @@ const TeamTrustSection: React.FC = () => {
                   src="https://i.ibb.co/WNwzR4vM/Black-and-White-Modern-Linkedln-Profile-Picture-4.png"
                   alt="Jawad Abbas"
                   className="w-full h-full rounded-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  width={96}
+                  height={96}
                 />
               </div>
               <h3
@@ -281,6 +296,10 @@ const TeamTrustSection: React.FC = () => {
                   src="https://i.ibb.co/cpq3pkZ/Black-and-White-Modern-Linkedln-Profile-Picture-3.png"
                   alt="Arvin Mahmoudi"
                   className="w-full h-full rounded-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  width={96}
+                  height={96}
                 />
               </div>
               <h3
@@ -298,11 +317,15 @@ const TeamTrustSection: React.FC = () => {
       </section>
 
       {/* Trust Promise Section */}
-      <section id="trust-promise" className="relative py-24 px-8">
+      <section
+        id="trust-promise"
+        className="relative py-24 px-8"
+        style={{ contentVisibility: 'auto', containIntrinsicSize: '720px' }}
+      >
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
             <h2
-              className="text-4xl md:text-5xl font-medium text-white mb-6"
+              className="text-3xl md:text-4xl font-medium text-white mb-6" /* ↓ professionell storlek */
               style={{ fontFamily: '"Zen Kaku Gothic Antique", sans-serif' }}
             >
               Vårt löfte till dig
