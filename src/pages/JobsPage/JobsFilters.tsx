@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import ReactDOM from 'react-dom';
 import { Search, MapPin, Building, Clock, X, ChevronDown } from 'lucide-react';
 
@@ -26,7 +26,7 @@ interface DropdownSelectProps {
   placeholder?: string;
 }
 
-const DropdownSelect: React.FC<DropdownSelectProps> = ({
+const DropdownSelect: React.FC<DropdownSelectProps> = React.memo(({
   label,
   value,
   onChange,
@@ -39,6 +39,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
   const [computedMaxHeight, setComputedMaxHeight] = useState(220);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
+  const rafRef = useRef<number | null>(null);
 
   const updatePosition = () => {
     if (!buttonRef.current) return;
@@ -68,12 +69,12 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
   };
 
   useEffect(() => {
-    if (open) {
-      updatePosition();
-    }
+    if (open) updatePosition();
   }, [open]);
 
   useEffect(() => {
+    if (!open) return;
+
     const handleOutside = (e: MouseEvent) => {
       if (
         panelRef.current &&
@@ -87,24 +88,26 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpen(false);
     };
-    const handleScrollResize = () => {
-      if (open) {
-        requestAnimationFrame(updatePosition);
-      }
+    const scheduleUpdate = () => {
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(updatePosition);
     };
+
     window.addEventListener('mousedown', handleOutside);
     window.addEventListener('keydown', handleEsc);
-    window.addEventListener('scroll', handleScrollResize, true);
-    window.addEventListener('resize', handleScrollResize);
+    window.addEventListener('scroll', scheduleUpdate, { passive: true, capture: true });
+    window.addEventListener('resize', scheduleUpdate, { passive: true });
+
     return () => {
       window.removeEventListener('mousedown', handleOutside);
       window.removeEventListener('keydown', handleEsc);
-      window.removeEventListener('scroll', handleScrollResize, true);
-      window.removeEventListener('resize', handleScrollResize);
+      window.removeEventListener('scroll', scheduleUpdate, true as unknown as EventListenerOptions);
+      window.removeEventListener('resize', scheduleUpdate);
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
     };
   }, [open]);
 
-  const panel = open
+  const panel = open && typeof document !== 'undefined'
     ? ReactDOM.createPortal(
         <div
           ref={(el) => (panelRef.current = el)}
@@ -123,6 +126,7 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
             zIndex: 400,
             fontFamily: 'Inter, sans-serif',
             transition: 'opacity .15s ease, transform .15s ease',
+            willChange: 'transform, opacity',
           }}
         >
           {options.length > 0 ? (
@@ -182,9 +186,10 @@ const DropdownSelect: React.FC<DropdownSelectProps> = ({
       {panel}
     </div>
   );
-};
+});
+DropdownSelect.displayName = 'DropdownSelect';
 
-const JobsFilters: React.FC<JobsFiltersProps> = ({
+const JobsFilters: React.FC<JobsFiltersProps> = React.memo(({
   searchTerm,
   setSearchTerm,
   selectedLocation,
@@ -198,11 +203,19 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
   omfattningar,
   clearFilters,
 }) => {
-  const anyFilterActive =
-    !!selectedLocation || !!selectedIndustry || !!selectedOmfattning || !!searchTerm;
+  const anyFilterActive = useMemo(
+    () => !!selectedLocation || !!selectedIndustry || !!selectedOmfattning || !!searchTerm,
+    [selectedLocation, selectedIndustry, selectedOmfattning, searchTerm]
+  );
 
   return (
-    <div className="px-8 mb-12">
+    <div
+      className="px-8 mb-12"
+      style={{
+        contentVisibility: 'auto',
+        containIntrinsicSize: '520px',
+      }}
+    >
       <div className="max-w-7xl mx-auto">
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 mb-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
@@ -226,6 +239,8 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                     style={{ fontFamily: 'Inter, sans-serif' }}
+                    autoComplete="off"
+                    enterKeyHint="search"
                   />
                 </div>
               </div>
@@ -329,7 +344,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
 
               <button
                 onClick={clearFilters}
-                className="inline-flex items-center gap-1 text-sm bg-white/10 hover:bg白/20 text-white rounded-full px-3 py-1 transition"
+                className="inline-flex items-center gap-1 text-sm bg-white/10 hover:bg-white/20 text-white rounded-full px-3 py-1 transition"
                 style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500 }}
               >
                 <X size={14} />
@@ -341,6 +356,7 @@ const JobsFilters: React.FC<JobsFiltersProps> = ({
       </div>
     </div>
   );
-};
+});
+JobsFilters.displayName = 'JobsFilters';
 
 export default JobsFilters;
