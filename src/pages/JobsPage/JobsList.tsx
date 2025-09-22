@@ -36,61 +36,130 @@ const getLogoChar = (job: Job) =>
 const getOmfattning = (job: Job) =>
   (job as any).omfattning ?? (job as any).employment_type ?? "";
 
-/** Hämta eventuell bild som laddats upp för jobbet (används på kortet). */
+/** Försök hitta en bild-URL på så många rimliga fältnamn som möjligt. */
 const getJobImageUrl = (job: Job): string | undefined => {
-  const j = job as any;
-  return (
+  const j: any = job;
+
+  // Platta fält
+  const flat =
     j.image_url ||
     j.imageUrl ||
     j.image ||
+    j.cover_url ||
+    j.coverUrl ||
+    j.cover ||
     j.banner_url ||
     j.bannerUrl ||
+    j.banner ||
     j.logo_url ||
     j.logoUrl ||
-    j.companyLogoUrl ||
-    undefined
-  );
+    j.companyLogoUrl;
+
+  if (typeof flat === "string" && flat.trim()) return flat;
+
+  // Vanliga nästlade strukturer
+  const nestedCandidates: any[] = [
+    j.media,
+    j.images,
+    j.attachments,
+    j.assets,
+    j.photos,
+    j.files,
+  ].filter(Boolean);
+
+  for (const c of nestedCandidates) {
+    if (Array.isArray(c) && c.length) {
+      const first = c[0];
+      const url =
+        first?.url ||
+        first?.publicUrl ||
+        first?.src ||
+        first?.href ||
+        first?.path ||
+        first?.signedUrl;
+      if (typeof url === "string" && url.trim()) return url;
+    } else if (typeof c === "object") {
+      const url =
+        c?.image?.url ||
+        c?.banner?.url ||
+        c?.cover?.url ||
+        c?.logo?.url ||
+        c?.url ||
+        c?.publicUrl ||
+        c?.src;
+      if (typeof url === "string" && url.trim()) return url;
+    }
+  }
+
+  // Om companyLogo råkar vara en URL (inte en bokstav), använd den
+  if (typeof j.companyLogo === "string" && /^https?:|^\/|\.(png|jpe?g|webp|gif)$/i.test(j.companyLogo)) {
+    return j.companyLogo;
+  }
+
+  return undefined;
 };
 
-/** Formatera "publicerad för X sedan" på svenska – utan negativa värden. */
-const formatPostedRelative = (job: Job): string => {
-  const j = job as any;
-  const raw =
-    j.posted_at || j.published_at || j.created_at || j.posted || j.createdAt || j.inserted_at;
-  if (!raw) return "";
+/** Säkert formaterad "publicerad för X sedan" i svensk stil – utan negativa värden. */
+const getPostedLabel = (job: Job): string => {
+  const j: any = job;
 
-  const postedDate = new Date(raw);
-  if (isNaN(postedDate.getTime())) return "";
+  // Prova datumfält först (Supabase & vanliga namn)
+  const candidates = [
+    j.posted_at,
+    j.published_at,
+    j.created_at,
+    j.createdAt,
+    j.inserted_at,
+    j.updated_at, // som sista utväg
+    j.posted, // om det råkar vara ISO-datum
+  ].filter(Boolean);
 
-  const now = new Date();
-  // Säkerställ att diff aldrig blir negativ p.g.a. tidszoner/servertid
-  let diffMs = now.getTime() - postedDate.getTime();
-  if (diffMs < 0) diffMs = 0;
-
-  const minute = 60 * 1000;
-  const hour = 60 * minute;
-  const day = 24 * hour;
-
-  if (diffMs < 30 * 1000) return "nyss";
-  if (diffMs < minute) return "mindre än 1 minut sedan";
-
-  if (diffMs < hour) {
-    const mins = Math.floor(diffMs / minute);
-    return `${mins} minut${mins === 1 ? "" : "er"} sedan`;
+  let postedDate: Date | null = null;
+  for (const c of candidates) {
+    const d = new Date(c);
+    if (!isNaN(d.getTime())) {
+      postedDate = d;
+      break;
+    }
   }
-  if (diffMs < day) {
-    const hrs = Math.floor(diffMs / hour);
-    return `${hrs} timme${hrs === 1 ? "" : "r"} sedan`;
-  }
-  const days = Math.floor(diffMs / day);
-  if (days <= 30) return `${days} dag${days === 1 ? "" : "ar"} sedan`;
 
-  // Äldre än ~1 månad: visa datum i svensk form
-  try {
-    return postedDate.toLocaleDateString("sv-SE");
-  } catch {
-    return "";
+  if (postedDate) {
+    const now = new Date();
+    let diffMs = now.getTime() - postedDate.getTime();
+    if (diffMs < 0) diffMs = 0; // skydda mot klock-skev
+
+    const minute = 60 * 1000;
+    const hour = 60 * minute;
+    const day = 24 * hour;
+
+    if (diffMs < 30 * 1000) return "nyss";
+    if (diffMs < minute) return "mindre än 1 minut sedan";
+    if (diffMs < hour) {
+      const mins = Math.floor(diffMs / minute);
+      return `${mins} minut${mins === 1 ? "" : "er"} sedan`;
+    }
+    if (diffMs < day) {
+      const hrs = Math.floor(diffMs / hour);
+      return `${hrs} timme${hrs === 1 ? "" : "r"} sedan`;
+    }
+    const days = Math.floor(diffMs / day);
+    if (days <= 30) return `${days} dag${days === 1 ? "" : "ar"} sedan`;
+
+    // Äldre: visa datum
+    try {
+      return postedDate.toLocaleDateString("sv-SE");
+    } catch {
+      return "";
+    }
   }
+
+  // Fallback: om "posted" redan är en färdig text men råkar vara negativ, ta bort minustecken
+  if (typeof j.posted === "string" && j.posted.trim()) {
+    // Hantera minus och u+2212 (långt minus)
+    return j.posted.replace(/^[\s]*[-\u2212]\s*/, "");
+  }
+
+  return "";
 };
 
 const JobsList: React.FC<JobsListProps> = React.memo(({ jobs }) => {
@@ -184,7 +253,7 @@ const JobsList: React.FC<JobsListProps> = React.memo(({ jobs }) => {
                     className="mt-1 text-[12px] text-white/60"
                     style={{ fontFamily: "Inter, sans-serif" }}
                   >
-                    {formatPostedRelative(job)}
+                    {getPostedLabel(job)}
                   </div>
                 </li>
               );
@@ -264,7 +333,7 @@ const JobsList: React.FC<JobsListProps> = React.memo(({ jobs }) => {
                       className="text-sm text-gray-500"
                       style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}
                     >
-                      {formatPostedRelative(job)}
+                      {getPostedLabel(job)}
                     </div>
                     <div className="text-right text-sm text-gray-500">
                       <div style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
