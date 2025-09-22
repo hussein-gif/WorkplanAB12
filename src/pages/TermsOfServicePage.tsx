@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { FileText, Calendar } from 'lucide-react';
+import React, { useEffect, useRef, useState, Suspense } from 'react';
 import SEO from '../components/SEO'; // ⬅️ SEO import
 
 /**
@@ -12,7 +11,20 @@ import SEO from '../components/SEO'; // ⬅️ SEO import
  * - HEADER FIX: ingen border-linje, och samma bakgrund (#F7FAFF) som resten av sidan
  * - NAV FIX: force-nav-dark aktiverar mörk logga & länkar
  * - SPACING FIX: header har pt-24 (flyttar ner innehållet från navbaren)
+ *
+ * Optimeringar:
+ * - Ikoner lazy-loadas (minskar initial JS)
+ * - content-visibility/containIntrinsicSize på stora wrappers för snabbare initial rendering
+ * - scroll listeners är passiva
  */
+
+// Lazy-load ikoner (minskar initial bundle)
+const FileTextIcon = React.lazy(() =>
+  import('lucide-react').then(mod => ({ default: mod.FileText }))
+);
+const CalendarIcon = React.lazy(() =>
+  import('lucide-react').then(mod => ({ default: mod.Calendar }))
+);
 
 const sections = [
   { id: 'allmant', label: '1. Allmänt & tillämpning' },
@@ -47,6 +59,7 @@ const TermsOfServicePage: React.FC = () => {
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
+
     const getSections = () =>
       Array.from(el.querySelectorAll('section[data-tos-section]')) as HTMLElement[];
 
@@ -64,7 +77,7 @@ const TermsOfServicePage: React.FC = () => {
 
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
+    window.addEventListener('resize', onScroll, { passive: true } as any);
     return () => {
       window.removeEventListener('scroll', onScroll as any);
       window.removeEventListener('resize', onScroll as any);
@@ -89,13 +102,22 @@ const TermsOfServicePage: React.FC = () => {
         canonical="https://www.work-plan.se/anvandarvillkor"
       />
 
-      <div className="min-h-screen" style={{ backgroundColor: '#F7FAFF' }}>
+      <div
+        className="min-h-screen"
+        style={{
+          backgroundColor: '#F7FAFF',
+          contentVisibility: 'auto',
+          containIntrinsicSize: '1px 1400px',
+        }}
+      >
         {/* Hero */}
         <header className="px-6 pt-24 pb-12" style={{ backgroundColor: '#F7FAFF' }}>
           <div className="mx-auto max-w-4xl text-center">
             <div className="flex justify-center mb-6">
               <div className="w-16 h-16 bg-gradient-to-br from-[#08132B] to-[#0B274D] rounded-2xl flex items-center justify-center shadow-lg">
-                <FileText className="h-8 w-8 text-white" />
+                <Suspense fallback={<div className="h-8 w-8 rounded bg-gray-200" />}>
+                  <FileTextIcon className="h-8 w-8 text-white" />
+                </Suspense>
               </div>
             </div>
             <h1
@@ -122,7 +144,10 @@ const TermsOfServicePage: React.FC = () => {
                   className="text-xs text-gray-500 mb-2 flex items-center gap-1.5"
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
-                  <Calendar className="h-3.5 w-3.5" /> Senast uppdaterad: {updatedAt}
+                  <Suspense fallback={<div className="h-3.5 w-3.5 rounded bg-gray-200" />}>
+                    <CalendarIcon className="h-3.5 w-3.5" />
+                  </Suspense>
+                  Senast uppdaterad: {updatedAt}
                 </div>
                 <nav
                   className="bg-white border border-gray-200 rounded-xl shadow-sm p-3 md:p-4 max-w-xs"
@@ -152,6 +177,7 @@ const TermsOfServicePage: React.FC = () => {
               <div
                 ref={containerRef}
                 className="bg-white border border-gray-200 rounded-3xl shadow-sm p-6 md:p-10 space-y-12"
+                style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 1200px' }}
               >
                 <Section id="allmant" title="1. Allmänt & tillämpning">
                   <p>
@@ -191,24 +217,22 @@ const TermsOfServicePage: React.FC = () => {
 
 export default TermsOfServicePage;
 
-/* Hjälpkomponent */
-const Section: React.FC<{ id: string; title: string; children: React.ReactNode }> = ({
-  id,
-  title,
-  children,
-}) => (
-  <section id={id} data-tos-section className="scroll-mt-28">
-    <h2
-      className="text-2xl md:text-3xl font-medium text-[#08132B] mb-4"
-      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-    >
-      {title}
-    </h2>
-    <div
-      className="space-y-4 text-gray-700 leading-relaxed"
-      style={{ fontFamily: 'Inter, sans-serif' }}
-    >
-      {children}
-    </div>
-  </section>
+/* Hjälpkomponent (memofierad för att undvika onödiga omrenderingar) */
+const Section: React.FC<{ id: string; title: string; children: React.ReactNode }> = React.memo(
+  ({ id, title, children }) => (
+    <section id={id} data-tos-section className="scroll-mt-28">
+      <h2
+        className="text-2xl md:text-3xl font-medium text-[#08132B] mb-4"
+        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+      >
+        {title}
+      </h2>
+      <div
+        className="space-y-4 text-gray-700 leading-relaxed"
+        style={{ fontFamily: 'Inter, sans-serif' }}
+      >
+        {children}
+      </div>
+    </section>
+  )
 );
