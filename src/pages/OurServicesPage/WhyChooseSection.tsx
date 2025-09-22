@@ -5,26 +5,51 @@ interface WhyChooseSectionProps {
   isVisible: boolean;
 }
 
-const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
+const WhyChooseSection: React.FC<WhyChooseSectionProps> = React.memo(({ isVisible }) => {
   return (
-    <section className="relative py-16 md:py-24 px-6 md:px-8 overflow-hidden bg-white">
-      {/* SVG-bakgrund: lugnare på mobil, full på md+ */}
-      <div className="absolute inset-0 pointer-events-none">
+    <section
+      className="relative py-16 md:py-24 px-6 md:px-8 overflow-hidden bg-white"
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 800px' }}
+    >
+      {/* SVG-bakgrund */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <radialGradient id="bgBlob-why" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor="rgba(59,130,246,0.12)" />
               <stop offset="100%" stopColor="transparent" />
             </radialGradient>
-            <pattern id="zigzag-why" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
+            <pattern
+              id="zigzag-why"
+              patternUnits="userSpaceOnUse"
+              width="10"
+              height="10"
+              patternTransform="rotate(45)"
+            >
               <path d="M0 5 l5 -5 l5 5" stroke="rgba(8,19,43,0.05)" strokeWidth="2" fill="none" />
             </pattern>
           </defs>
-          {/* mönster: svagare på mobil */}
-          <rect width="100%" height="100%" fill="url(#zigzag-why)" opacity="0.5" className="md:opacity-100" />
-          {/* blobbar: en diskret på mobil, två på md+ */}
-          <circle cx="25%" cy="20%" r="280" fill="url(#bgBlob-why)" className="opacity-70 md:opacity-100" />
-          <circle cx="80%" cy="75%" r="300" fill="url(#bgBlob-why)" className="hidden md:block" />
+          <rect
+            width="100%"
+            height="100%"
+            fill="url(#zigzag-why)"
+            opacity="0.5"
+            className="md:opacity-100"
+          />
+          <circle
+            cx="25%"
+            cy="20%"
+            r="280"
+            fill="url(#bgBlob-why)"
+            className="opacity-70 md:opacity-100"
+          />
+          <circle
+            cx="80%"
+            cy="75%"
+            r="300"
+            fill="url(#bgBlob-why)"
+            className="hidden md:block"
+          />
         </svg>
       </div>
 
@@ -74,7 +99,6 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
               `}
               style={{ transitionDelay: `${1200 + index * 150}ms` }}
             >
-              {/* 3D blå badge */}
               <div className="icon-badge-3d w-14 h-14 md:w-16 md:h-16 mx-auto mb-5 md:mb-6 rounded-2xl flex items-center justify-center relative">
                 <span className="absolute inset-0 rounded-2xl glow-ring pointer-events-none" />
                 <item.icon size={26} strokeWidth={2} className="icon-3d md:!size-[28px]" />
@@ -133,7 +157,7 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
           pointer-events: none;
           mix-blend-mode: screen;
         }
-        .icon-badge-3d:hover { /* hover-effekt aktiveras bara på md via parent classes */
+        .icon-badge-3d:hover {
           background:
             radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0) 40%),
             linear-gradient(180deg, var(--blue-700), var(--blue-800));
@@ -163,6 +187,6 @@ const WhyChooseSection: React.FC<WhyChooseSectionProps> = ({ isVisible }) => {
       `}</style>
     </section>
   );
-};
+});
 
 export default WhyChooseSection;
