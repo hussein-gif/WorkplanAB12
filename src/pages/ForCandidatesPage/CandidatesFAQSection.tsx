@@ -2,6 +2,39 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Minus } from 'lucide-react';
 
+/* ===== Statiska resurser utanför komponenten (ingen re-allokering per render) ===== */
+
+const FAQs = [
+  { question: 'Kostar det något att söka via er?', answer: 'Nej, det är helt kostnadsfritt för dig som kandidat.' },
+  { question: 'Måste jag skapa ett konto?', answer: 'Nej. Skicka bara in din ansökan – vi tar kontakt om nästa steg.' },
+  { question: 'Vad händer efter att jag skickat in min ansökan?', answer: 'Vi går igenom din profil, matchar mot aktuella uppdrag och hör av oss om det finns en passande roll.' },
+  { question: 'Hur snabbt får jag återkoppling?', answer: 'Vi återkommer så snart vi kan. Om du inte hört något – hör gärna av dig!' },
+  { question: 'Kan jag söka flera jobb samtidigt?', answer: 'Absolut. Ansök till allt som känns relevant, vi hjälper dig prioritera.' },
+  { question: 'Hur hanterar ni mina personuppgifter?', answer: 'Vi följer GDPR och behandlar allt konfidentiellt. Läs mer i vår integritetspolicy.' }
+] as const;
+
+const faqJsonLdString = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": FAQs.map(f => ({
+    "@type": "Question",
+    "name": f.question,
+    "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+  }))
+});
+
+/* Lättvikts-brus som data-URL (en gång) */
+const noiseSvg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <filter id="n">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+    <feComponentTransfer><feFuncA type="table" tableValues="0 1"/></feComponentTransfer>
+  </filter>
+  <rect width="100%" height="100%" filter="url(#n)" opacity="0.3"/>
+</svg>`;
+const noiseDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(noiseSvg)}`;
+
 const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) => {
   const navigate = useNavigate();
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
@@ -11,44 +44,14 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
     setOpenFAQ(prev => (prev === index ? null : index));
   };
 
-  const faqs = [
-    { question: 'Kostar det något att söka via er?', answer: 'Nej, det är helt kostnadsfritt för dig som kandidat.' },
-    { question: 'Måste jag skapa ett konto?', answer: 'Nej. Skicka bara in din ansökan – vi tar kontakt om nästa steg.' },
-    { question: 'Vad händer efter att jag skickat in min ansökan?', answer: 'Vi går igenom din profil, matchar mot aktuella uppdrag och hör av oss om det finns en passande roll.' },
-    { question: 'Hur snabbt får jag återkoppling?', answer: 'Vi återkommer så snart vi kan. Om du inte hört något – hör gärna av dig!' },
-    { question: 'Kan jag söka flera jobb samtidigt?', answer: 'Absolut. Ansök till allt som känns relevant, vi hjälper dig prioritera.' },
-    { question: 'Hur hanterar ni mina personuppgifter?', answer: 'Vi följer GDPR och behandlar allt konfidentiellt. Läs mer i vår integritetspolicy.' }
-  ];
-
-  // ✅ JSON-LD för FAQPage (byggt direkt från listan ovan)
-  const faqJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": faqs.map(f => ({
-      "@type": "Question",
-      "name": f.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": f.answer
-      }
-    }))
-  };
-
-  const noiseSvg = `<?xml version="1.0" encoding="UTF-8"?>
-  <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
-    <filter id="n">
-      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/>
-      <feColorMatrix type="saturate" values="0"/>
-      <feComponentTransfer><feFuncA type="table" tableValues="0 1"/></feComponentTransfer>
-    </filter>
-    <rect width="100%" height="100%" filter="url(#n)" opacity="0.3"/>
-  </svg>`;
-  const noiseDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(noiseSvg)}`;
-
   return (
     <section
       className="relative py-16 md:py-24 px-6 md:px-8"
-      style={{ backgroundColor: '#08132B' }}
+      style={{
+        backgroundColor: '#08132B',
+        contentVisibility: 'auto',
+        containIntrinsicSize: '900px'
+      }}
       onClick={(e) => {
         // Behåll: klick utanför korten stänger på mobil
         if (typeof window !== 'undefined' && window.innerWidth < 768) {
@@ -59,12 +62,12 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
       {/* 🔎 SEO: FAQPage JSON-LD */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: faqJsonLdString }}
         aria-hidden="true"
       />
 
       {/* Dekorativ bakgrund */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
           className="absolute inset-0"
           style={{
@@ -74,7 +77,7 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
               'radial-gradient(600px 360px at 28% 84%, rgba(120,119,198,0.18), rgba(120,119,198,0) 64%)',
               'radial-gradient(900px 540px at 76% 78%, rgba(0,122,255,0.16), rgba(0,122,255,0) 65%)'
             ].join(','),
-            mixBlendMode: 'screen',
+            mixBlendMode: 'screen'
           }}
         />
         <div
@@ -136,10 +139,11 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
         {/* (Mobilknappen "Expandera första" borttagen) */}
 
         <div className="max-w-4xl mx-auto space-y-3 md:space-y-4 mb-8">
-          {faqs.map((faq, index) => (
+          {FAQs.map((faq, index) => (
             <div
               key={index}
               className="bg-white/10 backdrop-blur-[2px] md:backdrop-blur-sm border border-white/20 rounded-2xl overflow-hidden"
+              style={{ contentVisibility: 'auto', containIntrinsicSize: '120px' }}
             >
               <button
                 onClick={() => toggleFAQ(index)}
@@ -163,6 +167,7 @@ const CandidatesFAQSection: React.FC<{ isVisible: boolean }> = ({ isVisible }) =
                 className={`faq-collapse ${openFAQ === index ? 'open' : ''}`}
                 style={{
                   maxHeight: openFAQ === index ? '500px' : '0',
+                  willChange: 'max-height, opacity, transform'
                 }}
                 aria-labelledby={`faq-question-${index}`}
               >
