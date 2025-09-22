@@ -163,19 +163,12 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                 <React.Fragment key={idx}>
                   {/* Number + Text */}
                   <div className="flex flex-col items-start w-64 flex-shrink-0">
-                    <div className="flex items-center gap-2">
-                      {/* Vänster pil */}
-                      <ChevronLeft className="w-5 h-5 text-gray-400" />
-                      <span
-                        className="text-9xl font-light"
-                        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                      >
-                        {`0${idx + 1}`}
-                      </span>
-                      {/* Höger pil */}
-                      <ChevronRight className="w-5 h-5 text-gray-400" />
-                    </div>
-
+                    <span
+                      className="text-9xl font-light"
+                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                    >
+                      {`0${idx + 1}`}
+                    </span>
                     <h3
                       className="text-3xl md:text-4xl font-medium text-left mt-2"
                       style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
@@ -190,9 +183,11 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                     </p>
                   </div>
 
-                  {/* Separator */}
+                  {/* Separator – PILAR tillbaka som i original */}
                   {idx < steps.length - 1 && (
-                    <div className="self-center flex-shrink-0 flex-1 h-1 bg-gray-300/50 transform -translate-y-4" />
+                    <div className="self-center flex-shrink-0 flex items-center -translate-y-4">
+                      <ChevronRight className="w-5 h-5 text-gray-400" />
+                    </div>
                   )}
                 </React.Fragment>
               ))}
