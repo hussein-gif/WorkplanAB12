@@ -50,7 +50,7 @@ const PillarCard = React.memo(function PillarCard({
         >
           <div className="flex items-center space-x-4">
             <span
-              className="text-6xl font-normal text-gray-400 leading-none" {/* <-- ändrad från text-gray-200 */}
+              className="text-6xl font-normal text-gray-400 leading-none"
               style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
             >
               {pillar.number}
@@ -256,7 +256,7 @@ const WhyChoose = () => {
       const sectionHeight = rect.height;
       const windowHeight = window.innerHeight;
       const progress = clamp(
-        visibleTop / (Math.max(1, sectionHeight - windowHeight + 200)),
+        visibleTop / Math.max(1, sectionHeight - windowHeight + 200),
         0,
         1
       );
