@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, memo, useCallback } from 'react';
 import { Send, Building, User, Mail, Phone, MessageSquare, ChevronDown, Check } from 'lucide-react';
 
 interface ContactFormSectionProps {
@@ -30,7 +30,16 @@ interface Option {
   label: string;
 }
 
-const SmoothSelect: React.FC<{
+/** Hoista options så de inte skapas om vid varje render */
+const TYP_OPTIONS: Option[] = [
+  { value: '', label: 'Välj typ' },
+  { value: 'tillsvidare', label: 'Tillsvidareanställning' },
+  { value: 'vikariat_tim', label: 'Vikariat / Timanställd' },
+  { value: 'säsongvikariat', label: 'Säsongvikariat' },
+  { value: 'provanställning', label: 'Provanställning' },
+];
+
+const SmoothSelectBase: React.FC<{
   name: string;
   value: string;
   onChange: (value: string) => void;
@@ -42,6 +51,7 @@ const SmoothSelect: React.FC<{
   const [hoverIndex, setHoverIndex] = useState<number>(-1);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
 
   const selected = options.find((o) => o.value === value);
 
@@ -56,8 +66,8 @@ const SmoothSelect: React.FC<{
         setOpen(false);
       }
     };
-    document.addEventListener('mousedown', onClickOutside);
-    return () => document.removeEventListener('mousedown', onClickOutside);
+    document.addEventListener('mousedown', onClickOutside, { passive: true } as any);
+    return () => document.removeEventListener('mousedown', onClickOutside as any);
   }, []);
 
   useEffect(() => {
@@ -93,6 +103,17 @@ const SmoothSelect: React.FC<{
     }
   };
 
+  const handleItemEnter = useCallback((idx: number) => {
+    if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => setHoverIndex(idx));
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
   return (
     <div className="relative" onKeyDown={handleKeyDown}>
       <button
@@ -121,6 +142,7 @@ const SmoothSelect: React.FC<{
         }`}
         role="listbox"
         tabIndex={-1}
+        style={{ willChange: 'transform, opacity' }}
       >
         <ul className="py-1 max-h-56 overflow-auto">
           {options.map((opt, idx) => {
@@ -132,7 +154,7 @@ const SmoothSelect: React.FC<{
                   type="button"
                   role="option"
                   aria-selected={isSelected}
-                  onMouseEnter={() => setHoverIndex(idx)}
+                  onMouseEnter={() => handleItemEnter(idx)}
                   onClick={() => {
                     onChange(opt.value);
                     setOpen(false);
@@ -160,6 +182,8 @@ const SmoothSelect: React.FC<{
   );
 };
 
+const SmoothSelect = memo(SmoothSelectBase);
+
 const ContactFormSection: React.FC<ContactFormSectionProps> = ({
   formData,
   handleFormSubmit,
@@ -180,27 +204,38 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
     gdprAccept: false,
   };
 
-  const typOptions: Option[] = [
-    { value: '', label: 'Välj typ' },
-    { value: 'tillsvidare', label: 'Tillsvidareanställning' },
-    { value: 'vikariat_tim', label: 'Vikariat / Timanställd' },
-    { value: 'säsongvikariat', label: 'Säsongvikariat' },
-    { value: 'provanställning', label: 'Provanställning' },
-  ];
+  /** Minimera nya funktionsobjekt vid värdeändring i selecten */
+  const onTypChange = useCallback(
+    (val: string) => {
+      const event = {
+        target: { name: 'typAvBehov', value: val },
+      } as unknown as React.ChangeEvent<HTMLSelectElement>;
+      handleInputChange(event);
+    },
+    [handleInputChange]
+  );
 
   return (
-    <section id="kontakt-form" className="contact-form-section relative">
-      {/* Wave uppe */}
+    <section
+      id="kontakt-form"
+      className="contact-form-section relative"
+      style={{
+        contentVisibility: 'auto',
+        containIntrinsicSize: '1px 1200px',
+      }}
+    >
+      {/* Wave uppe (dekorativ) */}
       <div
         className="absolute top-0 left-0 w-full h-20 overflow-hidden pointer-events-none"
         style={{ zIndex: 0 }}
+        aria-hidden="true"
       >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" className="w-full h-full" preserveAspectRatio="none">
           <path d="M0,0 C300,100 900,0 1200,100 L1200,120 L0,120 Z" fill="#08132B" />
         </svg>
       </div>
 
-      <div className="relative z-10 max-w-4xl mx-auto py-24 px-8">
+      <div className="relative z-10 max-w-4xl mx-auto py-24 px-8" style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 800px' }}>
         <h2
           className="text-4xl sm:text-5xl text-white font-medium text-center mb-8"
           style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
@@ -208,19 +243,23 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
           Börja Bemanna
         </h2>
 
-        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 shadow-lg">
+        <div
+          className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-3xl p-8 shadow-lg"
+          style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 680px' }}
+        >
           <form onSubmit={handleFormSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">Förnamn *</label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} aria-hidden="true" />
                   <input
                     type="text"
                     name="fornamn"
                     value={safeFormData.fornamn}
                     onChange={handleInputChange}
                     required
+                    autoComplete="given-name"
                     className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                     placeholder="Ditt förnamn"
                   />
@@ -229,13 +268,14 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">Efternamn *</label>
                 <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} aria-hidden="true" />
                   <input
                     type="text"
                     name="efternamn"
                     value={safeFormData.efternamn}
                     onChange={handleInputChange}
                     required
+                    autoComplete="family-name"
                     className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                     placeholder="Ditt efternamn"
                   />
@@ -247,13 +287,14 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">Företag *</label>
                 <div className="relative">
-                  <Building className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <Building className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} aria-hidden="true" />
                   <input
                     type="text"
                     name="foretag"
                     value={safeFormData.foretag}
                     onChange={handleInputChange}
                     required
+                    autoComplete="organization"
                     className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                     placeholder="Ert företagsnamn"
                   />
@@ -266,6 +307,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   name="titel"
                   value={safeFormData.titel}
                   onChange={handleInputChange}
+                  autoComplete="organization-title"
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                   placeholder="Din titel"
                 />
@@ -276,13 +318,14 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">E-post *</label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} aria-hidden="true" />
                   <input
                     type="email"
                     name="epost"
                     value={safeFormData.epost}
                     onChange={handleInputChange}
                     required
+                    autoComplete="email"
                     className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                     placeholder="din@email.com"
                   />
@@ -291,12 +334,15 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">Telefon</label>
                 <div className="relative">
-                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} />
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} aria-hidden="true" />
                   <input
                     type="tel"
                     name="telefon"
                     value={safeFormData.telefon}
                     onChange={handleInputChange}
+                    autoComplete="tel"
+                    inputMode="tel"
+                    pattern="^[0-9+()\\s-]*$"
                     className="w-full pl-12 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
                     placeholder="+46 XX XXX XX XX"
                   />
@@ -312,13 +358,8 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   value={safeFormData.typAvBehov}
                   required
                   placeholder="Välj typ"
-                  options={typOptions}
-                  onChange={(val) => {
-                    const event = {
-                      target: { name: 'typAvBehov', value: val },
-                    } as unknown as React.ChangeEvent<HTMLSelectElement>;
-                    handleInputChange(event);
-                  }}
+                  options={TYP_OPTIONS}
+                  onChange={onTypChange}
                 />
               </div>
               <div>
@@ -360,7 +401,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
               <div>
                 <label className="block text-white/80 text-sm font-medium mb-2">Meddelande *</label>
                 <div className="relative">
-                  <MessageSquare className="absolute left-4 top-4 text-white/40" size={18} />
+                  <MessageSquare className="absolute left-4 top-4 text-white/40" size={18} aria-hidden="true" />
                   <textarea
                     name="meddelande"
                     value={safeFormData.meddelande}
@@ -376,7 +417,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
 
             {/* ----- Åtgärder + GDPR ----- */}
             <div className="pt-2 md:pt-4 space-y-4">
-              {/* MOBIL: checkbox ovanför knappen (oförändrat) */}
+              {/* MOBIL */}
               <div className="block md:hidden">
                 <label className="flex items-start gap-3 mb-3">
                   <input
@@ -409,7 +450,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                 </button>
               </div>
 
-              {/* DESKTOP: GDPR till vänster, knapp till höger (ändringen) */}
+              {/* DESKTOP */}
               <div className="hidden md:flex md:items-center md:justify-between md:gap-6">
                 <label className="flex items-start gap-3">
                   <input
