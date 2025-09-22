@@ -58,7 +58,7 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
               Arvin Mahmoudi
             </h3>
             <p className="text-blue-400 font-medium text-sm sm:text-base" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Medgrundare & Leveranschef
+              Medgrundare & Ordförande
             </p>
           </div>
         </div>
