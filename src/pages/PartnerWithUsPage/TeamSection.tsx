@@ -46,11 +46,12 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
                 src="https://i.ibb.co/WNwzR4vM/Black-and-White-Modern-Linkedln-Profile-Picture-4.png"
                 alt="Jawad Abbas"
                 className="w-full h-full rounded-full object-cover"
-                loading="lazy"
+                /* 👉 Ladda tidigare och med hög prioritet */
+                loading="eager"
+                fetchPriority="high"
                 decoding="async"
                 width={96}
                 height={96}
-                fetchPriority="low"
               />
             </div>
             <h3
@@ -77,11 +78,12 @@ const TeamSection: React.FC<TeamSectionProps> = ({ isVisible }) => {
                 src="https://i.ibb.co/cpq3pkZ/Black-and-White-Modern-Linkedln-Profile-Picture-3.png"
                 alt="Arvin Mahmoudi"
                 className="w-full h-full rounded-full object-cover"
-                loading="lazy"
+                /* 👉 Ladda tidigare och med hög prioritet */
+                loading="eager"
+                fetchPriority="high"
                 decoding="async"
                 width={96}
                 height={96}
-                fetchPriority="low"
               />
             </div>
             <h3
