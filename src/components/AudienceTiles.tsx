@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState, memo, useCallback } from "
 import { User, Briefcase, ArrowRight, Sparkles, Target, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-// --- flytta konstanter utanför komponenten (hindrar nya referenser varje render)
+/** ---------- KONSTANTER (flyttade utanför) ---------- */
 const AUDIENCES = [
   {
     id: "candidates",
@@ -36,10 +36,10 @@ const STARS = [
   { left: "65%", top: "10%", size: 2.5, delay: "1.5s", color: "#c5e8ff", opacity: 0.09 },
 ] as const;
 
-// --- litet hjälpargränssnitt
+/** ---------- HJÄLP ---------- */
 type Vec2 = { x: number; y: number };
 
-// --- memo: enskilt kort (minimerar re-renders)
+/** ---------- CARD (memo) ---------- */
 const AudienceCard = memo(function AudienceCard({
   audience,
   index,
@@ -53,38 +53,44 @@ const AudienceCard = memo(function AudienceCard({
   isMobile: boolean;
   onNavigate: () => void;
 }) {
-  const cardRef = useRef<HTMLDivElement | null>(null);
-  const activeRef = useRef(false); // om kortet är hover:at
-  const targetRot = useRef<Vec2>({ x: 0, y: 0 }); // målrotation
-  const rot = useRef<Vec2>({ x: 0, y: 0 }); // aktuell rotation
+  // Vi tiltar BARA en dekorations-layer, inte hela kortet
+  const tiltLayerRef = useRef<HTMLDivElement | null>(null);
+  const activeRef = useRef(false);
+  const targetRot = useRef<Vec2>({ x: 0, y: 0 });
+  const rot = useRef<Vec2>({ x: 0, y: 0 });
   const rafId = useRef<number | null>(null);
 
-  // mjuk interpolering för snyggare känsla utan state
   const animate = useCallback(() => {
-    const el = cardRef.current;
+    const el = tiltLayerRef.current;
     if (!el) return;
     const lerp = 0.12;
     rot.current.x += (targetRot.current.x - rot.current.x) * lerp;
     rot.current.y += (targetRot.current.y - rot.current.y) * lerp;
+    // mild rotation – påverkar bara dekor; text ligger i separat icke-transformerad container
     el.style.transform = isMobile
       ? ""
       : `perspective(1000px) rotateX(${rot.current.x}deg) rotateY(${rot.current.y}deg)`;
-    if (Math.abs(rot.current.x - targetRot.current.x) > 0.01 || Math.abs(rot.current.y - targetRot.current.y) > 0.01) {
+    if (
+      Math.abs(rot.current.x - targetRot.current.x) > 0.01 ||
+      Math.abs(rot.current.y - targetRot.current.y) > 0.01
+    ) {
       rafId.current = requestAnimationFrame(animate);
     } else {
       rafId.current = null;
     }
   }, [isMobile]);
 
-  const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    if (isMobile || !activeRef.current) return;
-    const r = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width;
-    const py = (e.clientY - r.top) / r.height;
-    // mildare rotation (mindre GPU-kostnad)
-    targetRot.current = { x: -(py - 0.5) * 10, y: (px - 0.5) * 10 };
-    if (!rafId.current) rafId.current = requestAnimationFrame(animate);
-  }, [animate, isMobile]);
+  const onPointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (isMobile || !activeRef.current) return;
+      const r = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      targetRot.current = { x: -(py - 0.5) * 10, y: (px - 0.5) * 10 };
+      if (!rafId.current) rafId.current = requestAnimationFrame(animate);
+    },
+    [animate, isMobile]
+  );
 
   const onEnter = useCallback(() => {
     activeRef.current = true;
@@ -105,36 +111,61 @@ const AudienceCard = memo(function AudienceCard({
       onPointerLeave={onLeave}
       onPointerMove={onPointerMove}
     >
+      {/* YTTERKORT – INGEN transform här => texten förblir knivskarp */}
       <div
-        ref={cardRef}
         className={`
           relative rounded-2xl sm:rounded-3xl overflow-hidden
-          bg-white/5 backdrop-blur-sm   /* lägre blur än tidigare */
-          border border-white/10
-          transition-[box-shadow,transform] duration-300 ease-out cursor-pointer
-          min-h-[420px] sm:h-[560px]
-          shadow-[0_18px_40px_-10px_rgba(0,0,0,0.35)]
-          will-change-transform         /* bara på kortet, inte globalt */
+          bg-white/5 backdrop-blur-2xl
+          border border-white/15
+          transition-[box-shadow] duration-300 ease-out cursor-pointer
+          min-h-[420px] sm:h-[600px]
+          shadow-[0_16px_40px_-6px_rgba(0,0,0,0.35)]
         `}
         onClick={onNavigate}
       >
-        {/* Header */}
-        <div className={`relative h-36 sm:h-48 flex items-center justify-center overflow-hidden bg-gradient-to-br ${audience.gradient}`}>
-          {/* enklare dekor – färre element */}
-          <Sparkles size={12} className="absolute top-4 left-4 text-white/40" />
-          <Sparkles size={10} className="absolute bottom-4 right-4 text-white/30" />
+        {/* TILT-LAYER – ligger ovanför och innehåller enbart dekor som får roteras */}
+        <div
+          ref={tiltLayerRef}
+          className="absolute inset-0 pointer-events-none will-change-transform"
+          aria-hidden="true"
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          {/* Header + highlights som tidigare */}
+          <div
+            className={`absolute left-0 right-0 top-0 h-36 sm:h-48 overflow-hidden bg-gradient-to-br ${audience.gradient}`}
+            style={{ transform: "translateZ(1px)" }}
+          >
+            <Sparkles size={12} className="absolute top-8 left-8 text-white/45" />
+            <Sparkles size={8} className="absolute bottom-8 right-12 text-white/30" />
+            {/* Accent cirklar */}
+            <div className="absolute top-8 right-8 w-20 h-20 border border-white/25 rounded-full opacity-70" />
+            <div className="absolute bottom-8 left-8 w-12 h-12 border border-white/30 rounded-full opacity-70" />
+          </div>
+        </div>
 
-          <div className="relative z-10 w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center shadow-lg">
+        {/* HEADER-INNEHÅLL – statiskt (ingen transform) */}
+        <div className={`relative h-36 sm:h-48 flex items-center justify-center overflow-hidden bg-gradient-to-br ${audience.gradient}`}>
+          <div
+            className={`
+              relative z-10 w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-white/15 backdrop-blur-sm
+              flex items-center justify-center transition-all duration-500 shadow-lg
+            `}
+          >
             <audience.icon size={isMobile ? 32 : 40} className="text-white" />
           </div>
 
-          <div className="absolute top-3 right-3 sm:top-5 sm:right-5 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/10 backdrop-blur-sm flex items-center justify-center">
+          <div
+            className={`
+              absolute top-4 right-4 sm:top-6 sm:right-6 w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/10 backdrop-blur-sm
+              flex items-center justify-center transition-all duration-500 delay-100
+            `}
+          >
             <audience.accentIcon size={isMobile ? 14 : 16} className="text-white/80" />
           </div>
         </div>
 
-        {/* Body */}
-        <div className="relative p-6 sm:p-8 flex flex-col">
+        {/* BODY – text är 100% skarp */}
+        <div className="relative p-6 sm:p-8 flex flex-col" style={{ WebkitFontSmoothing: "antialiased" }}>
           <div style={{ marginBottom: "0.2rem" }}>
             <h3 className="uppercase text-[#A0BFFF] tracking-[0.08em] text-sm sm:text-base m-0" style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
               {audience.title}
@@ -149,11 +180,11 @@ const AudienceCard = memo(function AudienceCard({
           </p>
 
           <div className="hidden sm:block space-y-3 mb-8 flex-1">
-            {audience.features.map((f) => (
-              <div key={f} className="flex items-center space-x-3">
+            {audience.features.map((feature) => (
+              <div key={feature} className="flex items-center space-x-3">
                 <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${audience.gradient} flex-shrink-0`} />
                 <span className="text-[#E2E8F0]" style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}>
-                  {f}
+                  {feature}
                 </span>
               </div>
             ))}
@@ -186,6 +217,7 @@ const AudienceCard = memo(function AudienceCard({
   );
 });
 
+/** ---------- HUVUD-KOMP ---------- */
 const AudienceTiles = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
@@ -204,7 +236,6 @@ const AudienceTiles = () => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          // när den väl syns, pausa allt IO-arbete
           io.unobserve(entry.target);
         }
       },
@@ -219,22 +250,25 @@ const AudienceTiles = () => {
       <style>{`
         @keyframes float-slow { 0%,100% { transform: translate(0,0); } 50% { transform: translate(8px,5px); } }
         .animate-float-slow { animation: float-slow 28s ease-in-out infinite; }
-        /* respekt för prefers-reduced-motion */
         @media (prefers-reduced-motion: reduce) {
           .animate-float-slow { animation: none !important; }
         }
       `}</style>
 
-      {/* Bakgrund – förenklad */}
+      {/* Bakgrund (oförändrad look, men håller “brus” enkelt) */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0" style={{ backgroundColor: "#08132B" }} />
         <div
-          className="absolute -left-28 -top-28 w-[520px] h-[520px] rounded-full blur-3xl animate-float-slow opacity-20"
-          style={{ background: "radial-gradient(circle at 50% 50%, rgba(11,39,77,0.35) 0%, transparent 70%)" }}
+          className="absolute -left-28 -top-28 w-[600px] h-[600px] rounded-full blur-3xl animate-float-slow opacity-30"
+          style={{
+            background: "radial-gradient(circle at 50% 50%, rgba(11,39,77,0.35) 0%, transparent 70%)",
+          }}
         />
         <div
-          className="absolute right-1/4 bottom-24 w-[440px] h-[440px] rounded-full blur-3xl animate-float-slow opacity-15"
-          style={{ background: "radial-gradient(circle at 60% 50%, rgba(22,74,128,0.22) 0%, transparent 70%)" }}
+          className="absolute right-1/4 bottom-24 w-[500px] h-[500px] rounded-full blur-3xl animate-float-slow opacity-25"
+          style={{
+            background: "radial-gradient(circle at 60% 50%, rgba(22,74,128,0.22) 0%, transparent 70%)",
+          }}
         />
         {STARS.map((s, i) => (
           <div
