@@ -9,10 +9,8 @@ const WhyChoose = () => {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [scrollIndex, setScrollIndex] = useState<number | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
-
   const sectionRef = useRef<HTMLElement>(null);
   const pillarRefs = useRef<Array<HTMLDivElement | null>>([]);
-  const rafId = useRef<number | null>(null);
 
   const updateScrollIndex = () => {
     if (!pillarRefs.current.length) return;
@@ -37,39 +35,32 @@ const WhyChoose = () => {
       ([entry]) => {
         if (entry.isIntersecting) setIsVisible(true);
       },
-      { threshold: 0.12 }
+      { threshold: 0.1 }
     );
     if (sectionRef.current) observer.observe(sectionRef.current);
 
-    const onScroll = () => {
-      if (rafId.current != null) return;
-      rafId.current = requestAnimationFrame(() => {
-        if (sectionRef.current) {
-          const rect = sectionRef.current.getBoundingClientRect();
-          const visibleTop = Math.max(0, -rect.top);
-          const sectionHeight = rect.height;
-          const windowHeight = window.innerHeight;
-          const progress = clamp(
-            visibleTop / Math.max(1, sectionHeight - windowHeight),
-            0,
-            1
-          );
-          setScrollProgress(progress);
-        }
-        updateScrollIndex();
-        rafId.current = null;
-      });
+    const handleScroll = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const visibleTop = Math.max(0, -rect.top);
+      const sectionHeight = rect.height;
+      const windowHeight = window.innerHeight;
+      const progress = clamp(
+        visibleTop / (sectionHeight - windowHeight + 200),
+        0,
+        1
+      );
+      setScrollProgress(progress);
+      updateScrollIndex();
     };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', updateScrollIndex);
-    onScroll();
-
+    handleScroll();
     return () => {
       if (sectionRef.current) observer.unobserve(sectionRef.current);
-      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', updateScrollIndex);
-      if (rafId.current) cancelAnimationFrame(rafId.current);
     };
   }, []);
 
@@ -106,66 +97,141 @@ const WhyChoose = () => {
   ];
 
   return (
-    <section ref={sectionRef} className="relative py-20 sm:py-28 bg-white overflow-hidden">
-      {/* Vertikal progress-linje + blå boll (desktop) */}
-      <div
-        className={`pointer-events-none absolute left-1/2 -translate-x-1/2 z-0 hidden lg:flex flex-col items-center transition-all duration-700 ease-out ${
-          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-        }`}
-        style={{ top: '12rem', bottom: '18rem' }}
-        aria-hidden="true"
-      >
-        <div className="relative w-px flex-1">
-          <div
-            className="absolute left-1/2 -translate-x-1/2 w-px"
-            style={{
-              top: 0,
-              bottom: 0,
-              background:
-                'linear-gradient(to bottom, transparent 0%, rgba(107,114,128,0.55) 20%, rgba(107,114,128,0.55) 80%, transparent 100%)',
-            }}
-          />
-          <div
-            className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full"
-            style={{ top: 0, background: 'rgba(107,114,128,0.35)' }}
-          />
-          <div
-            className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full"
-            style={{ bottom: 0, background: 'rgba(107,114,128,0.35)' }}
-          />
-          <div
-            className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full shadow-md transition-transform duration-150"
-            style={{
-              backgroundColor: '#1e3a8a',
-              top: `${scrollProgress * 100}%`,
-              transform: 'translate(-50%, -50%)',
-            }}
-          >
-            <div className="absolute -inset-1 rounded-full border-2 border-[#1e3a8a]/30" />
-          </div>
-        </div>
+    // Mindre vertikal padding på mobil; desktop oförändrad
+    <section ref={sectionRef} className="relative py-20 sm:py-32 overflow-hidden">
+      {/* CSS-animationer */}
+      <style>{`
+        @keyframes blob {
+          0% { transform: scale(1) translate(0,0); }
+          33% { transform: scale(1.05) translate(8px, -5px); }
+          66% { transform: scale(0.95) translate(-8px, 5px); }
+          100% { transform: scale(1) translate(0,0); }
+        }
+        .animate-blob { animation: blob 20s infinite ease-in-out; }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-blob { animation: none; }
+        }
+      `}</style>
+
+      {/* Bakgrund */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(135deg, #f5f7fa 0%, #fffdf7 80%)' }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'radial-gradient(circle at 50% 40%, rgba(0,0,0,0.06) 0%, transparent 80%)',
+            mixBlendMode: 'multiply',
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E") repeat`,
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px)',
+            backgroundSize: '100px 100px',
+          }}
+        />
+        <div
+          className="absolute -top-10 left-1/3 w-[450px] h-[450px] rounded-full blur-3xl opacity-10 animate-blob"
+          style={{
+            background:
+              'radial-gradient(circle at 40% 40%, #7C3AED 0%, transparent 70%)',
+          }}
+        />
+        <div
+          className="absolute bottom-12 right-1/4 w-[500px] h-[500px] rounded-full blur-3xl opacity-10 animate-blob"
+          style={{
+            background:
+              'radial-gradient(circle at 60% 50%, #10B981 0%, transparent 70%)',
+            animationDelay: '3s',
+          }}
+        />
+        <div className="absolute top-20 right-20 w-2 h-2 bg-gray-200 rounded-full opacity-40" />
+        <div className="absolute top-40 left-16 w-1 h-1 bg-gray-300 rounded-full opacity-60" />
+        <div className="absolute bottom-32 right-32 w-1.5 h-1.5 bg-gray-200 rounded-full opacity-50" />
+        <div className="absolute bottom-20 left-20 w-0.5 h-0.5 bg-gray-400 rounded-full opacity-30" />
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-8">
-        {/* Rubrik */}
-        <div className="text-center mb-12 sm:mb-20">
-          <h2
-            className={`text-4xl sm:text-5xl font-bold tracking-tight text-black transition-all duration-600 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-            }`}
-            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-          >
-            Vår Metod För Framgång
-          </h2>
-          {/* Elegant linje under rubriken */}
+      <div className="relative z-10 max-w-6xl mx-auto px-8">
+        {/* Progress-line (endast desktop) */}
+        <div
+          className={`absolute left-1/2 -translate-x-1/2 z-0 hidden lg:flex flex-col items-center transition-all duration-1000 ease-out ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
+          style={{ top: '14rem', bottom: '20rem' }}
+        >
+          <div className="relative w-px flex-1">
+            <div
+              className="absolute left-1/2 -translate-x-1/2 w-px rounded"
+              style={{
+                top: 0,
+                bottom: 0,
+                background:
+                  'linear-gradient(to bottom, transparent 0%, rgba(107,114,128,0.75) 25%, rgba(107,114,128,0.75) 75%, transparent 100%)',
+                filter: 'blur(0.6px)',
+              }}
+            />
+            <div
+              className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full"
+              style={{ top: 0, background: 'rgba(107,114,128,0.4)' }}
+            />
+            <div
+              className="absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full"
+              style={{ bottom: 0, background: 'rgba(107,114,128,0.4)' }}
+            />
+            <div
+              className="absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full shadow-lg transition-all duration-500 ease-out"
+              style={{
+                backgroundColor: '#1e3a8a',
+                top: `${scrollProgress * 100}%`,
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              <div className="absolute inset-0 bg-white/20 rounded-full animate-pulse" />
+              <div className="absolute -inset-1 border-2 border-blue-900/30 rounded-full" />
+            </div>
+          </div>
+        </div>
+
+        {/* Rubrik – mindre på mobil */}
+        <div className="text-center mb-12 sm:mb-24">
+          <div className="inline-block relative">
+            <div
+              className="absolute inset-0 rounded-md"
+              style={{
+                background:
+                  'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 60%)',
+                filter: 'blur(16px)',
+                zIndex: -1,
+              }}
+            />
+            <h2
+              className={`text-4xl sm:text-5xl md:text-6xl font-normal text-gray-900 mb-4 tracking-tight leading-[1.15] sm:leading-[1.1] transition-all duration-1000 transform ${
+                isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+              }`}
+              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+            >
+              Vår Metod För <span className="font-medium">Framgång</span>
+            </h2>
+          </div>
           <div
-            className={`w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mt-4 transition-all duration-600 ${
-              isVisible ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
+            className={`w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-4 transition-all duration-1000 delay-200 transform ${
+              isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
             }`}
           />
           <p
-            className={`text-base sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed mt-4 transition-all duration-600 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+            className={`text-base sm:text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed font-light -mt-2 transition-all duration-1000 delay-400 transform ${
+              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
             }`}
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
@@ -174,7 +240,7 @@ const WhyChoose = () => {
           </p>
         </div>
 
-        {/* Kort – alternating layout som första versionen, men lättare */}
+        {/* Kort */}
         <div className="space-y-10 lg:space-y-16">
           {pillars.map((pillar, index) => {
             const isActive = effectiveActive === index;
@@ -182,10 +248,10 @@ const WhyChoose = () => {
               <div
                 key={index}
                 ref={(el) => (pillarRefs.current[index] = el)}
-                className={`group relative transition-all duration-600 ${
-                  isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+                className={`group relative transition-all duration-1000 transform ${
+                  isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
                 }`}
-                style={{ transitionDelay: `${200 + index * 120}ms` }}
+                style={{ transitionDelay: `${800 + index * 200}ms` }}
                 onMouseEnter={() => setHoverIndex(index)}
                 onMouseLeave={() => setHoverIndex(null)}
               >
@@ -202,26 +268,38 @@ const WhyChoose = () => {
                   >
                     <div className="flex items-center space-x-4">
                       <span
-                        className="text-5xl sm:text-6xl font-bold text-gray-200 leading-none"
-                        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                        className="text-6xl font-normal text-gray-200 leading-none"
+                        style={{
+                          fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                        }}
                       >
                         {pillar.number}
                       </span>
                       <div
-                        className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors duration-300 ${
-                          isActive ? 'bg-[#1e3a8a]' : 'bg-[#f1f4ff]'
+                        className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 ${
+                          isActive ? 'scale-110' : ''
                         }`}
+                        style={{
+                          backgroundColor: isActive ? '#1e3a8a' : '#f9f9f9',
+                          boxShadow: isActive
+                            ? '0 0 25px rgba(30,58,138,0.4)'
+                            : undefined,
+                        }}
                       >
                         <pillar.icon
                           size={20}
-                          className={`${isActive ? 'text-white' : 'text-[#1e3a8a]'} transition-colors duration-300`}
+                          className={`transition-colors duration-500 ${
+                            isActive ? 'text-white' : 'text-gray-600'
+                          }`}
                         />
                       </div>
                     </div>
 
                     <h3
-                      className="text-2xl sm:text-3xl font-medium text-gray-900 tracking-tight"
-                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                      className="text-3xl font-medium text-gray-900 tracking-tight"
+                      style={{
+                        fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                      }}
                     >
                       {pillar.title}
                     </h3>
@@ -233,15 +311,17 @@ const WhyChoose = () => {
                       {pillar.description}
                     </p>
 
-                    <div className="pt-2">
+                    <div className="pt-4">
                       <div
-                        className="text-xl sm:text-2xl font-medium text-[#1e3a8a] mb-0.5"
-                        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                        className="text-2xl font-normal text-gray-900 mb-1"
+                        style={{
+                          fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
+                        }}
                       >
                         {pillar.metric}
                       </div>
                       <div
-                        className="text-xs sm:text-sm text-gray-400 uppercase tracking-wider"
+                        className="text-sm text-gray-400 uppercase tracking-wider"
                         style={{ fontFamily: 'Inter, sans-serif' }}
                       >
                         {pillar.metricLabel}
@@ -249,43 +329,65 @@ const WhyChoose = () => {
                     </div>
                   </div>
 
-                  {/* Höger: Illustration – lätt, utan tunga filter */}
+                  {/* Höger: Illustration – dold på mobil */}
                   <div
                     className={`lg:col-span-5 relative ${
                       index % 2 === 1 ? 'lg:col-start-1' : ''
                     } hidden sm:block`}
                   >
                     <div
-                      className={`aspect-square max-w-sm mx-auto relative transition-transform duration-500 ${
-                        isActive ? 'scale-[1.03]' : ''
+                      className={`aspect-square max-w-sm mx-auto relative transition-all duration-700 ${
+                        isActive ? 'scale-105' : ''
                       }`}
                     >
                       <div
-                        className="absolute inset-0 rounded-2xl border border-gray-100"
-                        style={{ background: 'white' }}
+                        className="absolute inset-0 rounded-full"
+                        style={{
+                          border: '1px solid rgba(107,114,128,0.08)',
+                          background: 'rgba(255,255,255,0.03)',
+                          boxShadow: isActive
+                            ? '0 0 30px rgba(30,58,138,0.1)'
+                            : '0 0 15px rgba(0,0,0,0.03)',
+                        }}
+                      />
+                      <div
+                        className="absolute inset-10 rounded-full"
+                        style={{
+                          background: 'rgba(255,255,255,0.015)',
+                          backdropFilter: 'blur(3px)',
+                          ...(isActive ? { transform: 'scale(1.02)' } : {}),
+                        }}
                       />
                       <div className="absolute inset-0 flex items-center justify-center">
                         <div
-                          className={`w-20 h-20 rounded-full border border-gray-100 shadow-sm flex items-center justify-center transition-all duration-500 ${
-                            isActive ? 'shadow-md' : ''
+                          className={`w-20 h-20 rounded-full shadow-sm border border-gray-100 flex items-center justify-center transition-all duration-700 ${
+                            isActive ? 'scale-125 shadow-lg' : ''
                           }`}
-                          style={{ background: 'rgba(247,249,255,0.9)' }}
+                          style={{
+                            background: 'rgba(255,255,255,0.85)',
+                          }}
                         >
                           <pillar.icon
-                            size={30}
-                            className={`${isActive ? 'text-[#1e3a8a]' : 'text-gray-400'} transition-colors duration-300`}
+                            size={32}
+                            className={`transition-colors duration-500 ${
+                              isActive ? 'text-[#1e3a8a]' : 'text-gray-400'
+                            }`}
                           />
                         </div>
                       </div>
-                      {/* Små accentpunkter – minimala och billiga */}
                       <div
-                        className={`absolute top-4 right-6 w-2 h-2 rounded-full transition-colors duration-300 ${
-                          isActive ? 'bg-[#1e3a8a]' : 'bg-gray-200'
+                        className={`absolute top-4 right-8 w-2 h-2 rounded-full transition-all duration-700 ${
+                          isActive ? 'scale-150 bg-[#1e3a8a]' : 'bg-gray-200'
                         }`}
                       />
                       <div
-                        className={`absolute bottom-6 left-6 w-1.5 h-1.5 rounded-full transition-colors duration-300 ${
-                          isActive ? 'bg-[#1e3a8a]' : 'bg-gray-300'
+                        className={`absolute bottom-8 left-4 w-1.5 h-1.5 rounded-full transition-all duration-700 delay-100 ${
+                          isActive ? 'scale-150 bg-[#1e3a8a]' : 'bg-gray-300'
+                        }`}
+                      />
+                      <div
+                        className={`absolute top-1/3 left-2 w-1 h-1 rounded-full transition-all duration-700 delay-200 ${
+                          isActive ? 'scale-150 bg-[#1e3a8a]' : 'bg-gray-200'
                         }`}
                       />
                     </div>
@@ -294,8 +396,13 @@ const WhyChoose = () => {
 
                 {/* Separator-linje */}
                 {index < pillars.length - 1 && (
-                  <div className="mt-10 lg:mt-14 flex justify-center">
-                    <div className="w-px h-10 lg:h-16 bg-gradient-to-b from-transparent via-gray-200 to-transparent" />
+                  <div className="mt-10 lg:mt-16 flex justify-center">
+                    <div
+                      className={`w-px h-10 lg:h-16 bg-gradient-to-b from-transparent via-gray-200 to-transparent transition-all duration-1000 ${
+                        isVisible ? 'scale-y-100' : 'scale-y-0'
+                      }`}
+                      style={{ transitionDelay: `${1200 + index * 200}ms` }}
+                    />
                   </div>
                 )}
               </div>
