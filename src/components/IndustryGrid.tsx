@@ -37,7 +37,7 @@ const TRUST_PILLARS = [
 ] as const;
 
 /* =========================
-   DELKOMPONENTER – memo: inga re-renders i onödan
+   DELKOMPONENTER – memo
    ========================= */
 type Pillar = (typeof TRUST_PILLARS)[number];
 
@@ -228,7 +228,6 @@ const IndustryGrid = () => {
       data-animate="false"
       style={
         {
-          // default-variabler (för parallax)
           ["--mx" as any]: 0,
           ["--my" as any]: 0,
         } as React.CSSProperties
@@ -373,7 +372,7 @@ const IndustryGrid = () => {
               ${isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
             style={{ fontFamily: "Zen Kaku Gothic Antique, sans-serif", fontWeight: 400, color: "#000" }}
           >
-            <span className="block">Vår Expertis Inom</span>
+            <span className="block font-medium">Vår Expertis Inom</span>
             <span className="block font-medium">Logistikbemanning</span>
           </h2>
           <div
