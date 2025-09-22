@@ -162,8 +162,10 @@ const CandidateFormSection: React.FC<CandidateFormSectionProps> = React.memo(
                   <a
                     href="/privacy"
                     className="text-blue-600 hover:text-blue-700 underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 rounded"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.location.href = '/integritetspolicy';
+                    }}
                   >
                     Integritetspolicy
                   </a>
