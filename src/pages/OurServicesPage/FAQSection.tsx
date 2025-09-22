@@ -2,13 +2,13 @@ import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus } from 'lucide-react';
 
-const FAQSection: React.FC = () => {
+const FAQSection: React.FC = React.memo(() => {
   const navigate = useNavigate();
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
   const panelsRef = useRef<Array<HTMLDivElement | null>>([]);
 
   const toggleFAQ = (index: number) => {
-    setOpenFAQ(prev => (prev === index ? null : index));
+    setOpenFAQ((prev) => (prev === index ? null : index));
   };
 
   const faqs = [
@@ -22,11 +22,10 @@ const FAQSection: React.FC = () => {
     { question: 'Hur kommer vi igång?', answer: 'Fyll i formuläret eller kontakta oss – vi bokar ett kort behovssamtal och tar det därifrån.' }
   ];
 
-  // ✅ JSON-LD för FAQPage (byggs direkt från faqs)
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": faqs.map(f => ({
+    "mainEntity": faqs.map((f) => ({
       "@type": "Question",
       "name": f.question,
       "acceptedAnswer": {
@@ -36,7 +35,6 @@ const FAQSection: React.FC = () => {
     }))
   };
 
-  // Subtilt brus för vit bakgrund
   const noiseSvg = `<?xml version="1.0" encoding="UTF-8"?>
   <svg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'>
     <filter id='n'>
@@ -49,7 +47,14 @@ const FAQSection: React.FC = () => {
   const noiseDataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(noiseSvg)}`;
 
   return (
-    <section className="relative py-16 md:py-24 px-5 md:px-8 bg-white overflow-hidden">
+    <section
+      className="relative py-16 md:py-24 px-5 md:px-8 bg-white overflow-hidden"
+      style={{
+        contentVisibility: 'auto',
+        containIntrinsicSize: '720px',
+      }}
+      aria-label="FAQ Bemanning"
+    >
       {/* 🔎 SEO: FAQPage JSON-LD */}
       <script
         type="application/ld+json"
@@ -58,7 +63,11 @@ const FAQSection: React.FC = () => {
       />
 
       {/* Dekorativ bakgrund */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div
+        aria-hidden="true"
+        inert
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
         <div
           className="absolute inset-0 opacity-90 md:opacity-100"
           style={{
@@ -71,7 +80,10 @@ const FAQSection: React.FC = () => {
             mixBlendMode: 'normal',
           }}
         />
-        <div className="absolute inset-0 opacity-[0.03] md:opacity-[0.04]" style={{ backgroundImage: `url(${noiseDataUrl})` }} />
+        <div
+          className="absolute inset-0 opacity-[0.03] md:opacity-[0.04]"
+          style={{ backgroundImage: `url(${noiseDataUrl})` }}
+        />
       </div>
 
       <div className="max-w-4xl mx-auto relative">
@@ -97,7 +109,6 @@ const FAQSection: React.FC = () => {
                 data-open={isOpen}
                 className="group relative bg-white/80 backdrop-blur-[2px] border border-gray-200 rounded-2xl overflow-hidden shadow-sm transition-[box-shadow,transform,border-color] duration-300 md:hover:shadow-md md:hover:border-gray-300 md:hover:-translate-y-0.5 will-change-transform"
               >
-                {/* Vänster accentbar */}
                 <span className="pointer-events-none absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-blue-500/30 via-emerald-500/30 to-purple-500/30 transition-all duration-300 group-data-[open=true]:w-1.5" />
 
                 <button
@@ -110,8 +121,7 @@ const FAQSection: React.FC = () => {
                     {faq.question}
                   </h3>
 
-                  {/* + → – transition */}
-                  <span className="ml-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 transition-transform duration-300">
+                  <span className="ml-4 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0 transition-transform duration-300 will-change-transform">
                     <Plus
                       size={18}
                       className={`text-gray-600 transition-transform duration-300 ${isOpen ? 'rotate-45' : ''}`}
@@ -119,10 +129,9 @@ const FAQSection: React.FC = () => {
                   </span>
                 </button>
 
-                {/* Svar */}
                 <div
                   id={`faq-answer-${index}`}
-                  ref={el => (panelsRef.current[index] = el)}
+                  ref={(el) => (panelsRef.current[index] = el)}
                   className="faq-collapse"
                   style={{ maxHeight: maxH }}
                 >
@@ -137,17 +146,17 @@ const FAQSection: React.FC = () => {
           })}
         </div>
 
-        {/* CTA Line */}
         <div className="text-center relative z-10">
           <p className="text-lg text-gray-600">
             Fortsatt fundering?{' '}
             <button
               onClick={() => {
-                const element = document.getElementById('kontakt-form') || document.getElementById('contact-form');
+                const element =
+                  document.getElementById('kontakt-form') ||
+                  document.getElementById('contact-form');
                 if (element) {
                   element.scrollIntoView({ behavior: 'smooth' });
                 } else {
-                  // ✅ svensk fallback-route
                   navigate('/kontakt');
                 }
               }}
@@ -170,14 +179,23 @@ const FAQSection: React.FC = () => {
             max-height 280ms cubic-bezier(0.22, 1, 0.36, 1),
             opacity 220ms ease,
             transform 220ms ease;
+          will-change: max-height, opacity, transform;
         }
         .group[data-open="true"] .faq-collapse {
           opacity: 1;
           transform: translateY(0);
         }
+
+        @media (prefers-reduced-motion: reduce) {
+          .faq-collapse {
+            transition: none !important;
+          }
+        }
       `}</style>
     </section>
   );
-};
+});
+
+FAQSection.displayName = 'FAQSection';
 
 export default FAQSection;
