@@ -7,7 +7,13 @@ interface IndustriesSectionProps {
 
 const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
   return (
-    <section className="industries-section">
+    <section
+      className="industries-section"
+      style={{
+        contentVisibility: 'auto',
+        containIntrinsicSize: '1px 600px',
+      }}
+    >
       {/* Mobil: något mindre top-padding; desktop oförändrad */}
       <div className="content max-w-6xl mx-auto px-6 md:px-8 pt-14 md:pt-24 pb-12 md:py-16 relative z-10">
         <div className="text-center mb-4 md:mb-12">
@@ -21,10 +27,10 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
 
         {/* Dra upp kortet lite på mobil (-mt-2), oförändrat på md+ */}
         <div className="max-w-md md:max-w-2xl mx-auto mb-8 -mt-2 md:mt-0">
-          <div className="card p-6 md:p-8 text-center flex flex-col justify-between h-full">
-            <div className="icon-bg icon-3d mb-5 md:mb-6 mx-auto">
-              <Truck size={26} className="text-white md:hidden" />
-              <Truck size={28} className="text-white hidden md:block" />
+          <div className="card p-6 md:p-8 text-center flex flex-col justify-between h-full will-change-transform">
+            <div className="icon-bg icon-3d mb-5 md:mb-6 mx-auto will-change-transform">
+              <Truck size={26} className="text-white md:hidden" aria-hidden="true" />
+              <Truck size={28} className="text-white hidden md:block" aria-hidden="true" />
             </div>
 
             <div>
@@ -77,7 +83,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
           content: '';
           position: absolute;
           inset: 0;
-          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'><g fill='none' stroke='rgba(255,255,255,0.08)' stroke-width='2'><path d='M0 200 Q200 100 400 200 T800 200' /><path d='M0 300 Q200 200 400 300 T800 300' /><path d='M0 400 Q200 300 400 400 T800 400' /></g></svg>");
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600' aria-hidden='true'><g fill='none' stroke='rgba(255,255,255,0.08)' stroke-width='2'><path d='M0 200 Q200 100 400 200 T800 200' /><path d='M0 300 Q200 200 400 300 T800 300' /><path d='M0 400 Q200 300 400 400 T800 400' /></g></svg>");
           background-size: cover;
           opacity: 0.5;
           z-index: 0;
@@ -130,6 +136,7 @@ const IndustriesSection: React.FC<IndustriesSectionProps> = ({ isVisible }) => {
             inset 0 1px 0 rgba(255,255,255,0.16),
             inset 0 -1px 0 rgba(0,0,0,0.25);
           transition: transform .18s ease, box-shadow .18s ease;
+          will-change: transform, box-shadow;
         }
         .icon-3d:hover {
           transform: translateY(-1px);
