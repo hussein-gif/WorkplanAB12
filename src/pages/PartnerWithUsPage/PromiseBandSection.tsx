@@ -1,20 +1,38 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { CheckCircle } from 'lucide-react';
 
 interface PromiseBandSectionProps {
   isVisible: boolean;
 }
 
+/** Hoista statiskt innehåll så det inte skapas om varje render */
+const PROMISES: ReadonlyArray<{ title: string; subtitle: string }> = [
+  { title: 'Snabb återkoppling', subtitle: 'Svar inom 24 timmar' },
+  { title: 'Transparent prissättning', subtitle: 'Inga dolda avgifter' },
+  { title: 'Personlig kontaktperson', subtitle: 'Samma rådgivare genom hela uppdraget' },
+] as const;
+
 const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) => {
   return (
     <section
       aria-labelledby="vart-lofte"
       className="relative py-8 px-4 bg-white rounded-xl shadow-lg overflow-hidden"
-      style={{ fontFamily: 'Inter, sans-serif' }}
+      style={{
+        fontFamily: 'Inter, sans-serif',
+        /** Prestanda: rendera först när synlig och reservera platsen */
+        contentVisibility: 'auto',
+        containIntrinsicSize: '1px 320px',
+      }}
     >
-      {/* Shine overlays for glossy effect */}
-      <div className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-br from-white/50 via-white/10 to-transparent transform -skew-x-12 opacity-50 pointer-events-none" />
-      <div className="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-white/40 to-transparent transform skew-y-12 opacity-30 pointer-events-none" />
+      {/* Shine overlays for glossy effect (dekorativa, exkludera från a11y) */}
+      <div
+        aria-hidden="true"
+        className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-br from-white/50 via-white/10 to-transparent transform -skew-x-12 opacity-50 pointer-events-none"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute bottom-0 right-0 w-1/3 h-1/2 bg-gradient-to-tl from-white/40 to-transparent transform skew-y-12 opacity-30 pointer-events-none"
+      />
 
       <div className="relative max-w-4xl mx-auto text-center font-medium">
         <h3
@@ -25,13 +43,9 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
         </h3>
 
         <ul className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { title: 'Snabb återkoppling', subtitle: 'Svar inom 24 timmar' },
-            { title: 'Transparent prissättning', subtitle: 'Inga dolda avgifter' },
-            { title: 'Personlig kontaktperson', subtitle: 'Samma rådgivare genom hela uppdraget' },
-          ].map(({ title, subtitle }, idx) => (
+          {PROMISES.map(({ title, subtitle }, idx) => (
             <li key={idx} className="flex flex-col items-center space-y-1">
-              <CheckCircle size={20} className="text-[#4CAF50]" />
+              <CheckCircle size={20} className="text-[#4CAF50]" aria-hidden="true" />
               <p className="text-black text-sm md:text-base font-medium">
                 {title}
               </p>
@@ -47,4 +61,5 @@ const PromiseBandSection: React.FC<PromiseBandSectionProps> = ({ isVisible }) =>
   );
 };
 
-export default PromiseBandSection;
+/** Undvik onödiga re-renders om props inte ändras */
+export default memo(PromiseBandSection);
