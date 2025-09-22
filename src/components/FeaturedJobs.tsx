@@ -154,11 +154,11 @@ const FeaturedJobs = () => {
             />
             <h2
               className={`
-                text-4xl sm:text-6xl text-white mb-4 sm:mb-6 tracking-tight leading-[0.95]
+                text-3xl sm:text-5xl text-white mb-4 sm:mb-6 tracking-tight leading-[1.1]
                 transition-all duration-700 transform
                 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}
               `}
-              style={{ fontFamily: "Zen Kaku Gothic Antique, sans-serif", fontWeight: 400 }}
+              style={{ fontFamily: "Zen Kaku Gothic Antique, sans-serif", fontWeight: 500 }}
             >
               Utvalda <span className="font-medium">Möjligheter</span>
             </h2>
