@@ -11,25 +11,44 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
   const steps: Array<{
     number: string;
     title: string;
-    description: string; // underrubrik
+    description: string;
     kind: PieceKind;
   }> = [
-    { number: '01', title: 'Sök & Välj', description: 'Utforska roller som matchar dina mål och intressen.', kind: 'arrow-right' },
-    { number: '02', title: 'Matchning & Intervjuer', description: 'Vi matchar din profil, genomför intervjuer och presenterar dig sedan för arbetsgivaren.', kind: 'both' },
-    { number: '03', title: 'Starta Ditt Nya Jobb', description: 'Acceptera erbjudandet och kickstarta nästa kapitel.', kind: 'socket-left' },
+    {
+      number: '01',
+      title: 'Sök & Välj',
+      description: 'Utforska roller som matchar dina mål och intressen.',
+      kind: 'arrow-right',
+    },
+    {
+      number: '02',
+      title: 'Matchning & Intervjuer',
+      description:
+        'Vi matchar din profil, genomför intervjuer och presenterar dig sedan för arbetsgivaren.',
+      kind: 'both',
+    },
+    {
+      number: '03',
+      title: 'Starta Ditt Nya Jobb',
+      description: 'Acceptera erbjudandet och kickstarta nästa kapitel.',
+      kind: 'socket-left',
+    },
   ];
 
   return (
     <section
       className="pt-6 md:pt-20 pb-14 md:pb-20 px-5 md:px-6 bg-white"
       aria-label="Så går det till"
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '860px' }}
     >
       <div className="max-w-6xl mx-auto">
         {/* Rubrik */}
         <div className="text-center mb-8 md:mb-12">
           <h2
             className="text-[1.875rem] md:text-4xl font-semibold tracking-tight text-gray-900 leading-tight [text-wrap:balance]"
-            style={{ fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui' }}
+            style={{
+              fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui',
+            }}
           >
             Så Går Det Till
           </h2>
@@ -61,6 +80,7 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
                 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
               background:
                 'linear-gradient(135deg, #0B1E3A 0%, #10325C 60%, #14427A 100%)',
+              willChange: 'transform, opacity',
             }}
           >
             Bläddra bland jobben ovan
@@ -68,11 +88,15 @@ const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ isVisible }) => {
             <span className="pointer-events-none absolute inset-0 rounded-2xl opacity-60">
               <span
                 className="absolute inset-0 rounded-2xl"
+                aria-hidden="true"
                 style={{
                   backgroundImage: `radial-gradient(220px 160px at 20% 30%, rgba(56,189,248,0.28), transparent 60%), radial-gradient(260px 200px at 80% 70%, rgba(37,99,235,0.22), transparent 60%)`,
                 }}
               />
-              <span className="absolute left-[-40%] top-0 h-full w-1/3 bg-white/20 skew-x-[-20deg] translate-x-[-120%] group-hover:translate-x-[220%] transition-transform duration-700 ease-in-out" />
+              <span
+                aria-hidden="true"
+                className="absolute left-[-40%] top-0 h-full w-1/3 bg-white/20 skew-x-[-20deg] translate-x-[-120%] group-hover:translate-x-[220%] transition-transform duration-700 ease-in-out"
+              />
             </span>
           </button>
         </div>
@@ -101,14 +125,18 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
     <div
       className="relative overflow-hidden rounded-2xl md:rounded-3xl h-[260px] md:h-[420px] border backdrop-blur-xl touch-manipulation"
       style={{
-        background: 'linear-gradient(180deg, rgba(10,20,46,0.72) 0%, rgba(8,19,43,0.88) 100%)',
+        background:
+          'linear-gradient(180deg, rgba(10,20,46,0.72) 0%, rgba(8,19,43,0.88) 100%)',
         borderColor: 'rgba(255,255,255,0.08)',
         boxShadow:
           '0 10px 30px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -40px 80px rgba(9,31,72,0.55)',
+        contentVisibility: 'auto',
+        containIntrinsicSize: '420px',
+        willChange: 'transform, opacity',
       }}
     >
       {/* Aurora (endast desktop) */}
-      <div className="absolute inset-0 -z-0 pointer-events-none">
+      <div className="absolute inset-0 -z-0 pointer-events-none" aria-hidden="true">
         <div
           className="hidden md:block absolute inset-0 opacity-70"
           style={{
@@ -140,7 +168,9 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
         <div className="px-6 pt-6 md:px-7 md:pt-7">
           <h3
             className="text-[1.35rem] md:text-3xl font-bold tracking-tight text-white leading-[1.1]"
-            style={{ fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui' }}
+            style={{
+              fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui',
+            }}
           >
             {title}
           </h3>
@@ -156,7 +186,7 @@ const PosterCard: React.FC<CardProps> = ({ number, title, description }) => {
         {/* Stor siffra */}
         <div className="relative flex-1">
           <span
-            aria-hidden
+            aria-hidden="true"
             className="pointer-events-none select-none absolute bottom-[-4px] left-5 md:left-6 text-white/95 leading-none font-extrabold tracking-tight"
             style={{
               fontFamily: '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui',
