@@ -21,7 +21,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  // rAF-throttle scroll measurement
+  // rAF-throttle scroll measurement + undvik onödiga setState
   const rafId = useRef<number | null>(null);
   const last = useRef({ left: false, right: false });
 
@@ -69,6 +69,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Mask-efterlikning av fade i kanter, beroende på om scroll finns
   const maskImage = useMemo(() => {
     if (canScrollLeft && canScrollRight) {
       return 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)';
@@ -85,10 +86,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   return (
     <section
       className="relative py-12 px-8 overflow-hidden bg-white"
-      style={{
-        contentVisibility: 'auto',
-        containIntrinsicSize: '1px 900px',
-      }}
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 900px' }}
     >
       {/* Scroll target positioned at the very top of the section */}
       <div id="how-it-works" className="absolute -top-20" />
@@ -128,35 +126,24 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        {/* Scroll + Side arrow buttons (alltid synliga, disable vid kant) */}
+        {/* Scroll + Arrows (EXAKT som original: visas bara när man kan skrolla) */}
         <div className="relative">
-          <button
-            onClick={() => handleScroll('left')}
-            disabled={!canScrollLeft}
-            aria-label="Skrolla vänster"
-            className={`
-              absolute left-0 top-1/2 -translate-y-1/2 z-10
-              p-2 bg-white rounded-full shadow-lg border border-gray-200
-              transition-opacity
-              ${canScrollLeft ? 'opacity-100 cursor-pointer' : 'opacity-60 cursor-not-allowed'}
-            `}
-          >
-            <ChevronLeft className="w-6 h-6 text-gray-600" />
-          </button>
-
-          <button
-            onClick={() => handleScroll('right')}
-            disabled={!canScrollRight}
-            aria-label="Skrolla höger"
-            className={`
-              absolute right-0 top-1/2 -translate-y-1/2 z-10
-              p-2 bg-white rounded-full shadow-lg border border-gray-200
-              transition-opacity
-              ${canScrollRight ? 'opacity-100 cursor-pointer' : 'opacity-60 cursor-not-allowed'}
-            `}
-          >
-            <ChevronRight className="w-6 h-6 text-gray-600" />
-          </button>
+          {canScrollLeft && (
+            <button
+              onClick={() => handleScroll('left')}
+              className="absolute left-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg z-10"
+            >
+              <ChevronLeft className="w-6 h-6 text-gray-600" />
+            </button>
+          )}
+          {canScrollRight && (
+            <button
+              onClick={() => handleScroll('right')}
+              className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white rounded-full shadow-lg z-10"
+            >
+              <ChevronRight className="w-6 h-6 text-gray-600" />
+            </button>
+          )}
 
           {/* Steps container */}
           <div
