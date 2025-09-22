@@ -21,7 +21,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  // rAF-throttle & undvik onödiga setState
+  // rAF-throttle scroll measurement
   const rafId = useRef<number | null>(null);
   const last = useRef({ left: false, right: false });
 
@@ -59,7 +59,6 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
   };
 
   useEffect(() => {
-    // Initial mätning + resize-lyssnare
     scheduleMeasure();
     const onResize = () => scheduleMeasure();
     window.addEventListener('resize', onResize);
@@ -70,7 +69,6 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Mask-övergång beroende på om man kan scrolla åt vänster/höger
   const maskImage = useMemo(() => {
     if (canScrollLeft && canScrollRight) {
       return 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)';
@@ -92,7 +90,6 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
         containIntrinsicSize: '1px 900px',
       }}
     >
-      {/* Scroll target positioned at the very top of the section */}
       <div id="how-it-works" className="absolute -top-20" />
 
       {/* SVG-background */}
@@ -166,12 +163,19 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                 <React.Fragment key={idx}>
                   {/* Number + Text */}
                   <div className="flex flex-col items-start w-64 flex-shrink-0">
-                    <span
-                      className="text-9xl font-light"
-                      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                    >
-                      {`0${idx + 1}`}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      {/* Vänster pil */}
+                      <ChevronLeft className="w-5 h-5 text-gray-400" />
+                      <span
+                        className="text-9xl font-light"
+                        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                      >
+                        {`0${idx + 1}`}
+                      </span>
+                      {/* Höger pil */}
+                      <ChevronRight className="w-5 h-5 text-gray-400" />
+                    </div>
+
                     <h3
                       className="text-3xl md:text-4xl font-medium text-left mt-2"
                       style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
@@ -186,7 +190,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                     </p>
                   </div>
 
-                  {/* Thicker, centered separator */}
+                  {/* Separator */}
                   {idx < steps.length - 1 && (
                     <div className="self-center flex-shrink-0 flex-1 h-1 bg-gray-300/50 transform -translate-y-4" />
                   )}
