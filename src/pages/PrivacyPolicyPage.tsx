@@ -4,7 +4,7 @@ import SEO from "../components/SEO"; // ⬅️ SEO-import
 
 /**
  * PrivacyPolicyPage – Workplan AB (Bemanning inom Lager & Logistik)
- * (Utseendet oförändrat; scroll-spy fixad med IntersectionObserver)
+ * (Utseendet oförändrat; scroll-spy stabiliserad med rAF-throttlad scroll)
  */
 
 const sections = [
@@ -37,7 +37,7 @@ const PrivacyPolicyPage: React.FC = () => {
     return () => el.classList.remove("force-nav-dark");
   }, []);
 
-  // 🔧 FIX: Scroll-spy med IntersectionObserver (markeringen byts när du skrollar)
+  // ✅ Stabil scroll-spy med rAF-throttle (ingen fladder)
   useEffect(() => {
     const rootEl = containerRef.current;
     if (!rootEl) return;
@@ -45,57 +45,64 @@ const PrivacyPolicyPage: React.FC = () => {
     const nodes = Array.from(
       rootEl.querySelectorAll<HTMLElement>("section[data-pp-section]")
     );
-
     if (!nodes.length) return;
 
-    // Observer som favoriserar sektionen närmast toppen (med nav-offset)
-    const io = new IntersectionObserver(
-      (entries) => {
-        // Filtrera de som är i vy, välj den med top närmast 0 (efter offset).
-        let best: { id: string; dist: number } | null = null;
+    let ticking = false;
+    const BUFFER = 80; // liten buffert runt nav-offset för stabilitet
 
-        for (const en of entries) {
-          if (!en.isIntersecting) continue;
-          const id = (en.target as HTMLElement).id;
-          const dist = Math.abs(en.boundingClientRect.top + NAV_OFFSET_PX);
-          if (!best || dist < best.dist) best = { id, dist };
+    const chooseActive = () => {
+      // 1) Försök hitta en sektion som *omsluter* offset-linjen (top ≤ offset+BUFFER och bottom ≥ offset+BUFFER)
+      const pivot = NAV_OFFSET_PX + BUFFER;
+      let candidateId: string | null = null;
+      let bestDist = Number.POSITIVE_INFINITY;
+
+      for (const n of nodes) {
+        const rect = n.getBoundingClientRect();
+        const top = rect.top;
+        const bottom = rect.bottom;
+
+        const overlapsPivot = top <= pivot && bottom >= pivot;
+        const dist = Math.abs(top - NAV_OFFSET_PX - 8); // liten bias mot toppen
+        if (overlapsPivot && dist < bestDist) {
+          bestDist = dist;
+          candidateId = n.id;
         }
-
-        // Om inget nytt intersectar (pga snabb scroll), välj den helhetsmässigt närmast
-        if (!best) {
-          // Hitta den sektion vars topp är högst men inte förbi offset
-          let fallbackId = nodes[0].id;
-          let minAbs = Number.POSITIVE_INFINITY;
-          for (const n of nodes) {
-            const rect = n.getBoundingClientRect();
-            const d = Math.abs(rect.top + NAV_OFFSET_PX);
-            if (d < minAbs) {
-              minAbs = d;
-              fallbackId = n.id;
-            }
-          }
-          if (fallbackId !== activeIdRef.current) setActiveId(fallbackId);
-          return;
-        }
-
-        if (best.id !== activeIdRef.current) setActiveId(best.id);
-      },
-      {
-        root: null,
-        // När toppen når strax under navbaren betraktar vi sektionen som aktiv
-        rootMargin: `-${NAV_OFFSET_PX}px 0px -60% 0px`,
-        threshold: [0, 0.25, 0.5, 0.75, 1],
       }
-    );
 
-    nodes.forEach((n) => io.observe(n));
-    // Kör en initial markering
-    setTimeout(() => {
-      // Trigga callback genom att "peta" i observern (via reflowless loop)
-      nodes.forEach((n) => io.observe(n));
-    }, 0);
+      // 2) Om ingen omsluter pivoten (t.ex. vid snabba scroll), ta "senast passerad" sektion
+      if (!candidateId) {
+        let lastPassedId = nodes[0].id;
+        for (const n of nodes) {
+          const top = n.getBoundingClientRect().top;
+          if (top - NAV_OFFSET_PX <= BUFFER) lastPassedId = n.id;
+          else break;
+        }
+        candidateId = lastPassedId;
+      }
 
-    return () => io.disconnect();
+      if (candidateId && candidateId !== activeIdRef.current) {
+        setActiveId(candidateId);
+      }
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          chooseActive();
+          ticking = false;
+        });
+      }
+    };
+
+    // Initial markering + listeners
+    chooseActive();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
   const handleClick = (id: string) => {
