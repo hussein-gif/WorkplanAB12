@@ -1,5 +1,5 @@
-// src/pages/JobsPage/index.tsx  (eller motsv. sökväg där JobsPage ligger)
-import React, { useState, useEffect, useRef } from 'react';
+// src/pages/JobsPage/index.tsx
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import JobsHeader from './JobsHeader';
 import JobsFilters from './JobsFilters';
 import JobsList from './JobsList';
@@ -14,33 +14,49 @@ export interface Job {
   industry: string;
   omfattning: 'Heltid' | 'Deltid' | string;
   salary: string;
-  posted: string; // visningstext (ex. "2 dagar sedan")
+  posted: string;
   description: string;
   requirements: string[];
   featured: boolean;
   urgent: boolean;
   companyLogo: string;
-  // valfria som kan finnas i DB:
   slug?: string;
   employment_type?: string;
 }
 
-const RichBackground: React.FC = () => {
+const RichBackground: React.FC = React.memo(() => {
   const [mouse, setMouse] = useState({ x: 50, y: 50 });
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const particles = useMemo(() =>
+    Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      size: Math.random() * 6 + 4,
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      delay: Math.random() * 8,
+      duration: 10 + Math.random() * 10,
+    })), []
+  );
+
   useEffect(() => {
+    let frame: number;
     const handleMouse = (e: MouseEvent) => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
-      setMouse({ x, y });
+      frame = requestAnimationFrame(() => setMouse({ x, y }));
     };
     window.addEventListener('mousemove', handleMouse);
-    return () => window.removeEventListener('mousemove', handleMouse);
+    return () => {
+      window.removeEventListener('mousemove', handleMouse);
+      cancelAnimationFrame(frame);
+    };
   }, []);
+
   return (
-    <div ref={(el) => (containerRef.current = el)} className="absolute inset-0 pointer-events-none overflow-hidden">
+    <div ref={containerRef} className="absolute inset-0 pointer-events-none overflow-hidden">
       <style>{`@keyframes fadePulse{0%,100%{opacity:.03}50%{opacity:.07}}`}</style>
       <div className="absolute inset-0" style={{ backgroundColor: '#08132B' }} />
       <div
@@ -54,29 +70,23 @@ const RichBackground: React.FC = () => {
           transform: `translate(${(mouse.x - 50) * 0.02}px, ${(mouse.y - 50) * 0.02}px)`,
         }}
       />
-      {Array.from({ length: 15 }).map((_, i) => {
-        const size = Math.random() * 6 + 4;
-        const top = Math.random() * 100;
-        const left = Math.random() * 100;
-        const delay = Math.random() * 8;
-        return (
-          <div
-            key={i}
-            className="absolute"
-            style={{
-              width: `${size}px`,
-              height: `${size}px`,
-              top: `${top}%`,
-              left: `${left}%`,
-              backgroundColor: 'rgba(255,255,255,0.04)',
-              borderRadius: '2px',
-              transform: `translate(${(mouse.x - 50) * 0.018}px, ${(mouse.y - 50) * 0.018}px)`,
-              animation: `fadePulse ${10 + Math.random() * 10}s ease-in-out ${delay}s infinite`,
-              mixBlendMode: 'screen',
-            }}
-          />
-        );
-      })}
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          className="absolute"
+          style={{
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            top: `${p.top}%`,
+            left: `${p.left}%`,
+            backgroundColor: 'rgba(255,255,255,0.04)',
+            borderRadius: '2px',
+            transform: `translate(${(mouse.x - 50) * 0.018}px, ${(mouse.y - 50) * 0.018}px)`,
+            animation: `fadePulse ${p.duration}s ease-in-out ${p.delay}s infinite`,
+            mixBlendMode: 'screen',
+          }}
+        />
+      ))}
       <div
         className="absolute top-24 left-1/2 -translate-x-1/2 w-[500px] h-[140px] rounded-full pointer-events-none"
         style={{ background: 'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.07) 0%, transparent 80%)' }}
@@ -95,35 +105,48 @@ const RichBackground: React.FC = () => {
       />
     </div>
   );
-};
+});
 
-const LoadingPlaceholder = () => (
+const LoadingPlaceholder = React.memo(() => (
   <div className="min-h-screen flex items-center justify-center relative bg-[#08132B]">
     <RichBackground />
     <div className="relative z-10 text-center">
       <div className="inline-flex items-center space-x-3 mb-2">
-        <div role="status" aria-label="Laddar jobb" className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin" />
-        <h3 className="text-xl text-white/90" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}>
+        <div
+          role="status"
+          aria-label="Laddar jobb"
+          className="w-6 h-6 border-4 border-white/30 border-t-white rounded-full animate-spin"
+        />
+        <h3
+          className="text-xl text-white/90"
+          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 500 }}
+        >
           Laddar alla jobb...
         </h3>
       </div>
     </div>
   </div>
-);
+));
 
-const EmptyState = ({ clearFilters }: { clearFilters: () => void }) => (
+const EmptyState = React.memo(({ clearFilters }: { clearFilters: () => void }) => (
   <div className="py-20 text-center">
-    <h3 className="text-2xl text-white/80 mb-2" style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}>
+    <h3
+      className="text-2xl text-white/80 mb-2"
+      style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif', fontWeight: 400 }}
+    >
       Inga tjänster hittades
     </h3>
     <p className="text-white/60" style={{ fontFamily: 'Inter, sans-serif' }}>
       Prova att ändra dina sökkriterier eller återställ filtren.
     </p>
-    <button onClick={clearFilters} className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-500 transition rounded-md text-white">
+    <button
+      onClick={clearFilters}
+      className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-500 transition rounded-md text-white"
+    >
       Rensa filter
     </button>
   </div>
-);
+));
 
 const JobsPage = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -150,7 +173,7 @@ const JobsPage = () => {
     };
   }, []);
 
-  // 🔥 HÄMTA ENDAST PUBLICERADE JOBB FRÅN SUPABASE
+  // Hämta endast publicerade jobb
   useEffect(() => {
     (async () => {
       setIsLoading(true);
@@ -173,12 +196,11 @@ const JobsPage = () => {
         const now = new Date();
         const diffMs = postedAt ? now.getTime() - postedAt.getTime() : 0;
         const diffH = Math.floor(diffMs / 36e5);
-        const posted =
-          !postedAt
-            ? ''
-            : diffH < 24
-            ? `${diffH} timmar sedan`
-            : `${Math.floor(diffH / 24)} dagar sedan`;
+        const posted = !postedAt
+          ? ''
+          : diffH < 24
+          ? `${diffH} timmar sedan`
+          : `${Math.floor(diffH / 24)} dagar sedan`;
 
         return {
           id: String(j.id),
@@ -249,7 +271,6 @@ const JobsPage = () => {
 
   if (isLoading) return <LoadingPlaceholder />;
 
-  // JSON-LD
   const websiteLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
@@ -274,7 +295,10 @@ const JobsPage = () => {
         canonical="https://www.work-plan.se/jobb"
         jsonLd={[websiteLd, breadcrumbsLd]}
       />
-      <div className="min-h-screen relative bg-[#08132B] overflow-x-hidden">
+      <div
+        className="min-h-screen relative bg-[#08132B] overflow-x-hidden"
+        style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 1200px' }}
+      >
         <RichBackground />
         <div className="relative z-10">
           <div
@@ -296,7 +320,11 @@ const JobsPage = () => {
             omfattningar={omfattningar}
             clearFilters={clearFilters}
           />
-          {filteredJobs.length === 0 ? <EmptyState clearFilters={clearFilters} /> : <JobsList jobs={filteredJobs} />}
+          {filteredJobs.length === 0 ? (
+            <EmptyState clearFilters={clearFilters} />
+          ) : (
+            <JobsList jobs={filteredJobs} />
+          )}
         </div>
       </div>
     </>
