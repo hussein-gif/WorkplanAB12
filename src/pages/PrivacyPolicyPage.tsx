@@ -4,15 +4,7 @@ import SEO from "../components/SEO"; // ⬅️ SEO-import
 
 /**
  * PrivacyPolicyPage – Workplan AB (Bemanning inom Lager & Logistik)
- * Matchad design med Användarvillkor-sidan
- * - Rubrik + inledning centrerad i hero
- * - "Senast uppdaterad" ovanför vänster TOC
- * - Inledning ej i TOC
- * - Bort: 13 (Barn), 16 (Kontakt), 17 (Bilaga A), 18 (Bilaga B), callout
- * - Merge: Profilering + DPIA => "Profilering, automatiserade beslut & DPIA"
- * - Merge: Mottagare + Överföringar => "Mottagare & överföringar"
- * - Aktiv TOC-punkt: bg #08132B + vit text
- * - NAV FIX: force-nav-dark aktiverar mörk logga & länkar
+ * (Utseendet oförändrat; endast prestandaoptimeringar)
  */
 
 const sections = [
@@ -33,7 +25,13 @@ const NAV_OFFSET_PX = 120; // samma offset som TOS för stabil scroll-spy
 
 const PrivacyPolicyPage: React.FC = () => {
   const [activeId, setActiveId] = useState<string>(sections[0].id);
+
   const containerRef = useRef<HTMLDivElement | null>(null);
+
+  // cache av noder & beräknade toppar för låg-kostnads scroll-spy
+  const secNodesRef = useRef<HTMLElement[]>([]);
+  const secTopsRef = useRef<number[]>([]);
+  const frameRef = useRef<number | null>(null);
   const activeIdRef = useRef<string>(activeId);
   activeIdRef.current = activeId;
 
@@ -44,32 +42,83 @@ const PrivacyPolicyPage: React.FC = () => {
     return () => el.classList.remove("force-nav-dark");
   }, []);
 
-  // Robust scroll-spy (utan IntersectionObserver-buggar)
+  // Hämta sektioner + beräkna toppositioner (1 gång + vid resize/load)
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
 
-    const getSections = () =>
-      Array.from(el.querySelectorAll("section[data-pp-section]")) as HTMLElement[];
-
-    const onScroll = () => {
-      const secs = getSections();
-      if (!secs.length) return;
-      const scrollY = window.scrollY + NAV_OFFSET_PX + 1;
-      let currentId = secs[0].id;
-      for (const sec of secs) {
-        if (sec.offsetTop <= scrollY) currentId = sec.id;
-        else break; // sektioner i ordning
-      }
-      if (currentId !== activeIdRef.current) setActiveId(currentId);
+    const collect = () => {
+      secNodesRef.current = Array.from(
+        el.querySelectorAll<HTMLElement>("section[data-pp-section]")
+      );
+      // beräkna absoluta toppar (snabbt att slå upp vid scroll)
+      secTopsRef.current = secNodesRef.current.map((n) => {
+        const rect = n.getBoundingClientRect();
+        return rect.top + window.pageYOffset;
+      });
     };
 
+    const recalc = () => {
+      if (frameRef.current) return;
+      frameRef.current = requestAnimationFrame(() => {
+        collect();
+        frameRef.current = null;
+      });
+    };
+
+    // initial + liten delay efter mount (om fonter/bilder skiftar layout)
+    collect();
+    const t = setTimeout(collect, 50);
+
+    window.addEventListener("resize", recalc, { passive: true });
+    window.addEventListener("load", recalc);
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener("resize", recalc as any);
+      window.removeEventListener("load", recalc as any);
+    };
+  }, []);
+
+  // rAF-throttlad scroll-spy med binärsökning i preberäknade toppar
+  useEffect(() => {
+    const onScroll = () => {
+      if (frameRef.current) return;
+      frameRef.current = requestAnimationFrame(() => {
+        const tops = secTopsRef.current;
+        const nodes = secNodesRef.current;
+        if (!tops.length || tops.length !== nodes.length) {
+          frameRef.current = null;
+          return;
+        }
+
+        const scrollY = window.pageYOffset + NAV_OFFSET_PX + 1;
+
+        // binärsök: hitta största top <= scrollY
+        let lo = 0;
+        let hi = tops.length - 1;
+        let idx = 0;
+        while (lo <= hi) {
+          const mid = (lo + hi) >> 1;
+          if (tops[mid] <= scrollY) {
+            idx = mid;
+            lo = mid + 1;
+          } else {
+            hi = mid - 1;
+          }
+        }
+
+        const currentId = nodes[idx]?.id || sections[0].id;
+        if (currentId !== activeIdRef.current) setActiveId(currentId);
+        frameRef.current = null;
+      });
+    };
+
+    // kör en gång direkt
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
     return () => {
       window.removeEventListener("scroll", onScroll as any);
-      window.removeEventListener("resize", onScroll as any);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
     };
   }, []);
 
@@ -126,10 +175,19 @@ const PrivacyPolicyPage: React.FC = () => {
         </header>
 
         {/* Innehåll med sidomeny */}
-        <main className="px-6 pb-24">
+        <main
+          className="px-6 pb-24"
+          style={{
+            contentVisibility: "auto",
+            containIntrinsicSize: "1400px",
+          }}
+        >
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Vänster TOC (smalare, mindre text, alla punkter utan scroll) */}
-            <aside className="lg:col-span-4 xl:col-span-3">
+            <aside
+              className="lg:col-span-4 xl:col-span-3"
+              style={{ contentVisibility: "auto", containIntrinsicSize: "600px" }}
+            >
               <div className="sticky top-24">
                 {/* Senast uppdaterad över menyn */}
                 <div
@@ -163,7 +221,10 @@ const PrivacyPolicyPage: React.FC = () => {
             </aside>
 
             {/* Höger innehåll */}
-            <div className="lg:col-span-8 xl:col-span-9">
+            <div
+              className="lg:col-span-8 xl:col-span-9"
+              style={{ contentVisibility: "auto", containIntrinsicSize: "1800px" }}
+            >
               <div
                 ref={containerRef}
                 className="bg-white border border-gray-200 rounded-3xl shadow-sm p-6 md:p-10 space-y-12"
