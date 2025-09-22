@@ -213,8 +213,8 @@ const Hero: React.FC = () => {
             paddingRight: 'max(env(safe-area-inset-right), 1.25rem)',
           }}
         >
-          {/* ➕ Flytta innehåll lite åt höger på större skärmar */}
-          <div className="max-w-[40ch] sm:max-w-3xl text-left md:-mt-8 sm:ml-8 md:ml-16 lg:ml-24 xl:ml-32 2xl:ml-40">
+          {/* 🔧 LITE mindre förskjutning åt höger för ett proffsigt avstånd */}
+          <div className="max-w-[40ch] sm:max-w-3xl text-left md:-mt-8 sm:ml-4 md:ml-8 lg:ml-12 xl:ml-16 2xl:ml-20">
             <div
               className={`
                 space-y-3 transition-all duration-700
