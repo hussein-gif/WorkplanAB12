@@ -22,21 +22,25 @@ export interface Job {
   companyLogo: string;
   slug?: string;
   employment_type?: string;
+  /** 🔹 Läggs till för att lista ska kunna visa bilden (samma fält som detaljsidan använder) */
+  company_logo?: string;
 }
 
 const RichBackground: React.FC = React.memo(() => {
   const [mouse, setMouse] = useState({ x: 50, y: 50 });
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const particles = useMemo(() =>
-    Array.from({ length: 15 }).map((_, i) => ({
-      id: i,
-      size: Math.random() * 6 + 4,
-      top: Math.random() * 100,
-      left: Math.random() * 100,
-      delay: Math.random() * 8,
-      duration: 10 + Math.random() * 10,
-    })), []
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 15 }).map((_, i) => ({
+        id: i,
+        size: Math.random() * 6 + 4,
+        top: Math.random() * 100,
+        left: Math.random() * 100,
+        delay: Math.random() * 8,
+        duration: 10 + Math.random() * 10,
+      })),
+    []
   );
 
   useEffect(() => {
@@ -215,7 +219,10 @@ const JobsPage = () => {
           requirements: Array.isArray(j.requirements) ? j.requirements : [],
           featured: !!j.featured,
           urgent: !!j.urgent,
-          companyLogo: j.companyLogo ?? (j.company ? j.company[0] : ''),
+          /** 🔹 Om det är en full URL använder JobsList den direkt som bild */
+          company_logo: j.company_logo ?? undefined,
+          /** 🔹 Behåller bef. fält men låter URL vinna om den finns */
+          companyLogo: (j.company_logo as string) ?? (j.company ? j.company[0] : ''),
           slug: j.slug,
           employment_type: j.employment_type,
         };
