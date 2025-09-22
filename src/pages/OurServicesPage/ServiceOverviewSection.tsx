@@ -5,13 +5,17 @@ interface ServiceOverviewSectionProps {
   isVisible: boolean;
 }
 
-const ServiceOverviewSection: React.FC<ServiceOverviewSectionProps> = ({
-  isVisible,
-}) => {
+const ServiceOverviewSection: React.FC<ServiceOverviewSectionProps> = React.memo(({ isVisible }) => {
   return (
-    <section className="relative py-14 md:py-24 px-6 md:px-8 bg-[#08132B] overflow-hidden">
+    <section
+      className="relative py-14 md:py-24 px-6 md:px-8 bg-[#08132B] overflow-hidden"
+      style={{
+        contentVisibility: 'auto',
+        containIntrinsicSize: '680px',
+      }}
+    >
       {/* --- NY BAKGRUNDSDESIGN (ingen prickmönster) --- */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true" inert>
         {/* Hörn-glows */}
         <div
           className="absolute -top-24 -left-20 w-[42rem] h-[42rem] rounded-full blur-3xl opacity-30"
@@ -82,14 +86,20 @@ const ServiceOverviewSection: React.FC<ServiceOverviewSectionProps> = ({
             md:hover:shadow-xl md:transition-all md:duration-500
             ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 md:translate-y-8 opacity-0'}
           `}
-          style={{ transitionDelay: '600ms' }}
+          style={{
+            transitionDelay: '600ms',
+            willChange: isVisible ? 'transform, opacity' : undefined,
+          }}
         >
           {/* Hover Glow Overlay (endast md+) */}
           <div className="hidden md:block absolute inset-0 rounded-3xl bg-gradient-to-br from-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
           <div className="relative z-10">
             {/* Ikonruta */}
-            <div className="w-14 h-14 md:w-16 md:h-16 mx-auto mb-6 md:mb-8 rounded-2xl flex items-center justify-center btn-min md:group-hover:scale-105 md:transition-transform md:duration-500">
+            <div
+              className="w-14 h-14 md:w-16 md:h-16 mx-auto mb-6 md:mb-8 rounded-2xl flex items-center justify-center btn-min md:group-hover:scale-105 md:transition-transform md:duration-500"
+              style={{ transform: 'translateZ(0)' }}
+            >
               <Users size={22} className="text-white md:hidden" />
               <Users size={24} className="text-white hidden md:block" />
             </div>
@@ -136,6 +146,8 @@ const ServiceOverviewSection: React.FC<ServiceOverviewSectionProps> = ({
       `}</style>
     </section>
   );
-};
+});
+
+ServiceOverviewSection.displayName = 'ServiceOverviewSection';
 
 export default ServiceOverviewSection;
