@@ -189,7 +189,6 @@ const WhyChoose = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const pillarRefs = useRef<Array<HTMLDivElement | null>>([]);
   const rafId = useRef<number | null>(null);
-  const last = useRef({ progress: -1, idx: -1 });
 
   const pillars = useMemo<Pillar[]>(
     () => [
@@ -239,6 +238,9 @@ const WhyChoose = () => {
       1
     );
 
+    // bollen ska alltid uppdatera
+    setScrollProgress(nextProgress);
+
     // hitta kort närmast mitten
     const centerY = window.innerHeight / 2;
     let bestIdx = 0;
@@ -253,16 +255,7 @@ const WhyChoose = () => {
         bestIdx = i;
       }
     }
-
-    // uppdatera bara om meningsfull ändring
-    if (Math.abs(nextProgress - last.current.progress) > 0.005) {
-      last.current.progress = nextProgress;
-      setScrollProgress(nextProgress);
-    }
-    if (bestIdx !== last.current.idx) {
-      last.current.idx = bestIdx;
-      setScrollIndex(bestIdx);
-    }
+    setScrollIndex(bestIdx);
   };
 
   useEffect(() => {
@@ -282,7 +275,7 @@ const WhyChoose = () => {
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
-    onScroll(); // initial
+    onScroll();
 
     return () => {
       if (sectionRef.current) observer.unobserve(sectionRef.current);
@@ -290,7 +283,6 @@ const WhyChoose = () => {
       window.removeEventListener('resize', onScroll);
       if (rafId.current) cancelAnimationFrame(rafId.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const effectiveActive = scrollIndex;
@@ -304,7 +296,7 @@ const WhyChoose = () => {
         containIntrinsicSize: '1px 1200px',
       }}
     >
-      {/* CSS-animationer och små optimeringar */}
+      {/* CSS-animationer */}
       <style>{`
         @keyframes blob {
           0% { transform: scale(1) translate(0,0); }
@@ -318,7 +310,7 @@ const WhyChoose = () => {
         }
       `}</style>
 
-      {/* Bakgrund – något förenklad men visuellt lik */}
+      {/* Bakgrund */}
       <div className="absolute inset-0 pointer-events-none">
         <div
           className="absolute inset-0"
@@ -340,7 +332,6 @@ const WhyChoose = () => {
             backgroundSize: '100px 100px',
           }}
         />
-        {/* Minskat antal suddiga blobs (fortfarande två för looken) */}
         <div
           className="absolute -top-10 left-1/3 w-[450px] h-[450px] rounded-full blur-3xl opacity-10 animate-blob"
           style={{
@@ -356,15 +347,10 @@ const WhyChoose = () => {
             animationDelay: '3s',
           }}
         />
-        {/* små prickar */}
-        <div className="absolute top-20 right-20 w-2 h-2 bg-gray-200 rounded-full opacity-40" />
-        <div className="absolute top-40 left-16 w-1 h-1 bg-gray-300 rounded-full opacity-60" />
-        <div className="absolute bottom-32 right-32 w-1.5 h-1.5 bg-gray-200 rounded-full opacity-50" />
-        <div className="absolute bottom-20 left-20 w-0.5 h-0.5 bg-gray-400 rounded-full opacity-30" />
       </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-8">
-        {/* Progress-line (endast desktop) */}
+        {/* Progress-line */}
         <div
           className={`absolute left-1/2 -translate-x-1/2 z-0 hidden lg:flex flex-col items-center transition-all duration-1000 ease-out ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
@@ -404,27 +390,16 @@ const WhyChoose = () => {
           </div>
         </div>
 
-        {/* Rubrik – jämn boldness + mer professionell storlek */}
+        {/* Rubrik */}
         <div className="text-center mb-10 sm:mb-20">
-          <div className="inline-block relative">
-            <div
-              className="absolute inset-0 rounded-md"
-              style={{
-                background:
-                  'radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 0%, transparent 60%)',
-                filter: 'blur(16px)',
-                zIndex: -1,
-              }}
-            />
-            <h2
-              className={`text-3xl sm:text-4xl md:text-5xl font-medium text-gray-900 mb-3 tracking-tight leading-[1.15] sm:leading-[1.1] transition-all duration-1000 transform ${
-                isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
-              }`}
-              style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-            >
-              Vår Metod För Framgång
-            </h2>
-          </div>
+          <h2
+            className={`text-3xl sm:text-4xl md:text-5xl font-medium text-gray-900 mb-3 tracking-tight leading-[1.15] sm:leading-[1.1] transition-all duration-1000 transform ${
+              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'
+            }`}
+            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+          >
+            Vår Metod För Framgång
+          </h2>
           <div
             className={`w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-3 transition-all duration-1000 delay-200 transform ${
               isVisible ? 'scale-x-100 opacity-100' : 'scale-x-0 opacity-0'
