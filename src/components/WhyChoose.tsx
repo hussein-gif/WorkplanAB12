@@ -223,36 +223,44 @@ const WhyChoose = () => {
     []
   );
 
-  // NY: robust progress-beräkning baserad på viewportens mitt och sektionens absoluta position
+  // --- Återställd, beprövad progress-beräkning + rAF-throttle ---
+  const updateScrollIndex = () => {
+    const centerY = window.innerHeight / 2;
+    let bestIdx: number | null = null;
+    let smallestDist = Infinity;
+    for (let i = 0; i < pillarRefs.current.length; i++) {
+      const el = pillarRefs.current[i];
+      if (!el) continue;
+      const rect = el.getBoundingClientRect();
+      const pillarCenter = rect.top + rect.height / 2;
+      const dist = Math.abs(pillarCenter - centerY);
+      if (dist < smallestDist) {
+        smallestDist = dist;
+        bestIdx = i;
+      }
+    }
+    if (bestIdx !== null) setScrollIndex(bestIdx);
+  };
+
   const handleScrollRaf = () => {
     rafId.current = null;
     const section = sectionRef.current;
     if (!section) return;
 
     const rect = section.getBoundingClientRect();
-    const sectionTopAbs = rect.top + window.scrollY;
-    const sectionHeight = Math.max(1, rect.height);
-    const viewportCenter = window.scrollY + window.innerHeight * 0.5;
+    const visibleTop = Math.max(0, -rect.top);
+    const sectionHeight = rect.height;
+    const windowHeight = window.innerHeight;
 
-    // progress 0 när mitten är vid sektionens topp, 1 när mitten är vid sektionens botten
-    const nextProgress = clamp((viewportCenter - sectionTopAbs) / sectionHeight, 0, 1);
+    // Samma formel som i din första fungerande version
+    const nextProgress = clamp(
+      visibleTop / (Math.max(1, sectionHeight - windowHeight + 200)),
+      0,
+      1
+    );
+
     setScrollProgress(nextProgress);
-
-    // hitta kort närmast viewportens mitt
-    const centerY = window.innerHeight / 2;
-    let bestIdx = 0;
-    let smallest = Infinity;
-    for (let i = 0; i < pillarRefs.current.length; i++) {
-      const el = pillarRefs.current[i];
-      if (!el) continue;
-      const r = el.getBoundingClientRect();
-      const dist = Math.abs(r.top + r.height / 2 - centerY);
-      if (dist < smallest) {
-        smallest = dist;
-        bestIdx = i;
-      }
-    }
-    setScrollIndex(bestIdx);
+    updateScrollIndex();
   };
 
   useEffect(() => {
@@ -272,7 +280,8 @@ const WhyChoose = () => {
 
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
-    // initiera position direkt vid mount
+
+    // Viktigt: kör en första mätning direkt
     onScroll();
 
     return () => {
@@ -290,10 +299,7 @@ const WhyChoose = () => {
     <section
       ref={sectionRef}
       className="relative py-16 sm:py-28 overflow-hidden"
-      style={{
-        contentVisibility: 'auto',
-        containIntrinsicSize: '1px 1200px',
-      }}
+      // Viktigt: INGEN content-visibility här (den kunde stoppa uppdateringar)
     >
       {/* CSS-animationer */}
       <style>{`
@@ -389,7 +395,7 @@ const WhyChoose = () => {
           </div>
         </div>
 
-        {/* Rubrik */}
+        {/* Rubrik – professionell storlek + jämn boldness */}
         <div className="text-center mb-10 sm:mb-20">
           <h2
             className={`text-3xl sm:text-4xl md:text-5xl font-medium text-gray-900 mb-3 tracking-tight leading-[1.15] sm:leading-[1.1] transition-all duration-1000 transform ${
