@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useMemo } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ProcessSectionProps {
@@ -6,93 +6,60 @@ interface ProcessSectionProps {
 }
 
 const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
-  const steps = useMemo(
-    () => [
-      { title: 'Analys', description: 'Vi kartlägger mål, tidsram och kompetenskrav i ett kort uppstartssamtal.' },
-      { title: 'Strategi', description: 'Ni får ett transparent förslag på bemanningsupplägg, tidsplan och pris.' },
-      { title: 'Urval', description: 'Aktiv search, annonsering vid behov och strukturerade intervjuer/screening.' },
-      { title: 'Upplägg', description: 'En shortlist med matchade kandidater, referenser och våra rekommendationer.' },
-      { title: 'Uppstart', description: 'Smidig onboarding och regelbunden uppföljning för att säkerställa kvalitet.' },
-    ],
-    []
-  );
+  const steps = [
+    { title: 'Analys', description: 'Vi kartlägger mål, tidsram och kompetenskrav i ett kort uppstartssamtal.' },
+    { title: 'Strategi', description: 'Ni får ett transparent förslag på bemanningsupplägg, tidsplan och pris.' },
+    { title: 'Urval', description: 'Aktiv search, annonsering vid behov och strukturerade intervjuer/screening.' },
+    { title: 'Upplägg', description: 'En shortlist med matchade kandidater, referenser och våra rekommendationer.' },
+    { title: 'Uppstart', description: 'Smidig onboarding och regelbunden uppföljning för att säkerställa kvalitet.' },
+  ];
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
-  // rAF-throttle scroll measurement + undvik onödiga setState
-  const rafId = useRef<number | null>(null);
-  const last = useRef({ left: false, right: false });
-
-  const measureScroll = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const { scrollLeft, scrollWidth, clientWidth } = el;
-    const left = scrollLeft > 0;
-    const right = scrollLeft + clientWidth < scrollWidth - 1;
-
-    if (left !== last.current.left) {
-      last.current.left = left;
-      setCanScrollLeft(left);
-    }
-    if (right !== last.current.right) {
-      last.current.right = right;
-      setCanScrollRight(right);
-    }
-  };
-
-  const scheduleMeasure = () => {
-    if (rafId.current == null) {
-      rafId.current = requestAnimationFrame(() => {
-        rafId.current = null;
-        measureScroll();
-      });
-    }
+  const updateScrollButtons = () => {
+    if (!scrollRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 1);
   };
 
   const handleScroll = (direction: 'left' | 'right') => {
-    const el = scrollRef.current;
-    if (!el) return;
+    if (!scrollRef.current) return;
     const scrollAmount = 200;
-    el.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+    scrollRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
   };
 
   useEffect(() => {
-    scheduleMeasure();
-    const onResize = () => scheduleMeasure();
-    window.addEventListener('resize', onResize);
-    return () => {
-      window.removeEventListener('resize', onResize);
-      if (rafId.current) cancelAnimationFrame(rafId.current);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    updateScrollButtons();
+    window.addEventListener('resize', updateScrollButtons);
+    return () => window.removeEventListener('resize', updateScrollButtons);
   }, []);
 
-  // Mask-efterlikning av fade i kanter, beroende på om scroll finns
-  const maskImage = useMemo(() => {
+  // build a mask only on the side(s) that are scrollable
+  const maskImage = (() => {
     if (canScrollLeft && canScrollRight) {
       return 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)';
     }
     if (canScrollLeft) {
+      // fade only on left
       return 'linear-gradient(to right, transparent, black 15%, black 100%)';
     }
     if (canScrollRight) {
+      // fade only on right
       return 'linear-gradient(to right, black 0%, black 85%, transparent)';
     }
     return 'none';
-  }, [canScrollLeft, canScrollRight]);
+  })();
 
   return (
-    <section
-      className="relative py-12 px-8 overflow-hidden bg-white"
-      style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 900px' }}
-    >
+    <section className="relative py-12 px-8 overflow-hidden bg-white">
       {/* Scroll target positioned at the very top of the section */}
       <div id="how-it-works" className="absolute -top-20" />
-
+      
       {/* SVG-background */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <div className="absolute inset-0 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <radialGradient id="bgBlob" cx="50%" cy="50%" r="50%">
@@ -126,7 +93,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           </p>
         </div>
 
-        {/* Scroll + Arrows (EXAKT som original: visas bara när man kan skrolla) */}
+        {/* Scroll + Arrows */}
         <div className="relative">
           {canScrollLeft && (
             <button
@@ -148,13 +115,11 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
           {/* Steps container */}
           <div
             ref={scrollRef}
-            onScroll={scheduleMeasure}
+            onScroll={updateScrollButtons}
             className="overflow-x-auto"
             style={{
               WebkitMaskImage: maskImage,
               maskImage: maskImage,
-              willChange: 'scroll-position',
-              transform: 'translateZ(0)',
             }}
           >
             <div className="inline-flex items-start gap-6 px-4">
@@ -182,7 +147,7 @@ const ProcessSection: React.FC<ProcessSectionProps> = ({ isVisible }) => {
                     </p>
                   </div>
 
-                  {/* Separator (som i originalet) */}
+                  {/* Thicker, centered separator */}
                   {idx < steps.length - 1 && (
                     <div className="self-center flex-shrink-0 flex-1 h-1 bg-gray-300/50 transform -translate-y-4" />
                   )}
