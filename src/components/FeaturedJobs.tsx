@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback, memo } from "react";
 import { MapPin, Clock, ArrowRight, Briefcase, Building } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../../supabaseClient";
+import { supabase } from "../supabaseClient";
 
 // Desktop-kort, memoisering för att undvika re-renders
 const SimpleHoverCard = memo(function SimpleHoverCard({
