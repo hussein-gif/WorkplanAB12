@@ -297,88 +297,176 @@ const FeaturedJobsSection: React.FC<FeaturedJobsSectionProps> = React.memo(({ is
 
         {/* ===== DESKTOP: identisk grid/kort som JobsList ===== */}
         <div className="hidden sm:block">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16 justify-center">
-            {featuredJobs.map((job) => (
-              <SimpleHoverCard
-                key={job.slug ?? job.id ?? job.title}
-                className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
-              >
-                <div className="p-5 flex-1 flex flex-col" onClick={() => goToJob(job)}>
-                  <div className="flex items-start space-x-4 mb-4">
-                    {getJobImageUrl(job) ? (
-                      <img
-                        src={getJobImageUrl(job)}
-                        alt={job.title}
-                        loading="lazy"
-                        className="w-14 h-14 rounded-xl object-cover shadow-lg flex-shrink-0"
-                      />
-                    ) : (
-                      <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
-                        {(job.company ?? '•').charAt(0)}
+          {featuredJobs.length === 1 ? (
+            /* 👉 Centrera ett enda jobbkort */
+            <div className="mb-16 flex justify-center">
+              {(() => {
+                const job = featuredJobs[0];
+                return (
+                  <SimpleHoverCard
+                    className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
+                  >
+                    <div className="p-5 flex-1 flex flex-col" onClick={() => goToJob(job)}>
+                      <div className="flex items-start space-x-4 mb-4">
+                        {getJobImageUrl(job) ? (
+                          <img
+                            src={getJobImageUrl(job)}
+                            alt={job.title}
+                            loading="lazy"
+                            className="w-14 h-14 rounded-xl object-cover shadow-lg flex-shrink-0"
+                          />
+                        ) : (
+                          <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
+                            {(job.company ?? '•').charAt(0)}
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <h3
+                            className="text-lg text-gray-900 mb-2 leading-tight font-medium"
+                            style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                          >
+                            {job.title}
+                          </h3>
+                          <div
+                            className="text-base text-gray-700"
+                            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
+                          >
+                            {job.company}
+                          </div>
+                        </div>
                       </div>
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h3
-                        className="text-lg text-gray-900 mb-2 leading-tight font-medium"
-                        style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
-                      >
-                        {job.title}
-                      </h3>
+
+                      <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
+                        <div className="flex items-center space-x-2">
+                          <MapPin size={14} className="text-gray-400" />
+                          <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
+                            {job.location}
+                          </span>
+                        </div>
+                        <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                        <div className="flex items-center space-x-2">
+                          <Clock size={14} className="text-gray-400" />
+                          <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
+                            {getOmfattning(job)}
+                          </span>
+                        </div>
+                        <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                        <div className="flex items-center space-x-2">
+                          <Building size={14} className="text-gray-400" />
+                          <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
+                            {job.industry ?? ''}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-5 pt-0 flex items-end justify-between" onClick={() => goToJob(job)}>
                       <div
-                        className="text-base text-gray-700"
+                        className="text-sm text-gray-500"
                         style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
                       >
-                        {job.company}
+                        {getPostedLabel(job)}
+                      </div>
+                      <div className="text-right text-sm text-gray-500">
+                        <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
+                          Ansök senast
+                        </div>
+                        <div
+                          className="text-gray-700"
+                          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
+                        >
+                          {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE')}
+                        </div>
+                      </div>
+                    </div>
+                  </SimpleHoverCard>
+                );
+              })()}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16 justify-center">
+              {featuredJobs.map((job) => (
+                <SimpleHoverCard
+                  key={job.slug ?? job.id ?? job.title}
+                  className="w-full max-w-sm bg-white/95 backdrop-blur-sm border border-white/20 flex flex-col cursor-pointer"
+                >
+                  <div className="p-5 flex-1 flex flex-col" onClick={() => goToJob(job)}>
+                    <div className="flex items-start space-x-4 mb-4">
+                      {getJobImageUrl(job) ? (
+                        <img
+                          src={getJobImageUrl(job)}
+                          alt={job.title}
+                          loading="lazy"
+                          className="w-14 h-14 rounded-xl object-cover shadow-lg flex-shrink-0"
+                        />
+                      ) : (
+                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center text-white font-bold text-lg shadow-lg flex-shrink-0">
+                          {(job.company ?? '•').charAt(0)}
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h3
+                          className="text-lg text-gray-900 mb-2 leading-tight font-medium"
+                          style={{ fontFamily: 'Zen Kaku Gothic Antique, sans-serif' }}
+                        >
+                          {job.title}
+                        </h3>
+                        <div
+                          className="text-base text-gray-700"
+                          style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
+                        >
+                          {job.company}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
+                      <div className="flex items-center space-x-2">
+                        <MapPin size={14} className="text-gray-400" />
+                        <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
+                          {job.location}
+                        </span>
+                      </div>
+                      <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                      <div className="flex items-center space-x-2">
+                        <Clock size={14} className="text-gray-400" />
+                        <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
+                          {getOmfattning(job)}
+                        </span>
+                      </div>
+                      <span className="w-1 h-1 bg-gray-400 rounded-full" />
+                      <div className="flex items-center space-x-2">
+                        <Building size={14} className="text-gray-400" />
+                        <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
+                          {job.industry ?? ''}
+                        </span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
-                    <div className="flex items-center space-x-2">
-                      <MapPin size={14} className="text-gray-400" />
-                      <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
-                        {job.location}
-                      </span>
-                    </div>
-                    <span className="w-1 h-1 bg-gray-400 rounded-full" />
-                    <div className="flex items-center space-x-2">
-                      <Clock size={14} className="text-gray-400" />
-                      <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
-                        {getOmfattning(job)}
-                      </span>
-                    </div>
-                    <span className="w-1 h-1 bg-gray-400 rounded-full" />
-                    <div className="flex items-center space-x-2">
-                      <Building size={14} className="text-gray-400" />
-                      <span style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
-                        {job.industry ?? ''}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-5 pt-0 flex items-end justify-between" onClick={() => goToJob(job)}>
-                  <div
-                    className="text-sm text-gray-500"
-                    style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
-                  >
-                    {getPostedLabel(job)}
-                  </div>
-                  <div className="text-right text-sm text-gray-500">
-                    <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
-                      Ansök senast
-                    </div>
+                  <div className="p-5 pt-0 flex items-end justify-between" onClick={() => goToJob(job)}>
                     <div
-                      className="text-gray-700"
+                      className="text-sm text-gray-500"
                       style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
                     >
-                      {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE')}
+                      {getPostedLabel(job)}
+                    </div>
+                    <div className="text-right text-sm text-gray-500">
+                      <div style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}>
+                        Ansök senast
+                      </div>
+                      <div
+                        className="text-gray-700"
+                        style={{ fontFamily: 'Inter, sans-serif', fontWeight: 400 }}
+                      >
+                        {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('sv-SE')}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </SimpleHoverCard>
-            ))}
-          </div>
+                </SimpleHoverCard>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* CTA-knapp – oförändrad */}
