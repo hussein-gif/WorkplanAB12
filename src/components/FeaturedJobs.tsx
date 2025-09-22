@@ -160,7 +160,7 @@ const FeaturedJobs = () => {
               `}
               style={{ fontFamily: "Zen Kaku Gothic Antique, sans-serif", fontWeight: 500 }}
             >
-              Utvalda <span className="font-medium">Möjligheter</span>
+              Utforska Våra Lediga Jobb
             </h2>
             <p
               className={`
