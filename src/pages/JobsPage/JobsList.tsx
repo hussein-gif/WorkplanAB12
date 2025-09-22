@@ -8,16 +8,17 @@ interface JobsListProps {
   jobs: Job[]; // <-- kommer från Supabase via JobsPage
 }
 
-const SimpleHoverCard: React.FC<{ children: React.ReactNode; className?: string }> = ({
-  children,
-  className,
-}) => (
-  <div
-    className={`relative z-0 rounded-2xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-2 hover:shadow-2xl hover:z-10 ${className ?? ""} group`}
-    style={{ position: "relative" }}
-  >
-    {children}
-  </div>
+const SimpleHoverCard: React.FC<{ children: React.ReactNode; className?: string }> = React.memo(
+  ({ children, className }) => (
+    <div
+      className={`relative z-0 rounded-2xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-2 hover:shadow-2xl hover:z-10 ${
+        className ?? ""
+      } group`}
+      style={{ position: "relative", willChange: "transform" }}
+    >
+      {children}
+    </div>
+  )
 );
 
 // slug-hjälpare om job.slug saknas
@@ -29,14 +30,19 @@ const slugify = (s: string) =>
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
+const getLogoChar = (job: Job) =>
+  (job as any).companyLogo ?? (job.company ? job.company.charAt(0) : "");
+
+const getOmfattning = (job: Job) =>
+  (job as any).omfattning ?? (job as any).employment_type ?? "";
+
+const JobsList: React.FC<JobsListProps> = React.memo(({ jobs }) => {
   const navigate = useNavigate();
 
   // Använd en stabil identifierare för navigering
   const goToJob = (job: Job) => {
     const idOrSlug =
-      (job as any).slug ??
-      (job.id != null ? String(job.id) : slugify(job.title));
+      (job as any).slug ?? (job.id != null ? String(job.id) : slugify(job.title));
     navigate(`/jobb/${encodeURIComponent(idOrSlug)}`);
   };
 
@@ -60,17 +66,11 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
     );
   }
 
-  const getLogoChar = (job: Job) =>
-    (job as any).companyLogo ??
-    (job.company ? job.company.charAt(0) : "");
-
-  const getOmfattning = (job: Job) =>
-    (job as any).omfattning ??
-    (job as any).employment_type ??
-    "";
-
   return (
-    <div className="px-4 sm:px-8 pb-20">
+    <div
+      className="px-4 sm:px-8 pb-20"
+      style={{ contentVisibility: "auto", containIntrinsicSize: "1px 600px" }}
+    >
       <div className="max-w-7xl mx-auto">
         {/* MOBIL */}
         <div className="sm:hidden">
@@ -176,7 +176,10 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
                   </div>
                 </div>
 
-                <div className="p-5 pt-0 flex items-end justify-between" onClick={() => goToJob(job)}>
+                <div
+                  className="p-5 pt-0 flex items-end justify-between"
+                  onClick={() => goToJob(job)}
+                >
                   <div
                     className="text-sm text-gray-500"
                     style={{ fontFamily: "Inter, sans-serif", fontWeight: 400 }}
@@ -202,6 +205,6 @@ const JobsList: React.FC<JobsListProps> = ({ jobs }) => {
       </div>
     </div>
   );
-};
+});
 
 export default JobsList;
