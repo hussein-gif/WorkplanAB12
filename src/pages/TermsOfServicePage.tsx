@@ -179,6 +179,7 @@ const TermsOfServicePage: React.FC = () => {
                 className="bg-white border border-gray-200 rounded-3xl shadow-sm p-6 md:p-10 space-y-12"
                 style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 1200px' }}
               >
+                {/* 1 */}
                 <Section id="allmant" title="1. Allmänt & tillämpning">
                   <p>
                     Dessa villkor ("Villkoren") gäller när du använder Workplan AB:s ("Workplan", "vi") webbplats och tjänster. Genom att använda plattformen
@@ -189,6 +190,7 @@ const TermsOfServicePage: React.FC = () => {
                   </p>
                 </Section>
 
+                {/* 2 */}
                 <Section id="tjanster-anvandning" title="2. Tjänster & användning">
                   <p>
                     Vi tillhandahåller bemanning och rekrytering. Omfattning och specifika kommersiella villkor regleras i separata avtal mellan Workplan och
@@ -197,6 +199,7 @@ const TermsOfServicePage: React.FC = () => {
                   </p>
                 </Section>
 
+                {/* 3 */}
                 <Section id="konto-ansvar" title="3. Konto, roller & ansvar">
                   <ul className="list-disc pl-6 space-y-2">
                     <li>Vissa funktioner kräver konto. Du ansvarar för riktiga uppgifter och för att skydda dina inloggningsuppgifter.</li>
@@ -205,7 +208,86 @@ const TermsOfServicePage: React.FC = () => {
                   </ul>
                 </Section>
 
-                {/* ...resten av sektionerna (4–11) på samma sätt ... */}
+                {/* 4 */}
+                <Section id="immaterial-sakerhet" title="4. Immaterialrätt & säkerhet">
+                  <p>
+                    Allt innehåll på plattformen – inklusive varumärken, texter, bilder, grafik, kod och design – tillhör Workplan eller våra licensgivare och är
+                    skyddat av immaterialrättsliga lagar. Ingen del får kopieras, ändras eller distribueras utan uttryckligt medgivande.
+                  </p>
+                  <p>
+                    Du får inte försöka kringgå säkerhetsfunktioner, testa sårbarheter eller använda tjänsterna på sätt som kan skada system, data eller tredje
+                    man. Misstänkta säkerhetshändelser ska omgående rapporteras till oss.
+                  </p>
+                </Section>
+
+                {/* 5 */}
+                <Section id="sekretess-bakgrund" title="5. Sekretess & bakgrundskontroller">
+                  <p>
+                    Workplan hanterar uppgifter om kunder och kandidater med konfidentialitet. Vi delar endast uppgifter när det krävs för att leverera
+                    tjänsten, när lagstiftning kräver det eller efter samtycke. Personuppgiftsbehandling beskrivs i vår Integritetspolicy.
+                  </p>
+                  <p>
+                    För vissa uppdrag kan bakgrundskontroller vara nödvändiga (t.ex. referenser, belastningsutdrag där tillämpligt). Sådana kontroller sker
+                    enligt gällande lag och med kandidatens samtycke när så krävs.
+                  </p>
+                </Section>
+
+                {/* 6 */}
+                <Section id="tillit-tek-komp" title="6. Länkar, kompatibilitet & tillgänglighet">
+                  <p>
+                    Tjänsterna kan länka till externa webbplatser. Vi ansvarar inte för innehåll, säkerhet eller integritetspraxis hos tredje part. Vi strävar
+                    efter god kompatibilitet med moderna webbläsare och rimlig tillgänglighet, men kan inte garantera felfri eller oavbruten drift.
+                  </p>
+                  <p>
+                    Planerat underhåll och uppdateringar kan påverka tillgängligheten. Vi försöker i möjligaste mån informera i förväg vid större ingrepp.
+                  </p>
+                </Section>
+
+                {/* 7 */}
+                <Section id="ansvarsbegransning" title="7. Ansvarsbegränsning & friskrivningar">
+                  <p>
+                    I den utsträckning tillåts enligt lag ansvarar Workplan inte för indirekta skador såsom utebliven vinst, förlust av data eller följdskador.
+                    Vårt totala ansvar är begränsat till de belopp som faktiskt betalats för de specifika tjänster som kravet avser.
+                  </p>
+                  <p>
+                    Tjänsterna tillhandahålls i befintligt skick. Vi lämnar inga garantier utöver vad som uttryckligen avtalats skriftligen.
+                  </p>
+                </Section>
+
+                {/* 8 */}
+                <Section id="force-majeure" title="8. Force majeure">
+                  <p>
+                    Part är befriad från ansvar för underlåtenhet att fullgöra sina förpliktelser om detta beror på omständighet utanför partens rimliga
+                    kontroll (t.ex. myndighetsbeslut, strejk, pandemi, extrema väder, avbrott i allmänna kommunikationsnät).
+                  </p>
+                </Section>
+
+                {/* 9 */}
+                <Section id="tolkning-ogiltighet" title="9. Tolkning, ogiltighet & meddelanden">
+                  <p>
+                    Om någon bestämmelse i Villkoren bedöms ogiltig påverkar detta inte övriga bestämmelser. Ogiltig bestämmelse ska ersättas med giltig
+                    bestämmelse som i möjligaste mån speglar dess syfte. Meddelanden kan lämnas via plattformen, e-post eller post till uppgiven adress.
+                  </p>
+                </Section>
+
+                {/* 10 */}
+                <Section id="andringar-upphor" title="10. Ändringar, upphörande & överlåtelse">
+                  <p>
+                    Vi kan justera Villkoren när vi ändrar tjänster eller rutiner. Den senaste versionen publiceras här och gäller från publicering. Du bör
+                    regelbundet kontrollera uppdateringar. Vi kan säga upp eller begränsa åtkomst vid väsentligt avtalsbrott.
+                  </p>
+                  <p>
+                    Workplan får överlåta rättigheter och skyldigheter enligt Villkoren till bolag inom samma koncern eller i samband med fusion/förvärv.
+                  </p>
+                </Section>
+
+                {/* 11 */}
+                <Section id="lag-tvist" title="11. Tillämplig lag & tvist">
+                  <p>
+                    På Villkoren tillämpas svensk lag. Tvist som uppstår i anledning av Villkoren eller användning av tjänsterna ska i första hand lösas genom
+                    förhandling. Kan en lösning inte nås prövas tvisten av svensk allmän domstol med Stockholm tingsrätt som första instans.
+                  </p>
+                </Section>
               </div>
             </div>
           </div>
