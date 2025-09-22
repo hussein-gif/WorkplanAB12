@@ -4,17 +4,20 @@ interface JobsHeaderProps {
   filteredJobsCount: number;
 }
 
-const JobsHeader: React.FC<JobsHeaderProps> = ({ filteredJobsCount }) => {
+const JobsHeader: React.FC<JobsHeaderProps> = React.memo(({ filteredJobsCount }) => {
   return (
-    <div className="pt-32 pb-16 px-8">
+    <div
+      className="pt-32 pb-16 px-8"
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '1px 320px' }}
+    >
       <div className="max-w-7xl mx-auto text-center">
-        {/* Desktop title */}
-        <h1 className="hidden md:block text-5xl md:text-6xl font-extralight text-white mb-6 tracking-tight leading-[0.9]">
+        {/* Desktop title (professionell storlek + jämn boldness) */}
+        <h1 className="hidden md:block text-4xl md:text-5xl font-medium text-white mb-6 tracking-tight leading-[1.0]">
           <span
-            className="font-normal"
+            className="font-medium"
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-              fontWeight: 400,
+              fontWeight: 500,
             }}
           >
             Hitta Din{' '}
@@ -30,13 +33,13 @@ const JobsHeader: React.FC<JobsHeaderProps> = ({ filteredJobsCount }) => {
           </span>
         </h1>
 
-        {/* Mobile title */}
-        <h1 className="block md:hidden text-4xl font-extralight text-white mb-6 tracking-tight leading-tight">
+        {/* Mobile title (professionell storlek + jämn boldness) */}
+        <h1 className="block md:hidden text-3xl font-medium text-white mb-6 tracking-tight leading-tight">
           <span
-            className="font-normal block"
+            className="font-medium block"
             style={{
               fontFamily: 'Zen Kaku Gothic Antique, sans-serif',
-              fontWeight: 400,
+              fontWeight: 500,
             }}
           >
             Hitta Din
@@ -62,6 +65,6 @@ const JobsHeader: React.FC<JobsHeaderProps> = ({ filteredJobsCount }) => {
       </div>
     </div>
   );
-};
+});
 
 export default JobsHeader;
