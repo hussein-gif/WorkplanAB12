@@ -11,16 +11,28 @@ const AboutHeroSection: React.FC<AboutHeroSectionProps> = ({
   scrollToStory,
 }) => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      style={{
+        contentVisibility: 'auto',
+        containIntrinsicSize: '1000px',
+      }}
+    >
       {/* Background Image */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0" aria-hidden="true">
         <img
           src="https://i.ibb.co/DPq2LRqB/image-Photo-Grid.png"
           alt="About Workplan background"
           className="w-full h-full object-cover"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
         />
         {/* Mörk overlay för läsbarhet */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80" />
+        <div
+          className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80"
+          aria-hidden="true"
+        />
       </div>
 
       {/* Centralt innehåll */}
@@ -30,6 +42,7 @@ const AboutHeroSection: React.FC<AboutHeroSectionProps> = ({
           style={{
             fontFamily:
               '"Zen Kaku Gothic Antique", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+            willChange: 'transform, opacity',
           }}
           className={`
           text-5xl md:text-6xl lg:text-7xl font-medium text-white mb-6 tracking-tight leading-tight
@@ -45,6 +58,7 @@ const AboutHeroSection: React.FC<AboutHeroSectionProps> = ({
           style={{
             fontFamily:
               'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+            willChange: 'transform, opacity',
           }}
           className={`
           text-sm md:text-base text-white/80 mb-8 font-light leading-relaxed max-w-4xl mx-auto
@@ -61,6 +75,7 @@ const AboutHeroSection: React.FC<AboutHeroSectionProps> = ({
           style={{
             fontFamily:
               'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+            willChange: 'transform, opacity',
           }}
           className={`
             group px-8 py-4 mb-8
@@ -75,7 +90,11 @@ const AboutHeroSection: React.FC<AboutHeroSectionProps> = ({
         >
           <div className="flex items-center justify-center space-x-2">
             <span>Läs vår resa</span>
-            <ArrowDown size={16} className="group-hover:translate-y-1 transition-transform duration-300" />
+            <ArrowDown
+              size={16}
+              className="group-hover:translate-y-1 transition-transform duration-300"
+              aria-hidden="true"
+            />
           </div>
         </button>
       </div>
@@ -86,6 +105,7 @@ const AboutHeroSection: React.FC<AboutHeroSectionProps> = ({
           style={{
             fontFamily:
               'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+            willChange: 'transform, opacity',
           }}
           className={`
             flex flex-wrap items-center justify-center gap-4 text-sm text-white/70
@@ -94,15 +114,15 @@ const AboutHeroSection: React.FC<AboutHeroSectionProps> = ({
           `}
         >
           <div className="flex items-center space-x-2">
-            <div className="w-1.5 h-1.5 bg-white/40 rounded-full" />
+            <div className="w-1.5 h-1.5 bg-white/40 rounded-full" aria-hidden="true" />
             <span>Grundat 2025</span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-1.5 h-1.5 bg-white/40 rounded-full" />
+            <div className="w-1.5 h-1.5 bg-white/40 rounded-full" aria-hidden="true" />
             <span>Fokus: Lager & Logistik</span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-1.5 h-1.5 bg-white/40 rounded-full" />
+            <div className="w-1.5 h-1.5 bg-white/40 rounded-full" aria-hidden="true" />
             <span>Baserade i Örebro</span>
           </div>
         </div>
