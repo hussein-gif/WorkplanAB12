@@ -98,7 +98,7 @@ const AlternativeContactSection: React.FC = () => {
           >
             Vi hanterar dina uppgifter konfidentiellt och i enlighet med{" "}
             <button
-              onClick={() => navigate("/PrivacyPolicyPage")}
+              onClick={() => navigate("/integritetspolicy")}
               className="text-[#123B7A] font-medium hover:underline focus:outline-none"
             >
               Integritetspolicy
