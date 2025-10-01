@@ -76,7 +76,7 @@ const CompanyFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) => 
         gdpr_consented_at: companyForm.gdprAccept ? new Date().toISOString() : null,
       };
 
-      const { error } = await supabase.from("contact_messages").insert([row]).select();
+      const { error } = await supabase.from("contact_messages").insert([row]);
 
       if (error) {
         console.error("Supabase insert error:", error);
