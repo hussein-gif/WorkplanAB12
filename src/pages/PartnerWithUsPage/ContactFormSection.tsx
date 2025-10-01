@@ -381,7 +381,7 @@ const ContactFormSection: React.FC<ContactFormSectionProps> = ({
                   value={safeFormData.onskadStart}
                   onChange={handleInputChange}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:bg-white/15 focus:border-white/40 focus:outline-none transition-all duration-300"
-                  placeholder="t.ex. Omgående, Mars 2025"
+                  placeholder="t.ex. Omgående"
                 />
               </div>
             </div>
