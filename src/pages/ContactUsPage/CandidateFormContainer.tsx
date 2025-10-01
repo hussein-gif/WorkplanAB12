@@ -23,7 +23,7 @@ const INITIAL: CandidateFormState = {
 const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) => {
   const [candidateForm, setCandidateForm] = useState<CandidateFormState>(INITIAL);
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false); // ny state för success
+  const [success, setSuccess] = useState(false);
   const [feedback, setFeedback] = useState<{ typ: "ok" | "error"; text: string } | null>(null);
 
   const handleCandidateChange = (
@@ -62,21 +62,19 @@ const CandidateFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) =
         gdpr_consented_at: candidateForm.gdprConsent ? new Date().toISOString() : null,
       };
 
-      const { error } = await supabase.from("contact_messages").insert([row])();
+      // Viktigt: ingen .select(), och använd throwOnError för tydligt fel
+      await supabase.from("contact_messages").insert([row]).throwOnError();
 
-      if (error) {
-        console.error("Supabase insert error:", error);
-        setFeedback({ typ: "error", text: `Kunde inte skicka (${error.message}).` });
-        return;
-      }
-
-      // Visa success istället för formulär
       setSuccess(true);
       setCandidateForm(INITIAL);
       onSent?.();
     } catch (err: any) {
-      console.error("Unexpected submit error:", err);
-      setFeedback({ typ: "error", text: "Ett oväntat fel inträffade." });
+      console.error("Submit error:", err);
+      const msg =
+        err?.message ||
+        err?.error_description ||
+        (typeof err === "string" ? err : "Ett oväntat fel inträffade.");
+      setFeedback({ typ: "error", text: msg });
     } finally {
       setLoading(false);
     }
