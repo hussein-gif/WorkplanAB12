@@ -353,7 +353,7 @@ export default function JobsSection() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-gray-600 mb-1">Företag *</label>
+                      <label className="block text-sm text-gray-600 mb-1">Företag</label>
                       <input
                         className="w-full border rounded-lg px-3 py-2"
                         value={form.company ?? ''}
