@@ -116,18 +116,18 @@ export default function JobsSection() {
   function requiredMissing() {
     // ❗ Justerad: slug tas alltid automatiskt, recruiterPhone borttagen, salary ej obligatorisk och BORTTAGEN
     const must: Array<[string, string]> = [
-      ['title', 'Titel'],
-      ['company', 'Företag'],
-      ['location', 'Plats'],
-      ['employment_type', 'Omfattning'],
-      ['summary', 'Kort säljtext'],
-      ['aboutRole', 'Om rollen'],
-      ['responsibilitiesText', 'Arbetsuppgifter'],
-      ['requirementsText', 'Vem vi söker'],
-      ['recruitmentProcess', 'Vår rekryteringsprocess'],
-      ['recruiterEmail', 'Rekryterarens e-post'],
-      ['industry', 'Bransch'],
-    ];
+  ['title', 'Titel'],
+  ['location', 'Plats'],
+  ['employment_type', 'Omfattning'],
+  ['summary', 'Kort säljtext'],
+  ['aboutRole', 'Om rollen'],
+  ['responsibilitiesText', 'Arbetsuppgifter'],
+  ['requirementsText', 'Vem vi söker'],
+  ['recruitmentProcess', 'Vår rekryteringsprocess'],
+  ['recruiterEmail', 'Rekryterarens e-post'],
+  ['industry', 'Bransch'],
+];
+
     const missing = must.filter(([k]) => {
       const v = (form as any)[k];
       if (typeof v === 'string') return v.trim().length === 0;
