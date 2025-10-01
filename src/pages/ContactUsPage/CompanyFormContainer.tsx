@@ -76,20 +76,19 @@ const CompanyFormContainer: React.FC<{ onSent?: () => void }> = ({ onSent }) => 
         gdpr_consented_at: companyForm.gdprAccept ? new Date().toISOString() : null,
       };
 
-      const { error } = await supabase.from("contact_messages").insert([row]);
-
-      if (error) {
-        console.error("Supabase insert error:", error);
-        setFeedback({ typ: "error", text: `Kunde inte skicka (${error.message}).` });
-        return;
-      }
+      // Viktigt: ingen .select(); använd throwOnError för tydligt fel
+      await supabase.from("contact_messages").insert([row]).throwOnError();
 
       setSuccess(true);
       setCompanyForm(INITIAL);
       onSent?.();
     } catch (err: any) {
-      console.error("Unexpected submit error:", err);
-      setFeedback({ typ: "error", text: "Ett oväntat fel inträffade." });
+      console.error("Submit error:", err);
+      const msg =
+        err?.message ||
+        err?.error_description ||
+        (typeof err === "string" ? err : "Ett oväntat fel inträffade.");
+      setFeedback({ typ: "error", text: msg });
     } finally {
       setLoading(false);
     }
