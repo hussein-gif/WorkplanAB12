@@ -1,89 +1,92 @@
 // src/supabaseClient.ts
-import { createClient } from '@supabase/supabase-js';
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 /**
- * Miljövariabler (Vite)
- * VITE_SUPABASE_URL och VITE_SUPABASE_ANON_KEY ska vara publika.
+ * ENV (Vite): Publika nycklar för frontend.
+ * Dessa två måste finnas i projektets .env (med prefix VITE_).
  */
-const url = import.meta.env.VITE_SUPABASE_URL!;
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY!;
+const VITE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const VITE_ANON = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
-if (!url || !anonKey) {
-  throw new Error('Supabase env saknas: kontrollera VITE_SUPABASE_URL och VITE_SUPABASE_ANON_KEY');
+if (!VITE_URL || !VITE_ANON) {
+  throw new Error(
+    "Saknar Supabase ENV. Lägg till VITE_SUPABASE_URL och VITE_SUPABASE_ANON_KEY i .env"
+  );
 }
 
-/* ------------------------------------------------------------
-   1) PUBLIK KLIENT (webbplatsen): alltid "anon" utan session.
-   - Ingen storage
-   - Ingen token-autorefresh
-   - Ingen session i URL
-   Använd denna i publika komponenter, t.ex. kontaktformuläret.
-------------------------------------------------------------- */
-export const supabase = createClient(url, anonKey, {
-  auth: {
-    persistSession: false,       // ingen session lagras
-    autoRefreshToken: false,     // ingen auto-refresh
-    detectSessionInUrl: false,   // ignorera auth i URL
-    flowType: 'pkce',
-    storage: undefined,          // viktig: ingen storage kopplas
-  },
-  db: { schema: 'public' },
-});
-
-/* ------------------------------------------------------------
-   2) ADMIN-KLIENT för adminpanelen (kräver inloggning).
-   - PKCE + sessionStorage
-   - Endast i admin-vyer
-   OBS: Detta är fortfarande "anon key" + användarsession (inte service key).
-------------------------------------------------------------- */
-export const adminSupabase = createClient(url, anonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true,
-    flowType: 'pkce',
-    storage: typeof window !== 'undefined' ? window.sessionStorage : undefined,
-    storageKey: 'sb-admin-session',
-  },
-  db: { schema: 'public' },
-});
-
-/* Liten säkerhets-vakt: varna om admin-klienten används utanför /admin */
-if (typeof window !== 'undefined') {
-  const path = window.location?.pathname ?? '';
-  const isAdminRoute = path.startsWith('/admin');
-  if (!isAdminRoute) {
-    // Om någon råkar importera adminSupabase i publika sidor får vi en hint i konsolen
-    // (helt ofarligt i drift — bara en varning vid felimport).
-    // Du kan ta bort detta om du vill.
-    (adminSupabase as any).__warnIfUsedOutsideAdmin = new Proxy(adminSupabase, {
-      get(target, prop, receiver) {
-        console.warn(
-          '[adminSupabase] används utanför /admin – importera "supabase" istället för publika sidor.'
-        );
-        return Reflect.get(target, prop, receiver);
-      },
-    });
+/* ------------------------------------------------------------------
+   Singleton helpers så Vite HMR inte skapar nya klienter hela tiden.
+------------------------------------------------------------------- */
+declare global {
+  interface Window {
+    __sb_public?: SupabaseClient;
+    __sb_admin?: SupabaseClient;
   }
 }
 
-/* ------------------------------------------------------------
-   3) Hård max-livslängd på admin-sessionen (valfritt).
-   Styrs via VITE_ADMIN_MAX_SESSION_MINUTES (default 120).
-------------------------------------------------------------- */
+/* ------------------------------------------------------------------
+   1) Publik klient (för hela sajten / kontaktformulär)
+   - Ingen session
+   - Ingen auto refresh
+   - Ingen auth i URL
+------------------------------------------------------------------- */
+export const supabase: SupabaseClient =
+  (typeof window !== "undefined" && window.__sb_public) ||
+  createClient(VITE_URL, VITE_ANON, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+      flowType: "pkce",
+      storage: undefined, // ingen storage i publika klienten
+    },
+    db: { schema: "public" },
+  });
+
+if (typeof window !== "undefined") {
+  window.__sb_public = supabase;
+}
+
+/* ------------------------------------------------------------------
+   2) Admin-klient (endast i admin-vyer)
+   - Kräver användarinloggning (GoTrue) och sparar session i sessionStorage
+   - OBS: fortfarande anon key (inte service-role); policies + user session styr access
+------------------------------------------------------------------- */
+export const adminSupabase: SupabaseClient =
+  (typeof window !== "undefined" && window.__sb_admin) ||
+  createClient(VITE_URL, VITE_ANON, {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      flowType: "pkce",
+      storage:
+        typeof window !== "undefined" ? window.sessionStorage : undefined,
+      storageKey: "sb-admin-session",
+    },
+    db: { schema: "public" },
+  });
+
+if (typeof window !== "undefined") {
+  window.__sb_admin = adminSupabase;
+}
+
+/* ------------------------------------------------------------------
+   3) Valfritt: hård maxtid för admin-session
+------------------------------------------------------------------- */
 const MAX_MINUTES = Number(import.meta.env.VITE_ADMIN_MAX_SESSION_MINUTES ?? 120);
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   adminSupabase.auth.onAuthStateChange((_event, session) => {
     if (session) {
-      sessionStorage.setItem('sb-admin-session-start', String(Date.now()));
+      sessionStorage.setItem("sb-admin-session-start", String(Date.now()));
     } else {
-      sessionStorage.removeItem('sb-admin-session-start');
+      sessionStorage.removeItem("sb-admin-session-start");
     }
   });
 
   const checkHardLimit = async () => {
-    const startedAt = Number(sessionStorage.getItem('sb-admin-session-start') ?? '0');
+    const startedAt = Number(sessionStorage.getItem("sb-admin-session-start") ?? "0");
     if (!startedAt) return;
     const ageMinutes = (Date.now() - startedAt) / 60000;
     if (ageMinutes > MAX_MINUTES) {
@@ -92,4 +95,42 @@ if (typeof window !== 'undefined') {
   };
 
   setInterval(checkHardLimit, 60_000);
+}
+
+/* ------------------------------------------------------------------
+   4) Små hjälpare för dina formulär (valfritt men skönt att återanvända)
+   - Använder pub-klienten + throwOnError (så felet syns i UI)
+------------------------------------------------------------------- */
+type CompanyRow = {
+  from_type: "company";
+  company_name: string | null;
+  full_name: string;
+  email: string;
+  phone: string | null;
+  subject: string;
+  message: string;
+  status: "new";
+  gdpr_consent: boolean;
+  gdpr_consented_at: string | null;
+};
+
+type CandidateRow = {
+  from_type: "candidate";
+  company_name?: null; // lämnas tomt i DB (kolumnen bör vara nullable)
+  full_name: string;
+  email: string;
+  phone: string | null;
+  subject: string; // t.ex. "Kandidatfråga"
+  message: string;
+  status: "new";
+  gdpr_consent: boolean;
+  gdpr_consented_at: string | null;
+};
+
+export async function insertCompanyMessage(row: CompanyRow) {
+  await supabase.from("contact_messages").insert([row]).throwOnError();
+}
+
+export async function insertCandidateMessage(row: CandidateRow) {
+  await supabase.from("contact_messages").insert([row]).throwOnError();
 }
