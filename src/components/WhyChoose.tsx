@@ -214,7 +214,7 @@ const WhyChoose = () => {
         number: '03',
         title: 'Äkta Partnerskap',
         description:
-          'Vi finns vid er sida från första kontakt to avslutat uppdrag—med transparent kommunikation och regelbunden uppföljning.',
+          'Vi finns vid er sida från första kontakt till avslutat uppdrag—med transparent kommunikation och regelbunden uppföljning.',
         metric: 'Personlig',
         metricLabel: 'Service',
       },
