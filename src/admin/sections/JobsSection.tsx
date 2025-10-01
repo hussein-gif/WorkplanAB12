@@ -358,7 +358,6 @@ export default function JobsSection() {
                         className="w-full border rounded-lg px-3 py-2"
                         value={form.company ?? ''}
                         onChange={e => setForm(f => ({ ...f, company: e.target.value }))}
-                        required
                       />
                     </div>
                     <div>
