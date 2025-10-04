@@ -137,7 +137,11 @@ const normKey = slugify(key);        // --> "skjutstativforare" (utan å/ä/ö)
           .eq('published', true);
 
         const found =
-          (list ?? []).find((j: any) => j.title && slugify(j.title) === key) ?? null;
+  (list ?? []).find((j: any) => {
+    const s = j.slug ? String(j.slug) : slugify(j.title || '');
+    return s === normKey || s === key;
+  }) ?? null;
+
         data = found || null;
       }
 
