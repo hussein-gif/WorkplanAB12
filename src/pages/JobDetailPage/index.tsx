@@ -77,7 +77,10 @@ const JobDetailPage = () => {
         return;
       }
 
-      const key = decodeURIComponent(jobId);
+      const rawKey = decodeURIComponent(jobId ?? '');
+const key = rawKey.trim();           // t.ex. "skjutstativförare"
+const normKey = slugify(key);        // --> "skjutstativforare" (utan å/ä/ö)
+
 
       let { data, error } = await supabase
         .from('jobs')
