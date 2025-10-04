@@ -105,7 +105,7 @@ const normKey = slugify(key);        // --> "skjutstativforare" (utan å/ä/ö)
             'published',
           ].join(', ')
         )
-        .or(`slug.eq.${key},id.eq.${key}`)
+        .or(`slug.eq.${key},slug.eq.${normKey},id.eq.${key}`)
         .eq('published', true)
         .limit(1)
         .maybeSingle();
